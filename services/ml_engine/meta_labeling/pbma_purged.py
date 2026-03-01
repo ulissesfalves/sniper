@@ -43,6 +43,7 @@ MODEL_PARAMS: dict[str, dict] = {
         "min_child_samples": 20,
         "subsample": 0.8,
         "colsample_bytree": 0.8,
+        "class_weight": "balanced",   # v10.10.1: FIX classe desbalanceada (60/40)
         "random_state": 42,
         "verbose": -1,
         "n_jobs": -1,
@@ -53,6 +54,7 @@ MODEL_PARAMS: dict[str, dict] = {
         "learning_rate": 0.05,
         "min_child_samples": 50,   # mais conservador para N_eff baixo
         "subsample": 0.8,
+        "class_weight": "balanced",   # v10.10.1: FIX classe desbalanceada (60/40)
         "random_state": 42,
         "verbose": -1,
         "n_jobs": -1,

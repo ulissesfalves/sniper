@@ -34,7 +34,7 @@ REDIS_URL        = config("REDIS_URL",            default="redis://redis:6379/0"
 FRACDIFF_TAU       = float(config("FRACDIFF_TAU",           default="1e-5"))
 FRACDIFF_MIN_TRAIN = int(config("FRACDIFF_MIN_TRAIN_OBS",   default="252"))
 HMM_N_COMPONENTS   = int(config("HMM_N_COMPONENTS",        default="2"))
-HMM_N_PCA          = int(config("HMM_N_PCA",               default="2"))
+HMM_N_PCA          = float(config("HMM_MIN_VARIANCE",        default="0.85"))
 VI_THRESHOLD       = float(config("VI_THRESHOLD",           default="0.30"))
 CS_SIGMA_THR       = float(config("CORWIN_SCHULTZ_SIGMA_THR", default="3.0"))
 ISOTONIC_HALFLIFE  = int(config("ISOTONIC_HALFLIFE_DAYS",   default="180"))
@@ -329,7 +329,7 @@ def run_hmm_for_symbol(
         min_train=FRACDIFF_MIN_TRAIN,
         retrain_freq=63,
         artifacts_dir=artifacts_dir,
-        n_pca_components=2,  # SPEC v10.10: N_PCA=2 MANDATÓRIO (Parte 4, Tabela 4.2)
+        min_variance=0.85,  # v10.10.1: PCA retém PCs até 85% variância (não fixo em 2)
     )
 
     # Validação diagnóstica
@@ -363,42 +363,83 @@ def run_corwin_schultz_for_symbol(symbol: str) -> pd.DataFrame | None:
 def run_vi_clustering(all_features: dict[str, pd.DataFrame]) -> dict:
     """
     Computa matriz de distância VI entre features e identifica clusters redundantes.
+
+    v10.10.1 FIX: Usa features POOLED de todos os ativos (não apenas 1 referência).
+    O VI com 1 ativo falhava com INSUFFICIENT_DATA porque dropna() eliminava muitas
+    linhas. Com pooling, N cresce de ~500 para ~15000, estabilizando a discretização.
     """
     from vi_cfi.vi import compute_vi_distance_matrix
+    from vi_cfi.cfi import clustered_feature_importance
 
-    # Usa primeiro ativo com dados suficientes como referência
-    ref_symbol = None
-    ref_df = None
     exclude_cols = {"symbol", "d_star", "hmm_prob_bull", "hmm_is_bull",
-                    "close_fracdiff"}  # fracdiff tem ~20% NaN no início
+                    "close_fracdiff"}
+
+    # Seleciona features comuns a >= 50% dos ativos
+    feat_count: dict[str, int] = {}
     for sym, feat_df in all_features.items():
-        feat_cols = [c for c in feat_df.columns if c not in exclude_cols]
-        if not feat_cols:
+        for c in feat_df.columns:
+            if c not in exclude_cols:
+                feat_count[c] = feat_count.get(c, 0) + 1
+
+    min_assets = max(5, len(all_features) // 2)
+    common_feats = sorted([c for c, n in feat_count.items() if n >= min_assets])
+    if len(common_feats) < 3:
+        log.warning("vi.too_few_common_features", n=len(common_feats))
+        return {"status": "INSUFFICIENT_DATA"}
+
+    # Pooling: concatena features de todos os ativos
+    pool_rows = []
+    symbols_pooled = []
+    for sym, feat_df in all_features.items():
+        avail = [c for c in common_feats if c in feat_df.columns]
+        if len(avail) < len(common_feats) * 0.7:
             continue
-        valid = feat_df[feat_cols].dropna()
-        if len(valid) > 300:
-            ref_symbol = sym
-            ref_df = valid
-            break
+        sub = feat_df[avail].dropna()
+        if len(sub) >= 50:
+            pool_rows.append(sub)
+            symbols_pooled.append(sym)
 
-    if ref_df is None:
-        log.warning("vi.no_reference_data")
-        return {}
+    if not pool_rows:
+        log.warning("vi.no_pooled_data")
+        return {"status": "INSUFFICIENT_DATA"}
 
-    vi_matrix = compute_vi_distance_matrix(ref_df)
+    pooled_df = pd.concat(pool_rows, axis=0, ignore_index=True)
+    # Garante que temos as mesmas colunas (preenche faltantes)
+    for c in common_feats:
+        if c not in pooled_df.columns:
+            pooled_df[c] = 0.0
+    pooled_df = pooled_df[common_feats].dropna()
 
-    # Identifica pares com VI < threshold (redundantes)
+    log.info("vi.pooled_data",
+             n_symbols=len(symbols_pooled),
+             n_obs=len(pooled_df),
+             n_features=len(common_feats),
+             features=common_feats)
+
+    if len(pooled_df) < 200:
+        log.warning("vi.insufficient_pooled", n=len(pooled_df))
+        return {"status": "INSUFFICIENT_DATA"}
+
+    # Computa matriz VI no dataset pooled
+    vi_matrix = compute_vi_distance_matrix(pooled_df, n_bins=10)
+
+    # Identifica pares redundantes
     redundant_pairs = []
     cols = vi_matrix.columns.tolist()
     for i in range(len(cols)):
         for j in range(i + 1, len(cols)):
             if vi_matrix.iloc[i, j] < VI_THRESHOLD:
-                redundant_pairs.append((cols[i], cols[j], vi_matrix.iloc[i, j]))
+                redundant_pairs.append({
+                    "f1": cols[i], "f2": cols[j],
+                    "vi": round(float(vi_matrix.iloc[i, j]), 4)
+                })
 
     log.info("vi.clustering_done",
-             reference=ref_symbol,
+             n_symbols_pooled=len(symbols_pooled),
+             n_obs_pooled=len(pooled_df),
              n_features=len(cols),
              n_redundant_pairs=len(redundant_pairs),
+             mean_vi=round(float(vi_matrix.values[np.triu_indices_from(vi_matrix.values, k=1)].mean()), 4),
              threshold=VI_THRESHOLD)
 
     # Salva matriz VI como artefato
@@ -409,7 +450,11 @@ def run_vi_clustering(all_features: dict[str, pd.DataFrame]) -> dict:
     return {
         "vi_matrix": vi_matrix,
         "redundant_pairs": redundant_pairs,
-        "reference_symbol": ref_symbol,
+        "n_symbols_pooled": len(symbols_pooled),
+        "n_obs_pooled": len(pooled_df),
+        "n_features": len(cols),
+        "mean_vi": round(float(vi_matrix.values[np.triu_indices_from(vi_matrix.values, k=1)].mean()), 4),
+        "status": "OK",
     }
 
 
@@ -590,6 +635,7 @@ def run_meta_labeling_for_symbol(
     valid_mask = ~p_calibrated.isna()
     if valid_mask.sum() > 0:
         p_valid = p_calibrated[valid_mask]
+        p_raw_valid = p_bma.reindex(p_valid.index)
         y_valid = y_target.reindex(p_valid.index)
         from sklearn.metrics import roc_auc_score, brier_score_loss
         try:
@@ -598,11 +644,24 @@ def run_meta_labeling_for_symbol(
         except Exception:
             auc, brier = 0.5, 0.25
 
+        # v10.10.1: ECE before/after isotonic (Fix 2 — calibração pooled)
+        from meta_labeling.isotonic_calibration import calibration_diagnostics
+        try:
+            ece_diag = calibration_diagnostics(
+                p_raw_valid.values, p_valid.values, y_valid.values)
+            ece_before = ece_diag["ece_raw"]
+            ece_after  = ece_diag["ece_calibrated"]
+        except Exception:
+            ece_before, ece_after = 0.0, 0.0
+
         log.info("meta.calibration_done", symbol=symbol,
                  n_calibrated=int(valid_mask.sum()),
                  auc=round(auc, 4), brier=round(brier, 4),
+                 ece_before=round(ece_before, 4),
+                 ece_after=round(ece_after, 4),
                  p_cal_mean=round(float(p_valid.mean()), 4),
-                 p_cal_std=round(float(p_valid.std()), 4))
+                 p_cal_std=round(float(p_valid.std()), 4),
+                 p_raw_mean=round(float(p_raw_valid.mean()), 4))
     else:
         auc, brier = 0.5, 0.25
 
@@ -991,7 +1050,7 @@ async def main_loop() -> None:
              parquet_base=PARQUET_BASE,
              model_path=MODEL_PATH,
              fracdiff_tau=FRACDIFF_TAU,
-             hmm_n_pca=HMM_N_PCA,
+             hmm_min_variance=HMM_N_PCA,
              vi_threshold=VI_THRESHOLD)
 
     while True:

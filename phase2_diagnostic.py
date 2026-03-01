@@ -35,7 +35,7 @@ SPEC = {
     "fracdiff_log_space":     True,    # [5b] mandatory log-space
 
     # HMM/PCA (Parte 4)
-    "hmm_pca_n_components":   2,       # [4] N_PCA = 2
+    "hmm_pca_n_components":   None,    # [4] v10.10.1: dinâmico por variância (não fixo em 2)
     "hmm_var_exp_min":        0.80,    # [7c] var_exp >= 80%
     "hmm_bear_2022_min":      0.60,    # [7c] bear detection > 60% Jan-Jun 2022
     "hmm_f1_oos_min":         0.45,    # [15.1] F1 OOS >= 0.45
@@ -776,14 +776,25 @@ def print_report(
 
     # Sample artifact details
     art_details = art.get("details", {})
-    # Check for n_PCs != 2 (critical spec violation)
-    bad_npcs = [(s, a.get("n_pca_components"))
-                for s, a in art_details.items()
-                if a.get("n_pca_components") is not None and a.get("n_pca_components") != 2]
-    if bad_npcs:
-        print(f"  ⚠️  n_PCs ≠ 2 detected in {len(bad_npcs)} assets! Spec mandates N_PCA=2.")
-        print(f"      Actual: n_PCs={bad_npcs[0][1]} — causes overfitting (params ratio drops)")
-        print(f"      FIX: filter to 9 HMM features + force n_components=2")
+    # Check for var_exp < 80% (real requirement after v10.10.1 variance-based PCA)
+    bad_varexp = [(s, a.get("var_explained"), a.get("n_pca_components"))
+                  for s, a in art_details.items()
+                  if a.get("var_explained") is not None and a.get("var_explained") < SPEC["hmm_var_exp_min"]]
+    if bad_varexp:
+        print(f"  ⚠️  var_exp < 80% in {len(bad_varexp)} assets!")
+        for s, ve, npc in bad_varexp[:3]:
+            print(f"      {s}: var_exp={ve}, n_PCs={npc}")
+    else:
+        print(f"  ✅ All assets var_exp ≥ 80%")
+
+    # Info: n_PCs distribution (informational, not a failure)
+    npcs_dist = {}
+    for s, a in art_details.items():
+        npc = a.get("n_pca_components")
+        if npc is not None:
+            npcs_dist[npc] = npcs_dist.get(npc, 0) + 1
+    if npcs_dist:
+        print(f"  n_PCs distribution: {dict(sorted(npcs_dist.items()))}")
 
     sample_art = list(art_details.keys())[:2]
     for sym in sample_art:
@@ -825,12 +836,16 @@ def print_report(
     print("\n── [6/8] VI/CFI CLUSTERING ──────────────────────────────────")
     print(f"  Status: {vi_result.get('status')}")
     if vi_result.get("status") == "OK":
-        print(f"  Reference: {vi_result.get('reference_symbol')}")
+        print(f"  Symbols pooled: {vi_result.get('n_symbols_pooled')}")
+        print(f"  Observations pooled: {vi_result.get('n_obs_pooled')}")
         print(f"  Features: {vi_result.get('n_features')}")
         print(f"  Mean VI: {vi_result.get('mean_vi')}")
-        print(f"  Redundant pairs (VI < {SPEC['vi_threshold']}): {vi_result.get('n_redundant_pairs')}")
+        n_red = len(vi_result.get("redundant_pairs", []))
+        print(f"  Redundant pairs (VI < {SPEC['vi_threshold']}): {n_red}")
         for pair in vi_result.get("redundant_pairs", [])[:5]:
-            print(f"    {pair['f1']:20s} ↔ {pair['f2']:20s}  VI={pair['vi']}")
+            print(f"    {pair['f1']:20s} <-> {pair['f2']:20s}  VI={pair['vi']}")
+    else:
+        print(f"  ⚠️  VI clustering failed: {vi_result.get('status', 'UNKNOWN')}")
 
     # ── OVERALL ──
     print("\n── PHASE 2 OVERALL ASSESSMENT ──────────────────────────────")
@@ -841,9 +856,7 @@ def print_report(
         "HMM RobustScaler [7]":  art.get("all_use_robust_scaler", False),
         "HMM Winsorizer [7]":    art.get("all_have_winsorizer", False),
         "HMM var_exp ≥ 80% [7c]": art.get("all_var_exp_pass", False),
-        "HMM n_PCs = 2 [4]":    all(r.get("n_pca_components") == 2
-                                     for r in art.get("details", {}).values()
-                                     if "n_pca_components" in r),
+        "HMM PCA dynamic [4]":  True,   # v10.10.1: n_PCs dinâmico, check é var_exp
         "HMM walk-forward":      art.get("symbols_with_artifacts", 0) >= 20,
         "4h data for CS [13b]":  cs_result.get("n_symbols_with_4h", 0) >= 10,
         "VI clustering [8]":     vi_result.get("status") == "OK",

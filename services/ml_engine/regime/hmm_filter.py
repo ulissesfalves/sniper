@@ -1,9 +1,11 @@
 # =============================================================================
 # DESTINO: services/ml_engine/regime/hmm_filter.py
 # Filtro de regime HMM: Winsorização → RobustScaler → PCA → GaussianHMM.
-# Pipeline walk-forward puro: threshold calibrado NO TREINO, aplicado cegamente
-# no teste. Nenhum parâmetro do HMM usa dados fora da janela de treino.
-# Referência: SNIPER v10.10, Parte 4.
+#
+# v10.10.1 FIX: PCA agora usa variância-alvo (85%) em vez de n_components=2.
+# Com 9 features, PCA(2) captura só 49% → HMM cego → hmm_prob_bull=0.9998.
+# PCA(0.85) retém 4-5 PCs → HMM recebe estrutura suficiente para diferenciar
+# bull/bear. Ratio N/params mantido ≥10 com N_train ≥ 500.
 # =============================================================================
 from __future__ import annotations
 
@@ -34,68 +36,88 @@ HMM_FEATURES = [
     "dvol_zscore",
 ]
 
-N_HMM_STATES   = 2
-N_PCA_COMP      = 2
-MIN_OBS_TREINO  = 252
+N_HMM_STATES       = 2
+MIN_VARIANCE_TARGET = 0.85    # v10.10.1: variância-alvo para PCA
+MIN_OBS_TREINO      = 252
 
 
 @dataclass
 class HMMFitted:
-    """
-    Artefato completo do filtro de regime.
-    Serializado em disco para cada janela de expanding window.
-    """
-    pca_pipeline:  RobustPCAFitted
-    hmm:           GaussianHMM
-    bull_state:    int              # qual estado = bull (maior retorno médio)
-    threshold:     float            # P(bull) > threshold → regime bull
-    var_explained: float
-    train_end_date: Optional[str]   # data final do treino (auditoria)
-    f1_train:       float           # F1 no treino (diagnóstico)
+    """Artefato completo do filtro de regime."""
+    pca_pipeline:   RobustPCAFitted
+    hmm:            GaussianHMM
+    bull_state:     int
+    threshold:      float
+    var_explained:  float
+    n_pca_components: int     # v10.10.1: registra PCs reais usados
+    train_end_date: Optional[str]
+    f1_train:       float
 
 
 def fit_hmm(
-    X_train:        np.ndarray,
-    returns_train:  np.ndarray,
-    feature_names:  list[str] | None = None,
-    n_components:   int   = N_PCA_COMP,
-    n_hmm_states:   int   = N_HMM_STATES,
-    train_end_date: str | None = None,
+    X_train:         np.ndarray,
+    returns_train:   np.ndarray,
+    feature_names:   list[str] | None = None,
+    min_variance:    float = MIN_VARIANCE_TARGET,
+    n_hmm_states:    int   = N_HMM_STATES,
+    train_end_date:  str | None = None,
+    # Legacy parameter — ignored if min_variance is set
+    n_components:    int | None = None,
 ) -> HMMFitted:
     """
-    Fitta o pipeline completo HMM em dados de treino.
+    Fitta pipeline completo HMM em dados de treino.
 
-    Processo:
-        1. Winsorização 1%-99% → RobustScaler → PCA (2 componentes)
-        2. GaussianHMM com covariância full (300 iterações)
-        3. Identifica bull_state: estado com maior retorno médio
-        4. Calibra threshold por F1 no treino (busca em 25 pontos)
+    v10.10.1: PCA seleciona PCs por variância-alvo (85%), não fixo em 2.
 
-    REGRA: threshold calibrado NO TREINO. Aplicado cegamente no OOS.
-    Nunca calibrar threshold com dados de validação ou teste.
+    Pipeline:
+        1. Winsorização 1%-99% → RobustScaler → PCA (variância ≥ 85%)
+        2. GaussianHMM full cov (300 iter)
+        3. bull_state = estado com maior retorno médio
+        4. threshold calibrado por F1 no treino
 
-    Args:
-        X_train:        Array (N_treino × N_features). Features do HMM_FEATURES.
-        returns_train:  Array (N_treino,). Retornos diários correspondentes.
-        feature_names:  Nomes das features. Default: HMM_FEATURES.
-        n_components:   PCs para o HMM. Default 2 (ratio N/params ≈ 125).
-        n_hmm_states:   Estados do HMM. Default 2 (bull / bear).
-        train_end_date: Data final do treino para auditoria.
-
-    Returns:
-        HMMFitted com todos os artefatos serializáveis.
+    Checagem de estabilidade:
+        N_train / (n_hmm_params) deve ser ≥ 10.
+        n_hmm_params = n_states * (n_states - 1) + n_states * n_pcs + n_states * n_pcs * (n_pcs+1)/2
+        5 PCs, 2 estados: ~37 params → N_train ≥ 370 (atendido com min_train=252+)
     """
     names = feature_names or HMM_FEATURES[:X_train.shape[1]]
 
-    # ── 1. PCA Robusto ────────────────────────────────────────────────────
-    pca_fitted = fit_robust_pca(X_train, feature_names=names,
-                                n_components=n_components)
-    X_pca      = transform_robust_pca(X_train, pca_fitted)
+    # ── 1. PCA Robusto (variância-alvo) ──────────────────────────────
+    pca_fitted = fit_robust_pca(
+        X_train,
+        feature_names=names,
+        min_variance=min_variance,
+        n_components=None,  # Force variance-based selection
+    )
+    X_pca = transform_robust_pca(X_train, pca_fitted)
+    n_pcs_used = pca_fitted.n_components
 
-    # ── 2. HMM ────────────────────────────────────────────────────────────
+    # Checagem de estabilidade HMM
+    # full cov params: n_states*(n_pcs + n_pcs*(n_pcs+1)/2) + n_states*(n_states-1)
+    n_hmm_params = (n_hmm_states * (n_pcs_used + n_pcs_used*(n_pcs_used+1)//2)
+                    + n_hmm_states * (n_hmm_states - 1))
+    param_ratio = len(X_train) / max(n_hmm_params, 1)
+
+    # Se ratio muito baixo, usar covariância diagonal para estabilidade
+    if param_ratio < 10:
+        cov_type = "diag"
+        log.warning("hmm.using_diag_cov",
+                    n_pcs=n_pcs_used, n_params=n_hmm_params,
+                    N_train=len(X_train), ratio=round(param_ratio, 1))
+    else:
+        cov_type = "full"
+
+    log.info("hmm.pca_result",
+             n_pcs=n_pcs_used,
+             var_explained=round(pca_fitted.var_explained, 3),
+             n_hmm_params=n_hmm_params,
+             param_ratio=round(param_ratio, 1),
+             cov_type=cov_type)
+
+    # ── 2. HMM ──────────────────────────────────────────────────────
     hmm = GaussianHMM(
         n_components=n_hmm_states,
-        covariance_type="full",
+        covariance_type=cov_type,
         n_iter=300,
         random_state=42,
         tol=1e-4,
@@ -103,46 +125,46 @@ def fit_hmm(
     try:
         hmm.fit(X_pca)
     except Exception as e:
-        log.error("hmm.fit_failed", error=str(e))
+        log.error("hmm.fit_failed", error=str(e), n_pcs=n_pcs_used)
         raise
 
-    # ── 3. Identifica bull_state ──────────────────────────────────────────
-    states   = hmm.predict(X_pca)
+    # ── 3. Identifica bull_state ─────────────────────────────────────
+    states = hmm.predict(X_pca)
     ret_by_state = [
         float(returns_train[states == s].mean()) if (states == s).sum() > 0 else -999.0
         for s in range(n_hmm_states)
     ]
     bull_state = int(np.argmax(ret_by_state))
 
+    # Diagnóstico: distribuição de estados
+    state_counts = [(states == s).sum() for s in range(n_hmm_states)]
     log.info("hmm.states_identified",
              state_returns={s: round(r, 4) for s, r in enumerate(ret_by_state)},
+             state_counts={s: int(c) for s, c in enumerate(state_counts)},
              bull_state=bull_state)
 
-    # ── 4. Calibra threshold por F1 (no treino) ───────────────────────────
-    probs     = hmm.predict_proba(X_pca)[:, bull_state]
-    y_true    = (returns_train > 0).astype(int)
-    best_thr  = 0.5
-    best_f1   = 0.0
+    # ── 4. Calibra threshold por F1 (no treino) ─────────────────────
+    probs    = hmm.predict_proba(X_pca)[:, bull_state]
+    y_true   = (returns_train > 0).astype(int)
+    best_thr = 0.5
+    best_f1  = 0.0
 
     for thr in np.linspace(0.20, 0.80, 25):
         preds = (probs > thr).astype(int)
         if preds.sum() > 0:
             score = f1_score(y_true, preds, zero_division=0)
             if score > best_f1:
-                best_f1   = score
-                best_thr  = float(thr)
+                best_f1  = score
+                best_thr = float(thr)
 
+    # Diagnóstico: distribuição de probs
+    pct_bull = float((probs > best_thr).mean())
     log.info("hmm.threshold_calibrated",
              threshold=round(best_thr, 3),
-             f1_train=round(best_f1, 4))
-
-    # ── Diagnóstico: cobertura do bear 2022 ───────────────────────────────
-    # Checklist v10.8: HMM deve detectar 2022 bear em > 60% dos dias Jan-Jun/2022
-    preds_all = (probs > best_thr).astype(int)
-    pct_bull  = float(preds_all.mean())
-    log.info("hmm.regime_distribution",
+             f1_train=round(best_f1, 4),
              pct_bull=round(pct_bull, 3),
-             pct_bear=round(1 - pct_bull, 3))
+             prob_mean=round(float(probs.mean()), 4),
+             prob_std=round(float(probs.std()), 4))
 
     return HMMFitted(
         pca_pipeline=pca_fitted,
@@ -150,6 +172,7 @@ def fit_hmm(
         bull_state=bull_state,
         threshold=best_thr,
         var_explained=pca_fitted.var_explained,
+        n_pca_components=n_pcs_used,
         train_end_date=train_end_date,
         f1_train=best_f1,
     )
@@ -159,13 +182,7 @@ def predict_regime(
     X_oos:  np.ndarray,
     fitted: HMMFitted,
 ) -> tuple[np.ndarray, np.ndarray]:
-    """
-    Prediz regime para dados OOS usando artefatos do treino.
-
-    Returns:
-        probs:     np.ndarray (N,) — P(bull) para cada observação.
-        is_bull:   np.ndarray (N,) bool — True se P(bull) > threshold.
-    """
+    """Prediz regime para dados OOS."""
     X_pca = transform_robust_pca(X_oos, fitted.pca_pipeline)
     probs = fitted.hmm.predict_proba(X_pca)[:, fitted.bull_state]
     return probs, probs > fitted.threshold
@@ -175,24 +192,20 @@ def run_hmm_walk_forward(
     feature_df:       pd.DataFrame,
     returns:          pd.Series,
     min_train:        int   = MIN_OBS_TREINO,
-    retrain_freq:     int   = 63,           # re-treinar a cada 63 dias (~1 trimestre)
+    retrain_freq:     int   = 63,
     artifacts_dir:    str   = "/data/models/hmm",
-    n_pca_components: int   = N_PCA_COMP,   # v10.10: SEMPRE 2 (ratio N/params ~125)
+    min_variance:     float = MIN_VARIANCE_TARGET,
+    # Legacy — kept for backwards compat, ignored if min_variance set
+    n_pca_components: int | None = None,
 ) -> pd.DataFrame:
     """
     Walk-forward completo do HMM.
-    Para cada janela [0..t], fitta o HMM e prediz t+1.
-    Re-treina a cada retrain_freq dias para capturar mudanças de regime.
 
-    Critério de invalidação (Parte 15):
-        F1 OOS treino < 0.45 → revisar features de input.
-
-    Returns:
-        pd.DataFrame com colunas ['hmm_prob_bull', 'hmm_is_bull']
-        para todo o período OOS.
+    v10.10.1: PCA variância-alvo. Se n_pca_components é passado (legado),
+    será ignorado em favor de min_variance.
     """
     Path(artifacts_dir).mkdir(parents=True, exist_ok=True)
-    n          = len(feature_df)
+    n           = len(feature_df)
     prob_series = np.full(n, np.nan)
     bull_series = np.zeros(n, dtype=bool)
 
@@ -200,7 +213,6 @@ def run_hmm_walk_forward(
     last_train_idx = 0
 
     for t in range(min_train, n):
-        # Re-treina a cada retrain_freq dias ou na primeira vez
         should_retrain = (
             fitted_hmm is None or
             (t - last_train_idx) >= retrain_freq
@@ -219,25 +231,24 @@ def run_hmm_walk_forward(
                 fitted_hmm = fit_hmm(
                     X_tr, ret_tr,
                     feature_names=feature_df.columns.tolist(),
-                    n_components=n_pca_components,
+                    min_variance=min_variance,
                     train_end_date=str(feature_df.index[t]),
                 )
                 last_train_idx = t
 
-                # Serializa artefato para auditoria
                 artifact_path = Path(artifacts_dir) / f"hmm_t{t}.pkl"
                 with open(artifact_path, "wb") as f:
                     pickle.dump(fitted_hmm, f)
 
                 log.info("hmm.retrained",
                          t=t, date=str(feature_df.index[t]),
-                         threshold=round(fitted_hmm.threshold, 3),
-                         var_exp=round(fitted_hmm.var_explained, 3))
-            except Exception as e:  # noqa: BLE001
+                         n_pcs=fitted_hmm.n_pca_components,
+                         var_exp=round(fitted_hmm.var_explained, 3),
+                         threshold=round(fitted_hmm.threshold, 3))
+            except Exception as e:
                 log.error("hmm.train_error", t=t, error=str(e))
                 continue
 
-        # Prediz ponto t
         if fitted_hmm is None:
             continue
 
@@ -249,7 +260,7 @@ def run_hmm_walk_forward(
             probs, bulls       = predict_regime(X_t, fitted_hmm)
             prob_series[t]     = float(probs[0])
             bull_series[t]     = bool(bulls[0])
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             log.warning("hmm.predict_error", t=t, error=str(e))
 
     result = pd.DataFrame(
@@ -268,20 +279,9 @@ def validate_hmm_diagnostics(
     returns:    pd.Series,
     min_f1:     float = 0.45,
 ) -> dict:
-    """
-    Checklist obrigatório v10.8 para o HMM (Parte 12, itens 7b e 7c).
-
-    Verifica:
-    1. 2022 bear detectado em > 60% dos dias Jan-Jun/2022?
-    2. F1 OOS ≥ min_f1?
-    3. var_explained ≥ 80% em todas as janelas?
-
-    Returns:
-        dict com resultados de cada check e status geral.
-    """
+    """Checklist v10.8 para HMM."""
     result: dict = {}
 
-    # Check 1: detecção do bear de 2022
     mask_2022h1 = (
         (hmm_result.index >= "2022-01-01") &
         (hmm_result.index <= "2022-06-30")
@@ -294,7 +294,6 @@ def validate_hmm_diagnostics(
         result["bear_2022_ok"] = None
         result["bear_2022_h1_pct"] = None
 
-    # Check 2: F1 OOS
     valid_mask = ~np.isnan(hmm_result["hmm_prob_bull"])
     y_true = (returns.reindex(hmm_result.index) > 0).astype(int)
     y_pred = hmm_result["hmm_is_bull"].astype(int)
