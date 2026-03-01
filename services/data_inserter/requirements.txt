@@ -1,0 +1,20 @@
+# =============================================================
+# DESTINO: services/data_inserter/requirements.txt
+# Data Inserter — sem LightGBM, sem libgomp
+# =============================================================
+
+# HTTP assíncrono
+aiohttp==3.9.5
+aiohttp-retry==2.8.3
+
+# Dados
+polars==0.20.15
+pyarrow==15.0.2
+numpy>=1.24.0            # usado por anti_survivorship.filter_by_ups
+
+# Scheduler
+apscheduler==3.10.4
+
+# Utilitários
+python-decouple==3.8
+structlog==24.1.0

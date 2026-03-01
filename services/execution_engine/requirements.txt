@@ -1,0 +1,12 @@
+# DESTINO: services/execution_engine/requirements.txt
+# v2: aioredis→redis[asyncio] (aioredis 2.0.1 quebra no Python 3.11)
+
+# HTTP assíncrono (Binance API)
+aiohttp==3.9.5
+
+# Redis — substitui aioredis, API compatível, suporte nativo async Python 3.11
+redis[asyncio]>=4.6.0,<6.0.0
+
+# Utilitários
+python-decouple==3.8
+structlog==24.1.0

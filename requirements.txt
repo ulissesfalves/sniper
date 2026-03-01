@@ -1,0 +1,62 @@
+# =============================================================================
+# SNIPER v10.10 — requirements.txt (flat, pinned for reproducibility)
+# Generated from pyproject.toml. Used directly in Dockerfiles.
+# DO NOT edit manually — regenerate with: pip-compile pyproject.toml
+# =============================================================================
+
+# Data Processing
+polars==0.20.16
+pandas==2.2.1
+numpy==1.26.4
+pyarrow==15.0.2
+fastparquet==2024.2.0
+
+# Statistical & ML
+scikit-learn==1.4.2
+lightgbm==4.3.0
+hmmlearn==0.3.2
+statsmodels==0.14.1
+scipy==1.13.0
+joblib==1.4.0
+arch==6.3.0
+
+# Exchange APIs
+python-binance==1.0.19
+aiohttp==3.9.5
+tenacity==8.2.3
+
+# Backend API
+fastapi==0.110.2
+uvicorn[standard]==0.29.0
+uvloop==0.19.0
+httptools==0.6.1
+httpx==0.27.0
+redis==5.0.4
+websockets==12.0
+
+# Storage
+aiosqlite==0.20.0
+sqlalchemy==2.0.29
+alembic==1.13.1
+
+# Config & Security
+python-decouple==3.8
+cryptography==42.0.5
+python-multipart==0.0.9
+pydantic==2.7.0
+pydantic-settings==2.2.1
+
+# Notifications
+python-telegram-bot==21.1.1
+aiosmtplib==3.0.1
+
+# Scheduling
+APScheduler==3.10.4
+
+# Observability
+structlog==24.1.0
+prometheus-client==0.20.0
+
+# Visualization
+matplotlib==3.8.4
+seaborn==0.13.2

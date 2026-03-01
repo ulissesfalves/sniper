@@ -1,0 +1,23 @@
+# DESTINO: services/ml_engine/requirements.txt
+# v2: + pandas (main.py importa); aioredis→redis[asyncio] (compat Python 3.11)
+
+# Core ML
+lightgbm==4.3.0
+hmmlearn==0.3.2
+scikit-learn==1.4.2
+scipy==1.13.0
+statsmodels==0.14.2
+
+# Dados
+numpy<2.0
+pandas>=2.0.0,<3.0.0
+polars==0.20.15
+pyarrow==15.0.2
+
+# Redis — aioredis 2.0.1 quebra no Python 3.11 (duplicate base class TimeoutError)
+redis[asyncio]>=4.6.0,<6.0.0
+
+# Utilitários
+python-decouple==3.8
+structlog==24.1.0
+apscheduler==3.10.4

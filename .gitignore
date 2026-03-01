@@ -1,0 +1,60 @@
+# =============================================================================
+# SNIPER v10.10 — .gitignore
+# CRITICAL: .env MUST never be committed. Credentials = capital at risk.
+# =============================================================================
+
+# ── Credentials (CRITICAL) ────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+htmlcov/
+.coverage
+
+# ── Data & Models (large files → object storage, not Git) ─────────────────────
+data/raw/
+data/processed/
+data/models/
+data/calibration/
+*.parquet
+*.pkl
+*.joblib
+*.h5
+*.sqlite
+*.db
+logs/
+
+# ── Node / Frontend ───────────────────────────────────────────────────────────
+node_modules/
+frontend/dist/
+frontend/.cache/
+*.tsbuildinfo
+
+# ── Docker ────────────────────────────────────────────────────────────────────
+.dockerignore
+
+# ── IDE ───────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── OS ────────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
