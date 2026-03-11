@@ -10,7 +10,7 @@
 *.pem
 *.key
 secrets/
-ml_engine_hmm_rerun.log
+.log
 
 # ── Python ────────────────────────────────────────────────────────────────────
 __pycache__/
