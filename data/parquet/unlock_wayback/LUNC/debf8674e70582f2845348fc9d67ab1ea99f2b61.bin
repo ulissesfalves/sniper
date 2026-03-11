@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TFL Shutdown</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        header {
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px 0;
+            margin-bottom: 40px;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            width: 180px;
+            height: auto;
+        }
+
+        .main-content {
+            max-width: 900px;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        p {
+            color: #555;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+
+        .links {
+            margin-top: 30px;
+        }
+
+        .links a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="terra.svg" alt="Terraform Labs Logo" class="logo">
+        </div>
+    </header>
+    
+    <div class="main-content">
+        <h1>Terraform Labs is in the process of winding down as of 30 September 2024</h1>
+            <p>
+                <b>Follow us for the latest updates <a href="https://x.com/terra_money">https://x.com/terra_money</a></b>
+            </p>
+            <p>
+                <b>For more details, please refer to the Medium article published <a href="https://medium.com/terra-money/terraform-labs-crypto-loss-claims-portal-launch-7e85e3222db7">here</a> or the claims information page <a href="https://restructuring.ra.kroll.com/Terraform/">here</a></b>
+            </p>
+        </div>
+    </div>
+<!-- Cloudflare Pages Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "cc205d3c2b004b0980725c1888a4ee14"}'></script><!-- Cloudflare Pages Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"fb95b78204bb46c990cced4b54df0763","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>

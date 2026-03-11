@@ -1,11 +1,11 @@
 # =============================================================================
 # DESTINO: services/ml_engine/main.py
-# SNIPER v10.10 — ML Engine Pipeline Completo (Fase 2)
+# SNIPER v10.10 â€” ML Engine Pipeline Completo (Fase 2)
 #
-# Orquestra: Load Data → Features → FracDiff → HMM Walk-Forward → CFI/VI
-# Cada componente já está implementado como biblioteca. Este arquivo CONECTA tudo.
+# Orquestra: Load Data â†’ Features â†’ FracDiff â†’ HMM Walk-Forward â†’ CFI/VI
+# Cada componente jÃ¡ estÃ¡ implementado como biblioteca. Este arquivo CONECTA tudo.
 #
-# SUBSTITUI o stub anterior que só publicava heartbeat no Redis.
+# SUBSTITUI o stub anterior que sÃ³ publicava heartbeat no Redis.
 # =============================================================================
 from __future__ import annotations
 
@@ -22,10 +22,11 @@ import pandas as pd
 import polars as pl
 import structlog
 from decouple import config
+from features.onchain import UNLOCK_AUDIT_COLUMNS, UNLOCK_MODEL_FEATURE_COLUMNS
 
 log = structlog.get_logger(__name__)
 
-# ─── CONFIG ──────────────────────────────────────────────────────────────────
+# â”€â”€â”€ CONFIG â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 PARQUET_BASE     = config("PARQUET_BASE_PATH",    default="/data/parquet")
 MODEL_PATH       = config("MODEL_ARTIFACTS_PATH", default="/data/models")
 SQLITE_PATH      = config("SQLITE_PATH",          default="/data/sqlite/sniper.db")
@@ -34,23 +35,26 @@ REDIS_URL        = config("REDIS_URL",            default="redis://redis:6379/0"
 FRACDIFF_TAU       = float(config("FRACDIFF_TAU",           default="1e-5"))
 FRACDIFF_MIN_TRAIN = int(config("FRACDIFF_MIN_TRAIN_OBS",   default="252"))
 HMM_N_COMPONENTS   = int(config("HMM_N_COMPONENTS",        default="2"))
-HMM_N_PCA          = float(config("HMM_MIN_VARIANCE",        default="0.85"))
+HMM_MIN_VARIANCE   = float(config("HMM_MIN_VARIANCE",      default="0.80"))
+HMM_MIN_TRAIN_OBS  = int(config("HMM_MIN_TRAIN_OBS",      default="126"))
+HMM_RETRAIN_FREQ   = int(config("HMM_RETRAIN_FREQ_DAYS",   default="21"))
 VI_THRESHOLD       = float(config("VI_THRESHOLD",           default="0.30"))
 CS_SIGMA_THR       = float(config("CORWIN_SCHULTZ_SIGMA_THR", default="3.0"))
 ISOTONIC_HALFLIFE  = int(config("ISOTONIC_HALFLIFE_DAYS",   default="180"))
 
 RETRY_INTERVAL     = 300  # 5 min entre ciclos
-MIN_HISTORY_DAYS   = 365  # mínimo de dados para rodar pipeline
+MIN_HISTORY_DAYS   = 365  # mÃ­nimo de dados para rodar pipeline
+HMM_DEGRADABLE_INPUTS = {"funding_rate_ma7d", "basis_3m"}
 
-# Minimum assets para pipeline viável
+# Minimum assets para pipeline viÃ¡vel
 MIN_ASSETS_PIPELINE = 10
 
 
-# ─── DISCOVERY ───────────────────────────────────────────────────────────────
+# â”€â”€â”€ DISCOVERY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def discover_symbols() -> list[str]:
     """
-    Descobre símbolos disponíveis nos parquet diários.
+    Descobre sÃ­mbolos disponÃ­veis nos parquet diÃ¡rios.
     Estrutura: /data/parquet/ohlcv_daily/{SYMBOL}.parquet
     """
     ohlcv_dir = Path(PARQUET_BASE) / "ohlcv_daily"
@@ -63,14 +67,42 @@ def discover_symbols() -> list[str]:
     return sorted(symbols)
 
 
+def _read_parquet_df(path: Path) -> pd.DataFrame:
+    try:
+        return pd.read_parquet(path)
+    except Exception:
+        try:
+            return pl.read_parquet(path).to_pandas()
+        except Exception:
+            try:
+                return pd.read_pickle(path)
+            except Exception:
+                return pd.DataFrame()
+
+
+def _write_parquet_df(df: pd.DataFrame, path: Path) -> None:
+    try:
+        pl.from_pandas(df).write_parquet(path, compression="zstd")
+    except Exception:
+        pass
+    if path.exists() and path.stat().st_size > 0:
+        return
+    try:
+        df.to_parquet(path, compression="zstd", index=False)
+    except Exception:
+        try:
+            df.to_parquet(path, index=False)
+        except Exception:
+            df.to_pickle(path)
+
+
 def load_ohlcv(symbol: str) -> pd.DataFrame | None:
-    """Carrega OHLCV diário de um ativo. Retorna pd.DataFrame com DatetimeIndex."""
+    """Carrega OHLCV diÃ¡rio de um ativo. Retorna pd.DataFrame com DatetimeIndex."""
     path = Path(PARQUET_BASE) / "ohlcv_daily" / f"{symbol}.parquet"
     if not path.exists():
         return None
     try:
-        df_pl = pl.read_parquet(path)
-        df = df_pl.to_pandas()
+        df = _read_parquet_df(path)
 
         # Normaliza timestamp para DatetimeIndex
         if "timestamp" in df.columns:
@@ -80,7 +112,7 @@ def load_ohlcv(symbol: str) -> pd.DataFrame | None:
         # Remove duplicatas
         df = df[~df.index.duplicated(keep="last")]
 
-        # Garante colunas mínimas
+        # Garante colunas mÃ­nimas
         required = {"open", "high", "low", "close"}
         if not required.issubset(df.columns):
             log.warning("load.missing_columns", symbol=symbol,
@@ -108,7 +140,7 @@ def load_funding(symbol: str) -> pd.Series:
     if not path.exists():
         return pd.Series(dtype=float, name="funding_rate_ma7d")
     try:
-        df = pl.read_parquet(path).to_pandas()
+        df = _read_parquet_df(path)
         if "timestamp" in df.columns:
             df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
             df = df.set_index("timestamp").sort_index()
@@ -121,13 +153,85 @@ def load_funding(symbol: str) -> pd.Series:
         return pd.Series(dtype=float, name="funding_rate_ma7d")
 
 
+
+def _load_series_from_parquet(path: Path, candidates: list[str], out_name: str) -> pd.Series:
+    """Carrega uma sÃ©rie temporal numÃ©rica de um parquet, alinhada por timestamp."""
+    if not path.exists():
+        return pd.Series(dtype=float, name=out_name)
+    try:
+        df = _read_parquet_df(path)
+        if "timestamp" in df.columns:
+            df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
+            df = df.set_index("timestamp").sort_index()
+        for col in candidates:
+            if col in df.columns:
+                ser = pd.to_numeric(df[col], errors="coerce")
+                ser.name = out_name
+                return ser
+        return pd.Series(dtype=float, name=out_name)
+    except Exception:
+        return pd.Series(dtype=float, name=out_name)
+
+
+def load_basis(symbol: str) -> pd.Series:
+    """Carrega basis_3m do ativo. Sem fallback proxy."""
+    path = Path(PARQUET_BASE) / "basis" / f"{symbol}.parquet"
+    return _load_series_from_parquet(path, ["basis_3m", "basis"], "basis_3m")
+
+
+def load_stablecoin_regime() -> pd.Series:
+    """
+    Carrega stablecoin_chg30 global do mercado.
+    Busca em caminhos candidatos; se nÃ£o existir, retorna sÃ©rie vazia.
+    """
+    candidates = [
+        Path(PARQUET_BASE) / "stablecoin" / "stablecoin_chg30.parquet",
+        Path(PARQUET_BASE) / "stablecoin_chg30.parquet",
+        Path(PARQUET_BASE) / "macro" / "stablecoin_chg30.parquet",
+    ]
+    for path in candidates:
+        ser = _load_series_from_parquet(path, ["stablecoin_chg30"], "stablecoin_chg30")
+        if len(ser) > 0:
+            return ser
+    return pd.Series(dtype=float, name="stablecoin_chg30")
+
+
+def load_unlock_feature_frame(symbol: str) -> pd.DataFrame:
+    """Carrega o pacote on-chain do ativo com colunas ortogonais e de auditoria."""
+    candidates = [
+        Path(PARQUET_BASE) / "unlocks" / f"{symbol}.parquet",
+        Path(PARQUET_BASE) / "ups" / f"{symbol}.parquet",
+        Path(PARQUET_BASE) / "onchain" / f"{symbol}.parquet",
+    ]
+    for path in candidates:
+        if not path.exists():
+            continue
+        try:
+            df = _read_parquet_df(path)
+            if "timestamp" in df.columns:
+                df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
+                df = df.set_index("timestamp").sort_index()
+            elif "date" in df.columns:
+                df["date"] = pd.to_datetime(df["date"], utc=True)
+                df = df.set_index("date").sort_index()
+            else:
+                continue
+
+            cols = [col for col in UNLOCK_MODEL_FEATURE_COLUMNS + UNLOCK_AUDIT_COLUMNS if col in df.columns]
+            if cols:
+                return df[cols]
+        except Exception:
+            continue
+    return pd.DataFrame(columns=UNLOCK_MODEL_FEATURE_COLUMNS + UNLOCK_AUDIT_COLUMNS)
+
+
 def load_klines_4h(symbol: str) -> pd.DataFrame | None:
     """Carrega klines 4h para Corwin-Schultz."""
     path = Path(PARQUET_BASE) / "ohlcv_4h" / f"{symbol}.parquet"
     if not path.exists():
         return None
     try:
-        df = pl.read_parquet(path).to_pandas()
+        df = _read_parquet_df(path)
         if "timestamp" in df.columns:
             df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
             df = df.set_index("timestamp").sort_index()
@@ -136,24 +240,20 @@ def load_klines_4h(symbol: str) -> pd.DataFrame | None:
         return None
 
 
-# ─── FEATURE ENGINEERING ─────────────────────────────────────────────────────
+# â”€â”€â”€ FEATURE ENGINEERING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def compute_base_features(
     df: pd.DataFrame,
     symbol: str,
     btc_data: pd.DataFrame | None = None,
+    funding_series: pd.Series | None = None,
+    basis_series: pd.Series | None = None,
+    stablecoin_series: pd.Series | None = None,
+    unlock_frame: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
     """
-    Computa features base a partir de OHLCV diário.
-    Features usadas pelo HMM (Parte 4 da spec):
-      ret_1d, ret_5d, ret_20d, realized_vol_30d, vol_ratio,
-      drawdown_pct, term_spread, volume_momentum,
-      btc_ma200_flag, dvol_zscore
-
-    NOTA v3:
-      - btc_ma200_flag agora usa MA200 do BTC real (não do próprio ativo)
-      - funding_rate_ma7d substituído por drawdown_pct (proxy superior para
-        regime detection: no bear 2022 drawdown era -50% a -75% para todos os ativos)
+    Computa as features base do SNIPER em conformidade com a especificaÃ§Ã£o.
+    NÃ£o substitui features obrigatÃ³rias por proxies silenciosos.
     """
     close = df["close"]
     high  = df["high"]
@@ -161,6 +261,39 @@ def compute_base_features(
     vol   = df.get("volume", pd.Series(0.0, index=df.index))
 
     features = pd.DataFrame(index=df.index)
+
+    def _align_optional(series: pd.Series | None, name: str) -> pd.Series:
+        if series is None or len(series) == 0:
+            return pd.Series(np.nan, index=df.index, name=name, dtype=float)
+        ser = pd.to_numeric(series, errors="coerce")
+        if not isinstance(ser.index, pd.DatetimeIndex):
+            return pd.Series(np.nan, index=df.index, name=name, dtype=float)
+        ser = ser[~ser.index.duplicated(keep="last")].sort_index()
+        out = ser.reindex(df.index, method="ffill")
+        out.name = name
+        return out.astype(float)
+
+    def _align_unlock_numeric_column(name: str) -> pd.Series:
+        if unlock_frame is None or unlock_frame.empty or name not in unlock_frame.columns:
+            return pd.Series(np.nan, index=df.index, name=name, dtype=float)
+        ser = pd.to_numeric(unlock_frame[name], errors="coerce")
+        if not isinstance(ser.index, pd.DatetimeIndex):
+            return pd.Series(np.nan, index=df.index, name=name, dtype=float)
+        ser = ser[~ser.index.duplicated(keep="last")].sort_index()
+        out = ser.reindex(df.index, method="ffill")
+        out.name = name
+        return out.astype(float)
+
+    def _align_unlock_audit_column(name: str) -> pd.Series:
+        if unlock_frame is None or unlock_frame.empty or name not in unlock_frame.columns:
+            return pd.Series(pd.NA, index=df.index, name=name, dtype="object")
+        ser = unlock_frame[name]
+        if not isinstance(ser.index, pd.DatetimeIndex):
+            return pd.Series(pd.NA, index=df.index, name=name, dtype="object")
+        ser = ser[~ser.index.duplicated(keep="last")].sort_index()
+        out = ser.reindex(df.index, method="ffill")
+        out.name = name
+        return out
 
     # Retornos multi-horizonte
     features["ret_1d"]  = np.log(close / close.shift(1))
@@ -172,66 +305,59 @@ def compute_base_features(
         features["ret_1d"].rolling(30, min_periods=10).std() * np.sqrt(365)
     )
 
-    # Vol ratio: vol recente vs vol longa (detecta compressão de vol)
+    # Vol ratio: vol recente vs vol longa
     vol_5d  = features["ret_1d"].rolling(5, min_periods=3).std()
     vol_30d = features["ret_1d"].rolling(30, min_periods=10).std()
     features["vol_ratio"] = (vol_5d / vol_30d.clip(lower=1e-8)).clip(0, 5)
 
-    # Drawdown % do rolling 252d high (substitui funding_rate_ma7d):
-    #   No bear 2022: drawdown -50% a -75%. Feature extremamente discriminativa.
-    #   Em bull: drawdown ~0% a -10%.
-    #   Muito mais informativo que funding_rate=0 (sem dados históricos).
-    rolling_high = close.rolling(252, min_periods=30).max()
-    features["drawdown_pct"] = ((close / rolling_high.clip(lower=1e-8)) - 1.0).clip(-1.0, 0.0)
+    # Features obrigatÃ³rias da especificaÃ§Ã£o
+    features["funding_rate_ma7d"] = _align_optional(funding_series, "funding_rate_ma7d")
+    features["basis_3m"] = _align_optional(basis_series, "basis_3m")
+    features["stablecoin_chg30"] = _align_optional(stablecoin_series, "stablecoin_chg30")
+    for col in UNLOCK_MODEL_FEATURE_COLUMNS:
+        features[col] = _align_unlock_numeric_column(col).clip(0, 1)
+    for col in UNLOCK_AUDIT_COLUMNS:
+        features[col] = _align_unlock_audit_column(col)
 
-    # Term Spread: (MA50 - MA200) / close
-    ma50  = close.rolling(50, min_periods=20).mean()
+    # BTC MA200 flag: usa BTC real quando disponÃ­vel
     ma200 = close.rolling(200, min_periods=100).mean()
-    features["term_spread"] = ((ma50 - ma200) / close.clip(lower=1e-8)).clip(-0.5, 0.5)
-
-    # Volume Momentum: vol curto vs vol longo
-    if vol.sum() > 0:
-        vol_ma5  = vol.rolling(5,  min_periods=2).mean()
-        vol_ma30 = vol.rolling(30, min_periods=10).mean()
-        features["volume_momentum"] = (
-            (vol_ma5 / vol_ma30.clip(lower=1e-8)) - 1.0
-        ).clip(-3, 3)
-    else:
-        features["volume_momentum"] = 0.0
-
-    # BTC MA200 flag: usa BTC real quando disponível (spec: "btc_ma200_flag")
     if btc_data is not None and "close" in btc_data.columns:
         btc_close = btc_data["close"]
         btc_ma200 = btc_close.rolling(200, min_periods=100).mean()
         btc_flag  = (btc_close > btc_ma200).astype(float)
-        # Alinha BTC flag ao index do ativo
         features["btc_ma200_flag"] = btc_flag.reindex(df.index, method="ffill").fillna(0.5)
     else:
-        # Fallback: MA200 do próprio ativo
         features["btc_ma200_flag"] = (close > ma200).astype(float)
 
-    # DVOL zscore: proxy via Parkinson vol (High-Low range)
-    from triple_barrier.market_impact import compute_intraday_vol_parkinson
-    parkinson = compute_intraday_vol_parkinson(high, low, ewm_span=20)
+    # DVOL zscore via Parkinson
+    from features.volatility import compute_sigma_intraday_parkinson
+    parkinson = compute_sigma_intraday_parkinson(high, low, ewm_span=20)
     parkinson_mean = parkinson.rolling(90, min_periods=30).mean()
     parkinson_std  = parkinson.rolling(90, min_periods=30).std().clip(lower=1e-8)
     features["dvol_zscore"] = ((parkinson - parkinson_mean) / parkinson_std).clip(-4, 4)
 
-    log.info("features.computed", symbol=symbol,
-             n_rows=len(features),
-             n_valid=int(features.dropna().shape[0]),
-             features=list(features.columns),
-             has_btc_ref=btc_data is not None)
+    log.info(
+        "features.computed",
+        symbol=symbol,
+        n_rows=len(features),
+        n_valid=int(features.dropna(how="all").shape[0]),
+        features=list(features.columns),
+        has_btc_ref=btc_data is not None,
+        has_funding=features["funding_rate_ma7d"].notna().any(),
+        has_basis=features["basis_3m"].notna().any(),
+        has_stablecoin=features["stablecoin_chg30"].notna().any(),
+        has_unlock=any(features[col].notna().any() for col in UNLOCK_MODEL_FEATURE_COLUMNS),
+    )
 
     return features
 
 
-# ─── FRACDIFF ────────────────────────────────────────────────────────────────
+# â”€â”€â”€ FRACDIFF â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def run_fracdiff_for_symbol(df: pd.DataFrame, symbol: str) -> tuple[pd.Series, float]:
     """
     Roda FracDiff expanding window para um ativo.
-    Retorna série diferenciada e d* ótimo final.
+    Retorna sÃ©rie diferenciada e d* Ã³timo final.
     """
     from fracdiff.optimal_d import find_optimal_d_expanding
     from fracdiff.transform import fracdiff_log_fast
@@ -244,13 +370,13 @@ def run_fracdiff_for_symbol(df: pd.DataFrame, symbol: str) -> tuple[pd.Series, f
         result = fracdiff_log_fast(close.values, d=0.5, tau=FRACDIFF_TAU)
         return pd.Series(result, index=close.index, name="close_fracdiff"), 0.5
 
-    # Expanding window: calcula d* ótimo para cada janela
-    # NOTA: isso é computacionalmente caro (~30s/ativo). Usar cache.
+    # Expanding window: calcula d* Ã³timo para cada janela
+    # NOTA: isso Ã© computacionalmente caro (~30s/ativo). Usar cache.
     d_star_series = find_optimal_d_expanding(
         close, min_train_obs=FRACDIFF_MIN_TRAIN, tau=FRACDIFF_TAU
     )
 
-    # Usa o último d* como d representativo para a série completa
+    # Usa o Ãºltimo d* como d representativo para a sÃ©rie completa
     d_final = float(d_star_series.dropna().iloc[-1]) if not d_star_series.dropna().empty else 0.5
 
     result = fracdiff_log_fast(close.values, d=d_final, tau=FRACDIFF_TAU)
@@ -261,7 +387,7 @@ def run_fracdiff_for_symbol(df: pd.DataFrame, symbol: str) -> tuple[pd.Series, f
     return pd.Series(result, index=close.index, name="close_fracdiff"), d_final
 
 
-# ─── HMM REGIME DETECTION ───────────────────────────────────────────────────
+# â”€â”€â”€ HMM REGIME DETECTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def run_hmm_for_symbol(
     features: pd.DataFrame,
@@ -271,31 +397,46 @@ def run_hmm_for_symbol(
     """Roda HMM walk-forward para um ativo."""
     from regime.hmm_filter import run_hmm_walk_forward, validate_hmm_diagnostics
 
-    # ── FILTER: usar apenas HMM_FEATURES da spec (Parte 4) ──
-    # Spec v10.10: ret_1d, ret_5d, realized_vol_30d, vol_ratio,
-    #   funding_rate_ma7d, basis_3m, stablecoin_chg30, btc_ma200_flag, dvol_zscore
-    # Substitutos quando dado não disponível:
-    #   drawdown_pct → funding_rate_ma7d (stress proxy)
-    #   term_spread → basis_3m (term structure proxy)
-    #   volume_momentum → stablecoin_chg30 (flow proxy)
+    # â”€â”€ FILTER: usar apenas HMM_FEATURES da especificaÃ§Ã£o (Parte 4) â”€â”€
+    # Nenhuma proxy substitui funding/basis/stablecoin silenciosamente.
     HMM_FEATURE_COLS = [
         "ret_1d", "ret_5d", "realized_vol_30d", "vol_ratio",
-        "drawdown_pct", "term_spread", "volume_momentum",
+        "funding_rate_ma7d", "basis_3m", "stablecoin_chg30",
         "btc_ma200_flag", "dvol_zscore",
     ]
-    available = [c for c in HMM_FEATURE_COLS if c in features.columns]
-    if len(available) < 5:
-        log.warning("hmm.too_few_features", symbol=symbol, available=available)
+    missing_required = [c for c in HMM_FEATURE_COLS if c not in features.columns]
+    if missing_required:
+        log.error("hmm.required_columns_missing", symbol=symbol, missing=missing_required)
         return pd.DataFrame(
             {"hmm_prob_bull": np.nan, "hmm_is_bull": False},
             index=features.index
         )
-    feat_hmm = features[available].copy()
 
-    # FIX: preenche NaN residuais (ffill + fillna(0)) para evitar n=0
-    feat_clean = feat_hmm.ffill().fillna(0)
+    feat_hmm = features[HMM_FEATURE_COLS].copy()
+    degradable_sparse = [
+        col for col in HMM_FEATURE_COLS
+        if col in HMM_DEGRADABLE_INPUTS and feat_hmm[col].notna().sum() < max(30, HMM_MIN_TRAIN_OBS)
+    ]
+    if degradable_sparse:
+        log.warning(
+            "hmm.degraded_sparse_inputs",
+            symbol=symbol,
+            dropped=degradable_sparse,
+            coverage={col: int(feat_hmm[col].notna().sum()) for col in degradable_sparse},
+        )
+        feat_hmm = feat_hmm.drop(columns=degradable_sparse)
 
-    # Drop colunas com variância zero (constantes não informam o HMM)
+    empty_required = [c for c in feat_hmm.columns if not feat_hmm[c].notna().any()]
+    if empty_required:
+        log.error("hmm.required_inputs_missing", symbol=symbol, missing=empty_required)
+        return pd.DataFrame(
+            {"hmm_prob_bull": np.nan, "hmm_is_bull": False},
+            index=features.index
+        )
+
+    feat_clean = feat_hmm.ffill()
+
+    # Drop columns with zero variance after forward fill.
     var = feat_clean.var()
     zero_var_cols = var[var < 1e-12].index.tolist()
     if zero_var_cols:
@@ -309,9 +450,9 @@ def run_hmm_for_symbol(
             index=features.index
         )
 
-    valid_mask = feat_clean.dropna()
-    if len(valid_mask) < FRACDIFF_MIN_TRAIN:
-        log.warning("hmm.insufficient_features", symbol=symbol, n=len(valid_mask))
+    valid_rows = feat_clean.dropna()
+    if len(valid_rows) < max(126, HMM_MIN_TRAIN_OBS):
+        log.warning("hmm.insufficient_features", symbol=symbol, n=len(valid_rows))
         return pd.DataFrame(
             {"hmm_prob_bull": np.nan, "hmm_is_bull": False},
             index=features.index
@@ -326,20 +467,20 @@ def run_hmm_for_symbol(
     hmm_result = run_hmm_walk_forward(
         feature_df=feat_clean,
         returns=returns.reindex(feat_clean.index),
-        min_train=FRACDIFF_MIN_TRAIN,
-        retrain_freq=63,
+        min_train=max(126, HMM_MIN_TRAIN_OBS),
+        retrain_freq=max(7, HMM_RETRAIN_FREQ),
         artifacts_dir=artifacts_dir,
-        min_variance=0.85,  # v10.10.1: PCA retém PCs até 85% variância (não fixo em 2)
+        min_variance=HMM_MIN_VARIANCE,
     )
 
-    # Validação diagnóstica
+    # ValidaÃ§Ã£o diagnÃ³stica
     diag = validate_hmm_diagnostics(hmm_result, returns.reindex(hmm_result.index))
     log.info("hmm.validation", symbol=symbol, **diag)
 
     return hmm_result
 
 
-# ─── CORWIN-SCHULTZ CIRCUIT BREAKER ─────────────────────────────────────────
+# â”€â”€â”€ CORWIN-SCHULTZ CIRCUIT BREAKER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def run_corwin_schultz_for_symbol(symbol: str) -> pd.DataFrame | None:
     """Computa features CS a partir de klines 4h."""
@@ -358,23 +499,27 @@ def run_corwin_schultz_for_symbol(symbol: str) -> pd.DataFrame | None:
     return compute_cs_features(high, low, roll_window=30)
 
 
-# ─── VI/CFI CLUSTERING ──────────────────────────────────────────────────────
+# â”€â”€â”€ VI/CFI CLUSTERING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def run_vi_clustering(all_features: dict[str, pd.DataFrame]) -> dict:
     """
-    Computa matriz de distância VI entre features e identifica clusters redundantes.
+    Computa matriz VI GLOBAL (pooled) + clusterizaÃ§Ã£o hierÃ¡rquica (Ward).
 
-    v10.10.1 FIX: Usa features POOLED de todos os ativos (não apenas 1 referência).
-    O VI com 1 ativo falhava com INSUFFICIENT_DATA porque dropna() eliminava muitas
-    linhas. Com pooling, N cresce de ~500 para ~15000, estabilizando a discretização.
+    v10.10.2 â€” 4 DEFESAS LP DE PRADO:
+      DEFESA 1: Pooling cross-asset (N=500â†’15000, estabiliza discretizaÃ§Ã£o)
+      DEFESA 2: _safe_discretize() trata binÃ¡rias sem KBinsDiscretizer
+      DEFESA 3: std < 1e-3 â†’ VI=1.0 (feature isolada, sem informaÃ§Ã£o mÃºtua)
+      DEFESA 4: scipy.cluster.hierarchy.linkage(ward) + fcluster â†’ cluster_map.json
+
+    Salva artefatos:
+      - /data/models/vi_matrix.csv    (matriz de distÃ¢ncias VI)
+      - /data/models/cluster_map.json (mapeamento clusterâ†’features, reutilizÃ¡vel Fase 4)
     """
-    from vi_cfi.vi import compute_vi_distance_matrix
-    from vi_cfi.cfi import clustered_feature_importance
+    from vi_cfi.vi import compute_vi_distance_matrix, cluster_features
 
-    exclude_cols = {"symbol", "d_star", "hmm_prob_bull", "hmm_is_bull",
-                    "close_fracdiff"}
+    exclude_cols = {"symbol", "d_star", "close_fracdiff", *UNLOCK_AUDIT_COLUMNS}
 
-    # Seleciona features comuns a >= 50% dos ativos
+    # â”€â”€ Seleciona features comuns a >= 50% dos ativos â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     feat_count: dict[str, int] = {}
     for sym, feat_df in all_features.items():
         for c in feat_df.columns:
@@ -387,14 +532,14 @@ def run_vi_clustering(all_features: dict[str, pd.DataFrame]) -> dict:
         log.warning("vi.too_few_common_features", n=len(common_feats))
         return {"status": "INSUFFICIENT_DATA"}
 
-    # Pooling: concatena features de todos os ativos
+    # â”€â”€ DEFESA 1: Pooling cross-asset â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     pool_rows = []
     symbols_pooled = []
     for sym, feat_df in all_features.items():
         avail = [c for c in common_feats if c in feat_df.columns]
         if len(avail) < len(common_feats) * 0.7:
             continue
-        sub = feat_df[avail].dropna()
+        sub = feat_df[avail].replace([np.inf, -np.inf], np.nan).dropna()
         if len(sub) >= 50:
             pool_rows.append(sub)
             symbols_pooled.append(sym)
@@ -404,11 +549,11 @@ def run_vi_clustering(all_features: dict[str, pd.DataFrame]) -> dict:
         return {"status": "INSUFFICIENT_DATA"}
 
     pooled_df = pd.concat(pool_rows, axis=0, ignore_index=True)
-    # Garante que temos as mesmas colunas (preenche faltantes)
     for c in common_feats:
         if c not in pooled_df.columns:
             pooled_df[c] = 0.0
-    pooled_df = pooled_df[common_feats].dropna()
+    # â”€â”€ SANITIZAÃ‡ÃƒO: Inf das janelas de inicializaÃ§Ã£o FracDiff/log-returns â”€â”€
+    pooled_df = pooled_df[common_feats].replace([np.inf, -np.inf], np.nan).dropna()
 
     log.info("vi.pooled_data",
              n_symbols=len(symbols_pooled),
@@ -420,45 +565,46 @@ def run_vi_clustering(all_features: dict[str, pd.DataFrame]) -> dict:
         log.warning("vi.insufficient_pooled", n=len(pooled_df))
         return {"status": "INSUFFICIENT_DATA"}
 
-    # Computa matriz VI no dataset pooled
+    # â”€â”€ DEFESA 2+3: Matriz VI (binÃ¡rios bypass + variÃ¢ncia zero guard) â”€â”€â”€â”€
     vi_matrix = compute_vi_distance_matrix(pooled_df, n_bins=10)
 
-    # Identifica pares redundantes
-    redundant_pairs = []
-    cols = vi_matrix.columns.tolist()
-    for i in range(len(cols)):
-        for j in range(i + 1, len(cols)):
-            if vi_matrix.iloc[i, j] < VI_THRESHOLD:
-                redundant_pairs.append({
-                    "f1": cols[i], "f2": cols[j],
-                    "vi": round(float(vi_matrix.iloc[i, j]), 4)
-                })
+    # â”€â”€ DEFESA 4: ClusterizaÃ§Ã£o hierÃ¡rquica (Ward + fcluster) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    save_dir = str(Path(MODEL_PATH))
+    cl_result = cluster_features(
+        vi_matrix,
+        vi_threshold=VI_THRESHOLD,
+        save_path=save_dir,
+    )
+
+    triu = vi_matrix.values[np.triu_indices_from(vi_matrix.values, k=1)]
+    mean_vi = round(float(triu.mean()), 4) if len(triu) > 0 else 0.0
 
     log.info("vi.clustering_done",
              n_symbols_pooled=len(symbols_pooled),
              n_obs_pooled=len(pooled_df),
-             n_features=len(cols),
-             n_redundant_pairs=len(redundant_pairs),
-             mean_vi=round(float(vi_matrix.values[np.triu_indices_from(vi_matrix.values, k=1)].mean()), 4),
-             threshold=VI_THRESHOLD)
-
-    # Salva matriz VI como artefato
-    vi_path = Path(MODEL_PATH) / "vi_matrix.csv"
-    vi_path.parent.mkdir(parents=True, exist_ok=True)
-    vi_matrix.to_csv(vi_path)
+             n_features=len(common_feats),
+             n_clusters=cl_result["n_clusters"],
+             n_redundant_pairs=len(cl_result["redundant_pairs"]),
+             mean_vi=mean_vi,
+             threshold=VI_THRESHOLD,
+             cluster_sizes={cid: len(fs) for cid, fs in cl_result["cluster_map"].items()},
+             status=cl_result["status"])
 
     return {
-        "vi_matrix": vi_matrix,
-        "redundant_pairs": redundant_pairs,
-        "n_symbols_pooled": len(symbols_pooled),
-        "n_obs_pooled": len(pooled_df),
-        "n_features": len(cols),
-        "mean_vi": round(float(vi_matrix.values[np.triu_indices_from(vi_matrix.values, k=1)].mean()), 4),
-        "status": "OK",
+        "vi_matrix":          vi_matrix,
+        "cluster_map":        cl_result["cluster_map"],
+        "feature_to_cluster": cl_result["feature_to_cluster"],
+        "redundant_pairs":    cl_result["redundant_pairs"],
+        "n_symbols_pooled":   len(symbols_pooled),
+        "n_obs_pooled":       len(pooled_df),
+        "n_features":         len(common_feats),
+        "n_clusters":         cl_result["n_clusters"],
+        "mean_vi":            mean_vi,
+        "status":             cl_result["status"],
     }
 
 
-# ─── PHASE 3: TRIPLE-BARRIER + META-LABELING + ISOTONIC + SIZING ─────────
+# â”€â”€â”€ PHASE 3: TRIPLE-BARRIER + META-LABELING + ISOTONIC + SIZING â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 CAPITAL_TOTAL      = float(config("CAPITAL_TOTAL",          default="200000"))
 KELLY_KAPPA        = float(config("KELLY_QUARTER_FACTOR",   default="0.25"))
@@ -479,7 +625,7 @@ def run_triple_barrier_for_symbol(
     Triple-Barrier labeling (Parte 5 spec v10.10):
     Eventos = datas onde HMM sinaliza bull. Labels: +1 TP, -1 SL, 0 time-stop.
     HLC priority: Low[t]<=SL verificado ANTES de High[t]>=TP.
-    Slippage SL: ΔP = η × σ_intraday × √(Q/V).
+    Slippage SL: Î”P = Î· Ã— Ïƒ_intraday Ã— âˆš(Q/V).
     """
     from triple_barrier.labeler import (
         apply_triple_barrier, TripleBarrierConfig, validate_barrier_distribution
@@ -498,9 +644,9 @@ def run_triple_barrier_for_symbol(
     # Sigma intraday (Parkinson) para market impact
     sigma_intra = compute_sigma_intraday_parkinson(high, low, ewm_span=20)
 
-    # Eventos: datas onde HMM = bull E dados suficientes (sigma válido)
+    # Eventos: datas onde HMM = bull E dados suficientes (sigma vÃ¡lido)
     hmm_aligned = hmm_result.reindex(df.index)
-    bull_mask   = hmm_aligned["hmm_is_bull"].fillna(False)
+    bull_mask   = hmm_aligned["hmm_prob_bull"].fillna(0.0) >= 0.50
     valid_sigma = sigma_ewma > 0
     events      = df.index[bull_mask & valid_sigma]
 
@@ -508,8 +654,8 @@ def run_triple_barrier_for_symbol(
         log.warning("triple_barrier.too_few_events", symbol=symbol, n=len(events))
         return None
 
-    # Position sizes default (proporção igual do capital)
-    pos_size_default = CAPITAL_TOTAL * 0.05  # 5% por posição inicial
+    # Position sizes default (proporÃ§Ã£o igual do capital)
+    pos_size_default = CAPITAL_TOTAL * 0.05  # 5% por posiÃ§Ã£o inicial
     position_sizes   = pd.Series(pos_size_default, index=df.index)
 
     config_tb = TripleBarrierConfig(
@@ -533,7 +679,7 @@ def run_triple_barrier_for_symbol(
         log.warning("triple_barrier.empty", symbol=symbol)
         return None
 
-    # Validação de distribuição (checklist v10.5)
+    # ValidaÃ§Ã£o de distribuiÃ§Ã£o (checklist v10.5)
     diag = validate_barrier_distribution(barrier_df)
     log.info("triple_barrier.done", symbol=symbol, **diag)
 
@@ -549,8 +695,8 @@ def run_meta_labeling_for_symbol(
 ) -> dict | None:
     """
     Meta-Labeling pipeline (Partes 8-9 spec v10.10):
-    1. Uniqueness dinâmica (t_touch real)
-    2. N_eff → seleção de modelo (Logística vs LGBM)
+    1. Uniqueness dinÃ¢mica (t_touch real)
+    2. N_eff â†’ seleÃ§Ã£o de modelo (LogÃ­stica vs LGBM)
     3. P_bma via Purged K-Fold (stacking ortogonal v10.7)
     4. Isotonic calibration walk-forward com time-decay
     5. Retorna P_calibrated para Kelly sizing
@@ -561,10 +707,10 @@ def run_meta_labeling_for_symbol(
     from meta_labeling.pbma_purged import generate_pbma_purged_kfold
     from meta_labeling.isotonic_calibration import run_isotonic_walk_forward
 
-    # ── 1. Uniqueness dinâmica ───────────────────────────────────────────
+    # â”€â”€ 1. Uniqueness dinÃ¢mica â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     uniqueness = compute_label_uniqueness(barrier_df)
 
-    # ── 2. N_eff e sample weights ────────────────────────────────────────
+    # â”€â”€ 2. N_eff e sample weights â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     n_eff, uniqueness, model_type = compute_effective_n(barrier_df, uniqueness)
     log.info("meta.n_eff", symbol=symbol, n_eff=round(n_eff, 1),
              n_raw=len(barrier_df), model_type=model_type)
@@ -579,7 +725,7 @@ def run_meta_labeling_for_symbol(
         sl_penalty=2.0,
     )
 
-    # ── 3. Build meta features ───────────────────────────────────────────
+    # â”€â”€ 3. Build meta features â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     # Alinha features ao barrier_df index (event dates)
     meta_features = pd.DataFrame(index=barrier_df.index)
 
@@ -590,13 +736,53 @@ def run_meta_labeling_for_symbol(
     # Sigma EWMA at signal
     meta_features["sigma_ewma"] = sigma_ewma.reindex(barrier_df.index, method="ffill").fillna(0)
 
-    # Features derivadas do OHLCV
-    for col in ["ret_1d", "ret_5d", "realized_vol_30d", "vol_ratio",
-                "drawdown_pct", "term_spread", "dvol_zscore"]:
+    # Features da especificaÃ§Ã£o + FracDiff
+    for col in [
+        "ret_1d",
+        "ret_5d",
+        "ret_20d",
+        "realized_vol_30d",
+        "vol_ratio",
+        "funding_rate_ma7d",
+        "basis_3m",
+        "stablecoin_chg30",
+        *UNLOCK_MODEL_FEATURE_COLUMNS,
+        "dvol_zscore",
+        "btc_ma200_flag",
+        "close_fracdiff",
+    ]:
         if col in features.columns:
-            meta_features[col] = features[col].reindex(
-                barrier_df.index, method="ffill"
-            ).fillna(0)
+            aligned = features[col].reindex(barrier_df.index, method="ffill")
+            # close_fracdiff Ã© obrigatÃ³rio: preserva NaN iniciais para trim por linhas,
+            # evitando que zeros artificiais matem o sinal da feature.
+            if col == "close_fracdiff":
+                meta_features[col] = aligned
+            else:
+                meta_features[col] = aligned.fillna(0)
+
+    # Target: label +1 â†’ Y=1, label -1 ou 0 â†’ Y=0
+    y_target = (barrier_df["label"] == 1).astype(int)
+
+    # HMM hard gate alinhado aos eventos
+    hmm_for_gate = hmm_result["hmm_prob_bull"].reindex(
+        barrier_df.index, method="ffill"
+    ).fillna(0.0) if "hmm_prob_bull" in hmm_result.columns else None
+
+    # Preserva TODO o histÃ³rico por ativo.
+    # O warm-up do FracDiff NÃƒO deve mutilar o dataset inteiro da Fase 3/4.
+    # Em vez de truncar o ativo inteiro, mantemos a coluna e imputamos apenas
+    # os NaNs iniciais de forma conservadora apÃ³s o alinhamento temporal.
+    if "close_fracdiff" in meta_features.columns:
+        frac_aligned = pd.to_numeric(meta_features["close_fracdiff"], errors="coerce")
+        first_valid = frac_aligned.first_valid_index()
+        valid_ratio = float(frac_aligned.notna().mean()) if len(frac_aligned) else 0.0
+        log.info("meta.fracdiff_coverage", symbol=symbol,
+                 valid_ratio=round(valid_ratio, 3),
+                 first_valid=str(first_valid) if first_valid is not None else None)
+        meta_features["close_fracdiff"] = frac_aligned.ffill().fillna(0.0)
+
+    # SanitizaÃ§Ã£o final apÃ³s trim por linhas
+    meta_features = meta_features.replace([np.inf, -np.inf], np.nan).ffill().fillna(0)
 
     # Drop columns with zero variance
     var = meta_features.var()
@@ -606,10 +792,8 @@ def run_meta_labeling_for_symbol(
         log.warning("meta.too_few_features", symbol=symbol, n=meta_features.shape[1])
         return None
 
-    # Target: label +1 → Y=1, label -1 ou 0 → Y=0
-    y_target = (barrier_df["label"] == 1).astype(int)
+    # â”€â”€ 4. P_bma via PurgedKFold â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-    # ── 4. P_bma via Purged K-Fold ──────────────────────────────────────
     p_bma = generate_pbma_purged_kfold(
         feature_df=meta_features,
         target_series=y_target,
@@ -617,9 +801,10 @@ def run_meta_labeling_for_symbol(
         n_eff=n_eff,
         n_splits=min(10, max(3, int(n_eff / 20))),
         embargo_pct=0.01,
+        hmm_series=hmm_for_gate,
     )
 
-    # ── 5. Isotonic Calibration walk-forward ─────────────────────────────
+    # â”€â”€ 5. Isotonic Calibration walk-forward â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     artifacts_dir = str(Path(MODEL_PATH) / "calibration" / symbol)
 
     p_calibrated = run_isotonic_walk_forward(
@@ -631,7 +816,13 @@ def run_meta_labeling_for_symbol(
         artifacts_dir=artifacts_dir,
     )
 
-    # ── Diagnóstico ──────────────────────────────────────────────────────
+    # Reaplica HMM hard gate APÃ“S calibraÃ§Ã£o isotÃ´nica.
+    if hmm_for_gate is not None:
+        bear_mask = hmm_for_gate.reindex(p_calibrated.index).fillna(0.0) < 0.50
+        p_calibrated = p_calibrated.copy()
+        p_calibrated.loc[bear_mask] = 0.0
+
+    # â”€â”€ DiagnÃ³stico â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     valid_mask = ~p_calibrated.isna()
     if valid_mask.sum() > 0:
         p_valid = p_calibrated[valid_mask]
@@ -644,7 +835,7 @@ def run_meta_labeling_for_symbol(
         except Exception:
             auc, brier = 0.5, 0.25
 
-        # v10.10.1: ECE before/after isotonic (Fix 2 — calibração pooled)
+        # v10.10.1: ECE before/after isotonic (Fix 2 â€” calibraÃ§Ã£o pooled)
         from meta_labeling.isotonic_calibration import calibration_diagnostics
         try:
             ece_diag = calibration_diagnostics(
@@ -684,13 +875,13 @@ def run_kelly_sizing_for_symbol(
     symbol: str,
 ) -> pd.DataFrame:
     """
-    Kelly Fracionário + CVaR sizing (Parte 10 spec v10.10).
-    f = κ × (μ_adjusted) / σ²
-    μ_adjusted = p_cal × |avg_pnl_tp| - (1-p_cal) × |avg_pnl_sl|
+    Kelly FracionÃ¡rio + CVaR sizing (Parte 10 spec v10.10).
+    f = Îº Ã— (Î¼_adjusted) / ÏƒÂ²
+    Î¼_adjusted = p_cal Ã— |avg_pnl_tp| - (1-p_cal) Ã— |avg_pnl_sl|
     """
     from sizing.kelly_cvar import compute_kelly_fraction
 
-    # Calcula retornos médios de TP e SL para Kelly
+    # Calcula retornos mÃ©dios de TP e SL para Kelly
     pnl_tp = barrier_df.loc[barrier_df["label"] == 1, "pnl_real"]
     pnl_sl = barrier_df.loc[barrier_df["label"] == -1, "pnl_real"]
 
@@ -703,12 +894,12 @@ def run_kelly_sizing_for_symbol(
         sigma = float(sigma_ewma.get(dt, 0.01))
 
         if sigma < 1e-6 or p_cal < 0.50:
-            # Sem edge ou sem dados → skip
+            # Sem edge ou sem dados â†’ skip
             results.append({"date": dt, "kelly_frac": 0.0, "position_usdt": 0.0,
                             "p_cal": p_cal, "sigma": sigma})
             continue
 
-        # μ adjusted por P_calibrada (Parte 10.1)
+        # Î¼ adjusted por P_calibrada (Parte 10.1)
         mu_adj = p_cal * avg_tp - (1 - p_cal) * avg_sl
 
         kelly_f = compute_kelly_fraction(
@@ -716,7 +907,7 @@ def run_kelly_sizing_for_symbol(
         )
 
         position_usdt = kelly_f * CAPITAL_TOTAL
-        position_usdt = min(position_usdt, CAPITAL_TOTAL * 0.22)  # cap 22%
+        position_usdt = min(position_usdt, CAPITAL_TOTAL * 0.08)  # cap 8%
 
         results.append({
             "date": dt,
@@ -754,7 +945,7 @@ def save_phase3_results(
 
     # Barrier labels
     barrier_path = out_dir / f"{symbol}_barriers.parquet"
-    pl.from_pandas(barrier_df.reset_index()).write_parquet(barrier_path, compression="zstd")
+    _write_parquet_df(barrier_df.reset_index(), barrier_path)
 
     # Meta-labeling results (p_bma + p_calibrated + y)
     meta_df = pd.DataFrame({
@@ -764,12 +955,12 @@ def save_phase3_results(
         "uniqueness": meta_result["uniqueness"],
     })
     meta_path = out_dir / f"{symbol}_meta.parquet"
-    pl.from_pandas(meta_df.reset_index()).write_parquet(meta_path, compression="zstd")
+    _write_parquet_df(meta_df.reset_index(), meta_path)
 
     # Sizing
     if not sizing_df.empty:
         sizing_path = out_dir / f"{symbol}_sizing.parquet"
-        pl.from_pandas(sizing_df.reset_index()).write_parquet(sizing_path, compression="zstd")
+        _write_parquet_df(sizing_df.reset_index(), sizing_path)
 
     log.info("save.phase3", symbol=symbol,
              barriers=len(barrier_df),
@@ -783,7 +974,7 @@ def save_features_parquet(
     d_star: float,
 ) -> None:
     """Salva features + regime labels em parquet processado.
-    NOTA: parquet_data é read-only para ml_engine. Escreve em model_artifacts."""
+    NOTA: parquet_data Ã© read-only para ml_engine. Escreve em model_artifacts."""
     out_dir = Path(MODEL_PATH) / "features"
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -791,23 +982,21 @@ def save_features_parquet(
     merged["d_star"] = d_star
     merged["symbol"] = symbol
 
-    # Converte para polars e salva
-    df_pl = pl.from_pandas(merged.reset_index())
     path = out_dir / f"{symbol}.parquet"
-    df_pl.write_parquet(path, compression="zstd")
+    _write_parquet_df(merged.reset_index(), path)
 
     log.info("save.features", symbol=symbol, path=str(path),
-             rows=len(df_pl), columns=list(merged.columns))
+             rows=len(merged), columns=list(merged.columns))
 
 
-# ─── ORCHESTRATOR ────────────────────────────────────────────────────────────
+# â”€â”€â”€ ORCHESTRATOR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 async def run_ml_pipeline_full() -> dict:
     """
     Pipeline ML completo Fase 2 + Fase 3:
-      Phase 2: Load Data → Features → FracDiff → HMM Walk-Forward → Corwin-Schultz
-      Phase 3: Triple-Barrier → Uniqueness → PBMA Purged K-Fold → Isotonic Calibration
-               → Kelly/CVaR Sizing → CVaR Portfolio Stress Test
+      Phase 2: Load Data â†’ Features â†’ FracDiff â†’ HMM Walk-Forward â†’ Corwin-Schultz
+      Phase 3: Triple-Barrier â†’ Uniqueness â†’ PBMA Purged K-Fold â†’ Isotonic Calibration
+               â†’ Kelly/CVaR Sizing â†’ CVaR Portfolio Stress Test
       Cross-asset: VI/CFI clustering
     """
     start = time.time()
@@ -822,8 +1011,11 @@ async def run_ml_pipeline_full() -> dict:
 
     # Ensure output dirs exist
     Path(MODEL_PATH).mkdir(parents=True, exist_ok=True)
+    # v10.10.6: Pre-create Phase 3 directory so diagnostic never sees "NOT FOUND"
+    (Path(MODEL_PATH) / "phase3").mkdir(parents=True, exist_ok=True)
+    (Path(MODEL_PATH) / "calibration").mkdir(parents=True, exist_ok=True)
 
-    # ── Load BTC reference data ONCE (for btc_ma200_flag) ────────────
+    # â”€â”€ Load BTC reference data ONCE (for btc_ma200_flag) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     btc_ref = None
     for btc_sym in ["BTC", "BTCUSDT"]:
         btc_ref = load_ohlcv(btc_sym)
@@ -839,11 +1031,12 @@ async def run_ml_pipeline_full() -> dict:
             if btc_ref is not None and len(btc_ref) > 200:
                 log.warning("pipeline.btc_proxy",
                             proxy=proxy_sym, rows=len(btc_ref),
-                            msg="BTC parquet não encontrado, usando proxy")
+                            msg="BTC parquet nÃ£o encontrado, usando proxy")
                 break
 
     results = {}
     all_features: dict[str, pd.DataFrame] = {}
+    phase2_cache: dict[str, dict] = {}
     skipped = []
 
     # Phase 3: portfolio-level tracking for CVaR
@@ -851,11 +1044,12 @@ async def run_ml_pipeline_full() -> dict:
     portfolio_sigmas: dict[str, float]      = {}
     portfolio_pnl:    dict[str, np.ndarray] = {}
 
+    from features.volatility import compute_sigma_ewma
+
     for symbol in symbols:
         try:
             log.info("pipeline.symbol_start", symbol=symbol)
 
-            # ── 1. Load data ─────────────────────────────────────────────
             df = load_ohlcv(symbol)
             if df is None or len(df) < MIN_HISTORY_DAYS:
                 log.info("pipeline.skip_short", symbol=symbol,
@@ -863,104 +1057,204 @@ async def run_ml_pipeline_full() -> dict:
                 skipped.append(symbol)
                 continue
 
-            # ── 2. Features base (com BTC reference) ─────────────────────
-            features = compute_base_features(df, symbol, btc_data=btc_ref)
+            funding_series = load_funding(symbol)
+            basis_series = load_basis(symbol)
+            stablecoin_series = load_stablecoin_regime()
+            unlock_frame = load_unlock_feature_frame(symbol)
+            features = compute_base_features(
+                df,
+                symbol,
+                btc_data=btc_ref,
+                funding_series=funding_series,
+                basis_series=basis_series,
+                stablecoin_series=stablecoin_series,
+                unlock_frame=unlock_frame,
+            )
 
-            # ── 3. FracDiff ──────────────────────────────────────────────
             fracdiff_series, d_star = run_fracdiff_for_symbol(df, symbol)
             features["close_fracdiff"] = fracdiff_series
 
-            # ── 4. HMM walk-forward ──────────────────────────────────────
-            hmm_features = features[
-                [c for c in features.columns if c != "close_fracdiff"]
-            ].copy()
-            returns = features["ret_1d"].fillna(0)  # FIX: no NaN returns for HMM
-
+            hmm_features = features[[c for c in features.columns if c != "close_fracdiff"]].copy()
+            returns = features["ret_1d"].fillna(0)
             hmm_result = run_hmm_for_symbol(hmm_features, returns, symbol)
 
-            # ── 5. Corwin-Schultz ────────────────────────────────────────
             cs_result = run_corwin_schultz_for_symbol(symbol)
             if cs_result is not None:
                 log.info("pipeline.cs_done", symbol=symbol,
                          n_anomalies=int(cs_result["cs_anomaly"].sum()))
 
-            # ── 6. Save Phase 2 features ──────────────────────────────────
             save_features_parquet(symbol, features, hmm_result, d_star)
+            vi_feature_frame = features.drop(columns=UNLOCK_AUDIT_COLUMNS, errors="ignore")
+            all_features[symbol] = vi_feature_frame.ffill().fillna(0)
 
-            # Store CLEANED features for VI clustering (ffill+fillna like HMM)
-            all_features[symbol] = features.ffill().fillna(0)
+            features = features.reindex(df.index)
+            hmm_result = hmm_result.reindex(df.index)
+            hmm_result["hmm_prob_bull"] = hmm_result["hmm_prob_bull"].fillna(0.0)
+            hmm_result["hmm_is_bull"] = hmm_result["hmm_is_bull"].fillna(False)
 
-            # ══════════════════════════════════════════════════════════════
-            # PHASE 3: Triple-Barrier → Meta-Labeling → Kelly Sizing
-            # ══════════════════════════════════════════════════════════════
+            sigma_ewma = compute_sigma_ewma(returns.reindex(df.index, fill_value=0.0), span=20)
+            sigma_ewma = sigma_ewma.reindex(df.index, fill_value=0.0)
 
-            phase3_ok = False
-            meta_auc  = 0.0
+            log.info("pipeline.phase2_ready", symbol=symbol,
+                     len_df=len(df), len_features=len(features), len_hmm=len(hmm_result),
+                     len_sigma=len(sigma_ewma),
+                     hmm_bull_pct=round(float(hmm_result["hmm_is_bull"].mean()), 3),
+                     sigma_valid_pct=round(float((sigma_ewma > 0).mean()), 3))
 
-            # ── 7. Triple-Barrier labeling ────────────────────────────────
-            barrier_df = run_triple_barrier_for_symbol(
-                df, hmm_result, features, symbol
-            )
+            phase2_cache[symbol] = {
+                "df": df,
+                "features": features,
+                "hmm_result": hmm_result,
+                "sigma_ewma": sigma_ewma,
+                "d_star": d_star,
+                "cs_result": cs_result,
+            }
 
-            if barrier_df is not None and len(barrier_df) >= 20:
-                # ── 8. Meta-Labeling + Isotonic Calibration ───────────────
-                from features.volatility import compute_sigma_ewma
-                sigma_ewma = compute_sigma_ewma(returns, span=20)
+        except Exception as e:
+            log.error("pipeline.phase2_error", symbol=symbol,
+                      error=str(e), exc_info=True)
+            results[symbol] = {"status": "error", "error": str(e), "phase": 2}
+            continue
 
+    vi_result = {}
+    if len(all_features) >= 5:
+        vi_result = run_vi_clustering(all_features)
+        if vi_result.get("status") in ("OK", "PASS"):
+            log.info("pipeline.vi_done",
+                     n_clusters=vi_result.get("n_clusters"),
+                     redundant_pairs=len(vi_result.get("redundant_pairs", [])),
+                     cluster_sizes={cid: len(fs) for cid, fs in
+                                    vi_result.get("cluster_map", {}).items()})
+        else:
+            log.warning("pipeline.vi_failed", status=vi_result.get("status"))
+    else:
+        log.warning("pipeline.vi_skipped", n_assets=len(all_features),
+                    msg="Not enough phase2 assets for VI clustering")
+
+    for symbol in symbols:
+        if symbol not in phase2_cache:
+            continue
+
+        cached = phase2_cache[symbol]
+        df = cached["df"]
+        features = cached["features"]
+        hmm_result = cached["hmm_result"]
+        sigma_ewma = cached["sigma_ewma"]
+        d_star = cached["d_star"]
+        cs_result = cached["cs_result"]
+
+        phase3_ok = False
+        meta_auc = 0.0
+        barrier_df = None
+
+        try:
+            barrier_df = run_triple_barrier_for_symbol(df, hmm_result, features, symbol)
+        except Exception as e:
+            log.error(f"FATAL ERROR in Phase 3 Triple-Barrier for {symbol}: {str(e)}",
+                      exc_info=True)
+            raise
+
+        if barrier_df is not None and len(barrier_df) >= 20:
+            try:
                 meta_result = run_meta_labeling_for_symbol(
                     features, barrier_df, hmm_result, sigma_ewma, symbol
                 )
+            except Exception as e:
+                log.error(f"FATAL ERROR in Phase 3 Meta-Labeling for {symbol}: {str(e)}",
+                          exc_info=True)
+                raise
 
-                if meta_result is not None:
-                    # ── 9. Kelly/CVaR sizing ──────────────────────────────
+            if meta_result is not None:
+                try:
                     sizing_df = run_kelly_sizing_for_symbol(
-                        barrier_df, meta_result["p_calibrated"],
-                        sigma_ewma, symbol
+                        barrier_df, meta_result["p_calibrated"], sigma_ewma, symbol
                     )
 
-                    # Save Phase 3 results
                     save_phase3_results(symbol, barrier_df, meta_result, sizing_df)
                     phase3_ok = True
-                    meta_auc  = meta_result.get("auc", 0.0)
+                    meta_auc = meta_result.get("auc", 0.0)
 
-                    # Collect for portfolio CVaR
+                    log.info("phase3.SAVED_OK", symbol=symbol,
+                             n_barriers=len(barrier_df),
+                             auc=round(meta_auc, 4),
+                             n_sizing=len(sizing_df))
+
                     if not sizing_df.empty:
                         latest = sizing_df.iloc[-1]
                         portfolio_fracs[symbol] = float(latest.get("kelly_frac", 0))
                         portfolio_sigmas[symbol] = float(latest.get("sigma", 0.01))
                         portfolio_pnl[symbol] = barrier_df["pnl_real"].values
-                else:
-                    log.warning("pipeline.meta_skip", symbol=symbol,
-                                msg="N_eff too low or insufficient data")
+                except Exception as e:
+                    log.error(f"FATAL ERROR in Phase 3 Kelly/Save for {symbol}: {str(e)}",
+                              exc_info=True)
+                    raise
             else:
-                log.warning("pipeline.barrier_skip", symbol=symbol,
-                            n_events=len(barrier_df) if barrier_df is not None else 0)
+                log.warning("phase3.meta_returned_none", symbol=symbol,
+                            msg="N_eff too low or insufficient data - skipping, NOT fatal")
+        else:
+            n_ev = len(barrier_df) if barrier_df is not None else 0
+            log.warning("phase3.insufficient_barrier_events", symbol=symbol,
+                        n_events=n_ev, min_required=20,
+                        msg="Not enough HMM-bull events for this symbol - skipping")
 
-            results[symbol] = {
-                "status": "ok",
-                "d_star": round(d_star, 4),
-                "n_rows": len(features),
-                "hmm_pct_bull": round(float(hmm_result["hmm_is_bull"].mean()), 3),
-                "cs_anomalies": int(cs_result["cs_anomaly"].sum()) if cs_result is not None else 0,
-                "phase3": phase3_ok,
-                "meta_auc": round(meta_auc, 4) if phase3_ok else None,
-                "n_barriers": len(barrier_df) if barrier_df is not None else 0,
-            }
-            log.info("pipeline.symbol_done", symbol=symbol, **results[symbol])
+        results[symbol] = {
+            "status": "ok",
+            "d_star": round(d_star, 4),
+            "n_rows": len(features),
+            "hmm_pct_bull": round(float(hmm_result["hmm_is_bull"].mean()), 3),
+            "cs_anomalies": int(cs_result["cs_anomaly"].sum()) if cs_result is not None else 0,
+            "phase3": phase3_ok,
+            "meta_auc": round(meta_auc, 4) if phase3_ok else None,
+            "n_barriers": len(barrier_df) if barrier_df is not None else 0,
+        }
+        log.info("pipeline.symbol_done", symbol=symbol, **results[symbol])
 
+    phase4_status = None
+    n_phase3_ready = sum(1 for r in results.values() if r.get("phase3") is True)
+    if n_phase3_ready > 0:
+        try:
+            from phase4_cpcv import main as run_phase4_cpcv
+
+            run_phase4_cpcv()
+
+            phase4_report_path = Path(MODEL_PATH) / "phase4_report_v4.json"
+            snapshot_path = Path(MODEL_PATH) / "phase4" / "phase4_execution_snapshot.parquet"
+            aggregated_path = Path(MODEL_PATH) / "phase4" / "phase4_aggregated_predictions.parquet"
+            phase4_report = {}
+
+            if phase4_report_path.exists():
+                with open(phase4_report_path, "r", encoding="utf-8") as fin:
+                    phase4_report = json.load(fin)
+                phase4_status = phase4_report.get("cpcv", {}).get("status")
+
+            if snapshot_path.exists():
+                snapshot_df = pl.read_parquet(snapshot_path).to_pandas()
+                if not snapshot_df.empty:
+                    active_mask = pd.to_numeric(snapshot_df.get("position_usdt", 0.0), errors="coerce").fillna(0.0) > 0
+                    active_snapshot = snapshot_df.loc[active_mask].copy()
+                    portfolio_fracs = {
+                        str(row["symbol"]): float(row.get("kelly_frac", 0.0))
+                        for _, row in active_snapshot.iterrows()
+                    }
+                    portfolio_sigmas = {
+                        str(row["symbol"]): float(row.get("sigma_ewma", 0.01))
+                        for _, row in active_snapshot.iterrows()
+                    }
+                    if aggregated_path.exists():
+                        agg_df = pl.read_parquet(aggregated_path).to_pandas()
+                        portfolio_pnl = {
+                            str(symbol): pd.to_numeric(sym_df["pnl_real"], errors="coerce").fillna(0.0).values
+                            for symbol, sym_df in agg_df.groupby("symbol")
+                        }
+                    log.info("phase4.snapshot_loaded",
+                             status=phase4_status,
+                             n_symbols=len(snapshot_df),
+                             n_active=len(active_snapshot))
+            else:
+                log.warning("phase4.snapshot_missing", path=str(snapshot_path))
         except Exception as e:
-            log.error("pipeline.symbol_error", symbol=symbol, error=str(e),
-                      exc_info=True)
-            results[symbol] = {"status": "error", "error": str(e)}
+            log.warning("phase4.run_error", error=str(e), exc_info=True)
 
-    # ── 10. VI/CFI clustering (cross-asset) ──────────────────────────────
-    if len(all_features) >= 5:
-        vi_result = run_vi_clustering(all_features)
-        if vi_result:
-            log.info("pipeline.vi_done",
-                     redundant_pairs=len(vi_result.get("redundant_pairs", [])))
-
-    # ── 11. CVaR Portfolio Stress Test (Parte 10 — v10.10) ───────────────
     if len(portfolio_fracs) >= 2:
         try:
             from sizing.kelly_cvar import compute_cvar_stress
@@ -988,7 +1282,7 @@ async def run_ml_pipeline_full() -> dict:
         except Exception as e:
             log.warning("portfolio.cvar_error", error=str(e))
 
-    # ── 12. Phase 3 Summary ──────────────────────────────────────────────
+    # â”€â”€ 12. Phase 3 Summary â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     n_phase3_ok = sum(1 for r in results.values()
                       if r.get("phase3") is True)
     aucs = [r["meta_auc"] for r in results.values()
@@ -999,9 +1293,10 @@ async def run_ml_pipeline_full() -> dict:
              n_phase3_ok=n_phase3_ok,
              n_total=len(results),
              avg_meta_auc=avg_auc,
-             n_portfolio_positions=len(portfolio_fracs))
+             n_portfolio_positions=len(portfolio_fracs),
+             phase4_status=phase4_status)
 
-    # ── 13. Publish summary to Redis ─────────────────────────────────────
+    # â”€â”€ 13. Publish summary to Redis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     try:
         from redis.asyncio import from_url
         redis = await from_url(REDIS_URL, decode_responses=True)
@@ -1014,6 +1309,7 @@ async def run_ml_pipeline_full() -> dict:
             "n_phase3_ok": n_phase3_ok,
             "avg_meta_auc": avg_auc,
             "n_portfolio": len(portfolio_fracs),
+            "phase4_status": phase4_status,
             "elapsed_s": round(time.time() - start, 1),
             "timestamp": datetime.now(timezone.utc).isoformat(),
         }
@@ -1031,10 +1327,10 @@ async def run_ml_pipeline_full() -> dict:
              errors=sum(1 for r in results.values() if r.get("status") == "error"),
              skipped=len(skipped))
 
-    return {"status": "complete", "elapsed_s": elapsed, "results": results}
+    return {"status": "complete", "elapsed_s": elapsed, "results": results, "phase4_status": phase4_status}
 
 
-# ─── MAIN ────────────────────────────────────────────────────────────────────
+# â”€â”€â”€ MAIN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 async def main_loop() -> None:
     """Loop principal do ml_engine."""
@@ -1074,9 +1370,9 @@ async def main_loop() -> None:
         except Exception as e:
             log.error("ml_engine.cycle_error", error=str(e), exc_info=True)
 
-        # Próximo ciclo: alinhado ao data_inserter (4h)
+        # PrÃ³ximo ciclo: alinhado ao data_inserter (4h)
         log.info("ml_engine.next_cycle", wait_s=RETRY_INTERVAL * 12,
-                 msg="Aguardando próximo ciclo (4h)...")
+                 msg="Aguardando prÃ³ximo ciclo (4h)...")
         await asyncio.sleep(RETRY_INTERVAL * 12)  # ~60 min
 
 
@@ -1086,3 +1382,5 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         log.info("ml_engine.shutdown")
         sys.exit(0)
+
+

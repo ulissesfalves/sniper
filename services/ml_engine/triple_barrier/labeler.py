@@ -24,9 +24,9 @@ from .market_impact import compute_sqrt_market_impact, compute_intraday_vol_park
 
 log = structlog.get_logger(__name__)
 
-DEFAULT_K_TP            = 1.5
-DEFAULT_K_SL            = 1.5
-DEFAULT_MAX_HOLDING     = 5
+DEFAULT_K_TP            = 1.75
+DEFAULT_K_SL            = 1.0
+DEFAULT_MAX_HOLDING     = 4
 DEFAULT_ETA             = 0.10
 
 
@@ -130,7 +130,13 @@ def apply_triple_barrier(
 
         barrier_tp = p0 * (1.0 + config.k_tp * sigma_t)
         barrier_sl = p0 * (1.0 - config.k_sl * sigma_t)
-        t_end      = min(t0 + config.max_holding_days, len(close_prices) - 1)
+
+        # Time limit dinâmico: em regimes mais voláteis, encurta a janela.
+        # Isso aumenta a separação entre breakout verdadeiro e ruído prolongado.
+        vol_ref = 0.03
+        hold_scale = float(np.clip(vol_ref / max(sigma_t, 1e-6), 0.50, 1.25))
+        dyn_holding = int(np.clip(round(config.max_holding_days * hold_scale), 2, config.max_holding_days))
+        t_end      = min(t0 + dyn_holding, len(close_prices) - 1)
         q_usdt     = float(position_sizes.get(event_date, p0 * 1_000))
 
         label         = 0          # default: time-stop

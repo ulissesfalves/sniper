@@ -18,6 +18,7 @@ import pandas as pd
 from scipy.stats import norm, skew, kurtosis as scipy_kurtosis
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score
+from features.onchain import UNLOCK_MODEL_FEATURE_COLUMNS
 warnings.filterwarnings("ignore")
 
 MODEL_PATH    = Path("/data/models")
@@ -38,9 +39,14 @@ PBO_THRESHOLD       = 0.10
 AUC_MIN_THRESHOLD   = 0.52
 ECE_THRESHOLD       = 0.05
 SHARPE_OOS_MIN      = 0.70
-MAX_DD_THRESHOLD    = 0.45
+MAX_DD_THRESHOLD    = 0.18
 SUBPERIOD_MIN_PASS  = 4
 PBMA_FALLBACK_THR   = 0.65
+VI_CLUSTER_ASSET_PATHS = [
+    MODEL_PATH / "global_vi_clusters.json",
+    MODEL_PATH / "vi_asset_clusters.json",
+    MODEL_PATH / "calibration" / "global_vi_clusters.json",
+]
 
 
 def _safe_read(path):
@@ -61,6 +67,87 @@ def _safe_read(path):
     return df
 
 
+def _load_vi_cluster_map() -> dict[str, list[str]] | None:
+    path = MODEL_PATH / "cluster_map.json"
+    if not path.exists():
+        return None
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            raw = json.load(f)
+    except Exception:
+        return None
+
+    if isinstance(raw, dict) and "cluster_map" in raw and isinstance(raw["cluster_map"], dict):
+        raw = raw["cluster_map"]
+    elif isinstance(raw, dict) and "feature_to_cluster" in raw and isinstance(raw["feature_to_cluster"], dict):
+        grouped: dict[str, list[str]] = {}
+        for feat, cid in raw["feature_to_cluster"].items():
+            grouped.setdefault(str(cid), []).append(str(feat))
+        raw = grouped
+
+    cleaned: dict[str, list[str]] = {}
+    if isinstance(raw, dict):
+        for cid, feats in raw.items():
+            if isinstance(feats, list):
+                cleaned[str(cid)] = [str(f) for f in feats]
+    return cleaned or None
+
+
+def _choose_vi_features(df: pd.DataFrame, y_col: str = "y_meta") -> list[str]:
+    cluster_map = _load_vi_cluster_map()
+    fallback_candidates = [
+        "sigma_ewma", "ret_1d", "ret_5d", "ret_20d", "vol_ratio",
+        "funding_rate_ma7d", "basis_3m", "stablecoin_chg30",
+        *UNLOCK_MODEL_FEATURE_COLUMNS, "dvol_zscore", "btc_ma200_flag", "close_fracdiff",
+    ]
+    if cluster_map is None:
+        return [c for c in fallback_candidates if c in df.columns and df[c].notna().mean() > 0.5 and float(df[c].dropna().std()) >= 0.01]
+
+    alias = {"realized_vol_30d": "sigma_ewma"}
+    selected: list[str] = []
+    y = pd.to_numeric(df[y_col], errors="coerce") if y_col in df.columns else None
+
+    for cid, feats in sorted(cluster_map.items(), key=lambda kv: str(kv[0])):
+        mapped = []
+        for feat in feats:
+            feat = alias.get(feat, feat)
+            if feat in df.columns and feat != "p_bma_pkf" and feat != "hmm_prob_bull":
+                ser = pd.to_numeric(df[feat], errors="coerce")
+                if ser.notna().mean() > 0.5 and float(ser.dropna().std()) >= 0.01:
+                    mapped.append(feat)
+        mapped = list(dict.fromkeys(mapped))
+        if not mapped:
+            continue
+        if len(mapped) == 1 or y is None:
+            selected.append(mapped[0])
+            continue
+        best_feat = mapped[0]
+        best_score = -1.0
+        for feat in mapped:
+            tmp = pd.concat([pd.to_numeric(df[feat], errors="coerce"), y], axis=1).dropna()
+            if len(tmp) < 50:
+                continue
+            score = abs(float(tmp.iloc[:, 0].corr(tmp.iloc[:, 1], method="spearman")))
+            if np.isnan(score):
+                score = 0.0
+            if score > best_score:
+                best_score = score
+                best_feat = feat
+        selected.append(best_feat)
+    return list(dict.fromkeys(selected))
+
+
+def _atomic_json_write(path: Path, payload: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    with open(tmp, "w", encoding="utf-8") as fout:
+        json.dump(payload, fout, indent=2, default=str)
+        fout.flush()
+        import os
+        os.fsync(fout.fileno())
+    tmp.replace(path)
+
+
 def load_pooled_meta_df():
     rows, symbols_ok, feat_counts = [], [], {}
     for meta_path in sorted(PHASE3_PATH.glob("*_meta.parquet")):
@@ -75,6 +162,9 @@ def load_pooled_meta_df():
             barrier_df = _safe_read(barrier_path).drop_duplicates("date", keep="last").set_index("date")
             feature_df = _safe_read(feature_path).drop_duplicates("date", keep="last").set_index("date")
             common_idx = meta_df.index.intersection(barrier_df.index)
+
+            # Preserva o histÃ³rico de cada ativo.
+            # O warm-up do FracDiff nÃ£o deve cortar anos inteiros do dataset pooled.
             if len(common_idx) < 20:
                 continue
             n = len(common_idx)
@@ -91,25 +181,56 @@ def load_pooled_meta_df():
                 row["pnl_real"] = row["pnl"]
             f = feature_df.reindex(common_idx)
             feat_added = 0
-            for col in ["hmm_prob_bull","hmm_is_bull","realized_vol_30d",
-                         "ret_1d","ret_5d","ret_20d","vol_ratio",
-                         "drawdown_pct","dvol_zscore","btc_ma200_flag",
-                         "term_spread","volume_momentum","close_fracdiff"]:
+            for col in [
+                "hmm_prob_bull",
+                "hmm_is_bull",
+                "realized_vol_30d",
+                "ret_1d",
+                "ret_5d",
+                "ret_20d",
+                "vol_ratio",
+                "funding_rate_ma7d",
+                "basis_3m",
+                "stablecoin_chg30",
+                *UNLOCK_MODEL_FEATURE_COLUMNS,
+                "dvol_zscore",
+                "btc_ma200_flag",
+                "close_fracdiff",
+            ]:
                 if col in f.columns:
                     vals = f[col].values
                     try:
-                        if not np.all(np.isnan(vals.astype(float))):
-                            row[col] = vals; feat_added += 1
+                        vals_num = vals.astype(float)
+                        if not np.all(np.isnan(vals_num)):
+                            row[col] = vals_num; feat_added += 1
                     except (ValueError, TypeError):
                         row[col] = vals; feat_added += 1
             if "realized_vol_30d" in row:
                 row["sigma_ewma"] = row["realized_vol_30d"]
+
+            # close_fracdiff deve sobreviver sem cortar o histÃ³rico todo do ativo.
+            if "close_fracdiff" in row:
+                frac_ser = pd.to_numeric(pd.Series(row["close_fracdiff"]), errors="coerce")
+                row["close_fracdiff"] = frac_ser.ffill().fillna(0.0).values
+
+            # Hard gate incondicional: regime bear invalida p_bma e zera sizing.
+            bear_mask = None
+            if "hmm_prob_bull" in row and "p_bma_pkf" in row:
+                hmm_vals = np.asarray(row["hmm_prob_bull"], dtype=float)
+                p_vals = np.asarray(row["p_bma_pkf"], dtype=float)
+                bear_mask = np.isnan(hmm_vals) | (hmm_vals < 0.50)
+                p_vals[bear_mask] = 0.0
+                row["p_bma_pkf"] = p_vals
             if sizing_path.exists():
                 sizing_df = _safe_read(sizing_path).drop_duplicates("date", keep="last").set_index("date")
                 s = sizing_df.reindex(common_idx)
                 for col in ["kelly_frac","position_usdt"]:
                     if col in s.columns:
-                        row[col] = s[col].values
+                        vals = s[col].values
+                        if bear_mask is not None:
+                            vals = np.asarray(vals, dtype=float)
+                            vals[bear_mask] = 0.0
+                        row[col] = vals
             df_row = pd.DataFrame(row).reset_index(drop=True)
             df_row.index.name = None
             rows.append(df_row)
@@ -135,27 +256,24 @@ def load_pooled_meta_df():
     return pooled
 
 
+
+
 def select_features(df):
-    candidates = ["p_bma_pkf","hmm_prob_bull","sigma_ewma",
-                   "ret_1d","ret_5d","ret_20d","vol_ratio","drawdown_pct",
-                   "dvol_zscore","btc_ma200_flag","term_spread","volume_momentum"]
-    available, dropped = [], []
-    for c in candidates:
-        if c not in df.columns: continue
-        if df[c].notna().mean() <= 0.50: continue
-        col_std = float(df[c].dropna().std())
-        if col_std < 0.01:
-            dropped.append((c, float(df[c].dropna().mean()), col_std))
-            continue
-        available.append(c)
-    if dropped:
-        print(f"  DROPPED constant features:")
-        for name, mean, std in dropped:
-            print(f"    {name}: mean={mean:.4f}  std={std:.6f}")
-    return available
+    selected = ["p_bma_pkf"] if "p_bma_pkf" in df.columns else []
+    vi_feats = _choose_vi_features(df, y_col="y_meta")
+    selected.extend([c for c in vi_feats if c not in selected])
+
+    # close_fracdiff Ã© mandatÃ³ria na Fase 4 quando houver dados minimamente vÃ¡lidos.
+    if "close_fracdiff" in df.columns:
+        frac = pd.to_numeric(df["close_fracdiff"], errors="coerce")
+        if frac.notna().mean() > 0.30 and float(frac.dropna().std()) >= 1e-8:
+            if "close_fracdiff" not in selected:
+                selected.append("close_fracdiff")
+    return selected
 
 
-def compute_sample_weights(df):
+def compute_sample_weights(
+df):
     n = len(df)
     dates = pd.to_datetime(df["date"])
     w_uniq = df["uniqueness"].fillna(1.0).values if "uniqueness" in df.columns else np.ones(n)
@@ -246,100 +364,480 @@ def compute_equity_curve(pnl_real, signal, threshold=0.5, capital=CAPITAL_INITIA
     }
 
 
+def _load_symbol_vi_clusters(symbols):
+    symbols = sorted({str(s) for s in symbols if str(s)})
+    artifact_used = False
+    artifact_path = None
+    clusters = {}
+
+    for path in VI_CLUSTER_ASSET_PATHS:
+        if not path.exists():
+            continue
+        try:
+            with open(path, "r", encoding="utf-8") as fin:
+                raw = json.load(fin)
+            candidate = raw.get("vi_clusters") if isinstance(raw, dict) and isinstance(raw.get("vi_clusters"), dict) else raw
+            if not isinstance(candidate, dict):
+                continue
+            parsed = {}
+            for cluster_name, members in candidate.items():
+                if not isinstance(members, list):
+                    continue
+                valid_members = sorted({str(m) for m in members if str(m) in symbols})
+                if valid_members:
+                    parsed[str(cluster_name)] = valid_members
+            if parsed:
+                clusters = parsed
+                artifact_used = True
+                artifact_path = str(path)
+                break
+        except Exception:
+            continue
+
+    symbol_to_cluster = {}
+    for cluster_name, members in clusters.items():
+        for symbol in members:
+            symbol_to_cluster[symbol] = cluster_name
+
+    missing = [symbol for symbol in symbols if symbol not in symbol_to_cluster]
+    if missing:
+        fallback_cluster = "cluster_global"
+        clusters[fallback_cluster] = sorted({*clusters.get(fallback_cluster, []), *missing})
+        for symbol in missing:
+            symbol_to_cluster[symbol] = fallback_cluster
+
+    if not clusters:
+        clusters = {"cluster_global": symbols}
+        symbol_to_cluster = {symbol: "cluster_global" for symbol in symbols}
+
+    if artifact_used and missing:
+        mode = "artifact_with_global_fallback"
+    elif artifact_used:
+        mode = "artifact"
+    else:
+        mode = "global_fallback_missing_artifact"
+
+    return clusters, symbol_to_cluster, mode, artifact_path
+
+
+def _fit_cluster_calibrators(oos_df, min_pool_size=150):
+    from meta_labeling.isotonic_calibration import fit_isotonic_calibrator
+
+    symbols = oos_df["symbol"].astype(str).unique().tolist()
+    clusters, symbol_to_cluster, cluster_mode, artifact_path = _load_symbol_vi_clusters(symbols)
+
+    global_dates = pd.DatetimeIndex(pd.to_datetime(oos_df["date"]).values)
+    global_calibrator = fit_isotonic_calibrator(
+        oos_df["p_meta_raw"].values,
+        oos_df["y_meta"].values,
+        global_dates,
+        halflife_days=HALFLIFE_DAYS,
+    )
+
+    calibrators = {}
+    cluster_summary = []
+
+    for cluster_name, members in sorted(clusters.items()):
+        cluster_df = oos_df[oos_df["symbol"].astype(str).isin(members)].copy()
+        if cluster_df.empty:
+            continue
+
+        use_global = len(cluster_df) < max(60, min_pool_size)
+        if use_global:
+            calibrator = global_calibrator
+            fit_mode = "global_fallback_small_cluster"
+        else:
+            cluster_dates = pd.DatetimeIndex(pd.to_datetime(cluster_df["date"]).values)
+            calibrator = fit_isotonic_calibrator(
+                cluster_df["p_meta_raw"].values,
+                cluster_df["y_meta"].values,
+                cluster_dates,
+                halflife_days=HALFLIFE_DAYS,
+            )
+            fit_mode = "cluster_specific"
+
+        raw_probs = np.clip(cluster_df["p_meta_raw"].values.astype(float), 0.001, 0.999)
+        cal_probs = np.asarray(calibrator.predict(raw_probs), dtype=float)
+        cal_probs[cluster_df["p_meta_raw"].values.astype(float) <= 0.0] = 0.0
+
+        calibrators[cluster_name] = calibrator
+        cluster_summary.append({
+            "cluster": cluster_name,
+            "n_obs": int(len(cluster_df)),
+            "n_symbols": int(cluster_df["symbol"].nunique()),
+            "symbols": sorted(cluster_df["symbol"].astype(str).unique().tolist()),
+            "fit_mode": fit_mode,
+            "ece_before": round(_compute_ece(cluster_df["p_meta_raw"].values, cluster_df["y_meta"].values), 4),
+            "ece_after": round(_compute_ece(cal_probs, cluster_df["y_meta"].values), 4),
+        })
+
+    return calibrators, cluster_summary, symbol_to_cluster, cluster_mode, artifact_path
+
+
+def _apply_cluster_calibration(oos_df, calibrators, symbol_to_cluster):
+    cluster_names = oos_df["symbol"].astype(str).map(symbol_to_cluster).fillna("cluster_global")
+    calibrated = pd.Series(np.nan, index=oos_df.index, dtype=float)
+
+    for cluster_name, idx in cluster_names.groupby(cluster_names).groups.items():
+        calibrator = calibrators.get(cluster_name) or calibrators.get("cluster_global")
+        raw_vals = pd.to_numeric(oos_df.loc[idx, "p_meta_raw"], errors="coerce").fillna(0.0).values
+        if calibrator is None:
+            calibrated.loc[idx] = raw_vals
+            continue
+        clipped = np.clip(raw_vals, 0.001, 0.999)
+        cal_vals = np.asarray(calibrator.predict(clipped), dtype=float)
+        cal_vals[raw_vals <= 0.0] = 0.0
+        calibrated.loc[idx] = cal_vals
+
+    return calibrated.astype(float)
+
+
+def _compute_symbol_trade_stats(reference_df):
+    if reference_df.empty or "pnl_real" not in reference_df.columns:
+        return {}, 0.02, 0.02
+
+    pnl_tp = pd.to_numeric(
+        reference_df.loc[reference_df["label"] == 1, "pnl_real"],
+        errors="coerce",
+    ).dropna()
+    pnl_sl = pd.to_numeric(
+        reference_df.loc[reference_df["label"] == -1, "pnl_real"],
+        errors="coerce",
+    ).dropna()
+
+    global_tp = abs(float(pnl_tp.mean())) if not pnl_tp.empty else 0.02
+    global_sl = abs(float(pnl_sl.mean())) if not pnl_sl.empty else 0.02
+
+    stats = {}
+    for symbol, sym_df in reference_df.groupby("symbol"):
+        sym_tp = pd.to_numeric(
+            sym_df.loc[sym_df["label"] == 1, "pnl_real"],
+            errors="coerce",
+        ).dropna()
+        sym_sl = pd.to_numeric(
+            sym_df.loc[sym_df["label"] == -1, "pnl_real"],
+            errors="coerce",
+        ).dropna()
+        stats[str(symbol)] = {
+            "avg_tp": abs(float(sym_tp.mean())) if not sym_tp.empty else global_tp,
+            "avg_sl": abs(float(sym_sl.mean())) if not sym_sl.empty else global_sl,
+        }
+
+    return stats, global_tp, global_sl
+
+
+def _attach_trade_stats(df, symbol_stats, global_tp, global_sl, tp_col, sl_col):
+    out = df.copy()
+    mapped = out["symbol"].astype(str).map(lambda symbol: symbol_stats.get(symbol, {}))
+    out[tp_col] = mapped.map(lambda item: float(item.get("avg_tp", global_tp)))
+    out[sl_col] = mapped.map(lambda item: float(item.get("avg_sl", global_sl)))
+    out[tp_col] = pd.to_numeric(out[tp_col], errors="coerce").fillna(global_tp).clip(lower=1e-6)
+    out[sl_col] = pd.to_numeric(out[sl_col], errors="coerce").fillna(global_sl).clip(lower=1e-6)
+    return out
+
+
+def _compute_phase4_sizing(df, prob_col, prefix, avg_tp_col, avg_sl_col):
+    from sizing.kelly_cvar import compute_kelly_fraction
+
+    out = df.copy()
+    n = len(out)
+    if n == 0:
+        return out
+
+    probs = pd.to_numeric(out[prob_col], errors="coerce").fillna(0.0).clip(0.0, 1.0).values
+    if "sigma_ewma" in out.columns:
+        sigmas = pd.to_numeric(out["sigma_ewma"], errors="coerce").fillna(0.01).clip(lower=1e-6).values
+    else:
+        sigmas = np.full(n, 0.01, dtype=float)
+
+    avg_tp = pd.to_numeric(out[avg_tp_col], errors="coerce").fillna(0.02).clip(lower=1e-6).values
+    avg_sl = pd.to_numeric(out[avg_sl_col], errors="coerce").fillna(0.02).clip(lower=1e-6).values
+
+    mu_vals, kelly_vals, position_vals = [], [], []
+    for prob, sigma, tp_val, sl_val in zip(probs, sigmas, avg_tp, avg_sl):
+        if prob < 0.50 or sigma < 1e-6:
+            mu_vals.append(0.0)
+            kelly_vals.append(0.0)
+            position_vals.append(0.0)
+            continue
+
+        mu_adj = prob * tp_val - (1.0 - prob) * sl_val
+        if mu_adj <= 0:
+            mu_vals.append(float(mu_adj))
+            kelly_vals.append(0.0)
+            position_vals.append(0.0)
+            continue
+
+        kelly_frac = float(compute_kelly_fraction(mu=mu_adj, sigma=sigma, p_cal=prob))
+        position_usdt = min(kelly_frac * CAPITAL_INITIAL, CAPITAL_INITIAL * 0.08)
+
+        mu_vals.append(float(mu_adj))
+        kelly_vals.append(kelly_frac)
+        position_vals.append(float(position_usdt))
+
+    out[f"mu_adj_{prefix}"] = mu_vals
+    out[f"kelly_frac_{prefix}"] = kelly_vals
+    out[f"position_usdt_{prefix}"] = position_vals
+    return out
+
+
+def _build_execution_snapshot(predictions_df):
+    if predictions_df.empty:
+        return pd.DataFrame()
+
+    latest = (
+        predictions_df.sort_values(["date", "symbol"], kind="mergesort")
+        .groupby("symbol", as_index=False)
+        .tail(1)
+        .sort_values(["date", "symbol"], kind="mergesort")
+        .reset_index(drop=True)
+    )
+    latest["p_calibrated"] = pd.to_numeric(latest.get("p_meta_calibrated", 0.0), errors="coerce").fillna(0.0)
+    latest["kelly_frac"] = pd.to_numeric(latest.get("kelly_frac_meta", 0.0), errors="coerce").fillna(0.0)
+    latest["position_usdt"] = pd.to_numeric(latest.get("position_usdt_meta", 0.0), errors="coerce").fillna(0.0)
+    latest["side"] = np.where(latest["position_usdt"] > 0, "BUY", "FLAT")
+    latest["is_active"] = latest["position_usdt"] > 0
+    return latest
+
+
+def _aggregate_oos_predictions(oos_df):
+    if oos_df.empty:
+        return pd.DataFrame()
+
+    agg_spec = {
+        "y_meta": "first",
+        "p_meta_raw": "mean",
+        "p_meta_calibrated": "mean",
+        "cluster_name": "first",
+    }
+    for col in [
+        "p_bma_pkf",
+        "pnl_real",
+        "hmm_prob_bull",
+        "kelly_frac",
+        "position_usdt",
+        "sigma_ewma",
+        "avg_tp_train",
+        "avg_sl_train",
+        "mu_adj_meta",
+        "kelly_frac_meta",
+        "position_usdt_meta",
+    ]:
+        if col in oos_df.columns:
+            agg_spec[col] = "mean" if col.startswith(("avg_", "mu_adj_", "kelly_frac_", "position_usdt_")) else "first"
+
+    grouped = (
+        oos_df.groupby(["date", "symbol"], as_index=False)
+        .agg(agg_spec)
+        .sort_values(["date", "symbol"], kind="mergesort")
+        .reset_index(drop=True)
+    )
+    counts = (
+        oos_df.groupby(["date", "symbol"])
+        .size()
+        .reset_index(name="n_cpcv_predictions")
+    )
+    return grouped.merge(counts, on=["date", "symbol"], how="left")
+
 def run_cpcv(pooled_df, feature_cols):
+    feature_cols = [c for c in feature_cols if c != "hmm_prob_bull"]
     n = len(pooled_df)
     embargo = max(1, int(n * EMBARGO_PCT))
     splits = np.array_split(np.arange(n), N_SPLITS)
     combos = list(combinations(range(N_SPLITS), N_TEST_SPLITS))
-    trajectories, all_preds, all_labels = [], [], []
-
-    kelly_arr = pooled_df["kelly_frac"].fillna(0).values if "kelly_frac" in pooled_df.columns else None
+    trajectories, prediction_rows = [], []
 
     print(f"\n  CPCV: {len(combos)} trajectories, N={n}, embargo={embargo}")
     print(f"  Features ({len(feature_cols)}): {feature_cols}")
 
     for combo in combos:
-        test_idx  = np.concatenate([splits[i] for i in combo])
+        test_idx = np.concatenate([splits[i] for i in combo])
         train_idx = np.array([j for j in range(n) if j not in set(test_idx)])
         purge_mask = np.zeros(n, dtype=bool)
         for fi in combo:
             fs, fe = splits[fi][0], splits[fi][-1]
-            purge_mask |= (np.arange(n) >= fs-embargo) & (np.arange(n) <= fe+embargo)
+            purge_mask |= (np.arange(n) >= fs - embargo) & (np.arange(n) <= fe + embargo)
         train_idx = train_idx[~purge_mask[train_idx]]
         if len(train_idx) < 40 or len(test_idx) < 15:
             continue
+
         train_df = pooled_df.iloc[train_idx]
-        test_df  = pooled_df.iloc[test_idx]
-        uniq = train_df["uniqueness"].fillna(1.0) if "uniqueness" in train_df.columns \
-            else pd.Series(1.0, index=train_df.index)
+        test_df = pooled_df.iloc[test_idx]
+        symbol_stats, global_tp, global_sl = _compute_symbol_trade_stats(train_df)
+        uniq = train_df["uniqueness"].fillna(1.0) if "uniqueness" in train_df.columns else pd.Series(1.0, index=train_df.index)
         n_eff = float(uniq.sum())
+
         X_tr = train_df[feature_cols].fillna(0).values
         y_tr = train_df["y_meta"].values
         w_tr = compute_sample_weights(train_df)
         X_te = test_df[feature_cols].fillna(0).values
         y_te = test_df["y_meta"].values
+
         try:
             model = train_meta_model(X_tr, y_tr, w_tr, n_eff)
-            p_oos = model.predict_proba(X_te)[:, 1]
-            auc_oos = roc_auc_score(y_te, p_oos) if len(np.unique(y_te)) >= 2 else 0.5
-            pnl_arr = test_df["pnl_real"].fillna(0).values if "pnl_real" in test_df.columns \
-                else np.zeros(len(test_df))
-            k_arr = kelly_arr[test_idx] if kelly_arr is not None else None
-            eq = compute_equity_curve(pnl_arr, p_oos, threshold=0.5, kelly_frac=k_arr)
-            all_preds.extend(p_oos.tolist())
-            all_labels.extend(y_te.tolist())
+            p_oos_raw = model.predict_proba(X_te)[:, 1]
+            if "hmm_prob_bull" in test_df.columns:
+                hmm_te = pd.to_numeric(test_df["hmm_prob_bull"], errors="coerce").fillna(0.0).values
+                p_oos_raw = np.where(hmm_te < 0.50, 0.0, p_oos_raw)
+            auc_oos = roc_auc_score(y_te, p_oos_raw) if len(np.unique(y_te)) >= 2 else 0.5
+
             trajectories.append({
-                "combo":combo,"n_train":len(train_idx),"n_test":len(test_idx),
-                "n_eff":round(n_eff,1),"auc_oos":round(auc_oos,4),
-                "sharpe_oos":eq["sharpe"],"max_dd_oos":eq["max_dd"],
-                "cum_ret_oos":eq["cum_return"],"n_active":eq["n_active"],
-                "win_rate":eq["win_rate"],"avg_alloc":eq["avg_alloc"],
-                "beats_null":bool(auc_oos > 0.50),
+                "combo": str(combo),
+                "n_train": len(train_idx),
+                "n_test": len(test_idx),
+                "n_eff": round(n_eff, 1),
+                "auc_oos": round(auc_oos, 4),
+                "beats_null": bool(auc_oos > 0.50),
             })
             tag = "PASS" if auc_oos > AUC_MIN_THRESHOLD else ("~" if auc_oos > 0.50 else "FAIL")
-            print(f"    [{tag:4s}] {combo}: AUC={auc_oos:.4f}  Sharpe={eq['sharpe']:.2f}  "
-                  f"DD={eq['max_dd']:.1%}  WR={eq['win_rate']:.0%}  "
-                  f"Active={eq['n_active']}/{len(test_df)}  Alloc={eq['avg_alloc']:.1%}")
+            print(f"    [{tag:4s}] {combo}: AUC_raw={auc_oos:.4f}  N_train={len(train_idx)}  N_test={len(test_df)}")
+
+            test_rows = test_df.reset_index(drop=True)
+            for row_idx, (_, row) in enumerate(test_rows.iterrows()):
+                stats = symbol_stats.get(str(row["symbol"]), {"avg_tp": global_tp, "avg_sl": global_sl})
+                prediction_rows.append({
+                    "combo": str(combo),
+                    "date": row["date"],
+                    "symbol": row["symbol"],
+                    "y_meta": int(y_te[row_idx]),
+                    "p_meta_raw": float(p_oos_raw[row_idx]),
+                    "p_bma_pkf": float(row["p_bma_pkf"]) if "p_bma_pkf" in row else np.nan,
+                    "pnl_real": float(row["pnl_real"]) if "pnl_real" in row else np.nan,
+                    "label": int(row["label"]) if "label" in row and pd.notna(row["label"]) else np.nan,
+                    "hmm_prob_bull": float(row["hmm_prob_bull"]) if "hmm_prob_bull" in row else np.nan,
+                    "sigma_ewma": float(row["sigma_ewma"]) if "sigma_ewma" in row else np.nan,
+                    "avg_tp_train": float(stats["avg_tp"]),
+                    "avg_sl_train": float(stats["avg_sl"]),
+                })
         except Exception as e:
             print(f"    [ERR ] {combo}: {e}")
 
-    if not trajectories:
-        return {"status":"FAIL","n_trajectories":0,"pbo":1.0,"pbo_pass":False,
-                "auc_mean":0.5,"auc_std":0,"auc_below_052_pct":1.0,"auc_pass":False,
-                "sharpe_mean":0,"max_dd_worst":1,"avg_win_rate":0,
-                "ece_global":0.5,"ece_pass":False}
+    if not trajectories or not prediction_rows:
+        return {
+            "status": "FAIL",
+            "n_trajectories": 0,
+            "pbo": 1.0,
+            "pbo_pass": False,
+            "auc_mean": 0.5,
+            "auc_std": 0.0,
+            "auc_below_052_pct": 1.0,
+            "auc_pass": False,
+            "sharpe_mean": 0.0,
+            "max_dd_worst": 1.0,
+            "avg_win_rate": 0.0,
+            "ece_global": 0.5,
+            "ece_pass": False,
+        }
+
+    oos_df = pd.DataFrame(prediction_rows)
+    calibrators, cluster_summary, symbol_to_cluster, cluster_mode, artifact_path = _fit_cluster_calibrators(oos_df)
+    oos_df["cluster_name"] = oos_df["symbol"].astype(str).map(symbol_to_cluster).fillna("cluster_global")
+    oos_df["p_meta_calibrated"] = _apply_cluster_calibration(oos_df, calibrators, symbol_to_cluster)
+    oos_df = _compute_phase4_sizing(
+        oos_df,
+        prob_col="p_meta_calibrated",
+        prefix="meta",
+        avg_tp_col="avg_tp_train",
+        avg_sl_col="avg_sl_train",
+    )
+    aggregated_predictions = _aggregate_oos_predictions(oos_df)
+    aggregated_predictions = _compute_phase4_sizing(
+        aggregated_predictions,
+        prob_col="p_meta_calibrated",
+        prefix="meta",
+        avg_tp_col="avg_tp_train",
+        avg_sl_col="avg_sl_train",
+    )
+
     df_r = pd.DataFrame(trajectories)
+    combo_metrics = []
+    for combo_name, combo_df in oos_df.groupby("combo", sort=False):
+        pnl_arr = pd.to_numeric(combo_df["pnl_real"], errors="coerce").fillna(0.0).values
+        eq = compute_equity_curve(
+            pnl_arr,
+            combo_df["p_meta_calibrated"].values,
+            threshold=0.5,
+            kelly_frac=combo_df["kelly_frac_meta"].values,
+        )
+        auc_cal = roc_auc_score(combo_df["y_meta"], combo_df["p_meta_calibrated"]) if combo_df["y_meta"].nunique() >= 2 else 0.5
+        combo_metrics.append({
+            "combo": combo_name,
+            "auc_calibrated": round(float(auc_cal), 4),
+            "sharpe_oos": eq["sharpe"],
+            "max_dd_oos": eq["max_dd"],
+            "cum_ret_oos": eq["cum_return"],
+            "n_active": eq["n_active"],
+            "win_rate": eq["win_rate"],
+            "avg_alloc": eq["avg_alloc"],
+        })
+    if combo_metrics:
+        df_r = df_r.merge(pd.DataFrame(combo_metrics), on="combo", how="left")
+
     pbo = float((df_r["auc_oos"] < 0.50).mean())
     auc_m = float(df_r["auc_oos"].mean())
     auc_s = float(df_r["auc_oos"].std())
     auc_b = float((df_r["auc_oos"] < AUC_MIN_THRESHOLD).mean())
-    ece = _compute_ece(np.array(all_preds), np.array(all_labels))
-    return {
-        "trajectories":trajectories,"n_trajectories":len(trajectories),
-        "auc_mean":round(auc_m,4),"auc_std":round(auc_s,4),
-        "pbo":round(pbo,4),"pbo_pass":pbo < PBO_THRESHOLD,
-        "auc_below_052_pct":round(auc_b,4),"auc_pass":auc_b <= 0.30,
-        "sharpe_mean":round(float(df_r["sharpe_oos"].mean()),4),
-        "max_dd_worst":round(float(df_r["max_dd_oos"].max()),4),
-        "avg_win_rate":round(float(df_r["win_rate"].mean()),4),
-        "ece_global":round(ece,4),"ece_pass":ece < ECE_THRESHOLD,
-        "status":"PASS" if (pbo < PBO_THRESHOLD and auc_b <= 0.30) else "FAIL",
-    }
+    ece = _compute_ece(oos_df["p_meta_calibrated"].values, oos_df["y_meta"].values)
+    ece_raw = _compute_ece(oos_df["p_meta_raw"].values, oos_df["y_meta"].values)
+    ece_unique = _compute_ece(aggregated_predictions["p_meta_calibrated"].values, aggregated_predictions["y_meta"].values) if not aggregated_predictions.empty else ece
 
+    return {
+        "trajectories": df_r.to_dict(orient="records"),
+        "n_trajectories": len(df_r),
+        "auc_mean": round(auc_m, 4),
+        "auc_std": round(auc_s, 4),
+        "pbo": round(pbo, 4),
+        "pbo_pass": pbo < PBO_THRESHOLD,
+        "auc_below_052_pct": round(auc_b, 4),
+        "auc_pass": auc_b <= 0.30,
+        "sharpe_mean": round(float(df_r["sharpe_oos"].mean()), 4),
+        "max_dd_worst": round(float(df_r["max_dd_oos"].max()), 4),
+        "avg_win_rate": round(float(df_r["win_rate"].mean()), 4),
+        "ece_global": round(ece, 4),
+        "ece_raw": round(ece_raw, 4),
+        "ece_unique": round(ece_unique, 4),
+        "ece_pass": ece < ECE_THRESHOLD,
+        "cluster_calibration_mode": cluster_mode,
+        "cluster_calibration_artifact": artifact_path,
+        "cluster_calibration": cluster_summary,
+        "auc_calibrated_mean": round(float(df_r["auc_calibrated"].mean()), 4) if "auc_calibrated" in df_r.columns else None,
+        "mean_predictions_per_obs": round(float(aggregated_predictions["n_cpcv_predictions"].mean()), 4) if not aggregated_predictions.empty else 0.0,
+        "oos_predictions_df": oos_df,
+        "aggregated_predictions_df": aggregated_predictions,
+        "status": "PASS" if (pbo < PBO_THRESHOLD and auc_b <= 0.30) else "FAIL",
+    }
 
 def evaluate_fallback(pooled_df):
     if "p_bma_pkf" not in pooled_df.columns or "pnl_real" not in pooled_df.columns:
         return {"error":"Missing","sharpe":0,"cum_return":0,"max_dd":1,
                 "n_active":0,"win_rate":0,"equity_final":CAPITAL_INITIAL,
                 "avg_alloc":0,"sensitivity":{}}
-    sig = pooled_df["p_bma_pkf"].fillna(0).values
-    pnl = pooled_df["pnl_real"].fillna(0).values
-    kelly = pooled_df["kelly_frac"].fillna(0).values if "kelly_frac" in pooled_df.columns else None
-    pos   = pooled_df["position_usdt"].fillna(0).values if "position_usdt" in pooled_df.columns else None
+    symbol_stats, global_tp, global_sl = _compute_symbol_trade_stats(pooled_df)
+    fallback_df = _attach_trade_stats(
+        pooled_df,
+        symbol_stats,
+        global_tp,
+        global_sl,
+        tp_col="avg_tp_fallback",
+        sl_col="avg_sl_fallback",
+    )
+    fallback_df = _compute_phase4_sizing(
+        fallback_df,
+        prob_col="p_bma_pkf",
+        prefix="fallback",
+        avg_tp_col="avg_tp_fallback",
+        avg_sl_col="avg_sl_fallback",
+    )
+    sig = fallback_df["p_bma_pkf"].fillna(0).values
+    if "hmm_prob_bull" in fallback_df.columns:
+        hmm = pd.to_numeric(fallback_df["hmm_prob_bull"], errors="coerce").fillna(0.0).values
+        sig = np.where(hmm < 0.50, 0.0, sig)
+    pnl = fallback_df["pnl_real"].fillna(0).values
+    kelly = fallback_df["kelly_frac_fallback"].fillna(0).values
     results = {}
     for thr in [0.55, 0.60, 0.65, 0.70, 0.75]:
         results[f"thr_{thr:.2f}"] = compute_equity_curve(
-            pnl, sig, threshold=thr, kelly_frac=kelly, position_usdt=pos)
+            pnl, sig, threshold=thr, kelly_frac=kelly)
     main_r = results["thr_0.65"]
     return {
         "threshold":PBMA_FALLBACK_THR,
@@ -347,11 +845,11 @@ def evaluate_fallback(pooled_df):
         "max_dd":main_r["max_dd"],"n_active":main_r["n_active"],
         "win_rate":main_r["win_rate"],"equity_final":main_r["equity_final"],
         "avg_alloc":main_r.get("avg_alloc",0),
+        "signals_df": fallback_df,
         "sensitivity":{k:{kk:vv for kk,vv in v.items()
                           if kk in ("sharpe","cum_return","max_dd","n_active","win_rate","avg_alloc")}
                        for k,v in results.items()},
     }
-
 
 def compute_dsr_honest(sharpe_is, T=1500, skewness=-0.3, kurtosis_val=5.0):
     def dsr(sr, nt):
@@ -390,11 +888,11 @@ SUBPERIODS = [
     ("2024+",  "2024-01-01","2026-12-31","Bull/lateral"),
 ]
 
-def analyze_subperiods(pooled_df, signal_col="p_bma_pkf", threshold=PBMA_FALLBACK_THR):
+def analyze_subperiods(pooled_df, signal_col="p_bma_pkf", threshold=PBMA_FALLBACK_THR, kelly_col="kelly_frac"):
     dates = pd.to_datetime(pooled_df["date"]).values
     pnl = pooled_df["pnl_real"].fillna(0).values if "pnl_real" in pooled_df.columns else np.zeros(len(pooled_df))
     sig = pooled_df[signal_col].fillna(0).values if signal_col in pooled_df.columns else np.ones(len(pooled_df))*0.5
-    kelly = pooled_df["kelly_frac"].fillna(0).values if "kelly_frac" in pooled_df.columns else None
+    kelly = pooled_df[kelly_col].fillna(0).values if kelly_col in pooled_df.columns else None
     results = []
     for name, start, end, regime in SUBPERIODS:
         dm = (dates >= np.datetime64(start)) & (dates <= np.datetime64(end))
@@ -459,7 +957,8 @@ def main():
     dsr_result = compute_dsr_honest(fb_sharpe, T=T_t, skewness=sk, kurtosis_val=ku)
 
     print("\n[6/7] Analyzing subperiods (fallback + Kelly)...")
-    subperiods = analyze_subperiods(pooled_df)
+    fallback_signals_df = fallback.get("signals_df", pooled_df)
+    subperiods = analyze_subperiods(fallback_signals_df, kelly_col="kelly_frac_fallback")
 
     elapsed = time.time() - start
 
@@ -477,6 +976,14 @@ def main():
     print(f"  Sharpe OOS medio: {cpcv_result['sharpe_mean']:.2f}")
     print(f"  Win Rate medio: {cpcv_result.get('avg_win_rate',0):.0%}")
     print(f"  ECE global: {cpcv_result['ece_global']:.4f}  {'PASS' if cpcv_result['ece_pass'] else 'FAIL'}")
+    if "ece_raw" in cpcv_result:
+        print(f"  ECE raw:    {cpcv_result['ece_raw']:.4f}")
+    if "ece_unique" in cpcv_result:
+        print(f"  ECE unique: {cpcv_result['ece_unique']:.4f}")
+    if "cluster_calibration_mode" in cpcv_result:
+        print(f"  Calibration mode: {cpcv_result['cluster_calibration_mode']}")
+    if "mean_predictions_per_obs" in cpcv_result:
+        print(f"  Mean preds/obs:   {cpcv_result['mean_predictions_per_obs']:.2f}")
     print(f"  Status: {cpcv_result['status']}")
 
     print(f"\n-- FALLBACK: P_bma > {PBMA_FALLBACK_THR} + Kelly [15.1] --")
@@ -562,19 +1069,44 @@ def main():
 
     # Save
     OUTPUT_PATH.mkdir(parents=True, exist_ok=True)
+    oos_predictions_df = cpcv_result.get("oos_predictions_df", pd.DataFrame())
+    aggregated_predictions_df = cpcv_result.get("aggregated_predictions_df", pd.DataFrame())
+    execution_snapshot_df = _build_execution_snapshot(aggregated_predictions_df)
+    if not oos_predictions_df.empty:
+        oos_predictions_df.to_parquet(OUTPUT_PATH / "phase4_oos_predictions.parquet", index=False)
+    if not aggregated_predictions_df.empty:
+        aggregated_predictions_df.to_parquet(OUTPUT_PATH / "phase4_aggregated_predictions.parquet", index=False)
+    if not execution_snapshot_df.empty:
+        execution_snapshot_df.to_parquet(OUTPUT_PATH / "phase4_execution_snapshot.parquet", index=False)
     report = {
-        "timestamp":datetime.utcnow().isoformat(),"elapsed_s":round(elapsed,1),
-        "cpcv":{k:v for k,v in cpcv_result.items() if k!="trajectories"},
-        "cpcv_trajectories":cpcv_result.get("trajectories",[]),
-        "fallback":fallback,"dsr":dsr_result,"subperiods":subperiods,
-        "checks":{k:bool(v) for k,v in checks.items()},"n_pass":n_pass,
+        "timestamp": datetime.utcnow().isoformat(),
+        "elapsed_s": round(elapsed, 1),
+        "cpcv": {k: v for k, v in cpcv_result.items() if k not in ("trajectories", "oos_predictions_df", "aggregated_predictions_df")},
+        "cpcv_trajectories": cpcv_result.get("trajectories", []),
+        "fallback": {k: v for k, v in fallback.items() if k != "signals_df"},
+        "dsr": dsr_result,
+        "subperiods": subperiods,
+        "checks": {k: bool(v) for k, v in checks.items()},
+        "n_pass": n_pass,
     }
-    with open(OUTPUT_PATH / "phase4_report_v4.json","w") as fout:
-        json.dump(report, fout, indent=2, default=str)
-    print(f"\n  Report: {OUTPUT_PATH/'phase4_report_v4.json'}")
+    nested_path = OUTPUT_PATH / "phase4_report_v4.json"
+    root_path = MODEL_PATH / "phase4_report_v4.json"
+    _atomic_json_write(nested_path, report)
+    _atomic_json_write(root_path, report)
+    try:
+        size_nested = nested_path.stat().st_size
+        size_root = root_path.stat().st_size
+        print("\n  Reports saved:")
+        print(f"    - {nested_path} ({size_nested} bytes)")
+        print(f"    - {root_path} ({size_root} bytes)")
+    except Exception:
+        print(f"\n  Reports saved: {nested_path}, {root_path}")
     print(f"  Elapsed: {elapsed:.1f}s")
     print("=" * 72)
 
 
 if __name__ == "__main__":
     main()
+
+
+

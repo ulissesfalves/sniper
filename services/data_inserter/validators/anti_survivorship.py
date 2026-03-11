@@ -17,6 +17,8 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import Optional
 
+from collectors.token_unlocks import TokenUnlocksCollector
+
 import aiohttp
 import structlog
 
@@ -44,7 +46,7 @@ UPS_CATEGORY_WEIGHTS: dict[str, float] = {
     "Team/Founders": 1.5,
     "VC/Investors":  1.2,
     "Ecosystem":     0.8,
-    "Airdrop":       0.6,
+    "Airdrop/Public": 0.6,
 }
 
 # ── CoinGecko API key detection ──────────────────────────────────────────────
@@ -78,6 +80,7 @@ class AssetRecord:
     volume_24h_usd: float
     age_months:     int
     ups_score:      float = 0.0
+    ups_data_available: bool = False
     is_collapsed:   bool  = False
 
 
@@ -203,23 +206,37 @@ class AntiSurvivorshipValidator:
         """
         Remove ativos no top 25% de UPS score (maior pressão de unlock).
         Ativos colapsados são ISENTOS desta filtragem — mantidos por regra.
+        Se não houver dado de UPS para um ativo, ele é mantido com warning explícito.
         """
         import numpy as np
-        active    = [a for a in assets if not a.is_collapsed]
+        active = [a for a in assets if not a.is_collapsed]
         collapsed = [a for a in assets if a.is_collapsed]
 
         if not active:
             return collapsed
 
-        scores    = [a.ups_score for a in active]
+        active_with_ups = [a for a in active if a.ups_data_available]
+        active_without_ups = [a for a in active if not a.ups_data_available]
+
+        if not active_with_ups:
+            log.warning("ups.filter_skipped", reason="nenhum ativo com UPS disponível")
+            return active + collapsed
+
+        scores = [a.ups_score for a in active_with_ups]
         threshold = float(np.percentile(scores, 75))
-        filtered  = [a for a in active if a.ups_score <= threshold]
+        filtered = [a for a in active_with_ups if a.ups_score <= threshold]
 
-        removed = [a.symbol for a in active if a.ups_score > threshold]
+        removed = [a.symbol for a in active_with_ups if a.ups_score > threshold]
         if removed:
-            log.info("ups.filtered_out", symbols=removed, threshold=round(threshold, 4))
+            log.info("ups.filtered_out", symbols=removed, threshold=round(threshold, 6))
+        if active_without_ups:
+            log.warning(
+                "ups.data_missing",
+                symbols=[a.symbol for a in active_without_ups],
+                action="mantidos_no_universo",
+            )
 
-        return filtered + collapsed   # colapsados sempre incluídos
+        return filtered + active_without_ups + collapsed
 
     async def build_universe_point_in_time(
         self,
@@ -283,12 +300,30 @@ class AntiSurvivorshipValidator:
                     market_cap_usd=mktcap,
                     volume_24h_usd=volume,
                     age_months=age_months,
-                    ups_score=0.0,   # preenchido após busca de unlocks
+                    ups_score=0.0,
+                    ups_data_available=False,
                     is_collapsed=False,
                 ))
 
                 if len(assets) >= top_n:
                     break
+
+            # ── Enriquecer UPS atual via camada observada de unlocks ───────
+            try:
+                unlocks = TokenUnlocksCollector()
+                current_scores = await unlocks.fetch_current_ups_scores(assets)
+                for asset in assets:
+                    score = current_scores.get(asset.symbol)
+                    if score is not None:
+                        asset.ups_score = float(score)
+                        asset.ups_data_available = True
+                log.info(
+                    "ups.current_scores_enriched",
+                    available=sum(1 for a in assets if a.ups_data_available),
+                    missing=sum(1 for a in assets if not a.ups_data_available),
+                )
+            except Exception as exc:  # noqa: BLE001
+                log.warning("ups.enrichment_failed", error=str(exc), action="seguir_sem_bloquear")
 
             # ── Aplica UPS filter (ativos ativos apenas) ──────────────────
             final = self.filter_by_ups(assets) + collapsed_records
@@ -353,7 +388,7 @@ class AntiSurvivorshipValidator:
             AssetRecord(
                 symbol=symbol, coingecko_id=cg_id,
                 market_cap_usd=0, volume_24h_usd=0,
-                age_months=999, ups_score=0.0, is_collapsed=True,
+                age_months=999, ups_score=0.0, ups_data_available=False, is_collapsed=True,
             )
             for symbol, cg_id in collapsed_ids.items()
         ]

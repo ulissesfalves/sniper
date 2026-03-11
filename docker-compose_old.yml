@@ -1,0 +1,264 @@
+# =============================================================================
+# SNIPER v10.10 — Institutional Grade Orchestration
+# Cloud-native: stateless services, external volumes, env-driven config
+# Local: docker-compose up -d
+# AWS/GCP: replace volumes with EFS/GCS, services with ECS/Cloud Run
+# =============================================================================
+
+x-common-env: &common-env
+  TZ: America/Sao_Paulo
+  PYTHONUNBUFFERED: "1"
+  PYTHONDONTWRITEBYTECODE: "1"
+
+x-ml-resources: &ml-resources
+  deploy:
+    resources:
+      limits:
+        memory: 8G
+        cpus: "4.0"
+      reservations:
+        memory: 2G
+        cpus: "1.0"
+
+x-api-resources: &api-resources
+  deploy:
+    resources:
+      limits:
+        memory: 1G
+        cpus: "1.0"
+
+networks:
+  sniper_internal:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+
+volumes:
+  postgres_data:
+  redis_data:
+
+services:
+
+  data_inserter:
+    build:
+      context: ./services/data_inserter
+      dockerfile: Dockerfile
+      args:
+        PYTHON_VERSION: "3.11"
+    container_name: sniper_data_inserter
+    restart: unless-stopped
+    environment:
+      <<: *common-env
+      COINGECKO_API_KEY: ${COINGECKO_API_KEY}
+      BINANCE_API_KEY: ${BINANCE_API_KEY}
+      BINANCE_API_SECRET: ${BINANCE_API_SECRET}
+      BINANCE_TESTNET: ${BINANCE_TESTNET:-true}
+      DERIBIT_CLIENT_ID: ${DERIBIT_CLIENT_ID:-}
+      TOKEN_UNLOCKS_API_KEY: ${TOKEN_UNLOCKS_API_KEY:-}
+      PARQUET_BASE_PATH: /data/parquet
+      SQLITE_PATH: /data/sqlite/sniper.db
+      SCHEDULE_CRON: ${DATA_INSERT_CRON:-0 */4 * * *}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    volumes:
+      - ./data/parquet:/data/parquet
+      - ./data/sqlite:/data/sqlite
+      - ./logs:/app/logs
+    networks:
+      - sniper_internal
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: "2.0"
+
+  ml_engine:
+    build:
+      context: ./services/ml_engine
+      dockerfile: Dockerfile
+      args:
+        PYTHON_VERSION: "3.11"
+    container_name: sniper_ml_engine
+    restart: unless-stopped
+    environment:
+      <<: *common-env
+      PARQUET_BASE_PATH: /data/parquet
+      MODEL_ARTIFACTS_PATH: /data/models
+      SQLITE_PATH: /data/sqlite/sniper.db
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      REDIS_URL: redis://redis:6379/0
+      FRACDIFF_TAU: ${FRACDIFF_TAU:-1e-5}
+      FRACDIFF_MIN_TRAIN_OBS: ${FRACDIFF_MIN_TRAIN_OBS:-252}
+      HMM_N_COMPONENTS: ${HMM_N_COMPONENTS:-2}
+      HMM_N_PCA: ${HMM_N_PCA:-2}
+      KELLY_QUARTER_FACTOR: ${KELLY_QUARTER_FACTOR:-0.25}
+      CVAR_CONFIDENCE: ${CVAR_CONFIDENCE:-0.99}
+      PORTFOLIO_CVAR_LIMIT: ${PORTFOLIO_CVAR_LIMIT:-0.15}
+      CORWIN_SCHULTZ_SIGMA_THR: ${CS_SIGMA_THR:-3.0}
+      ISOTONIC_HALFLIFE_DAYS: ${ISOTONIC_HALFLIFE:-180}
+      C2ST_BLOCK_SIZE: ${C2ST_BLOCK_SIZE:-5}
+      VI_THRESHOLD: ${VI_THRESHOLD:-0.30}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    volumes:
+      - ./data/parquet:/data/parquet:ro
+      - ./data/models:/data/models
+      - ./data/sqlite:/data/sqlite
+      - ./logs:/app/logs
+    networks:
+      - sniper_internal
+    depends_on:
+      redis:
+        condition: service_healthy
+    <<: *ml-resources
+    command: ["python", "-m", "main"]
+
+  execution_engine:
+    build:
+      context: ./services/execution_engine
+      dockerfile: Dockerfile
+      args:
+        PYTHON_VERSION: "3.11"
+    container_name: sniper_execution_engine
+    restart: unless-stopped
+    environment:
+      <<: *common-env
+      BINANCE_API_KEY: ${BINANCE_API_KEY}
+      BINANCE_API_SECRET: ${BINANCE_API_SECRET}
+      BINANCE_TESTNET: ${BINANCE_TESTNET:-true}
+      REDIS_URL: redis://redis:6379/0
+      SQLITE_PATH: /data/sqlite/sniper.db
+      PARQUET_BASE_PATH: /data/parquet
+      MODEL_ARTIFACTS_PATH: /data/models
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      ALERT_EMAIL: ${ALERT_EMAIL:-}
+      MAX_POSITION_PCT: ${MAX_POSITION_PCT:-0.22}
+      MARKET_IMPACT_ETA: ${MARKET_IMPACT_ETA:-0.10}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    volumes:
+      - ./data/parquet:/data/parquet:ro
+      - ./data/models:/data/models:ro
+      - ./data/sqlite:/data/sqlite
+      - ./logs:/app/logs
+    networks:
+      - sniper_internal
+    depends_on:
+      redis:
+        condition: service_healthy
+    <<: *api-resources
+
+  api:
+    build:
+      context: ./services/api
+      dockerfile: Dockerfile
+      args:
+        PYTHON_VERSION: "3.11"
+    container_name: sniper_api
+    restart: unless-stopped
+    environment:
+      <<: *common-env
+      SQLITE_PATH: /data/sqlite/sniper.db
+      PARQUET_BASE_PATH: /data/parquet
+      MODEL_ARTIFACTS_PATH: /data/models
+      REDIS_URL: redis://redis:6379/0
+      API_SECRET_KEY: ${API_SECRET_KEY}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000,http://localhost:80}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    volumes:
+      - ./data/parquet:/data/parquet:ro
+      - ./data/models:/data/models:ro
+      - ./data/sqlite:/data/sqlite:ro
+    networks:
+      - sniper_internal
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    <<: *api-resources
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000",
+              "--workers", "2", "--loop", "uvloop", "--http", "h11"]
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000}
+        VITE_WS_URL: ${VITE_WS_URL:-ws://localhost:8000/ws}
+    container_name: sniper_frontend
+    restart: unless-stopped
+    networks:
+      - sniper_internal
+    expose:
+      - "80"
+    depends_on:
+      api:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: "0.5"
+
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: sniper_nginx
+    restart: unless-stopped
+    ports:
+      - "${NGINX_HTTP_PORT:-80}:80"
+      - "${NGINX_HTTPS_PORT:-443}:443"
+    volumes:
+      - ./infra/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./infra/nginx/ssl:/etc/nginx/ssl:ro
+      - ./logs/nginx:/var/log/nginx
+    networks:
+      - sniper_internal
+    depends_on:
+      - api
+      - frontend
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: "0.25"
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: sniper_redis
+    restart: unless-stopped
+    command: >
+      redis-server
+      --maxmemory 512mb
+      --maxmemory-policy allkeys-lru
+      --save 60 1
+      --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - sniper_internal
+    expose:
+      - "6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 640M
+          cpus: "0.5"

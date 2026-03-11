@@ -1,0 +1,897 @@
+<!DOCTYPE html><!-- Last Published: Thu Feb 26 2026 10:39:15 GMT+0000 (Coordinated Universal Time) --><html data-wf-domain="polygon.technology" data-wf-page="64afb34fde3a7b4d2e11b68c" data-wf-site="637359c81e22b715cec245ad" data-wf-intellimize-customer-id="117671656" lang="en"><head><meta charset="utf-8"/><title>Whitepaper</title><meta content="Whitepaper" property="og:title"/><meta content="https://cdn.prod.website-files.com/637359c81e22b715cec245ad/65f0028bfac68481d6f8971a_Polygon-OG-new.png" property="og:image"/><meta content="Whitepaper" property="twitter:title"/><meta content="https://cdn.prod.website-files.com/637359c81e22b715cec245ad/65f0028bfac68481d6f8971a_Polygon-OG-new.png" property="twitter:image"/><meta content="width=device-width, initial-scale=1" name="viewport"/><link href="https://cdn.prod.website-files.com/637359c81e22b715cec245ad/css/polygontechv2.shared.691c9a03b.min.css" rel="stylesheet" type="text/css" integrity="sha384-aRyaA7VF5eoNyFmHzI8ed/9TLOtahDiV/s33RVqIRIKRQYugjE6yr4dI2ekmhJYf" crossorigin="anonymous"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous"/><script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script><script type="text/javascript">WebFont.load({  google: {    families: ["Montserrat:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic"]  }});</script><script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script><link href="https://cdn.prod.website-files.com/637359c81e22b715cec245ad/66273ffe068c26509a5a7c7c_Frame%20514542.png" rel="shortcut icon" type="image/x-icon"/><link href="https://cdn.prod.website-files.com/637359c81e22b715cec245ad/662740056aca3c89ee39b9d5_Frame%20514543.png" rel="apple-touch-icon"/><link href="https://polygon.technology/papers/pol-whitepaper" rel="canonical"/><style>.anti-flicker, .anti-flicker * {visibility: hidden !important; opacity: 0 !important;}</style><style>[data-wf-hidden-variation], [data-wf-hidden-variation] * {
+        display: none !important;
+      }</style><script type="text/javascript">if (localStorage.getItem('intellimize_data_tracking_type') !== 'optOut') { localStorage.removeItem('intellimize_opt_out_117671656'); } if (localStorage.getItem('intellimize_data_tracking_type') !== 'optOut') { localStorage.setItem('intellimize_data_tracking_type', 'optOut'); }</script><script type="text/javascript">(function(e){var s={r:[]};e.wf={r:s.r,ready:t=>{s.r.push(t)}}})(window)</script><script type="text/javascript">(function(e,t,p){var n=document.documentElement,s={p:[],r:[]},u={p:s.p,r:s.r,push:function(e){s.p.push(e)},ready:function(e){s.r.push(e)}};e.intellimize=u,n.className+=" "+p,setTimeout(function(){n.className=n.className.replace(RegExp(" ?"+p),"")},t)})(window, 4000, 'anti-flicker')</script><link href="https://cdn.intellimize.co/snippet/117671656.js" rel="preload" as="script"/><script type="text/javascript">var wfClientScript=document.createElement("script");wfClientScript.src="https://cdn.intellimize.co/snippet/117671656.js",wfClientScript.async=!0,wfClientScript.onerror=function(){document.documentElement.className=document.documentElement.className.replace(RegExp(" ?anti-flicker"),"")},document.head.appendChild(wfClientScript);</script><link href="https://api.intellimize.co" rel="preconnect" crossorigin="true"/><link href="https://log.intellimize.co" rel="preconnect" crossorigin="true"/><link href="https://117671656.intellimizeio.com" rel="preconnect"/><script src="https://cdn.jsdelivr.net/npm/@teamepyc/webflow-toolkit@0.4/dist/current-year/index.js"></script>
+
+<!-- [Attributes by Finsweet] Disable scrolling -->
+<script defer src="https://cdn.jsdelivr.net/npm/@finsweet/attributes-scrolldisable@1/scrolldisable.js"></script>
+
+<!-- [Attributes by Finsweet] CMS Load -->
+<script async src="https://cdn.jsdelivr.net/npm/@finsweet/attributes-cmsload@1/cmsload.js"></script>
+
+  <style>
+/*width*/
+::-webkit-scrollbar {
+width:4px;
+height:0px;
+max-height:4px;
+}
+/*track*/
+::-webkit-scrollbar-track {
+background:rgba(0, 0, 0, 1);
+}
+/*thumb*/
+::-webkit-scrollbar-thumb {
+background:rgb(128, 128, 128);
+border-radius:40px;
+}
+    
+::-webkit-scrollbar-corner	{
+background:rgba(255, 255, 255, 0);
+}
+
+</style>
+  
+<!-- css to prevent mix blend mode in navbar -->
+<style>
+.nav_dropdown-developers-menu {
+will-change:opacity;
+}
+.nav_dropdown-community-menu {
+will-change:opacity;
+}
+.nav_dropdown-resources-menu {
+will-change:opacity;
+}
+.nav_dropdown-company-menu {
+will-change:opacity;
+}
+</style>
+  
+<!-- css global styles -->
+<style>
+  .blog-list_heading {
+  display: -webkit-box;
+	overflow: hidden;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+  }
+  
+  /* Apply "..." after 4 lines of text on ecosystem page */
+.text-size-med.is-item-card-desc {
+	display: -webkit-box;
+	overflow: hidden;
+	-webkit-line-clamp: 4;
+	-webkit-box-orient: vertical;
+}
+</style>
+<script>
+!function(w, d){
+    w.__adrsbl = {
+        queue: [],
+        run: function(){
+            this.queue.push(arguments);
+        }
+    };
+    var s = d.createElement('script');
+    s.async = true;
+    s.src = 'https://tag.adrsbl.io/p.js?tid=1c3f78d531a64b4fb8b4acdb495a4cf0';
+    var b = d.getElementsByTagName('script')[0];
+    b.parentNode.insertBefore(s, b);
+}(window, document);
+</script>
+<!-- End Addressable Pixel base code -->
+<!-- Twitter conversion -->
+<script>
+!function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
+},s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
+a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
+twq('config','o206t');
+</script>
+
+<script src="https://js.knock-ai.com/9cc2c5a7-fe24-45c9-a41e-317dc3599126.js" async></script>
+
+<script src="https://app.optibase.io/script.js" data-public-api-key="fefea50f-b787-444e-837e-58e7bafe260e"></script>
+
+<meta property="og:site_name" content="Polygon Labs" />
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Corporation",
+    "@id": "https://polygon.technology/#organization",
+    "name": "Polygon",
+    "legalName": "Polygon Labs UI (Cayman) Ltd.",
+    "url": "https://polygon.technology/",
+    "logo": "https://cdn.prod.website-files.com/637359c81e22b715cec245ad/66273f100889f2489acb2d8e_Polygon%20Logo%20Complete%20White.svg",
+    "foundingDate": "2022-10-21",
+    "founders": [
+      {
+        "@type": "Person",
+        "name": "Jaynti Kanani"
+      },
+      {
+        "@type": "Person",
+        "name": "Sandeep Nailwal"
+      },
+      {
+        "@type": "Person",
+        "name": "Anurag Arjun"
+      },
+      {
+        "@type": "Person",
+        "name": "Mihailo Bjelic"
+      }
+    ],
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Harneys Fiduciary (Cayman) Limited",
+      "addressLocality": "Grand Cayman",
+      "postalCode": "KY1-1002",
+      "addressCountry": "KY"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "url": "https://support.polygon.technology/support/home"
+    },
+    "sameAs": [
+      "https://x.com/0xPolygon",
+      "https://www.linkedin.com/company/polygonlabs/",
+      "https://github.com/maticnetwork/",
+      "https://discord.com/invite/0xPolygonCommunity",
+      "https://www.youtube.com/PolygonTV"
+    ]
+  }
+  </script>
+
+<script>
+(function () {
+  const siteUrl = "https://polygon.technology";
+  const siteName = "Home";
+
+  const currentPageTitle = document.title;
+  const currentPageUrl = window.location.href;
+
+  if (currentPageUrl === siteUrl || currentPageUrl === siteUrl + "/") {
+    return;
+  }
+
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": siteName,
+        "item": siteUrl + "/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": currentPageTitle,
+        "item": currentPageUrl
+      }
+    ]
+  };
+
+  const script = document.createElement("script");
+  script.type = "application/ld+json";
+  script.textContent = JSON.stringify(schema);
+  document.head.appendChild(script);
+})();
+</script>
+
+<script 
+tr-color-vars="var(--polygon-v3---color--primary),var(--polygon-v3---color--interverted-primary),var(--polygon-v3---color--inverted-primary-hover),var(--polygon-v3---color--grey-100),var(--polygon-v3---color--grey-200),var(--polygon-v3---color--grey-300),var(--polygon-v3---color--grey-400),var(--polygon-v3---color--grey-500),var(--polygon-v3---color--grey-500-hover),var(--polygon-v3---color--grey-600),var(--polygon-v3---color--grey-600-hover),var(--polygon-v3---color--stroke),var(--polygon-v3---color--purple-subtle),var(--polygon-v3---color--button-bg-white),var(--polygon-v3---color--button-white-text),var(--polygon-v3---color--button-bg-grey),var(--polygon-v3---color--button-grey-text),var(--polygon-v3---color--button-grey-hover-text),var(--polygon-v3---color--button-bg-black),var(--polygon-v3---color--button-black-text),var(--polygon-v3---color--theme-card-bg),var(--polygon-v3---color--nav-hover),var(--polygon-v3---color--accordion-border),var(--polygon-v3---color--trails-hero-card-bg),var(--polygon-v3---dark--nav-dd-outline)" 
+duration="0.5" 
+ease="power1.out" 
+src="https://wv2sd6.csb.app/dark.js">
+</script>
+
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M0GF614FMZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-M0GF614FMZ');
+</script>
+
+
+<!-- Google Tag Manager added on 17th feb 2026-->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NRG47BSK');</script>
+<!-- End Google Tag Manager -->
+
+<script type="text/javascript">
+_linkedin_partner_id = "9547313";
+window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+window._linkedin_data_partner_ids.push(_linkedin_partner_id);
+</script><script type="text/javascript">
+(function(l) {
+if (!l){window.lintrk = function(a,b){window.lintrk.q.push([a,b])};
+window.lintrk.q=[]}
+var s = document.getElementsByTagName("script")[0];
+var b = document.createElement("script");
+b.type = "text/javascript";b.async = true;
+b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+s.parentNode.insertBefore(b, s);})(window.lintrk);
+</script>
+<noscript>
+<img height="1" width="1" style="display:none;" alt="" src="https://px.ads.linkedin.com/collect/?pid=9547313&fmt=gif" />
+</noscript><script src="https://cdn.prod.website-files.com/637359c81e22b715cec245ad%2F6544eda5f000985a163a8687%2F6942228d87d8a7897da184e9%2Ffinsweetcomponentsconfig-1.0.1.js" type="module" async="" siteId="637359c81e22b715cec245ad" finsweet="components"></script><script type="text/javascript">window.__WEBFLOW_CURRENCY_SETTINGS = {"currencyCode":"USD","symbol":"$","decimal":".","fractionDigits":2,"group":",","template":"{{wf {\"path\":\"symbol\",\"type\":\"PlainText\"} }} {{wf {\"path\":\"amount\",\"type\":\"CommercePrice\"} }} {{wf {\"path\":\"currencyCode\",\"type\":\"PlainText\"} }}","hideDecimalForWholeNumbers":false};</script></head><body><div class="pdf-embed desktop-only w-embed w-iframe"><iframe       
+                src="https://cdn.prod.website-files.com/637359c81e22b715cec245ad/64afc5556f3cb0d160f6090c_pol-whitepaper.pdf" style="width:100%; height:100%;" frameborder="0">
+        </iframe></div><div class="pdf-embed hide-desktop w-embed w-iframe"><a href="https://drive.google.com/uc?export=download&id=1WDVOTvTBGlmi3vPnpPaCr2T2Uyn5iCnz" class="download-pdf">Download PDF</a>
+
+<iframe src="https://drive.google.com/file/d/1WDVOTvTBGlmi3vPnpPaCr2T2Uyn5iCnz/preview" width="100%" height="100%" frameborder="0" allow="autoplay"></iframe></div><script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=637359c81e22b715cec245ad" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script><script src="https://cdn.prod.website-files.com/637359c81e22b715cec245ad/js/polygontechv2.schunk.770e19531daceeea.js" type="text/javascript" integrity="sha384-fLj9AbnbNwh+CPgpUqdjITN7Vz6X+UgbAnq74S26A+41OZq/SV9z8IlOJ8Xq0Egz" crossorigin="anonymous"></script><script src="https://cdn.prod.website-files.com/637359c81e22b715cec245ad/js/polygontechv2.schunk.7e1d05487ac17106.js" type="text/javascript" integrity="sha384-uJqgWbQXvCV6mdNlZIWu7K0fEPzR19BBGh6TdKfr4Jfteb40J1U5x3FH32+o8Q67" crossorigin="anonymous"></script><script src="https://cdn.prod.website-files.com/637359c81e22b715cec245ad/js/polygontechv2.schunk.094a1a34628fc2b8.js" type="text/javascript" integrity="sha384-X4pc2ouJvRTPjoSWifB/wXPSvX3sOXu+cexqwuC7TDJIlESnwfhZgduhAYewH6Kl" crossorigin="anonymous"></script><script src="https://cdn.prod.website-files.com/637359c81e22b715cec245ad/js/polygontechv2.7f1a6393.7000a1c2a1b013cb.js" type="text/javascript" integrity="sha384-LT0WMa1FbkoYYftOfCNWDWLysN/nHygirCOIfnATkpEoPwq5DTmo41t6iG1PPQUa" crossorigin="anonymous"></script><script src="https://cdn.prod.website-files.com/gsap/3.14.2/gsap.min.js" type="text/javascript"></script><script src="https://cdn.prod.website-files.com/gsap/3.14.2/ScrollTrigger.min.js" type="text/javascript"></script><script src="https://cdn.prod.website-files.com/gsap/3.14.2/SplitText.min.js" type="text/javascript"></script><script type="text/javascript">gsap.registerPlugin(ScrollTrigger,SplitText);</script>
+
+<!-- Script to remove elements from DOM in mobile-->
+<script>
+if ($(window).width() <= 478) {
+  $('.desktop-only-js').remove();
+}
+</script>
+
+<!-- Jquery to set css on newletter submit button -->
+<script>
+$('.form_input').on('focus', function() {
+  $('#newsletter-submit').css('right', '1rem');
+});
+$('.form_input').on('focusout', function() {
+  $('#newsletter-submit').css('right', '1.25rem');
+});
+</script>
+
+
+<!-- JS to set padding top of main wrapper equal to height of navbar -->
+<script>
+
+</script>
+
+<script src="https://player.vimeo.com/api/player.js"></script>
+
+<script defer>
+ 
+	let WINDOW_WIDTH;
+const videoCards = document.querySelectorAll(".pb_section_card");
+
+const onMouseHover = (e) => {
+  const videoWrapper = e.target.querySelector(".pb_video_embed");
+
+  if (videoWrapper) {
+    const iframe = videoWrapper.querySelector("iframe");
+    const player = new Vimeo.Player(iframe);
+    videoWrapper.classList.add("pb_show");
+    if (iframe) player.play();
+  }
+};
+
+const onMouseLeave = (e) => {
+  const videoWrapper = e.target.querySelector(".pb_video_embed");
+
+  if (videoWrapper) {
+    const iframe = videoWrapper.querySelector("iframe");
+    const player = new Vimeo.Player(iframe);
+    videoWrapper.classList.remove("pb_show");
+    if (iframe) player.pause();
+  }
+};
+window.addEventListener("resize", (e) => {
+  // WINDOW_WIDTH = e.target.innerWidth;
+  WINDOW_WIDTH = e.target.innerWidth;
+
+  videoCards.forEach((card) => {
+    const iframe = card.querySelector(".pb_video_embed iframe");
+    const player = new Vimeo.Player(iframe);
+    player.pause();
+    if (iframe) {
+      if (WINDOW_WIDTH > 991) {
+        player.pause();
+        card.addEventListener("mouseover", onMouseHover);
+        card.addEventListener("mouseenter", onMouseHover);
+        card.addEventListener("mouseleave", onMouseLeave);
+      } else {
+        card.removeEventListener("mouseover", onMouseHover);
+        card.removeEventListener("mouseenter", onMouseHover);
+        card.removeEventListener("mouseleave", onMouseLeave);
+        player.play();
+      }
+    }
+  });
+});
+
+videoCards.forEach((card) => {
+  const iframe = card.querySelector(".pb_video_embed iframe");
+  if (iframe) {
+    const player = new Vimeo.Player(iframe);
+    if (iframe) {
+      if (window.innerWidth > 991) {
+        player.pause();
+        card.addEventListener("mouseover", onMouseHover);
+        card.addEventListener("mouseenter", onMouseHover);
+        card.addEventListener("mouseleave", onMouseLeave);
+      }
+    }
+  }
+});
+
+const intersectionSections = document.querySelectorAll(".pb_intersection");
+
+intersectionSections.forEach((section) => {
+  const iframe = section.querySelector(".pb_video_embed iframe");
+  if (iframe) {
+    const player = new Vimeo.Player(iframe);
+    if (player) player.pause();
+  }
+});
+
+let options = {
+  root: null,
+  rootMargin: "0px",
+  threshold: 1.0
+};
+
+const callback = (enteries) => {
+  enteries.forEach((entry) => {
+    let iframe = entry.target.querySelector(".pb_video_embed iframe");
+    if (iframe) {
+      const player = new Vimeo.Player(iframe);
+      if (entry.isIntersecting) {
+        player.play();
+        // video.play()
+      } else {
+        player.pause();
+      }
+    }
+  });
+};
+
+let observer = new IntersectionObserver(callback, options);
+
+intersectionSections.forEach((section) => {
+  observer.observe(section);
+});
+
+ 
+</script>
+
+
+<!-- Code to integrate metamask in Navbar -->
+<script>
+//set
+let buttons = document.querySelectorAll(".check-metamask-btn");
+for (let i = 0; i < buttons.length; i++) {
+  buttons[i].addEventListener("click", checkMetaMask);
+}
+
+function checkMetaMask() {
+  if (typeof window.ethereum === 'undefined') {
+    alert('Please install the Metamask browser extension to continue')
+    throw new Error('Please install the Metamask browser extension to continue');
+  } else {
+    window.ethereum.enable().then(function() {
+      if (typeof window.ethereum.networkVersion !== 'undefined') {
+        var network = window.ethereum.networkVersion;
+        if (network !== 'polygon') {
+          window.ethereum.request({
+            method: "wallet_addEthereumChain",
+  params: [{
+    chainId: "0x89",
+    rpcUrls: ["https://polygon-rpc.com/"],
+    chainName: "Polygon Mainnet",
+    nativeCurrency: {
+      name: "MATIC",
+      symbol: "MATIC",
+      decimals: 18
+    },
+    blockExplorerUrls: ["https://polygonscan.com/"]
+  }]
+          }, "*").then(function(chainId) {
+			alert("Network added successfully");
+          });
+        } else {
+          alert("You are already connected to Polygon network!");
+        }
+      } else {
+        alert('MetaMask is not connected to any network.')
+        throw new Error('MetaMask is not connected to any network.');
+      }
+    });
+  }
+}
+</script>
+
+
+<!-- Code to add sub bullet list & sub-sub-bullet list in list item (FS Hack. Reference - https://finsweet.com/hacks-typescript/hacks/create-sub-bullet-lists-inside-a-rich-text-element) -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const UL_SELECTOR = '[fs-hacks-element="unordered-list"]';
+  const OL_SELECTOR = '[fs-hacks-element="ordered-list"]';
+  const originalUnorderedList = document.querySelector(UL_SELECTOR);
+  const originalOrderedList = document.querySelector(OL_SELECTOR);
+
+  if (originalUnorderedList) {
+    const newUnorderedList = document.createElement('ul');
+    const listItems = originalUnorderedList.querySelectorAll('li');
+
+    listItems.forEach((item) => {
+      const tildeCount = (item.innerText.match(/~/g) || []).length;
+      const cleanedList = cleanListItem(item);
+      const wrappedList = wrapUnorderedList(cleanedList, tildeCount);
+
+      newUnorderedList.appendChild(wrappedList);
+    });
+
+    Array.from(newUnorderedList.childNodes).forEach((child) => {
+      originalUnorderedList.appendChild(child.cloneNode(true));
+    });
+  }
+  if (originalOrderedList) {
+    const orderedListItems = originalOrderedList.querySelectorAll('li');
+    let newHtml = '';
+
+    orderedListItems.forEach((item) => {
+      let lines = item.innerText.split('\n');
+
+      // remove empty lines
+      lines = lines.filter((line) => line.trim().length > 0);
+
+      newHtml += wrapOrderedList(lines);
+    });
+
+    originalOrderedList.innerHTML = newHtml;
+  }
+});
+
+/**
+ * Remove the tilde from the list item
+ * @param {HTMLElement} li item
+ **/
+function cleanListItem(li) {
+  li.innerText = li.innerText.replace(/~+/g, '');
+  return li;
+}
+/**
+ * Wrap the list item in a <ul> tag, given the number of tildes
+ * @param {HTMLElement} li item
+ * @param {number} tildeCount number of tildes
+ **/
+function wrapUnorderedList(li, tildeCount) {
+  if (tildeCount === 0) return li;
+  const uList = document.createElement('ul');
+
+  uList.appendChild(li);
+  return wrapUnorderedList(uList, tildeCount - 1);
+}
+/**
+ * Wrap the list item in a <ol> tag, given the numbered list item
+ * @param {string[]} lines an array of strings
+ * @returns {string} html
+ **/
+function wrapOrderedList(lines) {
+  let buildString = '';
+  let previousNestingLevel = 0;
+  let numOpenTags = 0;
+
+  for (let line of lines) {
+    // matches a number followed by a dot.
+    const regex = /(\d+\.)+/;
+    const matches = line.trim().match(regex);
+    const firstmatch = matches ? matches[0] : '';
+    const currentNestingLevel = firstmatch.split('.').length - 1;
+
+    line = '<li>' + line.replace(firstmatch, '') + '</li>';
+
+    if (previousNestingLevel === currentNestingLevel) {
+      buildString += line;
+    }
+    if (previousNestingLevel < currentNestingLevel) {
+      previousNestingLevel = currentNestingLevel;
+
+      numOpenTags += 1;
+
+      buildString += '<ol>' + line;
+    }
+  }
+
+  buildString += '</ol>'.repeat(numOpenTags);
+  return buildString;
+}
+</script>
+
+<!-- Script to load fallback image if video doesnt autoplay -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const videos = document.querySelectorAll('video[data-auto-animate]');
+
+    videos.forEach(function(video) {
+        video.addEventListener('play', function() {
+            console.log('Video has started playing.');
+            video.closest('.w-background-video-atom').style.opacity = 1;  // Make sure the video is visible
+            video.nextElementSibling.style.display = 'none';  // Hide the fallback image
+        });
+
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+            playPromise.then(function() {
+                console.log('Autoplay started successfully');
+            }).catch(function(error) {
+                console.log('Autoplay was prevented', error);
+                video.style.opacity = 0; // Hide video
+                video.nextElementSibling.style.display = 'block';  // Ensure the fallback image is visible
+            });
+        }
+    });
+});
+
+
+
+</script>
+
+<!-- Code to integrate POS metamask in Navbar -->
+<script>
+let buttonsPoS = document.querySelectorAll(".metamask-pos");
+for (let i = 0; i < buttonsPoS.length; i++) {
+    buttonsPoS[i].addEventListener("click", checkPosMetaMask);
+}
+
+function checkPosMetaMask() {
+  if (typeof window.ethereum === 'undefined') {
+    alert('Please install the Metamask browser extension to continue')
+    throw new Error('Please install the Metamask browser extension to continue');
+  } else {
+    window.ethereum.enable().then(function() {
+      if (typeof window.ethereum.networkVersion !== 'undefined') {
+        var network = window.ethereum.networkVersion;
+        if (network !== 'polygon') {
+          window.ethereum.request({
+            method: "wallet_addEthereumChain",
+  params: [{
+    chainId: "0x89",
+    rpcUrls: ["https://polygon-rpc.com/"],
+    chainName: "Polygon Mainnet",
+    nativeCurrency: {
+      name: "MATIC",
+      symbol: "MATIC",
+      decimals: 18
+    },
+    blockExplorerUrls: ["https://polygonscan.com/"]
+  }]
+          }, "*").then(function(chainId) {
+			alert("Network added successfully");
+          });
+        } else {
+          alert("You are already connected to Polygon network!");
+        }
+      } else {
+        alert('MetaMask is not connected to any network.')
+        throw new Error('MetaMask is not connected to any network.');
+      }
+    });
+  }
+}
+</script>
+
+
+<!-- Code to integrate Zkevm metamask in Navbar -->
+<script>
+let buttonszkEVM = document.querySelectorAll(".metamask-zkevm");
+for (let i = 0; i < buttonszkEVM.length; i++) {
+    buttonszkEVM[i].addEventListener("click", checkZkevmMetaMask);
+}
+
+        async function checkZkevmMetaMask() {
+            if (typeof window.ethereum === 'undefined') {
+                alert('Please install the Metamask browser extension to continue');
+                throw new Error('Please install the Metamask browser extension to continue');
+            } else {
+                try {
+                    const result = await window.ethereum.request({
+                        method: "wallet_addEthereumChain",
+                        params: [{
+                            "blockExplorerUrls": [
+                                "https://zkevm.polygonscan.com/"
+                            ],
+                            "nativeCurrency": {
+                                "name": "ETH",
+                                "symbol": "ETH",
+                                "decimals": 18
+                            },
+                            "rpcUrls": [
+                                "https://zkevm-rpc.com/"
+                            ],
+                            "chainId": "0x44D",
+                            "chainName": "Polygon zkEVM"
+                        }]
+                    });
+                    if (result === null) {
+                        alert("Polygon zkEVM network has been added to Metamask");
+                    }
+                } catch (error) {
+                    console.log(error);
+                    alert("Something went wrong! Please try again!");
+                }
+            }
+        }
+</script>
+
+
+
+
+
+<!-- ===== GDPR Banner + Consent Mode v2 (GTM + Hotjar + HubSpot + Addressable) ===== -->
+<style>
+  :root{--cmp-bg:#0b1020;--cmp-panel:#141217;--cmp-text:#f3f5ff;--cmp-subtle:#9aa3b2;--cmp-accent:#6154f3;--cmp-yes:#6154f3;--cmp-no:#ef476f;--cmp-br:14px;--cmp-shadow:0 20px 40px rgba(0,0,0,.45)}
+  .cmp-hidden{display:none!important}.cmp-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:99998;backdrop-filter:saturate(120%) blur(2px)}
+  .cmp-panel{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;width:min(720px,92vw);background:var(--cmp-panel);color:var(--cmp-text);border-radius:var(--cmp-br);box-shadow:var(--cmp-shadow);z-index:99999;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;padding:22px}
+  .cmp-title{font-size:18px;font-weight:700;margin:0 0 6px}.cmp-desc{font-size:14px;line-height:1.5;color:var(--cmp-subtle);margin:0 0 14px}
+  .cmp-actions{display:flex;gap:10px;flex-wrap:wrap}.cmp-btn{border:0;cursor:pointer;border-radius:12px;padding:10px 14px;font-weight:600; color: #0a090da3}
+  .cmp-btn.primary{background:var(--cmp-accent);color:#fff}.cmp-btn.reject{background:var(--cmp-no);color:#fff}.cmp-btn.outline{background:transparent;border:1px solid #2a324b;color:var(--cmp-text)}
+  .cmp-manage{margin-top:12px;padding-top:12px;border-top:1px solid #232b45}.cmp-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0}
+  .cmp-left{max-width:70%}.cmp-cat{font-weight:600;font-size:14px}.cmp-note{font-size:12px;color:var(--cmp-subtle)}
+  .cmp-switch{position:relative;width:54px;height:30px}.cmp-switch input{opacity:0;width:0;height:0}
+  .cmp-slider{position:absolute;cursor:pointer;inset:0;background:#2a324b;border-radius:30px;transition:.2s}
+  .cmp-slider:before{content:"";position:absolute;height:22px;width:22px;left:4px;top:4px;background:#fff;border-radius:50%;transition:.2s}
+  .cmp-switch input:checked + .cmp-slider{background:var(--cmp-yes)}.cmp-switch input:checked + .cmp-slider:before{transform:translateX(24px)}
+  .cmp-reopen{position:fixed;left:16px;bottom:16px;z-index:99990;background:var(--cmp-bg);color:var(--cmp-text);border:1px solid #2a324b;border-radius:999px;padding:10px 14px;font-weight:600;box-shadow:var(--cmp-shadow);cursor:pointer;opacity:.85}
+  .cmp-reopen:hover{opacity:1}
+</style>
+
+<div id="cmp-overlay" class="cmp-overlay cmp-hidden" aria-hidden="true"></div>
+<section id="cmp" class="cmp-panel cmp-hidden" role="dialog" aria-modal="true" aria-labelledby="cmp-title">
+  <h2 id="cmp-title" class="cmp-title">We use cookies 🍪</h2>
+  <p class="cmp-desc">
+    We use tasty cookies to personalize your site experience and analyze site traffic. <a href="https://polygon.technology/cookie-policy">Learn More</a>
+  </p>
+
+  <div class="cmp-actions">
+    <button class="cmp-btn outline" id="cmp-reject-all">Reject non-essential</button>
+    <button class="cmp-btn primary" id="cmp-accept-all">Accept all</button>
+    <button class="cmp-btn" id="cmp-manage-toggle" aria-expanded="false" aria-controls="cmp-manage">Manage preferences</button>
+  </div>
+
+  <div id="cmp-manage" class="cmp-manage cmp-hidden" aria-hidden="true">
+    <div class="cmp-row" aria-live="polite">
+      <div class="cmp-left">
+        <div class="cmp-cat">Essential</div>
+        <div class="cmp-note">Required for the site to function. Always on.</div>
+      </div>
+      <label class="cmp-switch"><input type="checkbox" checked disabled><span class="cmp-slider"></span></label>
+    </div>
+
+    <div class="cmp-row">
+      <div class="cmp-left">
+        <div class="cmp-cat">Analytics</div>
+        <div class="cmp-note">Google Tag Manager container and Hotjar.</div>
+      </div>
+      <label class="cmp-switch"><input id="cmp-analytics" type="checkbox"><span class="cmp-slider"></span></label>
+    </div>
+
+    <div class="cmp-row">
+      <div class="cmp-left">
+        <div class="cmp-cat">Marketing</div>
+        <div class="cmp-note">HubSpot and Addressable.</div>
+      </div>
+      <label class="cmp-switch"><input id="cmp-marketing" type="checkbox"><span class="cmp-slider"></span></label>
+    </div>
+
+    <div class="cmp-actions" style="margin-top:6px">
+      <button class="cmp-btn outline" id="cmp-save">Save choices</button>
+    </div>
+  </div>
+</section>
+
+<button id="cmp-reopen" class="cmp-reopen" type="button" aria-haspopup="dialog" aria-controls="cmp" aria-expanded="false">
+  Cookie Preferences
+</button>
+
+<script>
+/*** =======================
+ *  YOUR TAGS (filled in)
+ *  =======================*/
+const CONFIG = {
+  GTM_CONTAINER_ID: 'GTM-KQ9THKT', // Tag Manager container
+  HOTJAR_ID: 3886274,              // Hotjar Site ID
+  HOTJAR_SV: 6,                    // Hotjar snippet version (usually 6)
+  HUBSPOT_PORTAL_ID: '20572069',   // HubSpot portal
+  ADDRESSABLE_SRC: 'https://tag.adrsbl.io/p.js?tid=1c3f78d531a64b4fb8b4acdb495a4cf0' // Addressable
+};
+
+/*** ==========================================================
+ *  Consent store + Google Consent Mode v2 (default = denied)
+ *  ========================================================== */
+(function(){
+  const COOKIE = 'cmp_consent_v1';
+  const DAYS = 180;
+
+  // Consent Mode v2 defaults BEFORE anything loads
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('consent','default',{
+    ad_storage: 'denied',
+    analytics_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    functionality_storage: 'granted',
+    security_storage: 'granted'
+  });
+
+  function setCookie(name, value, days){
+    const d = new Date(); d.setTime(d.getTime() + days*24*60*60*1000);
+    document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/;SameSite=Lax;Secure`;
+  }
+  function getCookie(name){
+    return document.cookie.split('; ').find(r => r.startsWith(name+'='))?.split('=')[1];
+  }
+  function parseConsent(){
+    try{ const raw = getCookie(COOKIE); return raw ? JSON.parse(decodeURIComponent(raw)) : null; }catch(e){ return null; }
+  }
+  function saveConsent(prefs){
+    const payload = JSON.stringify({ ...prefs, ts: new Date().toISOString(), v: 2 });
+    setCookie(COOKIE, payload, DAYS);
+    window.cmpConsent = prefs;
+    // Helpful for GTM triggers/variables
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({event:'cmp_consent_update', cmpConsent:prefs});
+    document.dispatchEvent(new CustomEvent('cmp:consent', { detail: prefs }));
+  }
+
+  function loadScript(src, id, onload){
+    if(!src || document.getElementById(id)) { onload && onload(); return; }
+    const s = document.createElement('script'); s.src = src; s.async = true; s.id = id; if(onload) s.onload = onload;
+    document.head.appendChild(s);
+  }
+
+  // ----- Google Tag Manager (loaded only if analytics OR marketing granted) -----
+  function enableGTM(){
+    if(!CONFIG.GTM_CONTAINER_ID || window._gtmLoaded) return;
+    window._gtmLoaded = true;
+    (function(w,d,s,l,i){
+      w[l]=w[l]||[]; w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'});
+      const f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l!='dataLayer'?'&l='+l:'';
+      j.async=true; j.id='gtm-js'; j.src='https://www.googletagmanager.com/gtm.js?id='+encodeURIComponent(i)+dl;
+      f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer',CONFIG.GTM_CONTAINER_ID);
+  }
+
+  // ----- Vendors (gated) -----
+  function enableAnalytics(){
+    // Update Consent Mode for analytics
+    gtag('consent','update',{ analytics_storage:'granted' });
+    enableGTM();
+
+    // Hotjar
+    if(Number(CONFIG.HOTJAR_ID) > 0){
+      (function(h,o,t,j,a,r){
+        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+        h._hjSettings={hjid:Number(CONFIG.HOTJAR_ID),hjsv:Number(CONFIG.HOTJAR_SV||6)};
+        a=o.getElementsByTagName('head')[0]; r=o.createElement('script'); r.async=1;
+        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv; a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+    }
+  }
+
+  function enableMarketing(){
+    // Update Consent Mode for ads (v2)
+    gtag('consent','update',{
+      ad_storage:'granted', ad_user_data:'granted', ad_personalization:'granted'
+    });
+    enableGTM();
+
+    // HubSpot
+    if(CONFIG.HUBSPOT_PORTAL_ID){
+      window._hsq = window._hsq || [];
+      window._hsq.push(['doNotTrack',{track:true}]); // ensure tracking allowed when consented
+      loadScript('https://js-eu1.hs-scripts.com/'+encodeURIComponent(CONFIG.HUBSPOT_PORTAL_ID)+'.js', 'hs-script-loader');
+    }
+
+    // Addressable
+    if(CONFIG.ADDRESSABLE_SRC){
+      loadScript(CONFIG.ADDRESSABLE_SRC, 'addressable-js');
+    }
+  }
+
+  function applyVendors(prefs){
+    if(prefs?.analytics) enableAnalytics();
+    if(prefs?.marketing) enableMarketing();
+  }
+
+  // Explicit revoke path (and hard-disable previously loaded vendors)
+  function revokeVendors(prev, next){
+    const needReload = (prev.analytics && !next.analytics) || (prev.marketing && !next.marketing);
+
+    // Reflect immediately in Consent Mode
+    gtag('consent','update',{
+      analytics_storage: next.analytics ? 'granted' : 'denied',
+      ad_storage:        next.marketing ? 'granted' : 'denied',
+      ad_user_data:      next.marketing ? 'granted' : 'denied',
+      ad_personalization:next.marketing ? 'granted' : 'denied'
+    });
+
+    // HubSpot best-effort stop (will fully stop after reload)
+    try { if(window._hsq && !next.marketing) window._hsq.push(['doNotTrack']); } catch(_) {}
+
+    if(needReload) location.reload();
+  }
+
+  // ----- UI wiring -----
+  const $ = s => document.querySelector(s);
+  const overlay = $('#cmp-overlay');
+  const banner  = $('#cmp');
+  const manage  = $('#cmp-manage');
+  const manageToggle = $('#cmp-manage-toggle');
+  const btnAccept = $('#cmp-accept-all');
+  const btnReject = $('#cmp-reject-all');
+  const btnSave   = $('#cmp-save');
+  const chkAnalytics = $('#cmp-analytics');
+  const chkMarketing = $('#cmp-marketing');
+  const btnReopen = $('#cmp-reopen');
+
+  function showBanner(){ overlay.classList.remove('cmp-hidden'); overlay.setAttribute('aria-hidden','false'); banner.classList.remove('cmp-hidden'); banner.setAttribute('aria-hidden','false'); btnReopen.setAttribute('aria-expanded','true'); }
+  function hideBanner(){ overlay.classList.add('cmp-hidden'); overlay.setAttribute('aria-hidden','true'); banner.classList.add('cmp-hidden'); banner.setAttribute('aria-hidden','true'); btnReopen.setAttribute('aria-expanded','false'); }
+  function toggleManage(){
+    const isHidden = manage.classList.contains('cmp-hidden');
+    manage.classList.toggle('cmp-hidden');
+    manage.setAttribute('aria-hidden', String(!isHidden));
+    manageToggle.setAttribute('aria-expanded', String(isHidden));
+  }
+
+  manageToggle?.addEventListener('click', toggleManage);
+
+  btnAccept?.addEventListener('click', function(){
+    const prefs = { analytics:true, marketing:true };
+    saveConsent(prefs); applyVendors(prefs); hideBanner();
+    window._cmp_had_loaded = { analytics:true, marketing:true };
+  });
+
+  btnReject?.addEventListener('click', function(){
+    const next = { analytics:false, marketing:false };
+    const prev = window._cmp_had_loaded || { analytics:false, marketing:false };
+    saveConsent(next); revokeVendors(prev, next); hideBanner();
+    window._cmp_had_loaded = next;
+  });
+
+  btnSave?.addEventListener('click', function(){
+    const next = { analytics:!!chkAnalytics?.checked, marketing:!!chkMarketing?.checked };
+    const prev = window._cmp_had_loaded || { analytics:false, marketing:false };
+    saveConsent(next);
+    if((!prev.analytics && next.analytics) || (!prev.marketing && next.marketing)) applyVendors(next);
+    revokeVendors(prev, next); hideBanner(); window._cmp_had_loaded = next;
+  });
+
+  btnReopen?.addEventListener('click', showBanner);
+
+  // Init on load
+  document.addEventListener('DOMContentLoaded', function(){
+    const stored = parseConsent();
+    if(stored){
+      // Reflect stored consent into Consent Mode even before GTM loads
+      gtag('consent','update',{
+        analytics_storage: stored.analytics ? 'granted':'denied',
+        ad_storage:        stored.marketing ? 'granted':'denied',
+        ad_user_data:      stored.marketing ? 'granted':'denied',
+        ad_personalization:stored.marketing ? 'granted':'denied'
+      });
+      applyVendors(stored);
+      window._cmp_had_loaded = { analytics:!!stored.analytics, marketing:!!stored.marketing };
+    }else{
+      showBanner();
+      chkAnalytics && (chkAnalytics.checked=false);
+      chkMarketing && (chkMarketing.checked=false);
+      window._cmp_had_loaded = { analytics:false, marketing:false };
+    }
+  });
+})();
+</script>
+<!-- ===== /GDPR Banner ===== -->
+
+
+<!-- Google Tag Manager (noscript) added on 17th feb 2026 -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NRG47BSK"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) --></body></html>

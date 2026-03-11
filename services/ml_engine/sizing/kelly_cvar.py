@@ -40,6 +40,26 @@ CVAR_ALPHA          = 0.05    # α: cauda dos 5% piores cenários (CVaR_95%)
 MIN_POSITION_USDT   = 50.0    # Posição mínima em USDT (liquidez)
 MAX_POSITION_USDT   = 10_000  # Posição máxima absoluta por ativo
 
+# ── HARD CUTOFF de Expectativa Matemática (v10.10.3) ─────────────────────
+# p_cal ≤ P_CUTOFF → alocação = 0.0 INCONDICIONALMENTE.
+# Justificativa: com custos de trading (taxas maker/taker ~0.04-0.10%),
+# slippage (~0.05-0.20%), e funding rate (~0.01-0.03% per 8h),
+# a barreira de break-even real é ~51%. Qualquer p_cal ≤ 0.51 tem
+# expectativa matemática negativa líquida → Kelly correto = 0.
+P_CUTOFF            = 0.51    # Hard cutoff: p_cal ≤ 0.51 → size = 0
+
+# ── Φ(z) Compression (v10.10.3) ──────────────────────────────────────────
+# Kelly puro f* = (μ-r)/σ² é EXCESSIVAMENTE sensível a μ quando σ é baixo.
+# Em crypto, σ=3% é comum → f* = 0.015/0.0009 = 16.7 (!).
+# Compressão via CDF Normal: mapeia edge contínuo para [0, MAX_KELLY_CAP].
+# Φ(z) com z = (p_cal - 0.50) / PHI_SCALE:
+#   p_cal=0.55 → z=0.5 → Φ=0.69 → kelly frac ≈ 2.8% (não 20%)
+#   p_cal=0.60 → z=1.0 → Φ=0.84 → kelly frac ≈ 5.0%
+#   p_cal=0.70 → z=2.0 → Φ=0.98 → kelly frac ≈ 8.0% (raro)
+#   p_cal=0.80 → z=3.0 → Φ=0.999 → kelly frac ≈ 8.0% (cap)
+PHI_SCALE           = 0.10    # Escala do mapeamento p_cal → z
+MAX_KELLY_CAP       = 0.08    # Cap absoluto: NUNCA mais de 8% do capital por ativo
+
 
 @dataclass
 class SizingResult:
@@ -63,40 +83,75 @@ def compute_kelly_fraction(
     kappa:   float = KELLY_FRACTION,
 ) -> float:
     """
-    Kelly fracionário contínuo com ajuste de probabilidade calibrada.
+    Kelly fracionário com Hard Cutoff + Φ(z) Compression (v10.10.3).
 
-    Kelly puro: f* = (μ - rf) / σ²
-    Kelly fracionário: f = κ × f*  (κ=0.25 por padrão)
+    PIPELINE DE 3 ESTÁGIOS:
 
-    Ajuste de μ por p_calibrada (Parte 10.1):
-        μ_adjusted = p_cal × |μ_tp| - (1 - p_cal) × |μ_sl|
-        Integra a probabilidade calibrada diretamente no sizing.
-        Diferencia entre p_cal=0.90 (aposta grande) e p_cal=0.55 (aposta pequena).
+    1. HARD CUTOFF: p_cal ≤ 0.51 → return 0.0 (barreira de custos)
+       Justificativa: taxas + slippage + funding ≈ 0.15-0.30% por trade.
+       Com k_tp=k_sl=1.5, break-even está em p ≈ 0.507. Margem para 0.51.
 
-    Domínio: f ∈ [0, 1.0]. Valores negativos → não operar.
+    2. Φ(z) COMPRESSION: mapeia p_cal → fração via CDF Normal.
+       z = (p_cal - 0.50) / PHI_SCALE
+       f_phi = Φ(z) × MAX_KELLY_CAP
+       Isso comprime probabilidades marginais (0.55) para frações pequenas (2-5%)
+       e satura em MAX_KELLY_CAP=8% para p_cal muito altas.
+
+    3. KELLY CLÁSSICO como teto:
+       f_kelly = κ × max((μ - rf) / σ², 0)
+       f_final = min(f_phi, f_kelly)
+       O Kelly clássico serve como LIMITE SUPERIOR (não como base).
+       A Φ(z) é o driver principal — evita os problemas de sensibilidade do Kelly
+       quando σ é baixo (σ=3% → Kelly puro explode).
+
+    Domínio: f ∈ [0, MAX_KELLY_CAP]. Nunca ultrapassa 8%.
 
     Args:
-        mu:     Retorno esperado ajustado por p_cal (μ_adjusted acima).
+        mu:     Retorno esperado ajustado por p_cal (μ_adjusted).
         sigma:  Volatilidade EWMA no momento do sinal.
         p_cal:  Probabilidade calibrada (output do IsotonicCalibrator).
         rf:     Taxa livre de risco. Default 0 (crypto sem risk-free real).
         kappa:  Fração do Kelly. Default 0.25.
 
     Returns:
-        float: fração do capital a alocar ∈ [0, 0.50].
+        float: fração do capital a alocar ∈ [0, MAX_KELLY_CAP].
     """
-    sigma_sq = max(sigma ** 2, 1e-8)
-    f_star   = max((mu - rf) / sigma_sq, 0.0)
-    f_frac   = kappa * f_star
+    from scipy.stats import norm
 
-    # Cap conservador: nunca mais de 50% do capital em um ativo
-    f_frac   = min(f_frac, 0.50)
+    # ── ESTÁGIO 1: Hard Cutoff (barreira de custos) ───────────────────────
+    if p_cal <= P_CUTOFF:
+        log.debug("kelly.hard_cutoff",
+                  p_cal=round(p_cal, 4), cutoff=P_CUTOFF,
+                  msg="p_cal ≤ cutoff → alocação = 0.0")
+        return 0.0
+
+    if mu <= 0:
+        log.debug("kelly.negative_mu", mu=round(mu, 6), p_cal=round(p_cal, 4))
+        return 0.0
+
+    # ── ESTÁGIO 2: Φ(z) Compression ──────────────────────────────────────
+    # Mapeia edge (p_cal - 0.50) para fração via CDF Normal
+    z       = (p_cal - 0.50) / PHI_SCALE
+    phi_z   = float(norm.cdf(z))              # Φ(z) ∈ [0.5, 1.0] para z > 0
+    f_phi   = (phi_z - 0.5) * 2 * MAX_KELLY_CAP  # Remapeia [0.5, 1.0] → [0, MAX_KELLY_CAP]
+    f_phi   = max(f_phi, 0.0)
+
+    # ── ESTÁGIO 3: Kelly clássico como teto ──────────────────────────────
+    sigma_sq   = max(sigma ** 2, 1e-8)
+    f_kelly    = kappa * max((mu - rf) / sigma_sq, 0.0)
+    f_kelly    = min(f_kelly, MAX_KELLY_CAP)   # Kelly também capped
+
+    # Final: mínimo entre Φ-compression e Kelly (o mais conservador vence)
+    f_final = min(f_phi, f_kelly)
+    f_final = min(f_final, MAX_KELLY_CAP)      # Redundante mas explícito
 
     log.debug("kelly.computed",
               mu=round(mu, 4), sigma=round(sigma, 4), p_cal=round(p_cal, 4),
-              f_star=round(f_star, 4), f_frac=round(f_frac, 4), kappa=kappa)
+              z=round(z, 3), phi_z=round(phi_z, 4),
+              f_phi=round(f_phi, 4), f_kelly=round(f_kelly, 4),
+              f_final=round(f_final, 4), kappa=kappa)
 
-    return float(f_frac)
+    return float(f_final)
 
 
 def compute_cvar_stress(
@@ -154,20 +209,41 @@ def compute_cvar_stress(
     # ── CVaR com correlações reais (histórico) ────────────────────────────
     cvar_historical = cvar_stress  # fallback se sem histórico
     if pnl_history and all(s in pnl_history for s in symbols):
-        # Truncar ao comprimento mínimo (eventos != datas alinhadas)
-        min_len = min(len(pnl_history[s]) for s in symbols)
-        if min_len >= 30:
-            pnl_matrix = np.column_stack([
-                pnl_history[s][:min_len] for s in symbols
-            ])
-            # Remove linhas com NaN
-            pnl_matrix = pnl_matrix[~np.any(np.isnan(pnl_matrix), axis=1)]
+        # Os vetores de P&L por ativo podem ter comprimentos diferentes
+        # porque cada símbolo gera um número distinto de eventos/trades.
+        # Para evitar erro de empilhamento e ainda usar P&L histórico real,
+        # alinhamos pelo menor histórico comum usando a cauda mais recente.
+        series = []
+        lengths = {}
+        for s in symbols:
+            arr = np.asarray(pnl_history.get(s, []), dtype=float).reshape(-1)
+            arr = arr[np.isfinite(arr)]
+            if arr.size == 0:
+                continue
+            series.append(arr)
+            lengths[s] = int(arr.size)
 
-            if len(pnl_matrix) >= 30:
+        if len(series) == len(symbols):
+            min_len = min(arr.size for arr in series)
+            if min_len >= 30:
+                pnl_matrix = np.column_stack([arr[-min_len:] for arr in series])
                 portfolio_pnl = pnl_matrix @ weights
                 sorted_pnl    = np.sort(portfolio_pnl)
                 n_tail        = max(1, int(len(sorted_pnl) * alpha))
                 cvar_historical = float(-sorted_pnl[:n_tail].mean())
+                log.debug(
+                    "cvar_history.aligned",
+                    min_len=min_len,
+                    lengths=lengths,
+                    msg="P&L histories aligned to common trailing window for historical CVaR",
+                )
+            else:
+                log.warning(
+                    "cvar_history.insufficient_overlap",
+                    min_len=min_len,
+                    lengths=lengths,
+                    msg="Using stress CVaR fallback: insufficient common history across assets",
+                )
 
     log.debug("cvar_stress.computed",
               n_assets=len(symbols),
@@ -269,6 +345,24 @@ def compute_position_size(
     Returns:
         SizingResult com posição final e métricas de diagnóstico.
     """
+    # ── 0. HARD CUTOFF: p_cal ≤ 0.51 → size = 0 (v10.10.3) ────────────────
+    # Verificação ANTES de qualquer cálculo. Barreira de custos inegociável.
+    if p_calibrated <= P_CUTOFF:
+        log.info("sizing.hard_cutoff",
+                 symbol=symbol, p_cal=round(p_calibrated, 4),
+                 cutoff=P_CUTOFF,
+                 msg="p_cal ≤ cutoff → posição = 0.0 USDT (barreira de custos)")
+        return SizingResult(
+            symbol=symbol, position_usdt=0.0,
+            kelly_raw=0.0, kelly_frac=0.0,
+            cvar_95_stress=0.0, cvar_ok=True,
+            drawdown_scalar=compute_drawdown_scalar(
+                capital_total, capital_hwm, max_dd
+            ),
+            sigma_entry=sigma_ewma,
+            p_calibrated=p_calibrated,
+        )
+
     # ── 1. Retorno esperado ajustado por p_calibrada ──────────────────────
     # Ganho esperado no TP: k_tp × σ com probabilidade p_cal
     # Perda esperada no SL: k_sl × σ com probabilidade (1 - p_cal)

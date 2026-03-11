@@ -1,5 +1,3 @@
-version: "3.9"
-
 # =============================================================================
 # SNIPER v10.10 — Institutional Grade Orchestration
 # Cloud-native: stateless services, external volumes, env-driven config
@@ -11,6 +9,7 @@ x-common-env: &common-env
   TZ: America/Sao_Paulo
   PYTHONUNBUFFERED: "1"
   PYTHONDONTWRITEBYTECODE: "1"
+  PYTHONPATH: /workspace
 
 x-ml-resources: &ml-resources
   deploy:
@@ -37,20 +36,11 @@ networks:
         - subnet: 172.20.0.0/24
 
 volumes:
-  parquet_data:       # OHLCV + features in columnar format
-  model_artifacts:    # HMM, LGBM, Isotonic calibrators (joblib/pickle)
-  sqlite_data:        # trades, drift_log, retrain_log, ia_reflections
-  postgres_data:      # production-grade alternative to SQLite
-  redis_data:         # real-time signal queue + rate-limit cache
-  nginx_logs:
+  postgres_data:
+  redis_data:
 
 services:
 
-  # ─────────────────────────────────────────────────────────────────────────
-  # 1. DATA INSERTER — CoinGecko + Binance + TokenUnlocks ingest
-  #    Runs on schedule (cron inside container or external trigger)
-  #    Writes .parquet partitioned by asset/year to shared volume
-  # ─────────────────────────────────────────────────────────────────────────
   data_inserter:
     build:
       context: ./services/data_inserter
@@ -58,23 +48,39 @@ services:
       args:
         PYTHON_VERSION: "3.11"
     container_name: sniper_data_inserter
+    user: "0:0"
     restart: unless-stopped
     environment:
       <<: *common-env
       COINGECKO_API_KEY: ${COINGECKO_API_KEY}
+      MOBULA_API_KEY: ${MOBULA_API_KEY:-}
+      MOBULA_API_BASE_URL: ${MOBULA_API_BASE_URL:-https://api.mobula.io/api/1}
+      MOBULA_METADATA_PATH: ${MOBULA_METADATA_PATH:-/metadata}
+      MOBULA_MULTI_METADATA_PATH: ${MOBULA_MULTI_METADATA_PATH:-/multi-metadata}
       BINANCE_API_KEY: ${BINANCE_API_KEY}
       BINANCE_API_SECRET: ${BINANCE_API_SECRET}
       BINANCE_TESTNET: ${BINANCE_TESTNET:-true}
       DERIBIT_CLIENT_ID: ${DERIBIT_CLIENT_ID:-}
       TOKEN_UNLOCKS_API_KEY: ${TOKEN_UNLOCKS_API_KEY:-}
+      DEFILLAMA_UNLOCKS_ENDPOINT: ${DEFILLAMA_UNLOCKS_ENDPOINT:-}
+      UNLOCK_RECONSTRUCTION_ANCHORS: ${UNLOCK_RECONSTRUCTION_ANCHORS:-SOL,ADA,AVAX,DOT,ATOM,LINK,ARB,OP,APT,MATIC,POL}
+      UNLOCK_RECONSTRUCTION_CONFIDENCE_MIN: ${UNLOCK_RECONSTRUCTION_CONFIDENCE_MIN:-0.85}
+      UNLOCK_RECONSTRUCTION_EVIDENCE_MIN: ${UNLOCK_RECONSTRUCTION_EVIDENCE_MIN:-0.70}
+      UNLOCK_UNKNOWN_BUCKET_MAX: ${UNLOCK_UNKNOWN_BUCKET_MAX:-0.15}
+      UNLOCK_WINSOR_LOW: ${UNLOCK_WINSOR_LOW:-0.01}
+      UNLOCK_WINSOR_HIGH: ${UNLOCK_WINSOR_HIGH:-0.99}
+      UNLOCK_OBSERVED_SHADOW_MIN_SNAPSHOTS: ${UNLOCK_OBSERVED_SHADOW_MIN_SNAPSHOTS:-30}
+      UNLOCK_RUNTIME_HISTORY_MODE: ${UNLOCK_RUNTIME_HISTORY_MODE:-latest_only}
+      UNLOCK_RECONSTRUCTION_MAX_URLS_PER_ASSET: ${UNLOCK_RECONSTRUCTION_MAX_URLS_PER_ASSET:-4}
       PARQUET_BASE_PATH: /data/parquet
       SQLITE_PATH: /data/sqlite/sniper.db
-      SCHEDULE_CRON: ${DATA_INSERT_CRON:-0 */4 * * *}   # Every 4h default
+      SCHEDULE_CRON: ${DATA_INSERT_CRON:-0 */4 * * *}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
     volumes:
-      - parquet_data:/data/parquet
-      - sqlite_data:/data/sqlite
+      - ./data/parquet:/data/parquet
+      - ./data/sqlite:/data/sqlite
       - ./logs:/app/logs
+      - ./:/workspace:ro
     networks:
       - sniper_internal
     healthcheck:
@@ -88,11 +94,6 @@ services:
           memory: 2G
           cpus: "2.0"
 
-  # ─────────────────────────────────────────────────────────────────────────
-  # 2. ML ENGINE — FracDiff, HMM, CFI/VI, Meta-Model, CPCV, DSR
-  #    CPU-intensive; runs in parallel with data inserter
-  #    Writes model artifacts + calibrators to shared volume
-  # ─────────────────────────────────────────────────────────────────────────
   ml_engine:
     build:
       context: ./services/ml_engine
@@ -100,6 +101,7 @@ services:
       args:
         PYTHON_VERSION: "3.11"
     container_name: sniper_ml_engine
+    user: "0:0"
     restart: unless-stopped
     environment:
       <<: *common-env
@@ -109,7 +111,6 @@ services:
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       REDIS_URL: redis://redis:6379/0
-      # ML Hyperparameters (override via .env without rebuild)
       FRACDIFF_TAU: ${FRACDIFF_TAU:-1e-5}
       FRACDIFF_MIN_TRAIN_OBS: ${FRACDIFF_MIN_TRAIN_OBS:-252}
       HMM_N_COMPONENTS: ${HMM_N_COMPONENTS:-2}
@@ -123,24 +124,40 @@ services:
       VI_THRESHOLD: ${VI_THRESHOLD:-0.30}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
     volumes:
-      - parquet_data:/data/parquet:ro   # read-only: ml reads, inserter writes
-      - model_artifacts:/data/models
-      - sqlite_data:/data/sqlite
+      - ./data/parquet:/data/parquet:ro
+      - ./data/models:/data/models
+      - ./data/sqlite:/data/sqlite
       - ./logs:/app/logs
+      - ./:/workspace:ro
     networks:
       - sniper_internal
     depends_on:
       redis:
         condition: service_healthy
     <<: *ml-resources
-    # Override for backtest runs: docker-compose run ml_engine python -m backtest.run
     command: ["python", "-m", "main"]
 
-  # ─────────────────────────────────────────────────────────────────────────
-  # 3. EXECUTION ENGINE — Binance async executor, risk gate, CB
-  #    Consumes signals from Redis queue, applies sqrt market impact,
-  #    enforces CVaR portfolio limit before order submission
-  # ─────────────────────────────────────────────────────────────────────────
+  sniper_tests:
+    build:
+      context: .
+      dockerfile: infra/docker/test_runner.Dockerfile
+      args:
+        PYTHON_VERSION: "3.11"
+    container_name: sniper_tests
+    working_dir: /workspace
+    environment:
+      <<: *common-env
+      PARQUET_BASE_PATH: /workspace/data/parquet
+      MODEL_ARTIFACTS_PATH: /workspace/data/models
+      SQLITE_PATH: /workspace/data/sqlite/sniper.db
+      REDIS_URL: redis://redis:6379/0
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    volumes:
+      - ./:/workspace:ro
+    networks:
+      - sniper_internal
+    command: ["python", "-m", "unittest", "discover", "-s", "tests", "-t", ".", "-p", "test_*.py", "-v"]
+
   execution_engine:
     build:
       context: ./services/execution_engine
@@ -169,9 +186,9 @@ services:
       MARKET_IMPACT_ETA: ${MARKET_IMPACT_ETA:-0.10}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
     volumes:
-      - parquet_data:/data/parquet:ro
-      - model_artifacts:/data/models:ro
-      - sqlite_data:/data/sqlite
+      - ./data/parquet:/data/parquet:ro
+      - ./data/models:/data/models:ro
+      - ./data/sqlite:/data/sqlite
       - ./logs:/app/logs
     networks:
       - sniper_internal
@@ -180,9 +197,6 @@ services:
         condition: service_healthy
     <<: *api-resources
 
-  # ─────────────────────────────────────────────────────────────────────────
-  # 4. API — FastAPI async backend, serves dashboard + receives commands
-  # ─────────────────────────────────────────────────────────────────────────
   api:
     build:
       context: ./services/api
@@ -201,9 +215,9 @@ services:
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000,http://localhost:80}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
     volumes:
-      - parquet_data:/data/parquet:ro
-      - model_artifacts:/data/models:ro
-      - sqlite_data:/data/sqlite:ro
+      - ./data/parquet:/data/parquet:ro
+      - ./data/models:/data/models:ro
+      - ./data/sqlite:/data/sqlite:ro
     networks:
       - sniper_internal
     expose:
@@ -218,9 +232,6 @@ services:
     command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000",
               "--workers", "2", "--loop", "uvloop", "--http", "h11"]
 
-  # ─────────────────────────────────────────────────────────────────────────
-  # 5. FRONTEND — React/Vite SPA served by Nginx (static, no Node in prod)
-  # ─────────────────────────────────────────────────────────────────────────
   frontend:
     build:
       context: ./frontend
@@ -243,9 +254,6 @@ services:
           memory: 256M
           cpus: "0.5"
 
-  # ─────────────────────────────────────────────────────────────────────────
-  # 6. NGINX — Reverse proxy: routes /api → FastAPI, / → React SPA
-  # ─────────────────────────────────────────────────────────────────────────
   nginx:
     image: nginx:1.25-alpine
     container_name: sniper_nginx
@@ -255,8 +263,8 @@ services:
       - "${NGINX_HTTPS_PORT:-443}:443"
     volumes:
       - ./infra/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./infra/nginx/ssl:/etc/nginx/ssl:ro        # mount certs for HTTPS
-      - nginx_logs:/var/log/nginx
+      - ./infra/nginx/ssl:/etc/nginx/ssl:ro
+      - ./logs/nginx:/var/log/nginx
     networks:
       - sniper_internal
     depends_on:
@@ -268,9 +276,6 @@ services:
           memory: 128M
           cpus: "0.25"
 
-  # ─────────────────────────────────────────────────────────────────────────
-  # 7. REDIS — Signal queue, rate-limit, real-time pub/sub for dashboard
-  # ─────────────────────────────────────────────────────────────────────────
   redis:
     image: redis:7.2-alpine
     container_name: sniper_redis

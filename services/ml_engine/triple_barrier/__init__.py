@@ -1,24 +1,15 @@
-# DESTINO: services/ml_engine/triple_barrier/__init__.py
 from .market_impact import (
-    compute_sqrt_market_impact,
     compute_intraday_vol_parkinson,
-    slippage_table,
-    DEFAULT_ETA,
+    compute_market_impact,
+    compute_sqrt_market_impact,
 )
-from .labeler import (
-    apply_triple_barrier,
-    validate_barrier_distribution,
-    TripleBarrierConfig,
-    BarrierResult,
-)
+from .labeler import apply_triple_barrier, TripleBarrierConfig, validate_barrier_distribution
 
 __all__ = [
-    "compute_sqrt_market_impact",
     "compute_intraday_vol_parkinson",
-    "slippage_table",
-    "DEFAULT_ETA",
+    "compute_market_impact",
+    "compute_sqrt_market_impact",
     "apply_triple_barrier",
-    "validate_barrier_distribution",
     "TripleBarrierConfig",
-    "BarrierResult",
+    "validate_barrier_distribution",
 ]

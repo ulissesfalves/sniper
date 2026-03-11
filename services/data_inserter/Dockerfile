@@ -25,7 +25,9 @@ RUN pip install --no-cache-dir --no-index --find-links=/wheels -r requirements.t
 # FIX: cria user + diretórios de dados com permissões corretas
 RUN useradd -m -u 1000 sniper \
     && mkdir -p /app/logs /data/parquet/ohlcv_daily /data/parquet/funding \
-               /data/parquet/ohlcv_4h /data/parquet/basis /data/sqlite \
+               /data/parquet/ohlcv_4h /data/parquet/basis /data/parquet/stablecoin \
+               /data/parquet/unlocks /data/parquet/unlock_diagnostics \
+               /data/parquet/unlock_market /data/parquet/unlock_wayback /data/sqlite \
     && chown -R sniper:sniper /app /data
 
 USER sniper

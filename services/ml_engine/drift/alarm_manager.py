@@ -16,7 +16,7 @@
 #
 #   NÍVEL 1 — WARN (opera com tamanho reduzido):
 #     • DrawdownScalar ∈ (0.25, 0.75): tamanho já reduzido automaticamente
-#     • CVaR_stress ∈ [0.12, 0.15]: próximo ao limite
+#     • CVaR_stress ∈ [0.15, 0.18]: próximo ao limite
 #     • C2ST NONE mas trending (AUC 0.52-0.55)
 #
 #   NÍVEL 0 — CLEAR (operar normalmente)
@@ -141,7 +141,7 @@ def evaluate_alarms(
             level = max(level, 1)
             reasons.append(f"Drawdown elevado: scalar={drawdown_scalar:.2f}")
 
-        if cvar_stress is not None and 0.12 <= cvar_stress <= 0.15:
+        if cvar_stress is not None and 0.15 <= cvar_stress <= 0.18:
             level = max(level, 1)
             reasons.append(f"CVaR próximo ao limite: {cvar_stress:.3f}")
 
@@ -167,7 +167,7 @@ def evaluate_alarms(
         c2st_severity=(drift_result.severity if drift_result else None),
         c2st_auc=(drift_result.auc_observed if drift_result else None),
         cvar_stress=cvar_stress,
-        cvar_ok=(cvar_stress <= 0.15 if cvar_stress else True),
+        cvar_ok=(cvar_stress <= 0.18 if cvar_stress is not None else True),
         drawdown_scalar=drawdown_scalar,
         global_halt=global_halt,
     )

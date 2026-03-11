@@ -1,0 +1,54 @@
+{
+  "cluster_map": {
+    "1": [
+      "basis_3m"
+    ],
+    "2": [
+      "btc_ma200_flag"
+    ],
+    "6": [
+      "dvol_zscore"
+    ],
+    "3": [
+      "funding_rate_ma7d"
+    ],
+    "10": [
+      "realized_vol_30d"
+    ],
+    "11": [
+      "ret_1d"
+    ],
+    "8": [
+      "ret_20d"
+    ],
+    "9": [
+      "ret_5d"
+    ],
+    "4": [
+      "stablecoin_chg30"
+    ],
+    "5": [
+      "unlock_pressure_rank"
+    ],
+    "7": [
+      "vol_ratio"
+    ]
+  },
+  "feature_to_cluster": {
+    "basis_3m": 1,
+    "btc_ma200_flag": 2,
+    "dvol_zscore": 6,
+    "funding_rate_ma7d": 3,
+    "realized_vol_30d": 10,
+    "ret_1d": 11,
+    "ret_20d": 8,
+    "ret_5d": 9,
+    "stablecoin_chg30": 4,
+    "unlock_pressure_rank": 5,
+    "vol_ratio": 7
+  },
+  "n_clusters": 11,
+  "vi_threshold": 0.3,
+  "redundant_pairs": [],
+  "status": "PASS"
+}

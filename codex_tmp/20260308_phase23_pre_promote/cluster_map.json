@@ -1,0 +1,50 @@
+{
+  "cluster_map": {
+    "3": [
+      "btc_ma200_flag"
+    ],
+    "1": [
+      "drawdown_pct"
+    ],
+    "10": [
+      "dvol_zscore"
+    ],
+    "8": [
+      "realized_vol_30d"
+    ],
+    "9": [
+      "ret_1d"
+    ],
+    "6": [
+      "ret_20d"
+    ],
+    "7": [
+      "ret_5d"
+    ],
+    "2": [
+      "term_spread"
+    ],
+    "4": [
+      "vol_ratio"
+    ],
+    "5": [
+      "volume_momentum"
+    ]
+  },
+  "feature_to_cluster": {
+    "btc_ma200_flag": 3,
+    "drawdown_pct": 1,
+    "dvol_zscore": 10,
+    "realized_vol_30d": 8,
+    "ret_1d": 9,
+    "ret_20d": 6,
+    "ret_5d": 7,
+    "term_spread": 2,
+    "vol_ratio": 4,
+    "volume_momentum": 5
+  },
+  "n_clusters": 10,
+  "vi_threshold": 0.3,
+  "redundant_pairs": [],
+  "status": "PASS"
+}

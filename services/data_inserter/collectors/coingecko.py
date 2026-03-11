@@ -9,10 +9,11 @@
 from __future__ import annotations
 
 import asyncio
-from pathlib import Path
 from datetime import datetime, timezone
+from pathlib import Path
 
 import aiohttp
+import pandas as pd
 import structlog
 from decouple import config
 
@@ -29,6 +30,18 @@ STABLECOIN_IDS = {
 
 # Rate limit: Demo ~30 req/min → 2.5s entre chamadas
 RATE_LIMIT_DELAY = 2.5
+
+OHLCV_DAILY_COLUMNS = [
+    "timestamp",
+    "symbol",
+    "open",
+    "high",
+    "low",
+    "close",
+    "source",
+    "volume",
+    "quote_volume",
+]
 
 
 def _detect_coingecko_config(api_key: str) -> tuple[str, dict, str]:
@@ -186,15 +199,54 @@ class CoinGeckoCollector:
             }).sort("timestamp").unique(subset=["timestamp"], keep="last")
 
             path = self._parquet_base / "ohlcv_daily" / f"{symbol}.parquet"
+            frame = self._align_ohlcv_schema(df.to_pandas(), symbol=symbol, default_source="coingecko_ohlc")
             if path.exists():
-                existing = pl.read_parquet(path)
-                df = pl.concat([existing, df]).unique(
-                    subset=["timestamp"], keep="last"
-                ).sort("timestamp")
+                existing = self._align_ohlcv_schema(pl.read_parquet(path).to_pandas())
+                if list(existing.columns) != OHLCV_DAILY_COLUMNS:
+                    log.info("coingecko.parquet_schema_harmonized", symbol=symbol, path=str(path))
+                frame = (
+                    pd.concat([existing, frame], ignore_index=True, sort=False)
+                    .drop_duplicates(subset=["timestamp"], keep="last")
+                    .sort_values("timestamp")
+                    .reset_index(drop=True)
+                )
 
-            df.write_parquet(path, compression="zstd")
+            self._write_atomic_parquet(pl.from_pandas(frame), path)
         except Exception as e:
             log.error("coingecko.parquet_save_error", symbol=symbol, error=str(e))
+
+    def _align_ohlcv_schema(
+        self,
+        frame: pd.DataFrame,
+        symbol: str | None = None,
+        default_source: str | None = None,
+    ) -> pd.DataFrame:
+        aligned = frame.copy()
+        for column in OHLCV_DAILY_COLUMNS:
+            if column not in aligned.columns:
+                if column == "symbol" and symbol is not None:
+                    aligned[column] = symbol
+                elif column == "source" and default_source is not None:
+                    aligned[column] = default_source
+                else:
+                    aligned[column] = None
+
+        aligned["timestamp"] = pd.to_datetime(aligned["timestamp"], utc=True, errors="coerce")
+        if symbol is not None:
+            aligned["symbol"] = aligned["symbol"].fillna(symbol)
+        if default_source is not None:
+            aligned["source"] = aligned["source"].fillna(default_source)
+
+        for column in ["open", "high", "low", "close", "volume", "quote_volume"]:
+            aligned[column] = pd.to_numeric(aligned[column], errors="coerce")
+
+        aligned = aligned.dropna(subset=["timestamp"]).sort_values("timestamp")
+        return aligned[OHLCV_DAILY_COLUMNS].reset_index(drop=True)
+
+    def _write_atomic_parquet(self, frame, path: Path) -> None:
+        tmp_path = path.with_suffix(".parquet.tmp")
+        frame.write_parquet(tmp_path, compression="zstd")
+        tmp_path.replace(path)
 
     async def get_top_symbols(self, n: int = 30) -> list[str]:
         """Retorna top N símbolos filtrados (ex: ['SOLUSDT', 'AVAXUSDT', ...])."""

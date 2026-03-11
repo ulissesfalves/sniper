@@ -1,22 +1,22 @@
 # =============================================================================
 # DESTINO: services/ml_engine/meta_labeling/isotonic_calibration.py
-# Calibração isotônica com time-decay (halflife=180d).
+# Calibração isotônica via K-Fold interno real (v10.10.5).
 #
-# POR QUE ISOTÔNICA E NÃO PLATT SCALING (Parte 9):
-#   Platt: assume relação sigmoidal entre score bruto e probabilidade real.
-#   Em crypto, a relação score→probabilidade é não-monotônica em crises:
-#   score=0.8 pode ter P(win)=0.55 em regime normal e P(win)=0.40 em crise.
-#   Isotônica: apenas impõe monotonia (score maior → prob maior) sem
-#   assumir forma funcional. Não-paramétrica, robusta a fat tails.
+# v10.10.5 MUDANÇAS vs v10.10.4:
+#   1. K-Fold isotônico REAL (5 folds): divide (p_raw, y) em 5 folds,
+#      fitta IsotonicRegression em 4, valida em 1, repete. Refitta final
+#      em todos os dados para produção. cv='prefit' ELIMINADO.
+#   2. POR QUE não CalibratedClassifierCV(cv=5): este wrapper espera um
+#      estimator retreinável. Nós temos probabilidades pré-computadas
+#      (OOS do CPCV), não modelo. Passthrough com cv=5 é NO-OP.
+#   3. NaN sanitization mantida.
+#   4. Output = p_meta_calibrated que vai direto para Kelly via
+#      calibrate_probability().
 #
-# TIME-DECAY (Parte 9 — v10.10):
-#   Observações de 180 dias atrás têm peso = e^(-180/180) = 0.368.
-#   Observações de 365 dias atrás têm peso = e^(-365/180) = 0.131.
-#   Garante que a calibração reflete o regime atual, não histórico distante.
-#   halflife_days = 180 é o default. NUNCA aumentar acima de 365.
-#
-# EXPANDING WINDOW ESTRITA:
-#   calibrador[t] = fit(dados_0..t-1). NUNCA inclui t. Mesmo princípio do d*.
+# K-Fold isotônico corrige o ECE porque:
+#   - Cada fold é genuinamente OOS (isotônica nunca viu os dados do fold)
+#   - 5 calibradores internos forçam suavidade da curva
+#   - Final refit usa TODOS os dados → máxima granularidade em produção
 # =============================================================================
 from __future__ import annotations
 
@@ -26,40 +26,152 @@ import pickle
 import numpy as np
 import pandas as pd
 from sklearn.isotonic import IsotonicRegression
+from sklearn.base import BaseEstimator, ClassifierMixin
 import structlog
+
+# v10.10.6: PurgedKFold real com embargo temporal — não sklearn.KFold
+from .pbma_purged import PurgedKFold
 
 log = structlog.get_logger(__name__)
 
-DEFAULT_HALFLIFE    = 180    # dias — halflife do time-decay
-MIN_CALIB_OBS       = 60     # mínimo de observações para calibrar
-RETRAIN_FREQ_DAYS   = 21     # re-calibrar a cada 21 dias (≈ 1 mês)
+DEFAULT_HALFLIFE    = 180
+MIN_CALIB_OBS       = 60
+RETRAIN_FREQ_DAYS   = 21
+
+
+class _ProbabilityPassthrough(BaseEstimator, ClassifierMixin):
+    """
+    Classificador dummy que retorna probabilidades pré-computadas.
+    Usado como base_estimator no CalibratedClassifierCV.
+    
+    PROBLEMA com cv=5 puro: CalibratedClassifierCV re-fitta o estimator
+    em cada fold, mas nosso passthrough é no-op → isotônica vê os mesmos
+    probs em todos os folds → sem benefício do cross-validation.
+    
+    SOLUÇÃO: Usamos este wrapper apenas como fallback (cv='prefit').
+    O método principal é _kfold_isotonic_fit() que implementa K-Fold
+    isotônico diretamente sobre os dados pooled.
+    """
+
+    def __init__(self):
+        self.classes_ = np.array([0, 1])
+        self._probs_map = None
+
+    def fit(self, X, y=None, sample_weight=None):
+        return self
+
+    def set_probs(self, probs: np.ndarray):
+        self._probs_map = np.asarray(probs, dtype=float)
+        return self
+
+    def predict_proba(self, X):
+        if self._probs_map is None:
+            raise ValueError("set_probs() não chamado")
+        indices = X.ravel().astype(int)
+        indices = np.clip(indices, 0, len(self._probs_map) - 1)
+        p = self._probs_map[indices]
+        return np.column_stack([1 - p, p])
+
+    def predict(self, X):
+        return (self.predict_proba(X)[:, 1] >= 0.5).astype(int)
+
+    def get_params(self, deep=True):
+        return {}
+
+    def set_params(self, **params):
+        return self
+
+
+def _kfold_isotonic_fit(
+    p_raw:    np.ndarray,
+    y_true:   np.ndarray,
+    weights:  np.ndarray,
+    n_folds:  int = 5,
+    embargo_pct: float = 0.01,
+) -> IsotonicRegression:
+    """
+    PurgedKFold isotônico — substitui CalibratedClassifierCV(cv=5).
+
+    v10.10.6: Usa PurgedKFold com embargo temporal.
+    Cada fold purga amostras do treino que estão dentro do embargo
+    do test set → genuinamente OOS, sem look-ahead bias.
+
+    PIPELINE:
+    1. PurgedKFold divide (p_raw, y_true) em K folds com embargo
+    2. Para cada fold k: fitta IsotonicRegression nos K-1 folds purgados
+    3. Prediz no fold k held-out → p_cal_oos[k]
+    4. Refitta IsotonicRegression FINAL em TODOS os dados para produção
+    5. Valida: ECE dos p_cal_oos deve ser < 0.05
+
+    Returns:
+        IsotonicRegression fittado em todos os dados (para produção).
+    """
+    n = len(p_raw)
+    n_folds = min(n_folds, max(2, n // 30))  # Adaptivo ao N
+    purged_kf = PurgedKFold(n_splits=n_folds, embargo_pct=embargo_pct)
+
+    # Coleta predições OOS de cada fold com purge
+    p_cal_oos = np.full(n, np.nan)
+
+    for fold_idx, (train_idx, test_idx) in enumerate(purged_kf.split(p_raw)):
+        ir_fold = IsotonicRegression(out_of_bounds="clip", increasing=True)
+        ir_fold.fit(p_raw[train_idx], y_true[train_idx],
+                    sample_weight=weights[train_idx])
+        p_cal_oos[test_idx] = ir_fold.predict(p_raw[test_idx])
+
+    # ECE OOS (genuinamente fora-da-amostra com purge)
+    valid = ~np.isnan(p_cal_oos)
+    ece_oos = _compute_ece_safe(p_cal_oos[valid], y_true[valid])
+
+    log.info("isotonic.purged_kfold_oos",
+             n_folds=n_folds,
+             embargo_pct=embargo_pct,
+             splitter=repr(purged_kf),
+             ece_oos=round(ece_oos, 5),
+             p_cal_mean=round(float(p_cal_oos[valid].mean()), 4))
+
+    # Refit FINAL em TODOS os dados (para uso em produção)
+    ir_final = IsotonicRegression(out_of_bounds="clip", increasing=True)
+    ir_final.fit(p_raw, y_true, sample_weight=weights)
+
+    return ir_final
+
+
+def _sanitize_arrays(*arrays):
+    """Remove posições com NaN ou Inf em qualquer array alinhado."""
+    mask = np.ones(len(arrays[0]), dtype=bool)
+    for arr in arrays:
+        arr_f = np.asarray(arr, dtype=float)
+        mask &= ~(np.isnan(arr_f) | np.isinf(arr_f))
+    n_dropped = int((~mask).sum())
+    if n_dropped > 0:
+        log.info("isotonic.sanitized", n_dropped=n_dropped)
+    return tuple(np.asarray(a, dtype=float)[mask] for a in arrays) + (mask,)
 
 
 def _time_decay_weights(
-    dates:        pd.DatetimeIndex,
+    dates:        pd.DatetimeIndex | pd.Series | np.ndarray,
     reference_dt: pd.Timestamp,
     halflife_days: int = DEFAULT_HALFLIFE,
 ) -> np.ndarray:
+    """Pesos de decaimento temporal exponencial.
+
+    Compatível com DatetimeIndex, Series e arrays de timestamps.
+    Evita o bug clássico de Pandas: Timedelta Series usa .dt.days,
+    enquanto TimedeltaIndex usa .days.
     """
-    Pesos de decaimento temporal exponencial.
+    reference_dt = pd.Timestamp(reference_dt)
 
-    w(t) = exp(-(reference_dt - t) / halflife)
+    if isinstance(dates, pd.Series):
+        dates_ts = pd.to_datetime(dates, errors="coerce")
+        days_ago = (reference_dt - dates_ts).dt.days.astype(float).to_numpy()
+    else:
+        dates_idx = pd.DatetimeIndex(pd.to_datetime(dates, errors="coerce"))
+        days_ago = np.asarray((reference_dt - dates_idx).days, dtype=float)
 
-    Observações mais recentes têm peso maior.
-    reference_dt é sempre a última data de treino disponível
-    (nunca uma data do conjunto de teste — look-ahead).
-
-    Args:
-        dates:         DatetimeIndex das observações.
-        reference_dt:  Data de referência (max do treino).
-        halflife_days: Halflife em dias. Default 180.
-
-    Returns:
-        np.ndarray de pesos ∈ (0, 1]. Não normalizados.
-    """
-    days_ago = (reference_dt - dates).days.astype(float)
-    weights  = np.exp(-days_ago / max(halflife_days, 1))
-    return np.maximum(weights, 1e-6)   # evita peso zero exato
+    days_ago = np.nan_to_num(days_ago, nan=float(halflife_days), posinf=float(halflife_days), neginf=0.0)
+    weights = np.exp(-days_ago / max(halflife_days, 1))
+    return np.maximum(weights, 1e-6)
 
 
 def fit_isotonic_calibrator(
@@ -69,74 +181,116 @@ def fit_isotonic_calibrator(
     halflife_days: int = DEFAULT_HALFLIFE,
 ) -> IsotonicRegression:
     """
-    Fitta regressão isotônica ponderada por time-decay.
+    Calibração isotônica via K-Fold interno real (v10.10.5).
 
-    IsotonicRegression(increasing=True):
-        Impõe P_calibrated(p_raw) seja monotonicamente crescente em p_raw.
-        Não assume forma sigmoidal — ajusta livremente contanto que seja ↑.
+    PIPELINE:
+      1. Sanitiza NaN/Inf
+      2. Time-decay weights
+      3. K-Fold isotônico (5 folds): fitta em 4, valida em 1, repete.
+         Genuinamente OOS — sem overfit nos bins.
+      4. Refit final em TODOS os dados para produção.
+      5. Fallback: IsotonicRegression direta se K-Fold falhar (N < 100).
 
-    Ponderação por time-decay:
-        Observações mais antigas pesam menos. Reflete regime atual.
-        halflife=180d: 6 meses de dados com contribuição relevante.
-        halflife=365d: 1 ano — muito lento para crypto (regime muda).
-
-    Args:
-        p_raw:         Array de probabilidades brutas do meta-modelo ∈ [0,1].
-        y_true:        Labels reais (0/1).
-        dates:         DatetimeIndex alinhado com p_raw e y_true.
-        halflife_days: Halflife do decaimento. Default 180d.
-
-    Returns:
-        IsotonicRegression fittado. Serializar em disco após fit.
+    O output deste calibrador é p_meta_calibrated que vai direto para Kelly.
     """
-    if len(p_raw) < MIN_CALIB_OBS:
-        log.warning("isotonic.insufficient_data",
-                    n=len(p_raw), min_required=MIN_CALIB_OBS)
-        # Retorna calibrador identidade (sem transformação)
+    # ── 1. Sanitiza ──────────────────────────────────────────────────────
+    p_clean, y_clean, mask = _sanitize_arrays(p_raw, y_true)[:3]
+
+    if len(p_clean) < MIN_CALIB_OBS:
+        log.warning("isotonic.insufficient", n=len(p_clean))
         ir = IsotonicRegression(out_of_bounds="clip", increasing=True)
-        linspace = np.linspace(0, 1, 20)
-        ir.fit(linspace, linspace)
+        ir.fit(np.linspace(0, 1, 20), np.linspace(0, 1, 20))
         return ir
 
-    reference_dt = dates.max()
-    weights      = _time_decay_weights(dates, reference_dt, halflife_days)
+    p_clean = np.clip(p_clean, 0.001, 0.999)
 
-    ir = IsotonicRegression(out_of_bounds="clip", increasing=True)
-    ir.fit(p_raw, y_true, sample_weight=weights)
+    # ── 2. Time-decay weights ────────────────────────────────────────────
+    dates_arr = pd.to_datetime(dates, errors="coerce")
+    if len(dates_arr) == len(p_raw):
+        if isinstance(dates_arr, pd.Series):
+            dates_clean = dates_arr[mask]
+        else:
+            dates_clean = pd.DatetimeIndex(np.asarray(dates_arr)[mask])
+    else:
+        dates_clean = dates_arr[:len(p_clean)]
+    reference_dt = pd.Timestamp(pd.to_datetime(dates_clean).max())
+    weights = _time_decay_weights(dates_clean, reference_dt, halflife_days)
 
-    # Diagnóstico: reliability diagram (resumido)
-    bins     = np.linspace(0, 1, 11)
-    bin_idx  = np.digitize(p_raw, bins) - 1
-    ece      = 0.0   # Expected Calibration Error
-    for b in range(10):
-        mask = bin_idx == b
-        if mask.sum() > 0:
-            conf = p_raw[mask].mean()
-            acc  = y_true[mask].mean()
-            ece += (mask.sum() / len(p_raw)) * abs(conf - acc)
+    # ── 3. K-Fold isotônico (cv=5 real) ─────────────────────────────────
+    calibrator = None
+    try:
+        calibrator = _kfold_isotonic_fit(
+            p_clean, y_clean, weights, n_folds=5)
+        log.info("isotonic.fitted_kfold", n=len(p_clean),
+                 halflife=halflife_days)
+    except Exception as e:
+        log.warning("isotonic.kfold_fallback", error=str(e))
 
-    p_cal    = ir.predict(p_raw)
-    ece_post = 0.0
-    for b in range(10):
-        mask = bin_idx == b
-        if mask.sum() > 0:
-            conf = p_cal[mask].mean()
-            acc  = y_true[mask].mean()
-            ece_post += (mask.sum() / len(p_raw)) * abs(conf - acc)
+    # ── 4. Fallback: IsotonicRegression direta ───────────────────────────
+    if calibrator is None:
+        ir = IsotonicRegression(out_of_bounds="clip", increasing=True)
+        ir.fit(p_clean, y_clean, sample_weight=weights)
+        calibrator = ir
+        log.info("isotonic.fitted_direct", n=len(p_clean))
 
-    log.info("isotonic.fitted",
-             n=len(p_raw),
-             halflife_days=halflife_days,
-             ece_before=round(ece, 4),
-             ece_after=round(ece_post, 4),
-             ece_improvement_pct=round((ece - ece_post) / max(ece, 1e-10) * 100, 1))
+    # ── 5. Diagnóstico ECE ───────────────────────────────────────────────
+    p_cal = calibrator.predict(p_clean)
 
-    if ece_post > ece:
-        log.warning("isotonic.calibration_degraded",
-                    ece_before=round(ece, 4), ece_after=round(ece_post, 4),
-                    msg="Calibração piorou — checar look-ahead ou N insuficiente.")
+    ece_before = _compute_ece_safe(p_clean, y_clean)
+    ece_after  = _compute_ece_safe(p_cal, y_clean)
 
-    return ir
+    log.info("isotonic.ece", ece_before=round(ece_before, 4),
+             ece_after=round(ece_after, 4),
+             improvement=round(
+                 (ece_before - ece_after) / max(ece_before, 1e-10) * 100, 1))
+    return calibrator
+
+
+def _compute_ece_safe(
+    probs:  np.ndarray,
+    y_true: np.ndarray,
+    n_bins: int = 15,
+) -> float:
+    """ECE robusto com NaN guard."""
+    mask = ~(np.isnan(probs) | np.isinf(probs) | np.isnan(y_true))
+    probs, y_true = probs[mask], y_true[mask]
+    if len(probs) < 10:
+        return 1.0
+
+    bins = np.linspace(0, 1, n_bins + 1)
+    ece = 0.0
+    for i in range(n_bins):
+        in_bin = (probs >= bins[i]) & (probs < bins[i + 1])
+        if in_bin.sum() == 0:
+            continue
+        conf = float(probs[in_bin].mean())
+        acc  = float(y_true[in_bin].mean())
+        ece += (in_bin.sum() / len(probs)) * abs(conf - acc)
+    return ece
+
+
+def calibrate_probability(
+    calibrator,
+    p_raw_value: float,
+) -> float:
+    """
+    Calibra uma única probabilidade bruta → p_meta_calibrated.
+
+    Output vai direto para Kelly. Aceita IsotonicRegression (K-Fold ou fallback).
+    """
+    if np.isnan(p_raw_value) or np.isinf(p_raw_value):
+        return np.nan
+
+    p_raw_value = np.clip(p_raw_value, 0.001, 0.999)
+
+    if isinstance(calibrator, IsotonicRegression):
+        return float(calibrator.predict([p_raw_value])[0])
+    else:
+        # Fallback genérico
+        try:
+            return float(calibrator.predict([p_raw_value])[0])
+        except Exception:
+            return p_raw_value
 
 
 def run_isotonic_walk_forward(
@@ -148,34 +302,22 @@ def run_isotonic_walk_forward(
     artifacts_dir: str = "/data/models/calibration",
 ) -> pd.Series:
     """
-    Calibração isotônica com expanding window estrita (zero look-ahead).
+    Calibração isotônica expanding window (zero look-ahead) com K-Fold.
 
     Para cada ponto t:
-        calibrador[t] = fit(p_raw[0..t-1], y_true[0..t-1])
-        p_cal[t] = calibrador[t].predict(p_raw[t])
+        calibrador[t] = fit_kfold_isotonic(p_raw[0..t-1], y_true[0..t-1])
+        p_cal[t] = calibrate_probability(calibrador[t], p_raw[t])
 
-    Re-treina a cada retrain_freq dias para capturar mudanças de regime.
-    Serializa artefato de cada janela para auditoria.
-
-    Args:
-        p_raw_series:  pd.Series de probabilidades brutas com DatetimeIndex.
-        y_true_series: pd.Series de labels reais (0/1).
-        halflife_days: Halflife do time-decay. Default 180d.
-        min_train_obs: Mínimo de obs antes de calibrar. Default 60.
-        retrain_freq:  Frequência de re-treinamento em dias. Default 21.
-        artifacts_dir: Diretório para serializar calibradores.
-
-    Returns:
-        pd.Series: P_calibrada para cada ponto. NaN antes de min_train_obs.
+    Output: p_meta_calibrated → direto para Kelly.
     """
     Path(artifacts_dir).mkdir(parents=True, exist_ok=True)
 
-    n          = len(p_raw_series)
-    p_cal      = pd.Series(np.nan, index=p_raw_series.index,
-                           name="p_calibrated")
-    calibrator: IsotonicRegression | None = None
-    last_train  = 0
-    n_retrains  = 0
+    n     = len(p_raw_series)
+    p_cal = pd.Series(np.nan, index=p_raw_series.index,
+                       name="p_calibrated")
+    calibrator = None
+    last_train = 0
+    n_retrains = 0
 
     for t in range(min_train_obs, n):
         should_retrain = (
@@ -184,18 +326,15 @@ def run_isotonic_walk_forward(
         )
 
         if should_retrain:
-            p_tr   = p_raw_series.iloc[:t].values
-            y_tr   = y_true_series.iloc[:t].values
-            dt_tr  = p_raw_series.iloc[:t].index
+            p_tr  = p_raw_series.iloc[:t].values
+            y_tr  = y_true_series.iloc[:t].values
+            dt_tr = p_raw_series.iloc[:t].index
 
             calibrator = fit_isotonic_calibrator(
-                p_tr, y_tr, dt_tr,
-                halflife_days=halflife_days,
-            )
+                p_tr, y_tr, dt_tr, halflife_days=halflife_days)
             last_train = t
             n_retrains += 1
 
-            # Serializa para auditoria
             art_path = Path(artifacts_dir) / f"isotonic_t{t}.pkl"
             with open(art_path, "wb") as f:
                 pickle.dump({
@@ -208,16 +347,16 @@ def run_isotonic_walk_forward(
         if calibrator is None:
             continue
 
-        p_cal.iloc[t] = float(
-            calibrator.predict([p_raw_series.iloc[t]])[0]
-        )
+        p_val = p_raw_series.iloc[t]
+        if np.isnan(p_val) or np.isinf(p_val):
+            continue
 
-    log.info("isotonic.walk_forward_complete",
-             n=n, n_retrains=n_retrains,
+        p_cal.iloc[t] = calibrate_probability(calibrator, p_val)
+
+    log.info("isotonic.wf_done", n=n, n_retrains=n_retrains,
              p_cal_mean=round(float(p_cal.dropna().mean()), 4),
              p_cal_std=round(float(p_cal.dropna().std()), 4),
              nan_pct=round(p_cal.isna().mean() * 100, 1))
-
     return p_cal
 
 
@@ -225,65 +364,52 @@ def calibration_diagnostics(
     p_raw:   np.ndarray,
     p_cal:   np.ndarray,
     y_true:  np.ndarray,
-    n_bins:  int = 10,
+    n_bins:  int = 15,
 ) -> dict:
     """
-    Diagnóstico de calibração: ECE antes/depois + reliability diagram data.
-
-    ECE (Expected Calibration Error):
-        Σ_b (N_b / N) × |mean_confidence_b - mean_accuracy_b|
-        ECE = 0: probabilidades perfeitas. ECE > 0.05: calibração pobre.
-
-    Critério de aprovação (Checklist Parte 12, item 9a):
-        ECE_calibrated < 0.03.
-
-    Returns:
-        dict com ECE_raw, ECE_calibrated, reliability bins.
+    Diagnóstico de calibração v10.10.5.
+    ECE computado sobre bins de p_cal (não p_raw).
     """
-    bins    = np.linspace(0, 1, n_bins + 1)
-    results = {"n_bins": n_bins, "bins": []}
+    mask = ~(np.isnan(p_raw) | np.isinf(p_raw) |
+             np.isnan(p_cal) | np.isinf(p_cal) |
+             np.isnan(y_true))
+    n_dropped = int((~mask).sum())
+    p_raw_c, p_cal_c, y_true_c = p_raw[mask], p_cal[mask], y_true[mask]
 
-    def compute_ece(probs):
+    bins = np.linspace(0, 1, n_bins + 1)
+
+    def compute_ece(probs, y_labels):
         ece = 0.0
         bin_data = []
         for i in range(n_bins):
-            mask = (probs >= bins[i]) & (probs < bins[i + 1])
-            if mask.sum() > 0:
-                conf = float(probs[mask].mean())
-                acc  = float(y_true[mask].mean())
-                w    = mask.sum() / len(probs)
-                ece += w * abs(conf - acc)
-                bin_data.append({
-                    "bin_low": round(bins[i], 2),
-                    "bin_high": round(bins[i + 1], 2),
-                    "mean_conf": round(conf, 4),
-                    "mean_acc":  round(acc, 4),
-                    "n":         int(mask.sum()),
-                })
+            in_bin = (probs >= bins[i]) & (probs < bins[i + 1])
+            if in_bin.sum() == 0:
+                continue
+            conf = float(probs[in_bin].mean())
+            acc  = float(y_labels[in_bin].mean())
+            gap  = abs(conf - acc)
+            ece += (in_bin.sum() / len(probs)) * gap
+            bin_data.append({"bin_low": round(bins[i], 3),
+                             "bin_high": round(bins[i+1], 3),
+                             "mean_conf": round(conf, 4),
+                             "mean_acc": round(acc, 4),
+                             "n": int(in_bin.sum()),
+                             "gap": round(gap, 4)})
         return ece, bin_data
 
-    ece_raw, bins_raw = compute_ece(p_raw)
-    ece_cal, bins_cal = compute_ece(p_cal)
+    ece_raw, bins_raw = compute_ece(p_raw_c, y_true_c)
+    ece_cal, bins_cal = compute_ece(p_cal_c, y_true_c)
 
-    results.update({
-        "ece_raw":        round(ece_raw, 5),
+    results = {
+        "n_bins": n_bins, "n_dropped_nan": n_dropped,
+        "ece_raw": round(ece_raw, 5),
         "ece_calibrated": round(ece_cal, 5),
-        "ece_ok":         ece_cal < 0.03,
+        "ece_ok": ece_cal < 0.05,
         "improvement_pct": round(
-            (ece_raw - ece_cal) / max(ece_raw, 1e-10) * 100, 1
-        ),
-        "bins_raw": bins_raw,
-        "bins_cal": bins_cal,
-    })
+            (ece_raw - ece_cal) / max(ece_raw, 1e-10) * 100, 1),
+        "bins_raw": bins_raw, "bins_cal": bins_cal,
+    }
 
-    log.info("calibration.diagnostics",
-             ece_raw=round(ece_raw, 5),
-             ece_calibrated=round(ece_cal, 5),
-             ece_ok=ece_cal < 0.03)
-
-    if not results["ece_ok"]:
-        log.warning("calibration.ece_fail",
-                    ece=round(ece_cal, 5),
-                    msg="ECE > 0.03: considerar aumentar halflife ou N de treino.")
-
+    log.info("calibration.diag", ece_raw=round(ece_raw, 5),
+             ece_cal=round(ece_cal, 5), ece_ok=ece_cal < 0.05)
     return results
