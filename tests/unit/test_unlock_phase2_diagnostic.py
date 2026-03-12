@@ -145,6 +145,7 @@ class UnlockPhase2DiagnosticTest(unittest.TestCase):
                     "unlock_pressure_rank_reconstructed": [None, None, None, None, None, 0.2, 0.3, 0.4, None, None, None, None],
                     "unlock_overhang_proxy_rank_full": [0.3] * 12,
                     "unlock_fragility_proxy_rank_fallback": [0.4, 0.5, 0.6, 0.7, 0.8, None, None, 0.4, 0.5, 0.6, 0.7, 0.8],
+                    "unlock_pressure_rank_selected_for_reporting": [0.1] * 8 + [None] * 4,
                     "unlock_feature_state": ["OBSERVED"] * 5 + ["RECONSTRUCTED"] * 3 + ["PROXY_FULL"] * 2 + ["PROXY_FALLBACK"] * 2,
                 }
             )
@@ -167,6 +168,7 @@ class UnlockPhase2DiagnosticTest(unittest.TestCase):
                     "unlock_pressure_rank_reconstructed": unlock_frame["unlock_pressure_rank_reconstructed"].tolist(),
                     "unlock_overhang_proxy_rank_full": unlock_frame["unlock_overhang_proxy_rank_full"].tolist(),
                     "unlock_fragility_proxy_rank_fallback": unlock_frame["unlock_fragility_proxy_rank_fallback"].tolist(),
+                    "unlock_pressure_rank_selected_for_reporting": unlock_frame["unlock_pressure_rank_selected_for_reporting"].tolist(),
                 }
             )
             feature_frame.to_pickle(features_path / "OBS.parquet")
@@ -175,6 +177,7 @@ class UnlockPhase2DiagnosticTest(unittest.TestCase):
                 [
                     {
                         "date": "2024-01-12",
+                        "n_assets": 64,
                         "observed_coverage": 0.40,
                         "reconstructed_coverage": 0.25,
                         "proxy_full_coverage": 1.00,
@@ -183,7 +186,19 @@ class UnlockPhase2DiagnosticTest(unittest.TestCase):
                         "unknown_bucket_block_rate": 0.0,
                         "massive_ties_fraction": 0.5,
                         "shadow_mode_flag": 1,
-                    }
+                    },
+                    {
+                        "date": "2024-01-13",
+                        "n_assets": 1,
+                        "observed_coverage": 0.0,
+                        "reconstructed_coverage": 0.0,
+                        "proxy_full_coverage": 0.0,
+                        "proxy_fallback_coverage": 1.0,
+                        "missing_rate": 0.0,
+                        "unknown_bucket_block_rate": 0.0,
+                        "massive_ties_fraction": 1.0,
+                        "shadow_mode_flag": 1,
+                    },
                 ]
             )
             quality_frame.to_pickle(diagnostics_dir / "unlock_quality_daily.parquet")
@@ -198,8 +213,14 @@ class UnlockPhase2DiagnosticTest(unittest.TestCase):
         self.assertEqual(report["status"], "PASS")
         self.assertTrue(report["quality_summary_present"])
         self.assertIn("unlock_pressure_rank_observed", report["coverage_by_feature"])
-        self.assertIn("baseline_complete_row_ratio_avg", report["baseline_vs_augmented"])
+        self.assertIn("unlock_pressure_rank_selected_for_reporting", report["audit_only_coverage"])
+        self.assertGreater(report["baseline_vs_augmented"]["unlock_any_valid_row_ratio_avg"], 0.0)
+        self.assertGreater(report["baseline_vs_augmented"]["augmented_complete_row_ratio_avg"], 0.0)
+        self.assertEqual(report["baseline_vs_augmented"]["legacy_all_unlock_columns_nonnull_row_ratio_avg"], 0.0)
         self.assertEqual(report["latest_quality"]["shadow_mode_flag"], 1)
+        self.assertEqual(report["latest_quality"]["date"], "2024-01-12")
+        self.assertEqual(report["raw_latest_quality"]["date"], "2024-01-13")
+        self.assertTrue(report["latest_quality_metadata"]["partial_latest_filtered"])
 
 
 if __name__ == "__main__":

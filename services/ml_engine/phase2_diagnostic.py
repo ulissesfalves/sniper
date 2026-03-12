@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 import pickle
 from datetime import datetime
 from pathlib import Path
@@ -13,6 +14,10 @@ from sklearn.preprocessing import RobustScaler
 from features.onchain import UNLOCK_MODEL_FEATURE_COLUMNS
 
 from regime.pca_robust import transform_robust_pca
+try:
+    from .regime.hmm_filter import build_regime_target
+except ImportError:
+    from regime.hmm_filter import build_regime_target
 
 MODEL_PATH = Path('/data/models')
 FEATURES_PATH = MODEL_PATH / 'features'
@@ -74,10 +79,28 @@ FEATURE_STORE_SPARSE_FEATURES = [
     *UNLOCK_MODEL_FEATURE_COLUMNS,
 ]
 HMM_DEGRADABLE_FEATURES = ['funding_rate_ma7d', 'basis_3m']
+UNLOCK_MODEL_FEATURE_SET = os.getenv('UNLOCK_MODEL_FEATURE_SET', 'full').strip().lower()
+UNLOCK_PROXY_FEATURE_COLUMNS = [
+    'unlock_overhang_proxy_rank_full',
+    'unlock_fragility_proxy_rank_fallback',
+]
+HMM_HARD_REQUIRED_FEATURES = [
+    feature for feature in HMM_REQUIRED_FEATURES
+    if feature not in HMM_DEGRADABLE_FEATURES
+]
 
 
 def _status(ok: bool) -> str:
     return 'PASS' if ok else 'FAIL'
+
+
+def get_unlock_model_feature_columns(mode: str | None = None) -> list[str]:
+    normalized = (mode or UNLOCK_MODEL_FEATURE_SET or 'full').strip().lower()
+    if normalized in {'baseline', 'none', 'off'}:
+        return []
+    if normalized == 'proxies':
+        return UNLOCK_PROXY_FEATURE_COLUMNS.copy()
+    return list(UNLOCK_MODEL_FEATURE_COLUMNS)
 
 
 def _safe_read_parquet(path: Path) -> pd.DataFrame:
@@ -125,6 +148,59 @@ def _compute_psi(expected: pd.Series, actual: pd.Series, n_bins: int = 10) -> fl
     eps = 1e-6
     psi = ((actual_dist + eps) - (expected_dist + eps)) * np.log((actual_dist + eps) / (expected_dist + eps))
     return float(psi.sum())
+
+
+def _select_latest_operational_quality_row(quality_summary: pd.DataFrame) -> tuple[dict, dict | None]:
+    if quality_summary.empty:
+        return {}, None
+
+    ordered = quality_summary.sort_values('date').reset_index(drop=True)
+    raw_latest = ordered.iloc[-1].to_dict()
+
+    if 'n_assets' not in ordered.columns:
+        return raw_latest, None
+
+    n_assets = pd.to_numeric(ordered['n_assets'], errors='coerce')
+    valid_counts = n_assets.dropna()
+    if valid_counts.empty:
+        return raw_latest, None
+
+    recent_window = valid_counts.tail(30)
+    reference_count = float(recent_window.median())
+    minimum_operational_assets = max(10.0, reference_count * 0.8)
+    eligible = ordered.loc[n_assets >= minimum_operational_assets]
+    if eligible.empty:
+        return raw_latest, None
+
+    operational_latest = eligible.iloc[-1].to_dict()
+    metadata = {
+        'raw_latest_date': raw_latest.get('date'),
+        'raw_latest_n_assets': None if pd.isna(raw_latest.get('n_assets')) else int(raw_latest.get('n_assets')),
+        'operational_latest_date': operational_latest.get('date'),
+        'operational_latest_n_assets': None if pd.isna(operational_latest.get('n_assets')) else int(operational_latest.get('n_assets')),
+        'min_operational_assets': round(float(minimum_operational_assets), 2),
+        'operational_reference_assets': round(reference_count, 2),
+        'partial_latest_filtered': bool(raw_latest.get('date') != operational_latest.get('date')),
+    }
+    return operational_latest, metadata
+
+
+def _project_quality_row(row: dict | None) -> dict:
+    if not row:
+        return {}
+
+    return {
+        'date': row.get('date'),
+        'n_assets': row.get('n_assets'),
+        'observed_coverage': row.get('observed_coverage'),
+        'reconstructed_coverage': row.get('reconstructed_coverage'),
+        'proxy_full_coverage': row.get('proxy_full_coverage'),
+        'proxy_fallback_coverage': row.get('proxy_fallback_coverage'),
+        'missing_rate': row.get('missing_rate'),
+        'unknown_bucket_block_rate': row.get('unknown_bucket_block_rate'),
+        'massive_ties_fraction': row.get('massive_ties_fraction'),
+        'shadow_mode_flag': row.get('shadow_mode_flag'),
+    }
 
 
 def _parse_hmm_step(path: Path) -> int:
@@ -368,7 +444,13 @@ def audit_unlock_shadow_mode() -> dict:
         df = _coerce_datetime_index(_safe_read_parquet(path), ['timestamp', 'date', 'event_date', 'index'])
         if df.empty:
             continue
-        cols = [col for col in UNLOCK_MODEL_FEATURE_COLUMNS + ['unlock_feature_state'] if col in df.columns]
+        cols = [
+            col for col in (
+                UNLOCK_MODEL_FEATURE_COLUMNS
+                + ['unlock_pressure_rank_selected_for_reporting', 'unlock_feature_state']
+            )
+            if col in df.columns
+        ]
         if not cols:
             continue
         frame = df[cols].copy()
@@ -388,13 +470,32 @@ def audit_unlock_shadow_mode() -> dict:
         }
 
     stacked = pd.concat(stacked_frames, ignore_index=True).sort_values('date')
+    effective_unlock_features = [
+        col for col in get_unlock_model_feature_columns()
+        if col in stacked.columns
+    ]
     coverage_by_feature = {
         col: round(float(_numeric(stacked[col]).notna().mean()), 4)
         for col in UNLOCK_MODEL_FEATURE_COLUMNS
         if col in stacked.columns
     }
+    effective_x_feature_coverage = {
+        col: coverage_by_feature[col]
+        for col in effective_unlock_features
+        if col in coverage_by_feature
+    }
+    audit_only_coverage = {}
+    if 'unlock_pressure_rank_selected_for_reporting' in stacked.columns:
+        audit_only_coverage['unlock_pressure_rank_selected_for_reporting'] = round(
+            float(_numeric(stacked['unlock_pressure_rank_selected_for_reporting']).notna().mean()),
+            4,
+        )
 
-    corr_matrix = stacked[UNLOCK_MODEL_FEATURE_COLUMNS].apply(pd.to_numeric, errors='coerce').corr(min_periods=10)
+    corr_matrix = (
+        stacked.reindex(columns=UNLOCK_MODEL_FEATURE_COLUMNS)
+        .apply(pd.to_numeric, errors='coerce')
+        .corr(min_periods=10)
+    )
     pairwise_correlation = {
         f'{left}__{right}': None if pd.isna(corr_matrix.loc[left, right]) else round(float(corr_matrix.loc[left, right]), 4)
         for left in UNLOCK_MODEL_FEATURE_COLUMNS
@@ -412,24 +513,70 @@ def audit_unlock_shadow_mode() -> dict:
     }
 
     feature_files = sorted(FEATURES_PATH.glob('*.parquet'))
-    baseline_features = [feature for feature in REQUIRED_FEATURES if feature not in UNLOCK_MODEL_FEATURE_COLUMNS]
+    baseline_core_features = FEATURE_STORE_DENSE_FEATURES.copy()
     baseline_complete = []
     augmented_complete = []
     baseline_complete_recent = []
     augmented_complete_recent = []
+    hmm_eligible = []
+    hmm_eligible_recent = []
+    hmm_full = []
+    hmm_full_recent = []
+    unlock_any_valid = []
+    unlock_any_valid_recent = []
+    legacy_unlock_all = []
+    legacy_unlock_all_recent = []
+    selected_for_reporting = []
+    selected_for_reporting_recent = []
     for path in feature_files:
         df = _coerce_datetime_index(_safe_read_parquet(path), ['timestamp', 'date', 'event_date', 'index'])
         if df.empty:
             continue
-        baseline_present = [feature for feature in baseline_features if feature in df.columns]
-        augmented_present = [feature for feature in REQUIRED_FEATURES if feature in df.columns]
         recent_df = df.tail(90)
+        baseline_present = [feature for feature in baseline_core_features if feature in df.columns]
+        hmm_hard_present = [feature for feature in HMM_HARD_REQUIRED_FEATURES if feature in df.columns]
+        hmm_full_present = [feature for feature in HMM_REQUIRED_FEATURES if feature in df.columns]
+        effective_unlock_present = [feature for feature in effective_unlock_features if feature in df.columns]
+        legacy_unlock_present = [feature for feature in UNLOCK_MODEL_FEATURE_COLUMNS if feature in df.columns]
+
         if baseline_present:
-            baseline_complete.append(float(df[baseline_present].notna().all(axis=1).mean()))
-            baseline_complete_recent.append(float(recent_df[baseline_present].notna().all(axis=1).mean()))
-        if augmented_present:
-            augmented_complete.append(float(df[augmented_present].notna().all(axis=1).mean()))
-            augmented_complete_recent.append(float(recent_df[augmented_present].notna().all(axis=1).mean()))
+            baseline_mask = df[baseline_present].notna().all(axis=1)
+            recent_baseline_mask = recent_df[baseline_present].notna().all(axis=1)
+            baseline_complete.append(float(baseline_mask.mean()))
+            baseline_complete_recent.append(float(recent_baseline_mask.mean()))
+        else:
+            baseline_mask = pd.Series(False, index=df.index)
+            recent_baseline_mask = pd.Series(False, index=recent_df.index)
+
+        if hmm_hard_present:
+            hmm_eligible.append(float(df[hmm_hard_present].notna().all(axis=1).mean()))
+            hmm_eligible_recent.append(float(recent_df[hmm_hard_present].notna().all(axis=1).mean()))
+        if hmm_full_present:
+            hmm_full.append(float(df[hmm_full_present].notna().all(axis=1).mean()))
+            hmm_full_recent.append(float(recent_df[hmm_full_present].notna().all(axis=1).mean()))
+
+        if effective_unlock_present:
+            unlock_any_mask = df[effective_unlock_present].notna().any(axis=1)
+            recent_unlock_any_mask = recent_df[effective_unlock_present].notna().any(axis=1)
+            unlock_any_valid.append(float(unlock_any_mask.mean()))
+            unlock_any_valid_recent.append(float(recent_unlock_any_mask.mean()))
+            augmented_complete.append(float((baseline_mask & unlock_any_mask).mean()))
+            augmented_complete_recent.append(float((recent_baseline_mask & recent_unlock_any_mask).mean()))
+        elif baseline_present:
+            augmented_complete.append(float(baseline_mask.mean()))
+            augmented_complete_recent.append(float(recent_baseline_mask.mean()))
+
+        if legacy_unlock_present:
+            legacy_unlock_all.append(float(df[legacy_unlock_present].notna().all(axis=1).mean()))
+            legacy_unlock_all_recent.append(float(recent_df[legacy_unlock_present].notna().all(axis=1).mean()))
+
+        if 'unlock_pressure_rank_selected_for_reporting' in df.columns:
+            selected_for_reporting.append(
+                float(_numeric(df['unlock_pressure_rank_selected_for_reporting']).notna().mean())
+            )
+            selected_for_reporting_recent.append(
+                float(_numeric(recent_df['unlock_pressure_rank_selected_for_reporting']).notna().mean())
+            )
 
     quality_summary = None
     quality_summary_present = UNLOCK_DIAGNOSTICS_PATH.exists()
@@ -437,19 +584,13 @@ def audit_unlock_shadow_mode() -> dict:
         quality_summary = _safe_read_parquet(UNLOCK_DIAGNOSTICS_PATH)
 
     latest_quality = {}
+    raw_latest_quality = {}
+    latest_quality_metadata = {}
     if quality_summary is not None and not quality_summary.empty:
-        latest = quality_summary.sort_values('date').iloc[-1].to_dict()
-        latest_quality = {
-            'date': latest.get('date'),
-            'observed_coverage': latest.get('observed_coverage'),
-            'reconstructed_coverage': latest.get('reconstructed_coverage'),
-            'proxy_full_coverage': latest.get('proxy_full_coverage'),
-            'proxy_fallback_coverage': latest.get('proxy_fallback_coverage'),
-            'missing_rate': latest.get('missing_rate'),
-            'unknown_bucket_block_rate': latest.get('unknown_bucket_block_rate'),
-            'massive_ties_fraction': latest.get('massive_ties_fraction'),
-            'shadow_mode_flag': latest.get('shadow_mode_flag'),
-        }
+        latest, metadata = _select_latest_operational_quality_row(quality_summary)
+        latest_quality = _project_quality_row(latest)
+        raw_latest_quality = _project_quality_row(quality_summary.sort_values('date').iloc[-1].to_dict())
+        latest_quality_metadata = metadata or {}
 
     status_ok = bool(coverage_by_feature) and quality_summary_present
     return {
@@ -457,17 +598,35 @@ def audit_unlock_shadow_mode() -> dict:
         'unlock_files': len(unlock_files),
         'quality_summary_present': quality_summary_present,
         'coverage_by_feature': coverage_by_feature,
+        'coverage_scope': 'historical_unlock_rows_non_null_ratio',
+        'effective_x_feature_coverage': effective_x_feature_coverage,
+        'audit_only_coverage': audit_only_coverage,
         'pairwise_correlation': pairwise_correlation,
         'drift_psi': drift_psi,
         'baseline_vs_augmented': {
-            'baseline_feature_count': len(baseline_features),
-            'augmented_feature_count': len(REQUIRED_FEATURES),
+            'unlock_model_feature_set': UNLOCK_MODEL_FEATURE_SET,
+            'baseline_feature_count': len(baseline_core_features),
+            'effective_unlock_feature_count': len(effective_unlock_features),
+            'effective_unlock_features': effective_unlock_features,
+            'augmented_feature_count': len(baseline_core_features) + len(effective_unlock_features),
             'baseline_complete_row_ratio_avg': round(float(np.mean(baseline_complete)), 4) if baseline_complete else None,
             'augmented_complete_row_ratio_avg': round(float(np.mean(augmented_complete)), 4) if augmented_complete else None,
             'baseline_complete_row_ratio_last90d_avg': round(float(np.mean(baseline_complete_recent)), 4) if baseline_complete_recent else None,
             'augmented_complete_row_ratio_last90d_avg': round(float(np.mean(augmented_complete_recent)), 4) if augmented_complete_recent else None,
+            'hmm_eligible_row_ratio_avg': round(float(np.mean(hmm_eligible)), 4) if hmm_eligible else None,
+            'hmm_eligible_row_ratio_last90d_avg': round(float(np.mean(hmm_eligible_recent)), 4) if hmm_eligible_recent else None,
+            'hmm_full_input_row_ratio_avg': round(float(np.mean(hmm_full)), 4) if hmm_full else None,
+            'hmm_full_input_row_ratio_last90d_avg': round(float(np.mean(hmm_full_recent)), 4) if hmm_full_recent else None,
+            'unlock_any_valid_row_ratio_avg': round(float(np.mean(unlock_any_valid)), 4) if unlock_any_valid else None,
+            'unlock_any_valid_row_ratio_last90d_avg': round(float(np.mean(unlock_any_valid_recent)), 4) if unlock_any_valid_recent else None,
+            'selected_for_reporting_coverage_avg': round(float(np.mean(selected_for_reporting)), 4) if selected_for_reporting else None,
+            'selected_for_reporting_coverage_last90d_avg': round(float(np.mean(selected_for_reporting_recent)), 4) if selected_for_reporting_recent else None,
+            'legacy_all_unlock_columns_nonnull_row_ratio_avg': round(float(np.mean(legacy_unlock_all)), 4) if legacy_unlock_all else None,
+            'legacy_all_unlock_columns_nonnull_row_ratio_last90d_avg': round(float(np.mean(legacy_unlock_all_recent)), 4) if legacy_unlock_all_recent else None,
         },
         'latest_quality': latest_quality,
+        'raw_latest_quality': raw_latest_quality,
+        'latest_quality_metadata': latest_quality_metadata,
     }
 
 
@@ -606,11 +765,11 @@ def audit_hmm_outputs() -> dict:
         if hard_missing_inputs:
             n_missing_hmm_inputs += 1
 
-        valid_mask = prob.notna() & returns.notna()
+        y_true = build_regime_target(returns)
+        valid_mask = prob.notna() & y_true.notna()
         if valid_mask.sum() >= 30 and bull.loc[valid_mask].nunique() >= 1:
-            y_true = (returns.loc[valid_mask] > 0).astype(int)
             y_pred = bull.loc[valid_mask].astype(int)
-            f1_oos = float(f1_score(y_true, y_pred, zero_division=0))
+            f1_oos = float(f1_score(y_true.loc[valid_mask].astype(int), y_pred, zero_division=0))
         else:
             f1_oos = np.nan
 
@@ -942,9 +1101,16 @@ def main() -> None:
 
     print('\nUnlock shadow mode:')
     print(f"  - quality_summary_present: {unlock_shadow_mode['quality_summary_present']}")
+    print(f"  - coverage_scope: {unlock_shadow_mode.get('coverage_scope')}")
     print(f"  - coverage_by_feature: {unlock_shadow_mode['coverage_by_feature']}")
+    print(f"  - effective_x_feature_coverage: {unlock_shadow_mode.get('effective_x_feature_coverage', {})}")
+    print(f"  - audit_only_coverage: {unlock_shadow_mode.get('audit_only_coverage', {})}")
     print(f"  - baseline_vs_augmented: {unlock_shadow_mode['baseline_vs_augmented']}")
     print(f"  - latest_quality: {unlock_shadow_mode['latest_quality']}")
+    if unlock_shadow_mode.get('latest_quality_metadata'):
+        print(f"  - latest_quality_metadata: {unlock_shadow_mode['latest_quality_metadata']}")
+    if unlock_shadow_mode.get('raw_latest_quality'):
+        print(f"  - raw_latest_quality: {unlock_shadow_mode['raw_latest_quality']}")
 
     print('\nHMM blockers:')
     print(f"  - assets_with_missing_hmm_inputs: {hmm_outputs['assets_with_missing_hmm_inputs']}")
