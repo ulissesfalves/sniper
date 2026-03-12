@@ -10,14 +10,17 @@ Fixes v3:
 """
 from __future__ import annotations
 import json, time, warnings
+import os
 from datetime import datetime
 from itertools import combinations
 from pathlib import Path
 import numpy as np
 import pandas as pd
+from scipy.cluster.hierarchy import linkage, fcluster
 from scipy.stats import norm, skew, kurtosis as scipy_kurtosis
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score
+from sklearn.preprocessing import RobustScaler
 from features.onchain import UNLOCK_MODEL_FEATURE_COLUMNS
 warnings.filterwarnings("ignore")
 
@@ -42,11 +45,29 @@ SHARPE_OOS_MIN      = 0.70
 MAX_DD_THRESHOLD    = 0.18
 SUBPERIOD_MIN_PASS  = 4
 PBMA_FALLBACK_THR   = 0.65
+UNLOCK_MODEL_FEATURE_SET = os.getenv("UNLOCK_MODEL_FEATURE_SET", "full").strip().lower()
+UNLOCK_PROXY_FEATURE_COLUMNS = [
+    "unlock_overhang_proxy_rank_full",
+    "unlock_fragility_proxy_rank_fallback",
+]
 VI_CLUSTER_ASSET_PATHS = [
     MODEL_PATH / "global_vi_clusters.json",
     MODEL_PATH / "vi_asset_clusters.json",
     MODEL_PATH / "calibration" / "global_vi_clusters.json",
 ]
+
+
+def get_unlock_model_feature_columns(mode: str | None = None) -> list[str]:
+    normalized = (mode or UNLOCK_MODEL_FEATURE_SET or "full").strip().lower()
+    if normalized in {"baseline", "none", "off"}:
+        return []
+    if normalized == "proxies":
+        return UNLOCK_PROXY_FEATURE_COLUMNS.copy()
+    return list(UNLOCK_MODEL_FEATURE_COLUMNS)
+
+
+def _is_allowed_unlock_feature(feature: str) -> bool:
+    return feature not in UNLOCK_MODEL_FEATURE_COLUMNS or feature in get_unlock_model_feature_columns()
 
 
 def _safe_read(path):
@@ -95,10 +116,11 @@ def _load_vi_cluster_map() -> dict[str, list[str]] | None:
 
 def _choose_vi_features(df: pd.DataFrame, y_col: str = "y_meta") -> list[str]:
     cluster_map = _load_vi_cluster_map()
+    unlock_cols = get_unlock_model_feature_columns()
     fallback_candidates = [
         "sigma_ewma", "ret_1d", "ret_5d", "ret_20d", "vol_ratio",
         "funding_rate_ma7d", "basis_3m", "stablecoin_chg30",
-        *UNLOCK_MODEL_FEATURE_COLUMNS, "dvol_zscore", "btc_ma200_flag", "close_fracdiff",
+        *unlock_cols, "dvol_zscore", "btc_ma200_flag", "close_fracdiff",
     ]
     if cluster_map is None:
         return [c for c in fallback_candidates if c in df.columns and df[c].notna().mean() > 0.5 and float(df[c].dropna().std()) >= 0.01]
@@ -111,7 +133,7 @@ def _choose_vi_features(df: pd.DataFrame, y_col: str = "y_meta") -> list[str]:
         mapped = []
         for feat in feats:
             feat = alias.get(feat, feat)
-            if feat in df.columns and feat != "p_bma_pkf" and feat != "hmm_prob_bull":
+            if feat in df.columns and feat != "p_bma_pkf" and feat != "hmm_prob_bull" and _is_allowed_unlock_feature(feat):
                 ser = pd.to_numeric(df[feat], errors="coerce")
                 if ser.notna().mean() > 0.5 and float(ser.dropna().std()) >= 0.01:
                     mapped.append(feat)
@@ -148,7 +170,198 @@ def _atomic_json_write(path: Path, payload: dict) -> None:
     tmp.replace(path)
 
 
+def _cluster_artifact_suffix() -> str:
+    return "" if UNLOCK_MODEL_FEATURE_SET in {"", "full"} else f"_{UNLOCK_MODEL_FEATURE_SET}"
+
+
+def _symbol_cluster_artifact_paths() -> list[Path]:
+    suffix = _cluster_artifact_suffix()
+    paths: list[Path] = []
+    if suffix:
+        paths.extend([
+            MODEL_PATH / f"vi_asset_clusters{suffix}.json",
+            MODEL_PATH / f"global_vi_clusters{suffix}.json",
+            MODEL_PATH / "calibration" / f"global_vi_clusters{suffix}.json",
+        ])
+    paths.extend([
+        MODEL_PATH / "global_vi_clusters.json",
+        MODEL_PATH / "vi_asset_clusters.json",
+        MODEL_PATH / "calibration" / "global_vi_clusters.json",
+    ])
+    deduped: list[Path] = []
+    seen = set()
+    for path in paths:
+        key = str(path)
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(path)
+    return deduped
+
+
+def _symbol_cluster_artifact_write_paths() -> list[Path]:
+    suffix = _cluster_artifact_suffix()
+    if suffix:
+        return [
+            MODEL_PATH / f"vi_asset_clusters{suffix}.json",
+            MODEL_PATH / f"global_vi_clusters{suffix}.json",
+            MODEL_PATH / "calibration" / f"global_vi_clusters{suffix}.json",
+        ]
+    return [
+        MODEL_PATH / "vi_asset_clusters.json",
+        MODEL_PATH / "global_vi_clusters.json",
+        MODEL_PATH / "calibration" / "global_vi_clusters.json",
+    ]
+
+
+def _build_symbol_signature_frame(pooled_df: pd.DataFrame, feature_cols: list[str]) -> tuple[pd.DataFrame, list[str]]:
+    if pooled_df.empty or "symbol" not in pooled_df.columns:
+        return pd.DataFrame(), []
+
+    candidate_features = [
+        col for col in dict.fromkeys(["p_bma_pkf", *feature_cols])
+        if col in pooled_df.columns
+    ]
+    rows = []
+    summary_features: list[str] = []
+
+    for symbol, sym_df in pooled_df.groupby("symbol", sort=True):
+        row = {"symbol": str(symbol), "n_obs": int(len(sym_df))}
+        for feature in candidate_features:
+            ser = pd.to_numeric(sym_df[feature], errors="coerce")
+            cov_col = f"{feature}__coverage"
+            med_col = f"{feature}__median"
+            iqr_col = f"{feature}__iqr"
+            row[cov_col] = float(ser.notna().mean())
+            if ser.notna().any():
+                q25, q75 = ser.quantile([0.25, 0.75]).tolist()
+                row[med_col] = float(ser.median())
+                row[iqr_col] = float(q75 - q25)
+            else:
+                row[med_col] = np.nan
+                row[iqr_col] = np.nan
+            summary_features.extend([cov_col, med_col, iqr_col])
+        rows.append(row)
+
+    if not rows:
+        return pd.DataFrame(), []
+
+    signature_df = pd.DataFrame(rows).drop_duplicates("symbol").set_index("symbol").sort_index()
+    summary_features = [col for col in dict.fromkeys(summary_features) if col in signature_df.columns]
+    return signature_df, summary_features
+
+
+def _normalize_cluster_payload(cluster_map: dict[str, list[str]]) -> tuple[dict[str, list[str]], dict[str, str]]:
+    normalized: dict[str, list[str]] = {}
+    symbol_to_cluster: dict[str, str] = {}
+    for idx, (_, members) in enumerate(sorted(cluster_map.items(), key=lambda kv: tuple(sorted(kv[1])))):
+        cluster_name = f"cluster_{idx + 1}"
+        clean_members = sorted({str(member) for member in members if str(member)})
+        if not clean_members:
+            continue
+        normalized[cluster_name] = clean_members
+        for member in clean_members:
+            symbol_to_cluster[member] = cluster_name
+    return normalized, symbol_to_cluster
+
+
+def _derive_symbol_vi_clusters(pooled_df: pd.DataFrame, feature_cols: list[str]) -> dict:
+    signature_df, summary_features = _build_symbol_signature_frame(pooled_df, feature_cols)
+    symbols = signature_df.index.astype(str).tolist()
+    min_symbols_per_cluster = 4
+
+    if len(symbols) < 2 or len(summary_features) < 2:
+        cluster_map = {"cluster_global": symbols}
+        normalized, symbol_to_cluster = _normalize_cluster_payload(cluster_map)
+        return {
+            "vi_clusters": normalized,
+            "symbol_to_cluster": symbol_to_cluster,
+            "summary_features": summary_features,
+            "n_symbols": len(symbols),
+            "n_clusters": len(normalized),
+            "method": "global_single_cluster_insufficient_signature",
+            "min_symbols_per_cluster": min_symbols_per_cluster,
+        }
+
+    matrix = signature_df[summary_features].replace([np.inf, -np.inf], np.nan)
+    for column in matrix.columns:
+        median = pd.to_numeric(matrix[column], errors="coerce").median()
+        matrix[column] = pd.to_numeric(matrix[column], errors="coerce").fillna(
+            0.0 if pd.isna(median) else float(median)
+        )
+
+    if len(symbols) < min_symbols_per_cluster * 2:
+        cluster_map = {"cluster_global": symbols}
+        normalized, symbol_to_cluster = _normalize_cluster_payload(cluster_map)
+        return {
+            "vi_clusters": normalized,
+            "symbol_to_cluster": symbol_to_cluster,
+            "summary_features": summary_features,
+            "n_symbols": len(symbols),
+            "n_clusters": len(normalized),
+            "method": "global_single_cluster_insufficient_symbol_count",
+            "min_symbols_per_cluster": min_symbols_per_cluster,
+        }
+
+    scaler = RobustScaler()
+    X = scaler.fit_transform(matrix.to_numpy(dtype=float))
+    target_clusters = min(4, max(2, len(symbols) // min_symbols_per_cluster))
+    linkage_matrix = linkage(X, method="ward")
+    raw_labels = fcluster(linkage_matrix, t=target_clusters, criterion="maxclust")
+    raw_cluster_map: dict[str, list[str]] = {}
+    for symbol, label in zip(symbols, raw_labels):
+        raw_cluster_map.setdefault(f"cluster_{int(label)}", []).append(symbol)
+
+    centroids = {
+        cluster: matrix.loc[members].to_numpy(dtype=float).mean(axis=0)
+        for cluster, members in raw_cluster_map.items()
+    }
+    large_clusters = {
+        cluster for cluster, members in raw_cluster_map.items()
+        if len(members) >= min_symbols_per_cluster
+    }
+    if not large_clusters:
+        raw_cluster_map = {"cluster_global": symbols}
+    else:
+        for cluster_name, members in list(raw_cluster_map.items()):
+            if cluster_name in large_clusters:
+                continue
+            for symbol in members:
+                vec = matrix.loc[symbol].to_numpy(dtype=float)
+                nearest = min(
+                    large_clusters,
+                    key=lambda cid: float(np.linalg.norm(vec - centroids[cid])),
+                )
+                raw_cluster_map.setdefault(nearest, []).append(symbol)
+            raw_cluster_map.pop(cluster_name, None)
+
+    normalized, symbol_to_cluster = _normalize_cluster_payload(raw_cluster_map)
+    return {
+        "vi_clusters": normalized,
+        "symbol_to_cluster": symbol_to_cluster,
+        "summary_features": summary_features,
+        "n_symbols": len(symbols),
+        "n_clusters": len(normalized),
+        "method": "ward_symbol_signature_v1",
+        "min_symbols_per_cluster": min_symbols_per_cluster,
+    }
+
+
+def _ensure_symbol_vi_cluster_artifact(pooled_df: pd.DataFrame, feature_cols: list[str]) -> str | None:
+    artifact = _derive_symbol_vi_clusters(pooled_df, feature_cols)
+    artifact_payload = {
+        "generated_at_utc": datetime.utcnow().isoformat(),
+        "unlock_model_feature_set": UNLOCK_MODEL_FEATURE_SET,
+        **artifact,
+    }
+    write_paths = _symbol_cluster_artifact_write_paths()
+    for path in write_paths:
+        _atomic_json_write(path, artifact_payload)
+    return str(write_paths[0]) if write_paths else None
+
+
 def load_pooled_meta_df():
+    unlock_cols = get_unlock_model_feature_columns()
     rows, symbols_ok, feat_counts = [], [], {}
     for meta_path in sorted(PHASE3_PATH.glob("*_meta.parquet")):
         symbol = meta_path.stem.replace("_meta", "")
@@ -192,7 +405,7 @@ def load_pooled_meta_df():
                 "funding_rate_ma7d",
                 "basis_3m",
                 "stablecoin_chg30",
-                *UNLOCK_MODEL_FEATURE_COLUMNS,
+                *unlock_cols,
                 "dvol_zscore",
                 "btc_ma200_flag",
                 "close_fracdiff",
@@ -370,7 +583,7 @@ def _load_symbol_vi_clusters(symbols):
     artifact_path = None
     clusters = {}
 
-    for path in VI_CLUSTER_ASSET_PATHS:
+    for path in _symbol_cluster_artifact_paths():
         if not path.exists():
             continue
         try:
@@ -641,6 +854,7 @@ def _aggregate_oos_predictions(oos_df):
 
 def run_cpcv(pooled_df, feature_cols):
     feature_cols = [c for c in feature_cols if c != "hmm_prob_bull"]
+    cluster_artifact_path = _ensure_symbol_vi_cluster_artifact(pooled_df, feature_cols)
     n = len(pooled_df)
     embargo = max(1, int(n * EMBARGO_PCT))
     splits = np.array_split(np.arange(n), N_SPLITS)
@@ -649,6 +863,8 @@ def run_cpcv(pooled_df, feature_cols):
 
     print(f"\n  CPCV: {len(combos)} trajectories, N={n}, embargo={embargo}")
     print(f"  Features ({len(feature_cols)}): {feature_cols}")
+    if cluster_artifact_path:
+        print(f"  Symbol cluster artifact: {cluster_artifact_path}")
 
     for combo in combos:
         test_idx = np.concatenate([splits[i] for i in combo])
@@ -921,6 +1137,7 @@ def main():
     print("="*72)
     print("SNIPER v10.10 -- PHASE 4 v4: CPCV + Fallback (Kelly-weighted)")
     print(f"Timestamp: {datetime.utcnow().isoformat()}")
+    print(f"Unlock feature set: {UNLOCK_MODEL_FEATURE_SET} -> {get_unlock_model_feature_columns()}")
     print("="*72)
     start = time.time()
 
@@ -928,6 +1145,18 @@ def main():
     pooled_df = load_pooled_meta_df()
 
     feature_cols = select_features(pooled_df)
+    selected_feature_stats = {
+        feat: {
+            "coverage": round(float(pooled_df[feat].notna().mean()), 4),
+            "std": round(float(pooled_df[feat].dropna().std()), 6) if pooled_df[feat].notna().any() else 0.0,
+        }
+        for feat in feature_cols
+    }
+    unlock_feature_coverage = {
+        feat: round(float(pooled_df[feat].notna().mean()), 4)
+        for feat in get_unlock_model_feature_columns()
+        if feat in pooled_df.columns
+    }
     print(f"\n[2/7] Features selected: {len(feature_cols)}")
     for feat in feature_cols:
         nv = pooled_df[feat].notna().sum()
@@ -1081,6 +1310,11 @@ def main():
     report = {
         "timestamp": datetime.utcnow().isoformat(),
         "elapsed_s": round(elapsed, 1),
+        "unlock_model_feature_set": UNLOCK_MODEL_FEATURE_SET,
+        "unlock_model_columns": get_unlock_model_feature_columns(),
+        "selected_features": feature_cols,
+        "selected_feature_stats": selected_feature_stats,
+        "unlock_feature_coverage": unlock_feature_coverage,
         "cpcv": {k: v for k, v in cpcv_result.items() if k not in ("trajectories", "oos_predictions_df", "aggregated_predictions_df")},
         "cpcv_trajectories": cpcv_result.get("trajectories", []),
         "fallback": {k: v for k, v in fallback.items() if k != "signals_df"},
@@ -1089,16 +1323,32 @@ def main():
         "checks": {k: bool(v) for k, v in checks.items()},
         "n_pass": n_pass,
     }
+    suffix = "" if UNLOCK_MODEL_FEATURE_SET in {"", "full"} else f"_{UNLOCK_MODEL_FEATURE_SET}"
     nested_path = OUTPUT_PATH / "phase4_report_v4.json"
     root_path = MODEL_PATH / "phase4_report_v4.json"
     _atomic_json_write(nested_path, report)
     _atomic_json_write(root_path, report)
+    extra_paths = []
+    if suffix:
+        if not oos_predictions_df.empty:
+            oos_predictions_df.to_parquet(OUTPUT_PATH / f"phase4_oos_predictions{suffix}.parquet", index=False)
+        if not aggregated_predictions_df.empty:
+            aggregated_predictions_df.to_parquet(OUTPUT_PATH / f"phase4_aggregated_predictions{suffix}.parquet", index=False)
+        if not execution_snapshot_df.empty:
+            execution_snapshot_df.to_parquet(OUTPUT_PATH / f"phase4_execution_snapshot{suffix}.parquet", index=False)
+        nested_scenario_path = OUTPUT_PATH / f"phase4_report_v4{suffix}.json"
+        root_scenario_path = MODEL_PATH / f"phase4_report_v4{suffix}.json"
+        _atomic_json_write(nested_scenario_path, report)
+        _atomic_json_write(root_scenario_path, report)
+        extra_paths.extend([nested_scenario_path, root_scenario_path])
     try:
         size_nested = nested_path.stat().st_size
         size_root = root_path.stat().st_size
         print("\n  Reports saved:")
         print(f"    - {nested_path} ({size_nested} bytes)")
         print(f"    - {root_path} ({size_root} bytes)")
+        for extra_path in extra_paths:
+            print(f"    - {extra_path} ({extra_path.stat().st_size} bytes)")
     except Exception:
         print(f"\n  Reports saved: {nested_path}, {root_path}")
     print(f"  Elapsed: {elapsed:.1f}s")

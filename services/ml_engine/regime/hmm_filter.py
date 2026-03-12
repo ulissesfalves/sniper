@@ -48,6 +48,16 @@ class HMMFitted:
     hmm_scaler_scale_: np.ndarray | None = None
 
 
+def build_regime_target(
+    returns: np.ndarray | pd.Series,
+) -> pd.Series:
+    if isinstance(returns, pd.Series):
+        series = pd.to_numeric(returns, errors="coerce").astype(float)
+    else:
+        series = pd.Series(np.asarray(returns, dtype=float))
+    return (series > 0).where(series.notna())
+
+
 def fit_hmm(
     X_train: np.ndarray,
     returns_train: np.ndarray,
@@ -107,8 +117,8 @@ def fit_hmm(
 
     states = hmm.predict(X_hmm)
 
-    # Bull state = estado com maior retorno FUTURO médio em 20d.
-    future_20d = pd.Series(returns_train).rolling(20, min_periods=5).sum().shift(-19).values
+    # v10.10: bull state e threshold sÃ£o calibrados contra retorno histÃ³rico observado.
+    train_returns = np.asarray(returns_train, dtype=float)
     state_scores: list[float] = []
     state_counts: list[int] = []
     for s in range(n_hmm_states):
@@ -117,7 +127,7 @@ def fit_hmm(
         if mask_s.sum() < 5:
             state_scores.append(-999.0)
             continue
-        vals = future_20d[mask_s]
+        vals = train_returns[mask_s]
         vals = vals[~np.isnan(vals)]
         state_scores.append(float(vals.mean()) if len(vals) > 0 else -999.0)
     bull_state = int(np.argmax(state_scores))
@@ -131,21 +141,24 @@ def fit_hmm(
 
     log.info(
         "hmm.states_identified",
-        state_returns_20d={s: round(r, 6) for s, r in enumerate(state_scores)},
+        state_returns_train={s: round(r, 6) for s, r in enumerate(state_scores)},
         state_counts={s: int(c) for s, c in enumerate(state_counts)},
         bull_state=bull_state,
         separation=round(separation, 6),
     )
 
     probs = hmm.predict_proba(X_hmm)[:, bull_state]
-    y_true = (returns_train > 0).astype(int)
+    y_true = build_regime_target(returns_train).to_numpy()
     best_thr = 0.5
     best_f1 = 0.0
     for thr in np.linspace(0.20, 0.80, 25):
-        preds = (probs > thr).astype(int)
+        valid = ~np.isnan(y_true)
+        if valid.sum() < 30:
+            break
+        preds = (probs[valid] > thr).astype(int)
         if preds.sum() == 0:
             continue
-        score = f1_score(y_true, preds, zero_division=0)
+        score = f1_score(y_true[valid].astype(int), preds, zero_division=0)
         if score > best_f1:
             best_f1 = float(score)
             best_thr = float(thr)
@@ -274,11 +287,12 @@ def validate_hmm_diagnostics(hmm_result: pd.DataFrame, returns: pd.Series, min_f
         result["bear_2022_h1_pct"] = None
 
     valid_mask = ~np.isnan(hmm_result["hmm_prob_bull"])
-    y_true = (returns.reindex(hmm_result.index) > 0).astype(int)
-    y_pred = hmm_result["hmm_is_bull"].astype(int)
+    y_true = build_regime_target(returns.reindex(hmm_result.index))
+    y_pred = hmm_result["hmm_is_bull"].fillna(False).astype(int)
 
-    if valid_mask.sum() > 30:
-        oos_f1 = f1_score(y_true[valid_mask], y_pred[valid_mask], zero_division=0)
+    f1_mask = valid_mask & y_true.notna()
+    if f1_mask.sum() > 30:
+        oos_f1 = f1_score(y_true[f1_mask].astype(int), y_pred[f1_mask], zero_division=0)
         result["f1_oos"] = round(float(oos_f1), 4)
         result["f1_oos_ok"] = oos_f1 >= min_f1
     else:

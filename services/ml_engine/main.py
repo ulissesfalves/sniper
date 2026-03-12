@@ -41,13 +41,43 @@ HMM_RETRAIN_FREQ   = int(config("HMM_RETRAIN_FREQ_DAYS",   default="21"))
 VI_THRESHOLD       = float(config("VI_THRESHOLD",           default="0.30"))
 CS_SIGMA_THR       = float(config("CORWIN_SCHULTZ_SIGMA_THR", default="3.0"))
 ISOTONIC_HALFLIFE  = int(config("ISOTONIC_HALFLIFE_DAYS",   default="180"))
+UNLOCK_MODEL_FEATURE_SET = config("UNLOCK_MODEL_FEATURE_SET", default="full").strip().lower()
 
 RETRY_INTERVAL     = 300  # 5 min entre ciclos
 MIN_HISTORY_DAYS   = 365  # mÃ­nimo de dados para rodar pipeline
 HMM_DEGRADABLE_INPUTS = {"funding_rate_ma7d", "basis_3m"}
+UNLOCK_PROXY_FEATURE_COLUMNS = [
+    "unlock_overhang_proxy_rank_full",
+    "unlock_fragility_proxy_rank_fallback",
+]
 
 # Minimum assets para pipeline viÃ¡vel
 MIN_ASSETS_PIPELINE = 10
+
+
+def get_unlock_model_feature_columns(mode: str | None = None) -> list[str]:
+    normalized = (mode or UNLOCK_MODEL_FEATURE_SET or "full").strip().lower()
+    if normalized in {"baseline", "none", "off"}:
+        return []
+    if normalized == "proxies":
+        return UNLOCK_PROXY_FEATURE_COLUMNS.copy()
+    return list(UNLOCK_MODEL_FEATURE_COLUMNS)
+
+
+def _neutral_fill_value(column: str) -> float:
+    if column in UNLOCK_MODEL_FEATURE_COLUMNS:
+        return 0.5
+    if column in {"hmm_prob_bull", "btc_ma200_flag"}:
+        return 0.5
+    return 0.0
+
+
+def _fill_model_frame(frame: pd.DataFrame) -> pd.DataFrame:
+    out = frame.replace([np.inf, -np.inf], np.nan).ffill()
+    for column in out.columns:
+        if pd.api.types.is_numeric_dtype(out[column]):
+            out[column] = pd.to_numeric(out[column], errors="coerce").fillna(_neutral_fill_value(column))
+    return out
 
 
 # â”€â”€â”€ DISCOVERY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -729,6 +759,14 @@ def run_meta_labeling_for_symbol(
     # Alinha features ao barrier_df index (event dates)
     meta_features = pd.DataFrame(index=barrier_df.index)
 
+    unlock_meta_cols = get_unlock_model_feature_columns()
+    log.info(
+        "meta.unlock_feature_set",
+        symbol=symbol,
+        unlock_model_feature_set=UNLOCK_MODEL_FEATURE_SET,
+        unlock_model_columns=unlock_meta_cols,
+    )
+
     # HMM probability
     hmm_aligned = hmm_result["hmm_prob_bull"].reindex(barrier_df.index, method="ffill")
     meta_features["hmm_prob_bull"] = hmm_aligned.fillna(0.5)
@@ -746,7 +784,7 @@ def run_meta_labeling_for_symbol(
         "funding_rate_ma7d",
         "basis_3m",
         "stablecoin_chg30",
-        *UNLOCK_MODEL_FEATURE_COLUMNS,
+        *unlock_meta_cols,
         "dvol_zscore",
         "btc_ma200_flag",
         "close_fracdiff",
@@ -756,6 +794,8 @@ def run_meta_labeling_for_symbol(
             # close_fracdiff Ã© obrigatÃ³rio: preserva NaN iniciais para trim por linhas,
             # evitando que zeros artificiais matem o sinal da feature.
             if col == "close_fracdiff":
+                meta_features[col] = aligned
+            elif col in UNLOCK_MODEL_FEATURE_COLUMNS or col == "btc_ma200_flag":
                 meta_features[col] = aligned
             else:
                 meta_features[col] = aligned.fillna(0)
@@ -782,7 +822,7 @@ def run_meta_labeling_for_symbol(
         meta_features["close_fracdiff"] = frac_aligned.ffill().fillna(0.0)
 
     # SanitizaÃ§Ã£o final apÃ³s trim por linhas
-    meta_features = meta_features.replace([np.inf, -np.inf], np.nan).ffill().fillna(0)
+    meta_features = _fill_model_frame(meta_features)
 
     # Drop columns with zero variance
     var = meta_features.var()
@@ -989,6 +1029,87 @@ def save_features_parquet(
              rows=len(merged), columns=list(merged.columns))
 
 
+def _load_saved_feature_artifact(symbol: str) -> pd.DataFrame:
+    path = Path(MODEL_PATH) / "features" / f"{symbol}.parquet"
+    if not path.exists():
+        return pd.DataFrame()
+    df = _read_parquet_df(path)
+    if "timestamp" in df.columns:
+        df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
+        df = df.set_index("timestamp").sort_index()
+    return df
+
+
+def _load_saved_barrier_artifact(symbol: str) -> pd.DataFrame:
+    path = Path(MODEL_PATH) / "phase3" / f"{symbol}_barriers.parquet"
+    if not path.exists():
+        return pd.DataFrame()
+    df = _read_parquet_df(path)
+    for column in ["event_date", "date", "timestamp", "index"]:
+        if column in df.columns:
+            df[column] = pd.to_datetime(df[column], utc=True)
+            df = df.set_index(column).sort_index()
+            break
+    return df
+
+
+async def rerun_phase3_from_saved_features(symbols: list[str] | None = None) -> dict:
+    from features.volatility import compute_sigma_ewma
+
+    feature_dir = Path(MODEL_PATH) / "features"
+    if symbols is None:
+        symbols = sorted(path.stem for path in feature_dir.glob("*.parquet"))
+
+    ok = 0
+    skipped = 0
+    errors: dict[str, str] = {}
+
+    for symbol in symbols:
+        try:
+            features = _load_saved_feature_artifact(symbol)
+            barrier_df = _load_saved_barrier_artifact(symbol)
+            if features.empty or barrier_df.empty:
+                skipped += 1
+                continue
+            if "hmm_prob_bull" not in features.columns:
+                errors[symbol] = "missing_hmm_prob_bull"
+                continue
+
+            hmm_result = features[["hmm_prob_bull"]].copy()
+            if "hmm_is_bull" in features.columns:
+                hmm_result["hmm_is_bull"] = features["hmm_is_bull"].fillna(False).astype(bool)
+            else:
+                hmm_result["hmm_is_bull"] = features["hmm_prob_bull"].fillna(0.0) >= 0.50
+
+            returns = pd.to_numeric(features["ret_1d"], errors="coerce").fillna(0.0)
+            sigma_ewma = compute_sigma_ewma(returns, span=20).reindex(features.index, fill_value=0.0)
+            meta_result = run_meta_labeling_for_symbol(features, barrier_df, hmm_result, sigma_ewma, symbol)
+            if meta_result is None:
+                errors[symbol] = "meta_result_none"
+                continue
+            sizing_df = run_kelly_sizing_for_symbol(
+                barrier_df,
+                meta_result["p_calibrated"],
+                sigma_ewma,
+                symbol,
+            )
+            save_phase3_results(symbol, barrier_df, meta_result, sizing_df)
+            ok += 1
+        except Exception as exc:
+            errors[symbol] = str(exc)
+
+    result = {
+        "status": "ok" if not errors else "partial",
+        "ok": ok,
+        "skipped": skipped,
+        "errors": errors,
+        "unlock_model_feature_set": UNLOCK_MODEL_FEATURE_SET,
+        "unlock_model_columns": get_unlock_model_feature_columns(),
+    }
+    log.info("phase3.rerun_complete", **result)
+    return result
+
+
 # â”€â”€â”€ ORCHESTRATOR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 async def run_ml_pipeline_full() -> dict:
@@ -1007,7 +1128,13 @@ async def run_ml_pipeline_full() -> dict:
                     found=len(symbols), min=MIN_ASSETS_PIPELINE)
         return {"status": "waiting", "symbols": len(symbols)}
 
-    log.info("pipeline.start", n_symbols=len(symbols), symbols=symbols[:10])
+    log.info(
+        "pipeline.start",
+        n_symbols=len(symbols),
+        symbols=symbols[:10],
+        unlock_model_feature_set=UNLOCK_MODEL_FEATURE_SET,
+        unlock_model_columns=get_unlock_model_feature_columns(),
+    )
 
     # Ensure output dirs exist
     Path(MODEL_PATH).mkdir(parents=True, exist_ok=True)
@@ -1085,7 +1212,7 @@ async def run_ml_pipeline_full() -> dict:
 
             save_features_parquet(symbol, features, hmm_result, d_star)
             vi_feature_frame = features.drop(columns=UNLOCK_AUDIT_COLUMNS, errors="ignore")
-            all_features[symbol] = vi_feature_frame.ffill().fillna(0)
+            all_features[symbol] = _fill_model_frame(vi_feature_frame)
 
             features = features.reindex(df.index)
             hmm_result = hmm_result.reindex(df.index)

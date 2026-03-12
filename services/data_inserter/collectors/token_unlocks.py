@@ -72,6 +72,7 @@ class TokenUnlocksCollector:
         self,
         parquet_base: str | None = None,
         sqlite_path: str | None = None,
+        runtime_history_mode: str | None = None,
     ) -> None:
         self.parquet_base = parquet_base or config("PARQUET_BASE_PATH", default="/data/parquet")
         self.sqlite_path = sqlite_path or config("SQLITE_PATH", default="/data/sqlite/sniper.db")
@@ -88,7 +89,10 @@ class TokenUnlocksCollector:
         self.reconstruction_promote_min = float(config("UNLOCK_RECONSTRUCTION_CONFIDENCE_MIN", default="0.85"))
         self.reconstruction_evidence_min = float(config("UNLOCK_RECONSTRUCTION_EVIDENCE_MIN", default="0.70"))
         self.observed_shadow_min_snapshots = int(config("UNLOCK_OBSERVED_SHADOW_MIN_SNAPSHOTS", default="30"))
-        self.runtime_history_mode = config("UNLOCK_RUNTIME_HISTORY_MODE", default="latest_only").strip().lower()
+        self.runtime_history_mode = (
+            runtime_history_mode
+            or config("UNLOCK_RUNTIME_HISTORY_MODE", default="latest_only")
+        ).strip().lower()
         self.reconstruction_max_urls = max(
             int(config("UNLOCK_RECONSTRUCTION_MAX_URLS_PER_ASSET", default="4")),
             1,

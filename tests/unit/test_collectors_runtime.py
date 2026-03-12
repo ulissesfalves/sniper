@@ -27,6 +27,16 @@ def _client_response_error(status: int) -> aiohttp.ClientResponseError:
 class CollectorsRuntimeTest(unittest.TestCase):
     def test_phase2_bootstrap_uses_full_binance_phase2_fetch(self) -> None:
         async def _run() -> int:
+            unlock_instances: list[object] = []
+
+            class UnlockCollectorSpy:
+                def __init__(self, *args, **kwargs):
+                    unlock_instances.append(self)
+                    self.kwargs = kwargs
+
+                async def fetch_and_store(self, symbols):
+                    return ["BNB.parquet"]
+
             with (
                 patch.object(bootstrap_phase2_inputs, "_preflight", return_value=(["BNB"], {
                     "PARQUET_BASE_PATH": "/tmp",
@@ -37,10 +47,12 @@ class CollectorsRuntimeTest(unittest.TestCase):
                 })),
                 patch.object(bootstrap_phase2_inputs.BinanceCollector, "fetch_and_store", AsyncMock()) as fetch_all_mock,
                 patch.object(bootstrap_phase2_inputs.StablecoinCollector, "fetch_and_store", AsyncMock(return_value=Path("/tmp/stablecoin.parquet"))),
-                patch.object(bootstrap_phase2_inputs.TokenUnlocksCollector, "fetch_and_store", AsyncMock(return_value=["BNB.parquet"])),
+                patch.object(bootstrap_phase2_inputs, "TokenUnlocksCollector", UnlockCollectorSpy),
             ):
                 result = await bootstrap_phase2_inputs._run()
                 self.assertEqual(fetch_all_mock.await_count, 1)
+                self.assertEqual(len(unlock_instances), 1)
+                self.assertEqual(unlock_instances[0].kwargs.get("runtime_history_mode"), "full")
                 return result
 
         result = asyncio.run(_run())

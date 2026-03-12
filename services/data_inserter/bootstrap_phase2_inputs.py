@@ -73,7 +73,10 @@ async def _run() -> int:
     stable_path = await stable.fetch_and_store()
     print(f"stablecoin_chg30: {'ok' if stable_path else 'falhou'}")
 
-    unlocks = TokenUnlocksCollector(parquet_base=PARQUET_BASE)
+    unlocks = TokenUnlocksCollector(
+        parquet_base=PARQUET_BASE,
+        runtime_history_mode="full",
+    )
     written = await unlocks.fetch_and_store(symbols)
     print(f"unlock_pressure_rank bundle: ok ({len(written)} arquivos)")
     return 0

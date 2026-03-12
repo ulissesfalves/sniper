@@ -171,6 +171,65 @@ class UnlockMlIntegrationTest(unittest.TestCase):
         self.assertNotIn("reconstruction_confidence", captured["feature_df"].columns)
         self.assertNotIn("quality_flag", captured["feature_df"].columns)
 
+    def test_run_meta_labeling_respects_proxy_only_unlock_mode(self) -> None:
+        captured: dict[str, pd.DataFrame] = {}
+        index = pd.date_range("2024-01-01", periods=5, freq="D")
+        features = pd.DataFrame(
+            {
+                "ret_1d": np.linspace(0.01, 0.05, len(index)),
+                "ret_5d": np.linspace(0.02, 0.10, len(index)),
+                "ret_20d": np.linspace(0.03, 0.15, len(index)),
+                "realized_vol_30d": np.linspace(0.20, 0.24, len(index)),
+                "vol_ratio": np.linspace(1.0, 1.4, len(index)),
+                "funding_rate_ma7d": np.linspace(0.001, 0.005, len(index)),
+                "basis_3m": np.linspace(0.01, 0.03, len(index)),
+                "stablecoin_chg30": np.linspace(-0.02, 0.02, len(index)),
+                "dvol_zscore": np.linspace(-1.0, 1.0, len(index)),
+                "btc_ma200_flag": [0.0, 1.0, 0.0, 1.0, 1.0],
+                "close_fracdiff": np.linspace(-0.5, 0.5, len(index)),
+                "unlock_pressure_rank_observed": np.linspace(0.1, 0.5, len(index)),
+                "unlock_pressure_rank_reconstructed": np.linspace(0.2, 0.6, len(index)),
+                "unlock_overhang_proxy_rank_full": np.linspace(0.3, 0.7, len(index)),
+                "unlock_fragility_proxy_rank_fallback": np.linspace(0.4, 0.8, len(index)),
+            },
+            index=index,
+        )
+        barrier_df = pd.DataFrame({"label": [1, -1, 1, 0, 1], "t_touch": index + pd.Timedelta(days=2)}, index=index)
+        hmm_result = pd.DataFrame({"hmm_prob_bull": np.linspace(0.6, 0.9, len(index))}, index=index)
+        sigma_ewma = pd.Series(np.linspace(0.1, 0.3, len(index)), index=index)
+
+        def fake_compute_label_uniqueness(barrier: pd.DataFrame) -> pd.Series:
+            return pd.Series(1.0, index=barrier.index)
+
+        def fake_compute_effective_n(barrier: pd.DataFrame, uniqueness: pd.Series):
+            return 40.0, uniqueness, "LOGISTIC_ONLY"
+
+        def fake_compute_meta_sample_weights(barrier: pd.DataFrame, uniqueness: pd.Series, halflife_days: int, sl_penalty: float) -> pd.Series:
+            return pd.Series(1.0, index=barrier.index)
+
+        def fake_generate_pbma_purged_kfold(**kwargs) -> pd.Series:
+            captured["feature_df"] = kwargs["feature_df"].copy()
+            return pd.Series(0.6, index=kwargs["feature_df"].index, name="p_bma_pkf")
+
+        def fake_run_isotonic_walk_forward(**kwargs) -> pd.Series:
+            return kwargs["p_raw_series"]
+
+        with (
+            patch.object(ml_main, "UNLOCK_MODEL_FEATURE_SET", "proxies"),
+            patch("meta_labeling.uniqueness.compute_label_uniqueness", side_effect=fake_compute_label_uniqueness),
+            patch("meta_labeling.uniqueness.compute_effective_n", side_effect=fake_compute_effective_n),
+            patch("meta_labeling.uniqueness.compute_meta_sample_weights", side_effect=fake_compute_meta_sample_weights),
+            patch("meta_labeling.pbma_purged.generate_pbma_purged_kfold", side_effect=fake_generate_pbma_purged_kfold),
+            patch("meta_labeling.isotonic_calibration.run_isotonic_walk_forward", side_effect=fake_run_isotonic_walk_forward),
+        ):
+            result = ml_main.run_meta_labeling_for_symbol(features, barrier_df, hmm_result, sigma_ewma, "TEST")
+
+        self.assertIsNotNone(result)
+        self.assertIn("unlock_overhang_proxy_rank_full", captured["feature_df"].columns)
+        self.assertIn("unlock_fragility_proxy_rank_fallback", captured["feature_df"].columns)
+        self.assertNotIn("unlock_pressure_rank_observed", captured["feature_df"].columns)
+        self.assertNotIn("unlock_pressure_rank_reconstructed", captured["feature_df"].columns)
+
     def test_run_vi_clustering_excludes_unlock_audit_columns(self) -> None:
         captured: dict[str, pd.DataFrame] = {}
         base_index = pd.date_range("2024-01-01", periods=60, freq="D")
