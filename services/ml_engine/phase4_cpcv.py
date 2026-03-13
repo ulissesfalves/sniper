@@ -55,6 +55,18 @@ PHASE4_FIXED_ALLOC_SMALL = float(os.getenv("PHASE4_FIXED_ALLOC_SMALL", "0.01"))
 PHASE4_CONSERVATIVE_KELLY_MULT = float(os.getenv("PHASE4_CONSERVATIVE_KELLY_MULT", "0.50"))
 PHASE4_CONSERVATIVE_ALLOC_CAP = float(os.getenv("PHASE4_CONSERVATIVE_ALLOC_CAP", "0.02"))
 PHASE4_SELECTIVE_THRESHOLD = float(os.getenv("PHASE4_SELECTIVE_THRESHOLD", "0.75"))
+PHASE4_TAIL_THRESHOLD = float(os.getenv("PHASE4_TAIL_THRESHOLD", "0.80"))
+PHASE4_TOP_N_PER_DAY = int(os.getenv("PHASE4_TOP_N_PER_DAY", "1"))
+PHASE4_REGIME_MIN = float(os.getenv("PHASE4_REGIME_MIN", "0.55"))
+PHASE4_DECISION_POLICY = os.getenv("PHASE4_DECISION_POLICY", "fixed_small_080").strip().lower()
+PHASE4_SCORE_BUCKETS = [
+    (0.55, 0.60),
+    (0.60, 0.65),
+    (0.65, 0.70),
+    (0.70, 0.75),
+    (0.75, 0.80),
+    (0.80, None),
+]
 UNLOCK_PROXY_FEATURE_COLUMNS = [
     "unlock_overhang_proxy_rank_full",
     "unlock_fragility_proxy_rank_fallback",
@@ -723,6 +735,85 @@ def _attach_execution_pnl(df: pd.DataFrame, position_col: str, output_col: str) 
     return out
 
 
+def _build_policy_signal(
+    df: pd.DataFrame,
+    *,
+    score_col: str,
+    threshold: float,
+    top_n_per_day: int | None = None,
+    regime_col: str | None = None,
+    regime_min: float | None = None,
+) -> pd.Series:
+    score = pd.to_numeric(df.get(score_col), errors="coerce").fillna(0.0)
+    eligible = score > float(threshold)
+
+    if regime_col and regime_col in df.columns and regime_min is not None:
+        regime = pd.to_numeric(df.get(regime_col), errors="coerce").fillna(0.0)
+        eligible &= regime >= float(regime_min)
+
+    if top_n_per_day is not None and top_n_per_day > 0 and "date" in df.columns:
+        dates = pd.to_datetime(df["date"], errors="coerce").dt.normalize()
+        ranked = score.where(eligible).groupby(dates).rank(method="first", ascending=False)
+        eligible &= ranked.fillna(float(top_n_per_day) + 1.0) <= float(top_n_per_day)
+
+    return score.where(eligible, 0.0)
+
+
+def _sanitize_policy_stats(result: dict) -> dict:
+    return {k: v for k, v in result.items() if k not in {"subperiods", "active_port_returns"}}
+
+
+def _build_score_bucket_diagnostics(
+    df: pd.DataFrame,
+    *,
+    score_col: str,
+    pnl_col: str,
+    position_col: str,
+) -> list[dict]:
+    diagnostics: list[dict] = []
+    score = pd.to_numeric(df.get(score_col), errors="coerce")
+
+    for lower, upper in PHASE4_SCORE_BUCKETS:
+        label = f">{lower:.2f}" if upper is None else f"{lower:.2f}-{upper:.2f}"
+        if upper is None:
+            mask = score > lower
+        else:
+            mask = (score >= lower) & (score < upper)
+        bucket_df = df.loc[mask.fillna(False)].copy()
+        if bucket_df.empty:
+            diagnostics.append({"bucket": label, "n_trades": 0})
+            continue
+
+        bucket_df["_bucket_signal"] = 1.0
+        metrics = _evaluate_decision_policy(
+            bucket_df,
+            label=label,
+            threshold=0.5,
+            signal_col="_bucket_signal",
+            position_col=position_col,
+            pnl_col=pnl_col,
+        )
+        diagnostics.append(
+            {
+                "bucket": label,
+                "n_trades": int(len(bucket_df)),
+                "n_symbols": int(bucket_df["symbol"].nunique()) if "symbol" in bucket_df.columns else 0,
+                "mean_score": round(float(pd.to_numeric(bucket_df[score_col], errors="coerce").mean()), 4),
+                "win_rate": metrics["win_rate"],
+                "avg_return": round(float(pd.to_numeric(bucket_df[pnl_col], errors="coerce").fillna(0.0).mean()), 6),
+                "median_return": round(float(pd.to_numeric(bucket_df[pnl_col], errors="coerce").fillna(0.0).median()), 6),
+                "sharpe": metrics["sharpe"],
+                "cum_return": metrics["cum_return"],
+                "max_dd": metrics["max_dd"],
+                "subperiods_positive": int(sum(1 for row in metrics["subperiods"] if row.get("positive") is True)),
+                "subperiods_total": int(sum(1 for row in metrics["subperiods"] if row.get("positive") is not None)),
+                "subperiods": metrics["subperiods"],
+            }
+        )
+
+    return diagnostics
+
+
 def _evaluate_decision_policy(
     df: pd.DataFrame,
     *,
@@ -1271,43 +1362,106 @@ def evaluate_fallback(pooled_df):
             position_col="position_usdt_policy_current",
             pnl_col="pnl_exec_current",
         )
-    main_r = threshold_results[f"thr_{PBMA_FALLBACK_THR:.2f}"]
 
     fixed_position = np.full(len(fallback_df), CAPITAL_INITIAL * PHASE4_FIXED_ALLOC_SMALL, dtype=float)
     conservative_position = np.minimum(
         current_position.to_numpy(dtype=float) * PHASE4_CONSERVATIVE_KELLY_MULT,
         CAPITAL_INITIAL * PHASE4_CONSERVATIVE_ALLOC_CAP,
     )
-    policy_specs = [
-        ("current_kelly_065", PBMA_FALLBACK_THR, "position_usdt_policy_current", "pnl_exec_current"),
-        ("fixed_small_065", PBMA_FALLBACK_THR, "position_usdt_policy_fixed", "pnl_exec_fixed"),
-        ("kelly_conservative_065", PBMA_FALLBACK_THR, "position_usdt_policy_conservative", "pnl_exec_conservative"),
-        ("fixed_small_075", PHASE4_SELECTIVE_THRESHOLD, "position_usdt_policy_selective", "pnl_exec_selective"),
-    ]
     fallback_df["position_usdt_policy_fixed"] = fixed_position
     fallback_df["position_usdt_policy_conservative"] = conservative_position
     fallback_df["position_usdt_policy_selective"] = fixed_position
+    fallback_df["position_usdt_policy_tail"] = fixed_position
+    fallback_df["position_usdt_policy_tail_regime"] = fixed_position
     fallback_df = _attach_execution_pnl(fallback_df, "position_usdt_policy_fixed", "pnl_exec_fixed")
     fallback_df = _attach_execution_pnl(fallback_df, "position_usdt_policy_conservative", "pnl_exec_conservative")
     fallback_df = _attach_execution_pnl(fallback_df, "position_usdt_policy_selective", "pnl_exec_selective")
-    policy_ablation = {}
-    for label, thr, position_col, pnl_col in policy_specs:
-        policy_ablation[label] = {
-            k: v for k, v in _evaluate_decision_policy(
-                fallback_df,
-                label=label,
-                threshold=thr,
-                signal_col="p_bma_pkf_exec",
-                position_col=position_col,
-                pnl_col=pnl_col,
-            ).items()
-            if k not in {"subperiods", "active_port_returns"}
-        }
+    policy_specs = [
+        {
+            "label": "current_kelly_065",
+            "threshold": PBMA_FALLBACK_THR,
+            "signal_col": "signal_policy_current_kelly_065",
+            "position_col": "position_usdt_policy_current",
+            "pnl_col": "pnl_exec_current",
+            "signal_kwargs": {},
+        },
+        {
+            "label": "fixed_small_075",
+            "threshold": PHASE4_SELECTIVE_THRESHOLD,
+            "signal_col": "signal_policy_fixed_small_075",
+            "position_col": "position_usdt_policy_selective",
+            "pnl_col": "pnl_exec_selective",
+            "signal_kwargs": {},
+        },
+        {
+            "label": "fixed_small_080",
+            "threshold": PHASE4_TAIL_THRESHOLD,
+            "signal_col": "signal_policy_fixed_small_080",
+            "position_col": "position_usdt_policy_tail",
+            "pnl_col": "pnl_exec_selective",
+            "signal_kwargs": {},
+        },
+        {
+            "label": "fixed_small_075_top1",
+            "threshold": PHASE4_SELECTIVE_THRESHOLD,
+            "signal_col": "signal_policy_fixed_small_075_top1",
+            "position_col": "position_usdt_policy_selective",
+            "pnl_col": "pnl_exec_selective",
+            "signal_kwargs": {"top_n_per_day": PHASE4_TOP_N_PER_DAY},
+        },
+        {
+            "label": "fixed_small_080_hmm55",
+            "threshold": PHASE4_TAIL_THRESHOLD,
+            "signal_col": "signal_policy_fixed_small_080_hmm55",
+            "position_col": "position_usdt_policy_tail_regime",
+            "pnl_col": "pnl_exec_selective",
+            "signal_kwargs": {"regime_col": "hmm_prob_bull", "regime_min": PHASE4_REGIME_MIN},
+        },
+    ]
+    for spec in policy_specs:
+        fallback_df[spec["signal_col"]] = _build_policy_signal(
+            fallback_df,
+            score_col="p_bma_pkf_exec",
+            threshold=spec["threshold"],
+            **spec["signal_kwargs"],
+        )
+
+    policy_results: dict[str, dict] = {}
+    policy_ablation: dict[str, dict] = {}
+    for spec in policy_specs:
+        result = _evaluate_decision_policy(
+            fallback_df,
+            label=spec["label"],
+            threshold=spec["threshold"],
+            signal_col=spec["signal_col"],
+            position_col=spec["position_col"],
+            pnl_col=spec["pnl_col"],
+        )
+        policy_results[spec["label"]] = result
+        policy_ablation[spec["label"]] = _sanitize_policy_stats(result)
+
+    selected_label = PHASE4_DECISION_POLICY if PHASE4_DECISION_POLICY in policy_results else "fixed_small_080"
+    selected_spec = next((spec for spec in policy_specs if spec["label"] == selected_label), policy_specs[2])
+    main_r = policy_results[selected_label]
+
     main_signals_df = fallback_df.copy()
-    main_signals_df["position_usdt_active_policy"] = main_signals_df["position_usdt_policy_current"]
-    main_signals_df["pnl_exec_active_policy"] = main_signals_df["pnl_exec_current"]
+    main_signals_df["signal_active_policy"] = main_signals_df[selected_spec["signal_col"]]
+    active_mask = pd.to_numeric(main_signals_df["signal_active_policy"], errors="coerce").fillna(0.0) > float(selected_spec["threshold"])
+    main_signals_df["position_usdt_active_policy"] = np.where(
+        active_mask,
+        pd.to_numeric(main_signals_df[selected_spec["position_col"]], errors="coerce").fillna(0.0),
+        0.0,
+    )
+    main_signals_df["pnl_exec_active_policy"] = pd.to_numeric(main_signals_df[selected_spec["pnl_col"]], errors="coerce").fillna(0.0)
+    bucket_diagnostics = _build_score_bucket_diagnostics(
+        fallback_df,
+        score_col="p_bma_pkf_exec",
+        pnl_col="pnl_exec_selective",
+        position_col="position_usdt_policy_selective",
+    )
     return {
-        "threshold":PBMA_FALLBACK_THR,
+        "policy": selected_label,
+        "threshold": selected_spec["threshold"],
         "sharpe":main_r["sharpe"],"cum_return":main_r["cum_return"],
         "max_dd":main_r["max_dd"],"n_active":main_r["n_active"],
         "win_rate":main_r["win_rate"],"equity_final":main_r["equity_final"],
@@ -1319,6 +1473,7 @@ def evaluate_fallback(pooled_df):
             "reference_order_usdt": round(_reference_order_usdt(), 2),
             "current_policy_capped_ref_active": int(main_r.get("capped_slippage_ref_active", 0)),
         },
+        "score_bucket_diagnostics": bucket_diagnostics,
         "policy_ablation": policy_ablation,
         "sensitivity":{k:{kk:vv for kk,vv in v.items()
                           if kk in ("sharpe","cum_return","max_dd","n_active","win_rate","avg_alloc","dsr_honest","subperiods_positive","subperiods_total","capped_slippage_ref_active")}
@@ -1402,7 +1557,7 @@ def analyze_subperiods(
 
 def main():
     print("="*72)
-    print("SNIPER v10.10 -- PHASE 4 v4: CPCV + Fallback (Kelly-weighted)")
+    print("SNIPER v10.10 -- PHASE 4 v4: CPCV + Fallback policy")
     print(f"Timestamp: {datetime.utcnow().isoformat()}")
     print(f"Unlock feature set: {UNLOCK_MODEL_FEATURE_SET} -> {get_unlock_model_feature_columns()}")
     print(f"HMM meta feature mode: {HMM_META_FEATURE_MODE}")
@@ -1439,7 +1594,7 @@ def main():
     print(f"\n[3/7] Running CPCV N={N_SPLITS}, k={N_TEST_SPLITS}...")
     cpcv_result = run_cpcv(pooled_df, feature_cols)
 
-    print("\n[4/7] Evaluating fallback (P_bma > 0.65 + Kelly sizing)...")
+    print(f"\n[4/7] Evaluating fallback ({PHASE4_DECISION_POLICY})...")
     fallback = evaluate_fallback(pooled_df)
 
     print("\n[5/7] Computing DSR Honest...")
@@ -1450,12 +1605,12 @@ def main():
     ku = float(scipy_kurtosis(active_port_ret, fisher=False)) if len(active_port_ret) > 10 else 5.0
     dsr_result = compute_dsr_honest(fb_sharpe, T=T_t, skewness=sk, kurtosis_val=ku)
 
-    print("\n[6/7] Analyzing subperiods (fallback + Kelly)...")
+    print("\n[6/7] Analyzing subperiods (selected fallback policy)...")
     fallback_signals_df = fallback.get("signals_df", pooled_df)
     subperiods = analyze_subperiods(
         fallback_signals_df,
-        signal_col="p_bma_pkf_exec",
-        threshold=PBMA_FALLBACK_THR,
+        signal_col="signal_active_policy",
+        threshold=float(fallback.get("threshold", PBMA_FALLBACK_THR)),
         position_col="position_usdt_active_policy",
         pnl_col="pnl_exec_active_policy",
     )
@@ -1488,7 +1643,8 @@ def main():
         print(f"  Mean preds/obs:   {cpcv_result['mean_predictions_per_obs']:.2f}")
     print(f"  Status: {cpcv_result['status']}")
 
-    print(f"\n-- FALLBACK: P_bma > {PBMA_FALLBACK_THR} + Kelly [15.1] --")
+    print(f"\n-- FALLBACK POLICY [{fallback.get('policy', 'unknown')}] [15.1] --")
+    print(f"  Threshold:      > {float(fallback.get('threshold', PBMA_FALLBACK_THR)):.2f}")
     print(f"  Trades ativos: {fallback['n_active']} / {len(pooled_df)}")
     print(f"  Avg allocation: {fallback.get('avg_alloc',0):.1%}")
     print(f"  Win Rate:       {fallback['win_rate']:.1%}")
@@ -1511,6 +1667,17 @@ def main():
             f"DSR={stats.get('dsr_honest',0):.3f}  Sub={stats.get('subperiods_positive',0)}/{stats.get('subperiods_total',0)}"
         )
 
+    print(f"\n-- SCORE TAIL DIAGNOSTIC --")
+    for row in fallback.get("score_bucket_diagnostics", []):
+        if row.get("n_trades", 0) <= 0:
+            print(f"    {row['bucket']:10s}  N=   0")
+            continue
+        print(
+            f"    {row['bucket']:10s}  N={row['n_trades']:4d}  WR={row['win_rate']:.1%}  "
+            f"Ret={row['cum_return']:.1%}  Sharpe={row['sharpe']:.2f}  DD={row['max_dd']:.1%}  "
+            f"Sub={row.get('subperiods_positive',0)}/{row.get('subperiods_total',0)}"
+        )
+
     print(f"\n-- DSR Honesto [10] --")
     print(f"  Sharpe IS (fallback): {dsr_result['sharpe_is']:.4f}")
     print(f"  DSR surface (n={N_TRIALS_SURFACE:,}): {dsr_result['dsr_surface']:.4f}")
@@ -1519,7 +1686,7 @@ def main():
     if dsr_result.get("sr_needed"):
         print(f"  SR necessario para pass: >= {dsr_result['sr_needed']}")
 
-    print(f"\n-- Subperiodos (Fallback + Kelly) [16] --")
+    print(f"\n-- Subperiodos (Fallback policy) [16] --")
     # FIX: use bool() explicitly for counting
     n_pos = sum(1 for sp in subperiods if sp.get("positive") == True)
     n_tested = sum(1 for sp in subperiods if sp.get("positive") is not None)
@@ -1555,7 +1722,7 @@ def main():
     print(f"\n  Phase 4 compliance: {n_pass}/{len(checks)}")
 
     if not meta_pass:
-        print(f"\n  META-MODELO INVALIDADO -> FALLBACK P_bma > {PBMA_FALLBACK_THR}")
+        print(f"\n  META-MODELO INVALIDADO -> FALLBACK {fallback.get('policy', 'unknown')}")
 
     # Diagnostics
     print(f"\n-- DIAGNOSTICO --")
@@ -1566,6 +1733,12 @@ def main():
     p_bma = pooled_df["p_bma_pkf"].dropna()
     print(f"  p_bma: mean={p_bma.mean():.3f}  std={p_bma.std():.3f}  "
           f">0.65={int((p_bma>0.65).sum())}  >0.70={int((p_bma>0.70).sum())}")
+    top_bucket = next((row for row in fallback.get("score_bucket_diagnostics", []) if row.get("bucket") == ">0.80"), None)
+    if top_bucket:
+        print(
+            f"  tail >0.80: N={top_bucket.get('n_trades',0)}  WR={top_bucket.get('win_rate',0):.1%}  "
+            f"Sharpe={top_bucket.get('sharpe',0):.2f}  Ret={top_bucket.get('cum_return',0):.1%}"
+        )
     if "kelly_frac" in pooled_df.columns:
         kf = pooled_df["kelly_frac"].dropna()
         kfa = kf[kf > 0.001]
@@ -1599,6 +1772,7 @@ def main():
         "hmm_hard_gate_mode": HMM_HARD_GATE_MODE,
         "phase4_meta_prob_mode": _phase4_prob_mode(),
         "model_run_tag": MODEL_RUN_TAG,
+        "phase4_decision_policy": PHASE4_DECISION_POLICY,
         "selected_features": feature_cols,
         "selected_feature_stats": selected_feature_stats,
         "unlock_feature_coverage": unlock_feature_coverage,

@@ -173,6 +173,55 @@ class BaselineCoreAblationTest(unittest.TestCase):
         self.assertAlmostEqual(float(repriced.loc[0, "slippage_exec_policy"]), 0.10, places=6)
         self.assertAlmostEqual(float(repriced.loc[1, "pnl_exec_policy"]), 0.12, places=6)
 
+    def test_phase4_build_policy_signal_can_apply_top_n_and_regime_filter(self) -> None:
+        df = pd.DataFrame(
+            {
+                "date": pd.to_datetime(
+                    [
+                        "2024-01-01",
+                        "2024-01-01",
+                        "2024-01-02",
+                        "2024-01-02",
+                    ]
+                ),
+                "p_bma_pkf_exec": [0.81, 0.79, 0.84, 0.83],
+                "hmm_prob_bull": [0.60, 0.70, 0.40, 0.90],
+            }
+        )
+
+        signal = phase4._build_policy_signal(
+            df,
+            score_col="p_bma_pkf_exec",
+            threshold=0.80,
+            top_n_per_day=1,
+            regime_col="hmm_prob_bull",
+            regime_min=0.55,
+        )
+
+        self.assertEqual(signal.tolist(), [0.81, 0.0, 0.0, 0.83])
+
+    def test_phase4_score_bucket_diagnostics_reports_tail_bucket(self) -> None:
+        df = pd.DataFrame(
+            {
+                "date": pd.date_range("2024-01-01", periods=6, freq="D"),
+                "symbol": ["AAA"] * 6,
+                "score": [0.56, 0.62, 0.68, 0.74, 0.78, 0.84],
+                "pnl_exec": [0.01, -0.02, 0.03, -0.01, 0.02, 0.04],
+                "position": [2000.0] * 6,
+            }
+        )
+
+        buckets = phase4._build_score_bucket_diagnostics(
+            df,
+            score_col="score",
+            pnl_col="pnl_exec",
+            position_col="position",
+        )
+
+        tail_bucket = next(row for row in buckets if row["bucket"] == ">0.80")
+        self.assertEqual(tail_bucket["n_trades"], 1)
+        self.assertAlmostEqual(float(tail_bucket["mean_score"]), 0.84, places=6)
+
     def test_phase4_policy_ablation_reports_expected_scenarios(self) -> None:
         index = pd.date_range("2024-01-01", periods=12, freq="D")
         pooled = pd.DataFrame(
@@ -190,13 +239,21 @@ class BaselineCoreAblationTest(unittest.TestCase):
             }
         )
 
-        with patch.object(phase4, "CAPITAL_INITIAL", 200_000):
+        with (
+            patch.object(phase4, "CAPITAL_INITIAL", 200_000),
+            patch.object(phase4, "PHASE4_DECISION_POLICY", "fixed_small_080"),
+            patch.object(phase4, "PHASE4_TOP_N_PER_DAY", 1),
+            patch.object(phase4, "PHASE4_REGIME_MIN", 0.55),
+        ):
             result = phase4.evaluate_fallback(pooled)
 
         self.assertIn("current_kelly_065", result["policy_ablation"])
-        self.assertIn("fixed_small_065", result["policy_ablation"])
-        self.assertIn("kelly_conservative_065", result["policy_ablation"])
         self.assertIn("fixed_small_075", result["policy_ablation"])
+        self.assertIn("fixed_small_080", result["policy_ablation"])
+        self.assertIn("fixed_small_075_top1", result["policy_ablation"])
+        self.assertIn("fixed_small_080_hmm55", result["policy_ablation"])
+        self.assertEqual(result["policy"], "fixed_small_080")
+        self.assertIn("score_bucket_diagnostics", result)
         self.assertEqual(result["execution_repricing"]["mode"], "scaled_from_reference_slippage")
 
 
