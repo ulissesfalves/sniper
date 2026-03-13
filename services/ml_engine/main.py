@@ -41,7 +41,12 @@ HMM_RETRAIN_FREQ   = int(config("HMM_RETRAIN_FREQ_DAYS",   default="21"))
 VI_THRESHOLD       = float(config("VI_THRESHOLD",           default="0.30"))
 CS_SIGMA_THR       = float(config("CORWIN_SCHULTZ_SIGMA_THR", default="3.0"))
 ISOTONIC_HALFLIFE  = int(config("ISOTONIC_HALFLIFE_DAYS",   default="180"))
-UNLOCK_MODEL_FEATURE_SET = config("UNLOCK_MODEL_FEATURE_SET", default="full").strip().lower()
+UNLOCK_MODEL_FEATURE_SET = config("UNLOCK_MODEL_FEATURE_SET", default="baseline").strip().lower()
+META_TARGET_MODE = config("META_TARGET_MODE", default="tp_only").strip().lower()
+HMM_META_FEATURE_MODE = config("HMM_META_FEATURE_MODE", default="include").strip().lower()
+HMM_HARD_GATE_MODE = config("HMM_HARD_GATE_MODE", default="off").strip().lower()
+TB_EVENT_FILTER_MODE = config("TB_EVENT_FILTER_MODE", default="hmm_sigma").strip().lower()
+MODEL_RUN_TAG = config("MODEL_RUN_TAG", default="").strip()
 
 RETRY_INTERVAL     = 300  # 5 min entre ciclos
 MIN_HISTORY_DAYS   = 365  # mÃ­nimo de dados para rodar pipeline
@@ -56,7 +61,7 @@ MIN_ASSETS_PIPELINE = 10
 
 
 def get_unlock_model_feature_columns(mode: str | None = None) -> list[str]:
-    normalized = (mode or UNLOCK_MODEL_FEATURE_SET or "full").strip().lower()
+    normalized = (mode or UNLOCK_MODEL_FEATURE_SET or "baseline").strip().lower()
     if normalized in {"baseline", "none", "off"}:
         return []
     if normalized == "proxies":
@@ -70,6 +75,56 @@ def _neutral_fill_value(column: str) -> float:
     if column in {"hmm_prob_bull", "btc_ma200_flag"}:
         return 0.5
     return 0.0
+
+
+def _hmm_meta_feature_enabled(mode: str | None = None) -> bool:
+    normalized = (mode or HMM_META_FEATURE_MODE or "include").strip().lower()
+    return normalized not in {"exclude", "off", "gate_only", "false", "0"}
+
+
+def _hmm_hard_gate_enabled(mode: str | None = None) -> bool:
+    normalized = (mode or HMM_HARD_GATE_MODE or "off").strip().lower()
+    return normalized in {"on", "true", "1", "hard_gate", "gate"}
+
+
+def _tb_event_filter_mode(mode: str | None = None) -> str:
+    normalized = (mode or TB_EVENT_FILTER_MODE or "hmm_sigma").strip().lower()
+    if normalized in {"sigma_only", "sigma"}:
+        return "sigma_only"
+    return "hmm_sigma"
+
+
+def _build_meta_target(barrier_df: pd.DataFrame, symbol: str) -> pd.Series:
+    normalized = (META_TARGET_MODE or "tp_only").strip().lower()
+    if normalized in {"pnl_positive", "profit_sign", "pnl_real_positive"}:
+        if "pnl_real" in barrier_df.columns:
+            pnl = pd.to_numeric(barrier_df["pnl_real"], errors="coerce")
+            target = (pnl > 0).where(pnl.notna())
+            log.info(
+                "meta.target_mode",
+                symbol=symbol,
+                mode="pnl_positive",
+                positive_rate=round(float(target.dropna().mean()), 4) if target.notna().any() else None,
+            )
+            return target.fillna(0).astype(int)
+        log.warning("meta.target_mode_fallback", symbol=symbol, requested=normalized, fallback="tp_only")
+    target = (barrier_df["label"] == 1).astype(int)
+    log.info(
+        "meta.target_mode",
+        symbol=symbol,
+        mode="tp_only",
+        positive_rate=round(float(target.mean()), 4) if len(target) else None,
+    )
+    return target
+
+
+def _compute_realized_trade_buckets(barrier_df: pd.DataFrame) -> tuple[float, float]:
+    pnl_real = pd.to_numeric(barrier_df.get("pnl_real"), errors="coerce").dropna()
+    positive = pnl_real[pnl_real > 0]
+    negative = pnl_real[pnl_real < 0]
+    avg_gain = float(positive.mean()) if not positive.empty else 0.02
+    avg_loss = abs(float(negative.mean())) if not negative.empty else 0.02
+    return max(avg_gain, 1e-6), max(avg_loss, 1e-6)
 
 
 def _fill_model_frame(frame: pd.DataFrame) -> pd.DataFrame:
@@ -643,6 +698,7 @@ TB_K_TP            = float(config("TB_K_TP",                default="1.5"))
 TB_K_SL            = float(config("TB_K_SL",                default="1.5"))
 TB_MAX_HOLDING     = int(config("TB_MAX_HOLDING_DAYS",      default="5"))
 TB_ETA             = float(config("TB_ETA",                 default="0.10"))
+TB_REFERENCE_POSITION_FRAC = float(config("TB_REFERENCE_POSITION_FRAC", default="0.05"))
 
 
 def run_triple_barrier_for_symbol(
@@ -676,9 +732,12 @@ def run_triple_barrier_for_symbol(
 
     # Eventos: datas onde HMM = bull E dados suficientes (sigma vÃ¡lido)
     hmm_aligned = hmm_result.reindex(df.index)
-    bull_mask   = hmm_aligned["hmm_prob_bull"].fillna(0.0) >= 0.50
     valid_sigma = sigma_ewma > 0
-    events      = df.index[bull_mask & valid_sigma]
+    if _tb_event_filter_mode() == "sigma_only":
+        events = df.index[valid_sigma]
+    else:
+        bull_mask = hmm_aligned["hmm_prob_bull"].fillna(0.0) >= 0.50
+        events = df.index[bull_mask & valid_sigma]
 
     if len(events) < 30:
         log.warning("triple_barrier.too_few_events", symbol=symbol, n=len(events))
@@ -686,6 +745,7 @@ def run_triple_barrier_for_symbol(
 
     # Position sizes default (proporÃ§Ã£o igual do capital)
     pos_size_default = CAPITAL_TOTAL * 0.05  # 5% por posiÃ§Ã£o inicial
+    pos_size_default = CAPITAL_TOTAL * TB_REFERENCE_POSITION_FRAC
     position_sizes   = pd.Series(pos_size_default, index=df.index)
 
     config_tb = TripleBarrierConfig(
@@ -765,11 +825,15 @@ def run_meta_labeling_for_symbol(
         symbol=symbol,
         unlock_model_feature_set=UNLOCK_MODEL_FEATURE_SET,
         unlock_model_columns=unlock_meta_cols,
+        hmm_meta_feature_enabled=_hmm_meta_feature_enabled(),
+        hmm_hard_gate_enabled=_hmm_hard_gate_enabled(),
+        meta_target_mode=META_TARGET_MODE,
     )
 
     # HMM probability
     hmm_aligned = hmm_result["hmm_prob_bull"].reindex(barrier_df.index, method="ffill")
-    meta_features["hmm_prob_bull"] = hmm_aligned.fillna(0.5)
+    if _hmm_meta_feature_enabled():
+        meta_features["hmm_prob_bull"] = hmm_aligned.fillna(0.5)
 
     # Sigma EWMA at signal
     meta_features["sigma_ewma"] = sigma_ewma.reindex(barrier_df.index, method="ffill").fillna(0)
@@ -801,12 +865,14 @@ def run_meta_labeling_for_symbol(
                 meta_features[col] = aligned.fillna(0)
 
     # Target: label +1 â†’ Y=1, label -1 ou 0 â†’ Y=0
-    y_target = (barrier_df["label"] == 1).astype(int)
+    y_target = _build_meta_target(barrier_df, symbol)
 
     # HMM hard gate alinhado aos eventos
-    hmm_for_gate = hmm_result["hmm_prob_bull"].reindex(
-        barrier_df.index, method="ffill"
-    ).fillna(0.0) if "hmm_prob_bull" in hmm_result.columns else None
+    hmm_for_gate = None
+    if _hmm_hard_gate_enabled() and "hmm_prob_bull" in hmm_result.columns:
+        hmm_for_gate = hmm_result["hmm_prob_bull"].reindex(
+            barrier_df.index, method="ffill"
+        ).fillna(0.0)
 
     # Preserva TODO o histÃ³rico por ativo.
     # O warm-up do FracDiff NÃƒO deve mutilar o dataset inteiro da Fase 3/4.
@@ -842,6 +908,7 @@ def run_meta_labeling_for_symbol(
         n_splits=min(10, max(3, int(n_eff / 20))),
         embargo_pct=0.01,
         hmm_series=hmm_for_gate,
+        drop_hmm_feature=not _hmm_meta_feature_enabled(),
     )
 
     # â”€â”€ 5. Isotonic Calibration walk-forward â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -922,11 +989,7 @@ def run_kelly_sizing_for_symbol(
     from sizing.kelly_cvar import compute_kelly_fraction
 
     # Calcula retornos mÃ©dios de TP e SL para Kelly
-    pnl_tp = barrier_df.loc[barrier_df["label"] == 1, "pnl_real"]
-    pnl_sl = barrier_df.loc[barrier_df["label"] == -1, "pnl_real"]
-
-    avg_tp = abs(float(pnl_tp.mean())) if len(pnl_tp) > 0 else 0.02
-    avg_sl = abs(float(pnl_sl.mean())) if len(pnl_sl) > 0 else 0.02
+    avg_tp, avg_sl = _compute_realized_trade_buckets(barrier_df)
 
     results = []
     for dt in p_calibrated.dropna().index:
@@ -1105,6 +1168,11 @@ async def rerun_phase3_from_saved_features(symbols: list[str] | None = None) -> 
         "errors": errors,
         "unlock_model_feature_set": UNLOCK_MODEL_FEATURE_SET,
         "unlock_model_columns": get_unlock_model_feature_columns(),
+        "meta_target_mode": META_TARGET_MODE,
+        "hmm_meta_feature_mode": HMM_META_FEATURE_MODE,
+        "hmm_hard_gate_mode": HMM_HARD_GATE_MODE,
+        "tb_event_filter_mode": _tb_event_filter_mode(),
+        "model_run_tag": MODEL_RUN_TAG,
     }
     log.info("phase3.rerun_complete", **result)
     return result
@@ -1134,6 +1202,11 @@ async def run_ml_pipeline_full() -> dict:
         symbols=symbols[:10],
         unlock_model_feature_set=UNLOCK_MODEL_FEATURE_SET,
         unlock_model_columns=get_unlock_model_feature_columns(),
+        meta_target_mode=META_TARGET_MODE,
+        hmm_meta_feature_mode=HMM_META_FEATURE_MODE,
+        hmm_hard_gate_mode=HMM_HARD_GATE_MODE,
+        tb_event_filter_mode=_tb_event_filter_mode(),
+        model_run_tag=MODEL_RUN_TAG,
     )
 
     # Ensure output dirs exist

@@ -45,7 +45,16 @@ SHARPE_OOS_MIN      = 0.70
 MAX_DD_THRESHOLD    = 0.18
 SUBPERIOD_MIN_PASS  = 4
 PBMA_FALLBACK_THR   = 0.65
-UNLOCK_MODEL_FEATURE_SET = os.getenv("UNLOCK_MODEL_FEATURE_SET", "full").strip().lower()
+UNLOCK_MODEL_FEATURE_SET = os.getenv("UNLOCK_MODEL_FEATURE_SET", "baseline").strip().lower()
+HMM_META_FEATURE_MODE = os.getenv("HMM_META_FEATURE_MODE", "include").strip().lower()
+HMM_HARD_GATE_MODE = os.getenv("HMM_HARD_GATE_MODE", "off").strip().lower()
+PHASE4_META_PROB_MODE = os.getenv("PHASE4_META_PROB_MODE", "calibrated").strip().lower()
+MODEL_RUN_TAG = os.getenv("MODEL_RUN_TAG", "").strip()
+TB_REFERENCE_POSITION_FRAC = float(os.getenv("TB_REFERENCE_POSITION_FRAC", "0.05"))
+PHASE4_FIXED_ALLOC_SMALL = float(os.getenv("PHASE4_FIXED_ALLOC_SMALL", "0.01"))
+PHASE4_CONSERVATIVE_KELLY_MULT = float(os.getenv("PHASE4_CONSERVATIVE_KELLY_MULT", "0.50"))
+PHASE4_CONSERVATIVE_ALLOC_CAP = float(os.getenv("PHASE4_CONSERVATIVE_ALLOC_CAP", "0.02"))
+PHASE4_SELECTIVE_THRESHOLD = float(os.getenv("PHASE4_SELECTIVE_THRESHOLD", "0.75"))
 UNLOCK_PROXY_FEATURE_COLUMNS = [
     "unlock_overhang_proxy_rank_full",
     "unlock_fragility_proxy_rank_fallback",
@@ -58,7 +67,7 @@ VI_CLUSTER_ASSET_PATHS = [
 
 
 def get_unlock_model_feature_columns(mode: str | None = None) -> list[str]:
-    normalized = (mode or UNLOCK_MODEL_FEATURE_SET or "full").strip().lower()
+    normalized = (mode or UNLOCK_MODEL_FEATURE_SET or "baseline").strip().lower()
     if normalized in {"baseline", "none", "off"}:
         return []
     if normalized == "proxies":
@@ -68,6 +77,36 @@ def get_unlock_model_feature_columns(mode: str | None = None) -> list[str]:
 
 def _is_allowed_unlock_feature(feature: str) -> bool:
     return feature not in UNLOCK_MODEL_FEATURE_COLUMNS or feature in get_unlock_model_feature_columns()
+
+
+def _hmm_meta_feature_enabled(mode: str | None = None) -> bool:
+    normalized = (mode or HMM_META_FEATURE_MODE or "include").strip().lower()
+    return normalized not in {"exclude", "off", "gate_only", "false", "0"}
+
+
+def _hmm_hard_gate_enabled(mode: str | None = None) -> bool:
+    normalized = (mode or HMM_HARD_GATE_MODE or "off").strip().lower()
+    return normalized in {"on", "true", "1", "hard_gate", "gate"}
+
+
+def _phase4_prob_mode(mode: str | None = None) -> str:
+    normalized = (mode or PHASE4_META_PROB_MODE or "calibrated").strip().lower()
+    return "raw" if normalized in {"raw", "uncalibrated", "off"} else "calibrated"
+
+
+def _phase4_neutral_fill(feature: str) -> float:
+    if feature in {"hmm_prob_bull", "btc_ma200_flag"}:
+        return 0.5
+    if feature in UNLOCK_MODEL_FEATURE_COLUMNS:
+        return 0.5
+    return 0.0
+
+
+def _prepare_feature_matrix(df: pd.DataFrame, feature_cols: list[str]) -> np.ndarray:
+    frame = df.loc[:, feature_cols].replace([np.inf, -np.inf], np.nan).ffill()
+    for col in feature_cols:
+        frame[col] = pd.to_numeric(frame[col], errors="coerce").fillna(_phase4_neutral_fill(col))
+    return frame.to_numpy(dtype=float)
 
 
 def _safe_read(path):
@@ -117,10 +156,11 @@ def _load_vi_cluster_map() -> dict[str, list[str]] | None:
 def _choose_vi_features(df: pd.DataFrame, y_col: str = "y_meta") -> list[str]:
     cluster_map = _load_vi_cluster_map()
     unlock_cols = get_unlock_model_feature_columns()
+    hmm_cols = ["hmm_prob_bull"] if _hmm_meta_feature_enabled() else []
     fallback_candidates = [
         "sigma_ewma", "ret_1d", "ret_5d", "ret_20d", "vol_ratio",
         "funding_rate_ma7d", "basis_3m", "stablecoin_chg30",
-        *unlock_cols, "dvol_zscore", "btc_ma200_flag", "close_fracdiff",
+        *hmm_cols, *unlock_cols, "dvol_zscore", "btc_ma200_flag", "close_fracdiff",
     ]
     if cluster_map is None:
         return [c for c in fallback_candidates if c in df.columns and df[c].notna().mean() > 0.5 and float(df[c].dropna().std()) >= 0.01]
@@ -133,7 +173,9 @@ def _choose_vi_features(df: pd.DataFrame, y_col: str = "y_meta") -> list[str]:
         mapped = []
         for feat in feats:
             feat = alias.get(feat, feat)
-            if feat in df.columns and feat != "p_bma_pkf" and feat != "hmm_prob_bull" and _is_allowed_unlock_feature(feat):
+            if feat in df.columns and feat != "p_bma_pkf" and _is_allowed_unlock_feature(feat):
+                if feat == "hmm_prob_bull" and not _hmm_meta_feature_enabled():
+                    continue
                 ser = pd.to_numeric(df[feat], errors="coerce")
                 if ser.notna().mean() > 0.5 and float(ser.dropna().std()) >= 0.01:
                     mapped.append(feat)
@@ -171,7 +213,12 @@ def _atomic_json_write(path: Path, payload: dict) -> None:
 
 
 def _cluster_artifact_suffix() -> str:
-    return "" if UNLOCK_MODEL_FEATURE_SET in {"", "full"} else f"_{UNLOCK_MODEL_FEATURE_SET}"
+    parts: list[str] = []
+    if UNLOCK_MODEL_FEATURE_SET not in {"", "full"}:
+        parts.append(UNLOCK_MODEL_FEATURE_SET)
+    if MODEL_RUN_TAG:
+        parts.append(MODEL_RUN_TAG)
+    return "" if not parts else "_" + "_".join(parts)
 
 
 def _symbol_cluster_artifact_paths() -> list[Path]:
@@ -387,7 +434,7 @@ def load_pooled_meta_df():
             row["y_meta"]     = m["y_target"].values if "y_target" in m.columns else np.full(n, np.nan)
             row["uniqueness"] = m["uniqueness"].values if "uniqueness" in m.columns else np.ones(n)
             b = barrier_df.reindex(common_idx)
-            for col in ["label","t_touch","pnl_real","pnl","holding_days","slippage_frac","sigma_at_entry"]:
+            for col in ["label","t_touch","pnl_real","pnl","holding_days","slippage_frac","sigma_at_entry","barrier_sl","p0"]:
                 if col in b.columns:
                     row[col] = b[col].values
             if "pnl_real" not in row and "pnl" in row:
@@ -428,7 +475,7 @@ def load_pooled_meta_df():
 
             # Hard gate incondicional: regime bear invalida p_bma e zera sizing.
             bear_mask = None
-            if "hmm_prob_bull" in row and "p_bma_pkf" in row:
+            if _hmm_hard_gate_enabled() and "hmm_prob_bull" in row and "p_bma_pkf" in row:
                 hmm_vals = np.asarray(row["hmm_prob_bull"], dtype=float)
                 p_vals = np.asarray(row["p_bma_pkf"], dtype=float)
                 bear_mask = np.isnan(hmm_vals) | (hmm_vals < 0.50)
@@ -475,6 +522,11 @@ def select_features(df):
     selected = ["p_bma_pkf"] if "p_bma_pkf" in df.columns else []
     vi_feats = _choose_vi_features(df, y_col="y_meta")
     selected.extend([c for c in vi_feats if c not in selected])
+    if _hmm_meta_feature_enabled() and "hmm_prob_bull" in df.columns:
+        hmm_prob = pd.to_numeric(df["hmm_prob_bull"], errors="coerce")
+        if hmm_prob.notna().mean() > 0.50 and float(hmm_prob.dropna().std()) >= 0.01:
+            if "hmm_prob_bull" not in selected:
+                selected.append("hmm_prob_bull")
 
     # close_fracdiff Ã© mandatÃ³ria na Fase 4 quando houver dados minimamente vÃ¡lidos.
     if "close_fracdiff" in df.columns:
@@ -520,6 +572,48 @@ def train_meta_model(X_tr, y_tr, w_tr, n_eff):
     return m
 
 
+def _build_portfolio_returns(
+    pnl_real,
+    signal,
+    threshold=0.5,
+    capital=CAPITAL_INITIAL,
+    kelly_frac=None,
+    position_usdt=None,
+):
+    active = signal > threshold
+    n_active = int(active.sum())
+    if n_active < 5:
+        return {
+            "portfolio_returns": np.array([], dtype=float),
+            "active_pnl": np.array([], dtype=float),
+            "allocations": np.array([], dtype=float),
+            "n_active": n_active,
+        }
+
+    ap = np.clip(pnl_real[active], -0.50, 2.00)
+    if position_usdt is not None:
+        alloc = np.clip(position_usdt[active] / max(capital, 1), 0.0, 0.25)
+    elif kelly_frac is not None:
+        alloc = np.clip(kelly_frac[active], 0.0, 0.25)
+    else:
+        alloc = np.full(n_active, 0.10)
+
+    nonzero = alloc > 0.001
+    if nonzero.sum() < 5:
+        return {
+            "portfolio_returns": np.array([], dtype=float),
+            "active_pnl": np.array([], dtype=float),
+            "allocations": np.array([], dtype=float),
+            "n_active": int(nonzero.sum()),
+        }
+    return {
+        "portfolio_returns": ap[nonzero] * alloc[nonzero],
+        "active_pnl": ap[nonzero],
+        "allocations": alloc[nonzero],
+        "n_active": int(nonzero.sum()),
+    }
+
+
 def compute_equity_curve(pnl_real, signal, threshold=0.5, capital=CAPITAL_INITIAL,
                          kelly_frac=None, position_usdt=None):
     """
@@ -527,31 +621,20 @@ def compute_equity_curve(pnl_real, signal, threshold=0.5, capital=CAPITAL_INITIA
     portfolio_return_i = pnl_real_i * allocation_i
     allocation = kelly_frac (capped 25%) ou position_usdt/capital ou 10% default.
     """
-    DEFAULT_ALLOC = 0.10
-    active = signal > threshold
-    n_active = int(active.sum())
-    if n_active < 5:
-        return {"sharpe":0.0,"cum_return":0.0,"max_dd":0.0,"n_active":n_active,
+    series = _build_portfolio_returns(
+        pnl_real,
+        signal,
+        threshold=threshold,
+        capital=capital,
+        kelly_frac=kelly_frac,
+        position_usdt=position_usdt,
+    )
+    if series["n_active"] < 5 or len(series["portfolio_returns"]) < 5:
+        return {"sharpe":0.0,"cum_return":0.0,"max_dd":0.0,"n_active":series["n_active"],
                 "win_rate":0.0,"equity_final":float(capital),"avg_alloc":0.0}
-
-    ap = np.clip(pnl_real[active], -0.50, 2.00)
-
-    if kelly_frac is not None:
-        alloc = np.clip(kelly_frac[active], 0.0, 0.25)
-    elif position_usdt is not None:
-        alloc = np.clip(position_usdt[active] / max(capital, 1), 0.0, 0.25)
-    else:
-        alloc = np.full(n_active, DEFAULT_ALLOC)
-
-    port_ret = ap * alloc
-    nonzero = alloc > 0.001
-    if nonzero.sum() < 5:
-        return {"sharpe":0.0,"cum_return":0.0,"max_dd":0.0,"n_active":int(nonzero.sum()),
-                "win_rate":0.0,"equity_final":float(capital),"avg_alloc":0.0}
-
-    pr = port_ret[nonzero]
-    ap_nz = ap[nonzero]
-    al_nz = alloc[nonzero]
+    pr = series["portfolio_returns"]
+    ap_nz = series["active_pnl"]
+    al_nz = series["allocations"]
     n_real = len(pr)
 
     tpy = 252 / 5
@@ -574,6 +657,121 @@ def compute_equity_curve(pnl_real, signal, threshold=0.5, capital=CAPITAL_INITIA
         "win_rate": round(float((ap_nz > 0).mean()), 4),
         "equity_final": round(float(ea[-1]), 2),
         "avg_alloc": round(float(al_nz.mean()), 4),
+    }
+
+
+def _reference_order_usdt(capital: float = CAPITAL_INITIAL) -> float:
+    return max(float(capital) * TB_REFERENCE_POSITION_FRAC, 1.0)
+
+
+def _rescale_slippage_to_position(slippage_frac_ref: float, position_usdt: float, reference_order_usdt: float) -> float:
+    slip_ref = max(float(slippage_frac_ref), 0.0)
+    if slip_ref <= 0:
+        return 0.0
+    q_exec = max(float(position_usdt), 0.0)
+    if q_exec <= 0:
+        return slip_ref
+    scale = np.sqrt(q_exec / max(float(reference_order_usdt), 1e-9))
+    return float(min(slip_ref * scale, 0.50))
+
+
+def _attach_execution_pnl(df: pd.DataFrame, position_col: str, output_col: str) -> pd.DataFrame:
+    out = df.copy()
+    pnl_real = pd.to_numeric(out["pnl_real"], errors="coerce").fillna(0.0) if "pnl_real" in out.columns else pd.Series(0.0, index=out.index)
+    labels = pd.to_numeric(out["label"], errors="coerce") if "label" in out.columns else pd.Series(np.nan, index=out.index)
+    barrier_sl = pd.to_numeric(out["barrier_sl"], errors="coerce") if "barrier_sl" in out.columns else pd.Series(np.nan, index=out.index)
+    p0 = pd.to_numeric(out["p0"], errors="coerce") if "p0" in out.columns else pd.Series(np.nan, index=out.index)
+    slippage_ref = pd.to_numeric(out["slippage_frac"], errors="coerce").fillna(0.0) if "slippage_frac" in out.columns else pd.Series(0.0, index=out.index)
+    positions = pd.to_numeric(out[position_col], errors="coerce").fillna(0.0) if position_col in out.columns else pd.Series(0.0, index=out.index)
+    reference_order_usdt = _reference_order_usdt()
+
+    pnl_exec = pnl_real.to_numpy(dtype=float, copy=True)
+    slip_exec = slippage_ref.to_numpy(dtype=float, copy=True)
+    labels_arr = labels.to_numpy(dtype=float, copy=False)
+    barrier_sl_arr = barrier_sl.to_numpy(dtype=float, copy=False)
+    p0_arr = p0.to_numpy(dtype=float, copy=False)
+    slippage_ref_arr = slippage_ref.to_numpy(dtype=float, copy=False)
+    position_arr = positions.to_numpy(dtype=float, copy=False)
+
+    stop_mask = (
+        np.isfinite(labels_arr)
+        & (labels_arr == -1)
+        & np.isfinite(barrier_sl_arr)
+        & np.isfinite(p0_arr)
+        & (p0_arr > 0)
+        & np.isfinite(slippage_ref_arr)
+        & (slippage_ref_arr > 0)
+        & np.isfinite(position_arr)
+        & (position_arr > 0)
+    )
+    if np.any(stop_mask):
+        scaled = np.array(
+            [
+                _rescale_slippage_to_position(slippage_ref_arr[idx], position_arr[idx], reference_order_usdt)
+                for idx in np.where(stop_mask)[0]
+            ],
+            dtype=float,
+        )
+        pnl_exec[stop_mask] = (barrier_sl_arr[stop_mask] * (1.0 - scaled) / p0_arr[stop_mask]) - 1.0
+        slip_exec[stop_mask] = scaled
+
+    suffix = output_col[4:] if output_col.startswith("pnl_") else output_col
+    out[output_col] = pnl_exec
+    out[f"slippage_{suffix}"] = slip_exec
+    out[f"slippage_ref_capped_{suffix}"] = (slippage_ref_arr >= 0.499).astype(int)
+    out[f"reference_order_usdt_{suffix}"] = reference_order_usdt
+    return out
+
+
+def _evaluate_decision_policy(
+    df: pd.DataFrame,
+    *,
+    label: str,
+    threshold: float,
+    signal_col: str,
+    position_col: str,
+    pnl_col: str,
+) -> dict:
+    signal = pd.to_numeric(df.get(signal_col), errors="coerce").fillna(0.0).values
+    pnl = pd.to_numeric(df.get(pnl_col), errors="coerce").fillna(0.0).values
+    positions = pd.to_numeric(df.get(position_col), errors="coerce").fillna(0.0).values
+    eq = compute_equity_curve(pnl, signal, threshold=threshold, position_usdt=positions)
+    series = _build_portfolio_returns(pnl, signal, threshold=threshold, position_usdt=positions)
+    pr = series["portfolio_returns"]
+    if len(pr) >= 5:
+        sk = float(skew(pr)) if len(pr) > 10 else -0.3
+        ku = float(scipy_kurtosis(pr, fisher=False)) if len(pr) > 10 else 5.0
+        dsr = compute_dsr_honest(eq["sharpe"], T=max(len(pr), 100), skewness=sk, kurtosis_val=ku)
+    else:
+        dsr = compute_dsr_honest(0.0, T=100, skewness=-0.3, kurtosis_val=5.0)
+    subperiods = analyze_subperiods(
+        df,
+        signal_col=signal_col,
+        threshold=threshold,
+        position_col=position_col,
+        pnl_col=pnl_col,
+    )
+    active_mask = (signal > threshold) & (positions > 0)
+    capped_col = f"slippage_ref_capped_{pnl_col[4:] if pnl_col.startswith('pnl_') else pnl_col}"
+    capped_active = 0
+    if capped_col in df.columns:
+        capped_active = int(pd.to_numeric(df[capped_col], errors="coerce").fillna(0).values[active_mask].sum())
+    return {
+        "policy": label,
+        "threshold": round(float(threshold), 4),
+        "sharpe": eq["sharpe"],
+        "cum_return": eq["cum_return"],
+        "max_dd": eq["max_dd"],
+        "n_active": eq["n_active"],
+        "win_rate": eq["win_rate"],
+        "equity_final": eq["equity_final"],
+        "avg_alloc": eq.get("avg_alloc", 0.0),
+        "dsr_honest": dsr["dsr_honest"],
+        "subperiods_positive": int(sum(1 for row in subperiods if row.get("positive") is True)),
+        "subperiods_total": int(sum(1 for row in subperiods if row.get("positive") is not None)),
+        "capped_slippage_ref_active": capped_active,
+        "subperiods": subperiods,
+        "active_port_returns": pr,
     }
 
 
@@ -709,28 +907,18 @@ def _compute_symbol_trade_stats(reference_df):
     if reference_df.empty or "pnl_real" not in reference_df.columns:
         return {}, 0.02, 0.02
 
-    pnl_tp = pd.to_numeric(
-        reference_df.loc[reference_df["label"] == 1, "pnl_real"],
-        errors="coerce",
-    ).dropna()
-    pnl_sl = pd.to_numeric(
-        reference_df.loc[reference_df["label"] == -1, "pnl_real"],
-        errors="coerce",
-    ).dropna()
+    pnl_real = pd.to_numeric(reference_df["pnl_real"], errors="coerce").dropna()
+    pnl_tp = pnl_real[pnl_real > 0]
+    pnl_sl = pnl_real[pnl_real < 0]
 
     global_tp = abs(float(pnl_tp.mean())) if not pnl_tp.empty else 0.02
     global_sl = abs(float(pnl_sl.mean())) if not pnl_sl.empty else 0.02
 
     stats = {}
     for symbol, sym_df in reference_df.groupby("symbol"):
-        sym_tp = pd.to_numeric(
-            sym_df.loc[sym_df["label"] == 1, "pnl_real"],
-            errors="coerce",
-        ).dropna()
-        sym_sl = pd.to_numeric(
-            sym_df.loc[sym_df["label"] == -1, "pnl_real"],
-            errors="coerce",
-        ).dropna()
+        sym_pnl = pd.to_numeric(sym_df["pnl_real"], errors="coerce").dropna()
+        sym_tp = sym_pnl[sym_pnl > 0]
+        sym_sl = sym_pnl[sym_pnl < 0]
         stats[str(symbol)] = {
             "avg_tp": abs(float(sym_tp.mean())) if not sym_tp.empty else global_tp,
             "avg_sl": abs(float(sym_sl.mean())) if not sym_sl.empty else global_sl,
@@ -797,6 +985,7 @@ def _compute_phase4_sizing(df, prob_col, prefix, avg_tp_col, avg_sl_col):
 def _build_execution_snapshot(predictions_df):
     if predictions_df.empty:
         return pd.DataFrame()
+    prob_col = "p_meta_raw" if _phase4_prob_mode() == "raw" else "p_meta_calibrated"
 
     latest = (
         predictions_df.sort_values(["date", "symbol"], kind="mergesort")
@@ -805,7 +994,7 @@ def _build_execution_snapshot(predictions_df):
         .sort_values(["date", "symbol"], kind="mergesort")
         .reset_index(drop=True)
     )
-    latest["p_calibrated"] = pd.to_numeric(latest.get("p_meta_calibrated", 0.0), errors="coerce").fillna(0.0)
+    latest["p_calibrated"] = pd.to_numeric(latest.get(prob_col, 0.0), errors="coerce").fillna(0.0)
     latest["kelly_frac"] = pd.to_numeric(latest.get("kelly_frac_meta", 0.0), errors="coerce").fillna(0.0)
     latest["position_usdt"] = pd.to_numeric(latest.get("position_usdt_meta", 0.0), errors="coerce").fillna(0.0)
     latest["side"] = np.where(latest["position_usdt"] > 0, "BUY", "FLAT")
@@ -826,6 +1015,7 @@ def _aggregate_oos_predictions(oos_df):
     for col in [
         "p_bma_pkf",
         "pnl_real",
+        "pnl_exec_meta",
         "hmm_prob_bull",
         "kelly_frac",
         "position_usdt",
@@ -835,6 +1025,9 @@ def _aggregate_oos_predictions(oos_df):
         "mu_adj_meta",
         "kelly_frac_meta",
         "position_usdt_meta",
+        "slippage_frac",
+        "barrier_sl",
+        "p0",
     ]:
         if col in oos_df.columns:
             agg_spec[col] = "mean" if col.startswith(("avg_", "mu_adj_", "kelly_frac_", "position_usdt_")) else "first"
@@ -853,8 +1046,8 @@ def _aggregate_oos_predictions(oos_df):
     return grouped.merge(counts, on=["date", "symbol"], how="left")
 
 def run_cpcv(pooled_df, feature_cols):
-    feature_cols = [c for c in feature_cols if c != "hmm_prob_bull"]
     cluster_artifact_path = _ensure_symbol_vi_cluster_artifact(pooled_df, feature_cols)
+    prob_col = "p_meta_raw" if _phase4_prob_mode() == "raw" else "p_meta_calibrated"
     n = len(pooled_df)
     embargo = max(1, int(n * EMBARGO_PCT))
     splits = np.array_split(np.arange(n), N_SPLITS)
@@ -883,16 +1076,16 @@ def run_cpcv(pooled_df, feature_cols):
         uniq = train_df["uniqueness"].fillna(1.0) if "uniqueness" in train_df.columns else pd.Series(1.0, index=train_df.index)
         n_eff = float(uniq.sum())
 
-        X_tr = train_df[feature_cols].fillna(0).values
+        X_tr = _prepare_feature_matrix(train_df, feature_cols)
         y_tr = train_df["y_meta"].values
         w_tr = compute_sample_weights(train_df)
-        X_te = test_df[feature_cols].fillna(0).values
+        X_te = _prepare_feature_matrix(test_df, feature_cols)
         y_te = test_df["y_meta"].values
 
         try:
             model = train_meta_model(X_tr, y_tr, w_tr, n_eff)
             p_oos_raw = model.predict_proba(X_te)[:, 1]
-            if "hmm_prob_bull" in test_df.columns:
+            if _hmm_hard_gate_enabled() and "hmm_prob_bull" in test_df.columns:
                 hmm_te = pd.to_numeric(test_df["hmm_prob_bull"], errors="coerce").fillna(0.0).values
                 p_oos_raw = np.where(hmm_te < 0.50, 0.0, p_oos_raw)
             auc_oos = roc_auc_score(y_te, p_oos_raw) if len(np.unique(y_te)) >= 2 else 0.5
@@ -951,31 +1144,39 @@ def run_cpcv(pooled_df, feature_cols):
     oos_df["p_meta_calibrated"] = _apply_cluster_calibration(oos_df, calibrators, symbol_to_cluster)
     oos_df = _compute_phase4_sizing(
         oos_df,
-        prob_col="p_meta_calibrated",
+        prob_col=prob_col,
         prefix="meta",
         avg_tp_col="avg_tp_train",
         avg_sl_col="avg_sl_train",
     )
+    oos_df = _attach_execution_pnl(oos_df, position_col="position_usdt_meta", output_col="pnl_exec_meta")
     aggregated_predictions = _aggregate_oos_predictions(oos_df)
     aggregated_predictions = _compute_phase4_sizing(
         aggregated_predictions,
-        prob_col="p_meta_calibrated",
+        prob_col=prob_col,
         prefix="meta",
         avg_tp_col="avg_tp_train",
         avg_sl_col="avg_sl_train",
+    )
+    aggregated_predictions = _attach_execution_pnl(
+        aggregated_predictions,
+        position_col="position_usdt_meta",
+        output_col="pnl_exec_meta",
     )
 
     df_r = pd.DataFrame(trajectories)
     combo_metrics = []
     for combo_name, combo_df in oos_df.groupby("combo", sort=False):
-        pnl_arr = pd.to_numeric(combo_df["pnl_real"], errors="coerce").fillna(0.0).values
+        pnl_col = "pnl_exec_meta" if "pnl_exec_meta" in combo_df.columns else "pnl_real"
+        pnl_arr = pd.to_numeric(combo_df[pnl_col], errors="coerce").fillna(0.0).values
         eq = compute_equity_curve(
             pnl_arr,
-            combo_df["p_meta_calibrated"].values,
+            combo_df[prob_col].values,
             threshold=0.5,
-            kelly_frac=combo_df["kelly_frac_meta"].values,
+            position_usdt=combo_df["position_usdt_meta"].values if "position_usdt_meta" in combo_df.columns else None,
+            kelly_frac=combo_df["kelly_frac_meta"].values if "kelly_frac_meta" in combo_df.columns else None,
         )
-        auc_cal = roc_auc_score(combo_df["y_meta"], combo_df["p_meta_calibrated"]) if combo_df["y_meta"].nunique() >= 2 else 0.5
+        auc_cal = roc_auc_score(combo_df["y_meta"], combo_df[prob_col]) if combo_df["y_meta"].nunique() >= 2 else 0.5
         combo_metrics.append({
             "combo": combo_name,
             "auc_calibrated": round(float(auc_cal), 4),
@@ -993,9 +1194,9 @@ def run_cpcv(pooled_df, feature_cols):
     auc_m = float(df_r["auc_oos"].mean())
     auc_s = float(df_r["auc_oos"].std())
     auc_b = float((df_r["auc_oos"] < AUC_MIN_THRESHOLD).mean())
-    ece = _compute_ece(oos_df["p_meta_calibrated"].values, oos_df["y_meta"].values)
+    ece = _compute_ece(oos_df[prob_col].values, oos_df["y_meta"].values)
     ece_raw = _compute_ece(oos_df["p_meta_raw"].values, oos_df["y_meta"].values)
-    ece_unique = _compute_ece(aggregated_predictions["p_meta_calibrated"].values, aggregated_predictions["y_meta"].values) if not aggregated_predictions.empty else ece
+    ece_unique = _compute_ece(aggregated_predictions[prob_col].values, aggregated_predictions["y_meta"].values) if not aggregated_predictions.empty else ece
 
     return {
         "trajectories": df_r.to_dict(orient="records"),
@@ -1016,6 +1217,8 @@ def run_cpcv(pooled_df, feature_cols):
         "cluster_calibration_mode": cluster_mode,
         "cluster_calibration_artifact": artifact_path,
         "cluster_calibration": cluster_summary,
+        "phase4_probability_mode": prob_col,
+        "auc_selected_prob_mean": round(float(df_r["auc_calibrated"].mean()), 4) if "auc_calibrated" in df_r.columns else None,
         "auc_calibrated_mean": round(float(df_r["auc_calibrated"].mean()), 4) if "auc_calibrated" in df_r.columns else None,
         "mean_predictions_per_obs": round(float(aggregated_predictions["n_cpcv_predictions"].mean()), 4) if not aggregated_predictions.empty else 0.0,
         "oos_predictions_df": oos_df,
@@ -1045,26 +1248,81 @@ def evaluate_fallback(pooled_df):
         avg_sl_col="avg_sl_fallback",
     )
     sig = fallback_df["p_bma_pkf"].fillna(0).values
-    if "hmm_prob_bull" in fallback_df.columns:
+    if _hmm_hard_gate_enabled() and "hmm_prob_bull" in fallback_df.columns:
         hmm = pd.to_numeric(fallback_df["hmm_prob_bull"], errors="coerce").fillna(0.0).values
         sig = np.where(hmm < 0.50, 0.0, sig)
-    pnl = fallback_df["pnl_real"].fillna(0).values
-    kelly = fallback_df["kelly_frac_fallback"].fillna(0).values
-    results = {}
+    fallback_df["p_bma_pkf_exec"] = sig
+
+    current_position = pd.to_numeric(fallback_df["position_usdt_fallback"], errors="coerce").fillna(0.0)
+    fallback_df["position_usdt_policy_current"] = current_position
+    fallback_df = _attach_execution_pnl(
+        fallback_df,
+        position_col="position_usdt_policy_current",
+        output_col="pnl_exec_current",
+    )
+
+    threshold_results = {}
     for thr in [0.55, 0.60, 0.65, 0.70, 0.75]:
-        results[f"thr_{thr:.2f}"] = compute_equity_curve(
-            pnl, sig, threshold=thr, kelly_frac=kelly)
-    main_r = results["thr_0.65"]
+        threshold_results[f"thr_{thr:.2f}"] = _evaluate_decision_policy(
+            fallback_df,
+            label=f"current_kelly_{thr:.2f}",
+            threshold=thr,
+            signal_col="p_bma_pkf_exec",
+            position_col="position_usdt_policy_current",
+            pnl_col="pnl_exec_current",
+        )
+    main_r = threshold_results[f"thr_{PBMA_FALLBACK_THR:.2f}"]
+
+    fixed_position = np.full(len(fallback_df), CAPITAL_INITIAL * PHASE4_FIXED_ALLOC_SMALL, dtype=float)
+    conservative_position = np.minimum(
+        current_position.to_numpy(dtype=float) * PHASE4_CONSERVATIVE_KELLY_MULT,
+        CAPITAL_INITIAL * PHASE4_CONSERVATIVE_ALLOC_CAP,
+    )
+    policy_specs = [
+        ("current_kelly_065", PBMA_FALLBACK_THR, "position_usdt_policy_current", "pnl_exec_current"),
+        ("fixed_small_065", PBMA_FALLBACK_THR, "position_usdt_policy_fixed", "pnl_exec_fixed"),
+        ("kelly_conservative_065", PBMA_FALLBACK_THR, "position_usdt_policy_conservative", "pnl_exec_conservative"),
+        ("fixed_small_075", PHASE4_SELECTIVE_THRESHOLD, "position_usdt_policy_selective", "pnl_exec_selective"),
+    ]
+    fallback_df["position_usdt_policy_fixed"] = fixed_position
+    fallback_df["position_usdt_policy_conservative"] = conservative_position
+    fallback_df["position_usdt_policy_selective"] = fixed_position
+    fallback_df = _attach_execution_pnl(fallback_df, "position_usdt_policy_fixed", "pnl_exec_fixed")
+    fallback_df = _attach_execution_pnl(fallback_df, "position_usdt_policy_conservative", "pnl_exec_conservative")
+    fallback_df = _attach_execution_pnl(fallback_df, "position_usdt_policy_selective", "pnl_exec_selective")
+    policy_ablation = {}
+    for label, thr, position_col, pnl_col in policy_specs:
+        policy_ablation[label] = {
+            k: v for k, v in _evaluate_decision_policy(
+                fallback_df,
+                label=label,
+                threshold=thr,
+                signal_col="p_bma_pkf_exec",
+                position_col=position_col,
+                pnl_col=pnl_col,
+            ).items()
+            if k not in {"subperiods", "active_port_returns"}
+        }
+    main_signals_df = fallback_df.copy()
+    main_signals_df["position_usdt_active_policy"] = main_signals_df["position_usdt_policy_current"]
+    main_signals_df["pnl_exec_active_policy"] = main_signals_df["pnl_exec_current"]
     return {
         "threshold":PBMA_FALLBACK_THR,
         "sharpe":main_r["sharpe"],"cum_return":main_r["cum_return"],
         "max_dd":main_r["max_dd"],"n_active":main_r["n_active"],
         "win_rate":main_r["win_rate"],"equity_final":main_r["equity_final"],
         "avg_alloc":main_r.get("avg_alloc",0),
-        "signals_df": fallback_df,
+        "signals_df": main_signals_df,
+        "active_port_returns": main_r.get("active_port_returns", np.array([], dtype=float)),
+        "execution_repricing": {
+            "mode": "scaled_from_reference_slippage",
+            "reference_order_usdt": round(_reference_order_usdt(), 2),
+            "current_policy_capped_ref_active": int(main_r.get("capped_slippage_ref_active", 0)),
+        },
+        "policy_ablation": policy_ablation,
         "sensitivity":{k:{kk:vv for kk,vv in v.items()
-                          if kk in ("sharpe","cum_return","max_dd","n_active","win_rate","avg_alloc")}
-                       for k,v in results.items()},
+                          if kk in ("sharpe","cum_return","max_dd","n_active","win_rate","avg_alloc","dsr_honest","subperiods_positive","subperiods_total","capped_slippage_ref_active")}
+                       for k,v in threshold_results.items()},
     }
 
 def compute_dsr_honest(sharpe_is, T=1500, skewness=-0.3, kurtosis_val=5.0):
@@ -1104,11 +1362,19 @@ SUBPERIODS = [
     ("2024+",  "2024-01-01","2026-12-31","Bull/lateral"),
 ]
 
-def analyze_subperiods(pooled_df, signal_col="p_bma_pkf", threshold=PBMA_FALLBACK_THR, kelly_col="kelly_frac"):
+def analyze_subperiods(
+    pooled_df,
+    signal_col="p_bma_pkf",
+    threshold=PBMA_FALLBACK_THR,
+    kelly_col="kelly_frac",
+    position_col: str | None = None,
+    pnl_col: str = "pnl_real",
+):
     dates = pd.to_datetime(pooled_df["date"]).values
-    pnl = pooled_df["pnl_real"].fillna(0).values if "pnl_real" in pooled_df.columns else np.zeros(len(pooled_df))
+    pnl = pooled_df[pnl_col].fillna(0).values if pnl_col in pooled_df.columns else np.zeros(len(pooled_df))
     sig = pooled_df[signal_col].fillna(0).values if signal_col in pooled_df.columns else np.ones(len(pooled_df))*0.5
-    kelly = pooled_df[kelly_col].fillna(0).values if kelly_col in pooled_df.columns else None
+    positions = pooled_df[position_col].fillna(0).values if position_col and position_col in pooled_df.columns else None
+    kelly = None if positions is not None else (pooled_df[kelly_col].fillna(0).values if kelly_col in pooled_df.columns else None)
     results = []
     for name, start, end, regime in SUBPERIODS:
         dm = (dates >= np.datetime64(start)) & (dates <= np.datetime64(end))
@@ -1119,7 +1385,8 @@ def analyze_subperiods(pooled_df, signal_col="p_bma_pkf", threshold=PBMA_FALLBAC
                             "avg_alloc":0.0,"positive":None})
             continue
         k_sub = kelly[dm] if kelly is not None else None
-        eq = compute_equity_curve(pnl[dm], sig[dm], threshold=threshold, kelly_frac=k_sub)
+        pos_sub = positions[dm] if positions is not None else None
+        eq = compute_equity_curve(pnl[dm], sig[dm], threshold=threshold, kelly_frac=k_sub, position_usdt=pos_sub)
         # FIX: explicit Python bool (not numpy bool)
         is_positive = bool(eq["cum_return"] > 0) if eq["n_active"] >= 5 else None
         results.append({
@@ -1138,6 +1405,11 @@ def main():
     print("SNIPER v10.10 -- PHASE 4 v4: CPCV + Fallback (Kelly-weighted)")
     print(f"Timestamp: {datetime.utcnow().isoformat()}")
     print(f"Unlock feature set: {UNLOCK_MODEL_FEATURE_SET} -> {get_unlock_model_feature_columns()}")
+    print(f"HMM meta feature mode: {HMM_META_FEATURE_MODE}")
+    print(f"HMM hard gate mode: {HMM_HARD_GATE_MODE}")
+    print(f"Phase 4 probability mode: {_phase4_prob_mode()}")
+    if MODEL_RUN_TAG:
+        print(f"Model run tag: {MODEL_RUN_TAG}")
     print("="*72)
     start = time.time()
 
@@ -1172,14 +1444,7 @@ def main():
 
     print("\n[5/7] Computing DSR Honest...")
     fb_sharpe = fallback.get("sharpe", 0.0)
-    pnl_arr = pooled_df["pnl_real"].fillna(0).values if "pnl_real" in pooled_df.columns else np.zeros(len(pooled_df))
-    sig_arr = pooled_df["p_bma_pkf"].fillna(0).values if "p_bma_pkf" in pooled_df.columns else np.zeros(len(pooled_df))
-    kelly_arr = pooled_df["kelly_frac"].fillna(0).values if "kelly_frac" in pooled_df.columns else None
-    if kelly_arr is not None:
-        am = sig_arr > PBMA_FALLBACK_THR
-        active_port_ret = np.clip(pnl_arr[am], -0.5, 2.0) * np.clip(kelly_arr[am], 0, 0.25)
-    else:
-        active_port_ret = np.clip(pnl_arr[sig_arr > PBMA_FALLBACK_THR], -0.5, 2.0) * 0.10
+    active_port_ret = np.asarray(fallback.get("active_port_returns", np.array([], dtype=float)), dtype=float)
     T_t = max(len(active_port_ret), 100)
     sk = float(skew(active_port_ret)) if len(active_port_ret) > 10 else -0.3
     ku = float(scipy_kurtosis(active_port_ret, fisher=False)) if len(active_port_ret) > 10 else 5.0
@@ -1187,7 +1452,13 @@ def main():
 
     print("\n[6/7] Analyzing subperiods (fallback + Kelly)...")
     fallback_signals_df = fallback.get("signals_df", pooled_df)
-    subperiods = analyze_subperiods(fallback_signals_df, kelly_col="kelly_frac_fallback")
+    subperiods = analyze_subperiods(
+        fallback_signals_df,
+        signal_col="p_bma_pkf_exec",
+        threshold=PBMA_FALLBACK_THR,
+        position_col="position_usdt_active_policy",
+        pnl_col="pnl_exec_active_policy",
+    )
 
     elapsed = time.time() - start
 
@@ -1200,6 +1471,8 @@ def main():
     print("\n-- CPCV N=6, k=2 (15 Trajetorias) [9] --")
     print(f"  Trajetorias: {cpcv_result['n_trajectories']}/15")
     print(f"  AUC OOS: mean={cpcv_result['auc_mean']:.4f} std={cpcv_result['auc_std']:.4f}")
+    if cpcv_result.get("auc_selected_prob_mean") is not None:
+        print(f"  AUC prob usada: {cpcv_result['auc_selected_prob_mean']:.4f} ({cpcv_result.get('phase4_probability_mode','p_meta_calibrated')})")
     print(f"  PBO: {cpcv_result['pbo']:.1%}  {'PASS' if cpcv_result['pbo_pass'] else 'FAIL'} (thr <{PBO_THRESHOLD:.0%})")
     print(f"  AUC<0.52: {cpcv_result['auc_below_052_pct']:.0%}  {'PASS' if cpcv_result['auc_pass'] else 'FAIL'} (thr <=30%)")
     print(f"  Sharpe OOS medio: {cpcv_result['sharpe_mean']:.2f}")
@@ -1223,10 +1496,20 @@ def main():
     print(f"  Cum Return:     {fallback['cum_return']:.1%}")
     print(f"  Max DD:         {fallback['max_dd']:.1%}")
     print(f"  Equity:         ${fallback['equity_final']:,.0f} (de ${CAPITAL_INITIAL:,.0f})")
+    exec_diag = fallback.get("execution_repricing", {})
+    if exec_diag:
+        print(f"  Exec repricing: {exec_diag.get('mode')}  ref_Q=${exec_diag.get('reference_order_usdt', 0):,.0f}  capped_ref_active={exec_diag.get('current_policy_capped_ref_active', 0)}")
     print(f"  Sensibilidade:")
     for tn, td in fallback.get("sensitivity",{}).items():
         print(f"    {tn}: Sharpe={td['sharpe']:.2f}  WR={td['win_rate']:.0%}  "
               f"DD={td['max_dd']:.1%}  Active={td['n_active']}  Alloc={td.get('avg_alloc',0):.1%}")
+    print(f"  Policy ablation:")
+    for name, stats in fallback.get("policy_ablation", {}).items():
+        print(
+            f"    {name}: Sharpe={stats['sharpe']:.2f}  CumRet={stats['cum_return']:.1%}  "
+            f"DD={stats['max_dd']:.1%}  Active={stats['n_active']}  Alloc={stats.get('avg_alloc',0):.1%}  "
+            f"DSR={stats.get('dsr_honest',0):.3f}  Sub={stats.get('subperiods_positive',0)}/{stats.get('subperiods_total',0)}"
+        )
 
     print(f"\n-- DSR Honesto [10] --")
     print(f"  Sharpe IS (fallback): {dsr_result['sharpe_is']:.4f}")
@@ -1312,18 +1595,27 @@ def main():
         "elapsed_s": round(elapsed, 1),
         "unlock_model_feature_set": UNLOCK_MODEL_FEATURE_SET,
         "unlock_model_columns": get_unlock_model_feature_columns(),
+        "hmm_meta_feature_mode": HMM_META_FEATURE_MODE,
+        "hmm_hard_gate_mode": HMM_HARD_GATE_MODE,
+        "phase4_meta_prob_mode": _phase4_prob_mode(),
+        "model_run_tag": MODEL_RUN_TAG,
         "selected_features": feature_cols,
         "selected_feature_stats": selected_feature_stats,
         "unlock_feature_coverage": unlock_feature_coverage,
         "cpcv": {k: v for k, v in cpcv_result.items() if k not in ("trajectories", "oos_predictions_df", "aggregated_predictions_df")},
         "cpcv_trajectories": cpcv_result.get("trajectories", []),
-        "fallback": {k: v for k, v in fallback.items() if k != "signals_df"},
+        "fallback": {k: v for k, v in fallback.items() if k not in {"signals_df", "active_port_returns"}},
         "dsr": dsr_result,
         "subperiods": subperiods,
         "checks": {k: bool(v) for k, v in checks.items()},
         "n_pass": n_pass,
     }
-    suffix = "" if UNLOCK_MODEL_FEATURE_SET in {"", "full"} else f"_{UNLOCK_MODEL_FEATURE_SET}"
+    suffix_parts: list[str] = []
+    if UNLOCK_MODEL_FEATURE_SET not in {"", "full"}:
+        suffix_parts.append(UNLOCK_MODEL_FEATURE_SET)
+    if MODEL_RUN_TAG:
+        suffix_parts.append(MODEL_RUN_TAG)
+    suffix = "" if not suffix_parts else "_" + "_".join(suffix_parts)
     nested_path = OUTPUT_PATH / "phase4_report_v4.json"
     root_path = MODEL_PATH / "phase4_report_v4.json"
     _atomic_json_write(nested_path, report)
