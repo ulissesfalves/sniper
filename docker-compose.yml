@@ -41,6 +41,29 @@ volumes:
 
 services:
 
+  nautilus_bridge:
+    profiles: ["paper"]
+    build:
+      context: .
+      dockerfile: services/nautilus_bridge/Dockerfile
+    image: sniper-nautilus-bridge:latest
+    container_name: sniper_nautilus_bridge
+    restart: unless-stopped
+    environment:
+      SNIPER_BRIDGE_ID: bridge01
+      SNIPER_BRIDGE_ENVIRONMENT: paper
+      SNIPER_BRIDGE_REDIS_URL: redis://redis:6379/0
+      SNIPER_BRIDGE_INSTRUMENT_MAP: /app/services/nautilus_bridge/instrument_map.json
+      SNIPER_BRIDGE_PHASE4_SNAPSHOT: /app/data/models/phase4/phase4_execution_snapshot.parquet
+    volumes:
+      - ./data:/app/data
+    networks:
+      - sniper_internal
+    depends_on:
+      redis:
+        condition: service_healthy
+    command: ["python", "services/nautilus_bridge/main.py"]
+
   data_inserter:
     build:
       context: ./services/data_inserter
