@@ -173,6 +173,40 @@ class BaselineCoreAblationTest(unittest.TestCase):
         self.assertAlmostEqual(float(repriced.loc[0, "slippage_exec_policy"]), 0.10, places=6)
         self.assertAlmostEqual(float(repriced.loc[1, "pnl_exec_policy"]), 0.12, places=6)
 
+    def test_phase4_friction_stress_pnl_worsens_with_higher_cost(self) -> None:
+        df = pd.DataFrame(
+            {
+                "label": [-1, 1],
+                "pnl_exec_base": [-0.19, 0.12],
+                "slippage_base": [0.10, 0.00],
+                "barrier_sl": [90.0, np.nan],
+                "p0": [100.0, 100.0],
+                "position_usdt_policy": [2000.0, 2000.0],
+            }
+        )
+
+        mild = phase4._attach_friction_stress_pnl(
+            df,
+            base_pnl_col="pnl_exec_base",
+            base_slippage_col="slippage_base",
+            position_col="position_usdt_policy",
+            output_col="pnl_exec_mild",
+            slippage_mult=1.25,
+            extra_cost_bps=5.0,
+        )
+        hard = phase4._attach_friction_stress_pnl(
+            df,
+            base_pnl_col="pnl_exec_base",
+            base_slippage_col="slippage_base",
+            position_col="position_usdt_policy",
+            output_col="pnl_exec_hard",
+            slippage_mult=2.0,
+            extra_cost_bps=20.0,
+        )
+
+        self.assertLess(float(hard.loc[0, "pnl_exec_hard"]), float(mild.loc[0, "pnl_exec_mild"]))
+        self.assertLess(float(hard.loc[1, "pnl_exec_hard"]), float(mild.loc[1, "pnl_exec_mild"]))
+
     def test_phase4_build_policy_signal_can_apply_top_n_and_regime_filter(self) -> None:
         df = pd.DataFrame(
             {
@@ -199,6 +233,35 @@ class BaselineCoreAblationTest(unittest.TestCase):
         )
 
         self.assertEqual(signal.tolist(), [0.81, 0.0, 0.0, 0.83])
+
+    def test_phase4_build_policy_signal_can_apply_cooldown_and_daily_cap(self) -> None:
+        df = pd.DataFrame(
+            {
+                "date": pd.to_datetime(
+                    [
+                        "2024-01-01",
+                        "2024-01-01",
+                        "2024-01-01",
+                        "2024-01-02",
+                        "2024-01-03",
+                        "2024-01-05",
+                    ]
+                ),
+                "symbol": ["AAA", "BBB", "CCC", "AAA", "AAA", "AAA"],
+                "p_bma_pkf_exec": [0.90, 0.88, 0.86, 0.91, 0.92, 0.93],
+            }
+        )
+
+        signal = phase4._build_policy_signal(
+            df,
+            score_col="p_bma_pkf_exec",
+            threshold=0.80,
+            cooldown_days=3,
+            max_daily_exposure_frac=0.02,
+            alloc_frac=0.01,
+        )
+
+        self.assertEqual(signal.tolist(), [0.90, 0.88, 0.0, 0.0, 0.0, 0.93])
 
     def test_phase4_score_bucket_diagnostics_reports_tail_bucket(self) -> None:
         df = pd.DataFrame(
@@ -254,7 +317,72 @@ class BaselineCoreAblationTest(unittest.TestCase):
         self.assertIn("fixed_small_080_hmm55", result["policy_ablation"])
         self.assertEqual(result["policy"], "fixed_small_080")
         self.assertIn("score_bucket_diagnostics", result)
+        self.assertIn("fixed_small_078", result["local_threshold_sensitivity"])
+        self.assertIn("fixed_small_085", result["local_threshold_sensitivity"])
+        self.assertIn("fixed_small_080", result["temporal_robustness"])
+        self.assertIn("stress_hard", result["friction_stress"])
+        self.assertIn("operational_robustness", result)
+        self.assertIn("holdout_validation", result)
+        self.assertIn("forward_validation", result)
+        self.assertIn("rolling_stability", result)
         self.assertEqual(result["execution_repricing"]["mode"], "scaled_from_reference_slippage")
+        self.assertGreaterEqual(
+            result["friction_stress"]["stress_base"]["cum_return"],
+            result["friction_stress"]["stress_hard"]["cum_return"],
+        )
+
+    def test_phase4_policy_holdout_and_rolling_can_run_on_sufficient_history(self) -> None:
+        index = pd.date_range("2022-01-01", periods=500, freq="D")
+        score = np.where(np.arange(len(index)) % 11 == 0, 0.86, np.where(np.arange(len(index)) % 7 == 0, 0.81, 0.76))
+        pnl = np.where(score > 0.82, 0.08, np.where(score > 0.79, 0.03, -0.02))
+        df = pd.DataFrame(
+            {
+                "date": index,
+                "symbol": ["AAA"] * len(index),
+                "p_bma_pkf_exec": score,
+                "position_usdt_policy_tail": 2000.0,
+                "pnl_exec_selective": pnl,
+                "label": np.where(pnl > 0, 1, -1),
+                "barrier_sl": np.where(pnl > 0, np.nan, 90.0),
+                "p0": 100.0,
+                "slippage_selective": np.where(pnl > 0, 0.0, 0.05),
+            }
+        )
+        candidate_specs = [
+            {
+                "label": f"fixed_small_{int(round(thr * 100)):03d}",
+                "threshold": thr,
+                "position_col": "position_usdt_policy_tail",
+                "pnl_col": "pnl_exec_selective",
+                "signal_kwargs": {},
+            }
+            for thr in phase4.PHASE4_LOCAL_THRESHOLD_GRID
+        ]
+
+        holdout = phase4._evaluate_policy_holdout_validation(
+            df,
+            candidate_specs=candidate_specs,
+            benchmark_label="fixed_small_080",
+        )
+        forward = phase4._evaluate_policy_forward_validation(
+            df,
+            candidate_specs=candidate_specs,
+            benchmark_label="fixed_small_080",
+        )
+        rolling = phase4._build_rolling_policy_stability(
+            df,
+            label="fixed_small_080",
+            threshold=0.80,
+            position_col="position_usdt_policy_tail",
+            pnl_col="pnl_exec_selective",
+        )
+
+        self.assertEqual(holdout["status"], "ok")
+        self.assertEqual(forward["status"], "ok")
+        self.assertEqual(rolling["status"], "ok")
+        self.assertIn("fixed_small_080", holdout["benchmark_label"])
+        self.assertGreaterEqual(forward["n_folds"], 1)
+        self.assertGreaterEqual(rolling["n_valid_windows"], 1)
 
 
 if __name__ == "__main__":

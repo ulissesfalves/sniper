@@ -79,7 +79,8 @@ FEATURE_STORE_SPARSE_FEATURES = [
     *UNLOCK_MODEL_FEATURE_COLUMNS,
 ]
 HMM_DEGRADABLE_FEATURES = ['funding_rate_ma7d', 'basis_3m']
-UNLOCK_MODEL_FEATURE_SET = os.getenv('UNLOCK_MODEL_FEATURE_SET', 'full').strip().lower()
+UNLOCK_MODEL_FEATURE_SET = os.getenv('UNLOCK_MODEL_FEATURE_SET', 'baseline').strip().lower()
+MODEL_RUN_TAG = os.getenv('MODEL_RUN_TAG', '').strip()
 UNLOCK_PROXY_FEATURE_COLUMNS = [
     'unlock_overhang_proxy_rank_full',
     'unlock_fragility_proxy_rank_fallback',
@@ -95,7 +96,7 @@ def _status(ok: bool) -> str:
 
 
 def get_unlock_model_feature_columns(mode: str | None = None) -> list[str]:
-    normalized = (mode or UNLOCK_MODEL_FEATURE_SET or 'full').strip().lower()
+    normalized = (mode or UNLOCK_MODEL_FEATURE_SET or 'baseline').strip().lower()
     if normalized in {'baseline', 'none', 'off'}:
         return []
     if normalized == 'proxies':
@@ -215,7 +216,19 @@ def _parse_hmm_step(path: Path) -> int:
 
 def _write_report(report: dict) -> list[str]:
     saved = []
-    for path in [PHASE2_REPORT_PATH, PHASE2_NESTED_REPORT_PATH]:
+    paths = [PHASE2_REPORT_PATH, PHASE2_NESTED_REPORT_PATH]
+    suffix_parts: list[str] = []
+    if UNLOCK_MODEL_FEATURE_SET not in {'', 'full'}:
+        suffix_parts.append(UNLOCK_MODEL_FEATURE_SET)
+    if MODEL_RUN_TAG:
+        suffix_parts.append(MODEL_RUN_TAG)
+    if suffix_parts:
+        suffix = '_' + '_'.join(suffix_parts)
+        paths.extend([
+            MODEL_PATH / f'phase2_diagnostic_report{suffix}.json',
+            MODEL_PATH / 'phase2' / f'diagnostic_report{suffix}.json',
+        ])
+    for path in paths:
         try:
             path.parent.mkdir(parents=True, exist_ok=True)
             tmp = path.with_suffix(path.suffix + '.tmp')
@@ -490,6 +503,28 @@ def audit_unlock_shadow_mode() -> dict:
             float(_numeric(stacked['unlock_pressure_rank_selected_for_reporting']).notna().mean()),
             4,
         )
+    stacked_recent = stacked.tail(90)
+    stacked_unlock_present = [col for col in UNLOCK_MODEL_FEATURE_COLUMNS if col in stacked.columns]
+    stacked_unlock_any_valid_avg = None
+    stacked_unlock_any_valid_recent = None
+    stacked_legacy_all_avg = None
+    stacked_legacy_all_recent = None
+    stacked_selected_reporting_avg = None
+    stacked_selected_reporting_recent = None
+    if stacked_unlock_present:
+        stacked_unlock_any_valid_avg = round(float(stacked[stacked_unlock_present].notna().any(axis=1).mean()), 4)
+        stacked_unlock_any_valid_recent = round(float(stacked_recent[stacked_unlock_present].notna().any(axis=1).mean()), 4)
+        stacked_legacy_all_avg = round(float(stacked[stacked_unlock_present].notna().all(axis=1).mean()), 4)
+        stacked_legacy_all_recent = round(float(stacked_recent[stacked_unlock_present].notna().all(axis=1).mean()), 4)
+    if 'unlock_pressure_rank_selected_for_reporting' in stacked.columns:
+        stacked_selected_reporting_avg = round(
+            float(_numeric(stacked['unlock_pressure_rank_selected_for_reporting']).notna().mean()),
+            4,
+        )
+        stacked_selected_reporting_recent = round(
+            float(_numeric(stacked_recent['unlock_pressure_rank_selected_for_reporting']).notna().mean()),
+            4,
+        )
 
     corr_matrix = (
         stacked.reindex(columns=UNLOCK_MODEL_FEATURE_COLUMNS)
@@ -555,11 +590,12 @@ def audit_unlock_shadow_mode() -> dict:
             hmm_full.append(float(df[hmm_full_present].notna().all(axis=1).mean()))
             hmm_full_recent.append(float(recent_df[hmm_full_present].notna().all(axis=1).mean()))
 
-        if effective_unlock_present:
-            unlock_any_mask = df[effective_unlock_present].notna().any(axis=1)
-            recent_unlock_any_mask = recent_df[effective_unlock_present].notna().any(axis=1)
+        if legacy_unlock_present:
+            unlock_any_mask = df[legacy_unlock_present].notna().any(axis=1)
+            recent_unlock_any_mask = recent_df[legacy_unlock_present].notna().any(axis=1)
             unlock_any_valid.append(float(unlock_any_mask.mean()))
             unlock_any_valid_recent.append(float(recent_unlock_any_mask.mean()))
+        if effective_unlock_present:
             augmented_complete.append(float((baseline_mask & unlock_any_mask).mean()))
             augmented_complete_recent.append(float((recent_baseline_mask & recent_unlock_any_mask).mean()))
         elif baseline_present:
@@ -617,12 +653,36 @@ def audit_unlock_shadow_mode() -> dict:
             'hmm_eligible_row_ratio_last90d_avg': round(float(np.mean(hmm_eligible_recent)), 4) if hmm_eligible_recent else None,
             'hmm_full_input_row_ratio_avg': round(float(np.mean(hmm_full)), 4) if hmm_full else None,
             'hmm_full_input_row_ratio_last90d_avg': round(float(np.mean(hmm_full_recent)), 4) if hmm_full_recent else None,
-            'unlock_any_valid_row_ratio_avg': round(float(np.mean(unlock_any_valid)), 4) if unlock_any_valid else None,
-            'unlock_any_valid_row_ratio_last90d_avg': round(float(np.mean(unlock_any_valid_recent)), 4) if unlock_any_valid_recent else None,
-            'selected_for_reporting_coverage_avg': round(float(np.mean(selected_for_reporting)), 4) if selected_for_reporting else None,
-            'selected_for_reporting_coverage_last90d_avg': round(float(np.mean(selected_for_reporting_recent)), 4) if selected_for_reporting_recent else None,
-            'legacy_all_unlock_columns_nonnull_row_ratio_avg': round(float(np.mean(legacy_unlock_all)), 4) if legacy_unlock_all else None,
-            'legacy_all_unlock_columns_nonnull_row_ratio_last90d_avg': round(float(np.mean(legacy_unlock_all_recent)), 4) if legacy_unlock_all_recent else None,
+            'unlock_any_valid_row_ratio_avg': (
+                stacked_unlock_any_valid_avg
+                if stacked_unlock_any_valid_avg is not None
+                else round(float(np.mean(unlock_any_valid)), 4) if unlock_any_valid else None
+            ),
+            'unlock_any_valid_row_ratio_last90d_avg': (
+                stacked_unlock_any_valid_recent
+                if stacked_unlock_any_valid_recent is not None
+                else round(float(np.mean(unlock_any_valid_recent)), 4) if unlock_any_valid_recent else None
+            ),
+            'selected_for_reporting_coverage_avg': (
+                stacked_selected_reporting_avg
+                if stacked_selected_reporting_avg is not None
+                else round(float(np.mean(selected_for_reporting)), 4) if selected_for_reporting else None
+            ),
+            'selected_for_reporting_coverage_last90d_avg': (
+                stacked_selected_reporting_recent
+                if stacked_selected_reporting_recent is not None
+                else round(float(np.mean(selected_for_reporting_recent)), 4) if selected_for_reporting_recent else None
+            ),
+            'legacy_all_unlock_columns_nonnull_row_ratio_avg': (
+                stacked_legacy_all_avg
+                if stacked_legacy_all_avg is not None
+                else round(float(np.mean(legacy_unlock_all)), 4) if legacy_unlock_all else None
+            ),
+            'legacy_all_unlock_columns_nonnull_row_ratio_last90d_avg': (
+                stacked_legacy_all_recent
+                if stacked_legacy_all_recent is not None
+                else round(float(np.mean(legacy_unlock_all_recent)), 4) if legacy_unlock_all_recent else None
+            ),
         },
         'latest_quality': latest_quality,
         'raw_latest_quality': raw_latest_quality,
@@ -1049,6 +1109,8 @@ def main() -> None:
     report = {
         'timestamp_utc': datetime.utcnow().isoformat(),
         'spec_binding': 'SNIPER v10.10 Phase 2 deliverables',
+        'unlock_model_feature_set': UNLOCK_MODEL_FEATURE_SET,
+        'model_run_tag': MODEL_RUN_TAG,
         'overall_status': _status(overall_ok),
         'feature_store': feature_store,
         'upstream_inputs': upstream_inputs,

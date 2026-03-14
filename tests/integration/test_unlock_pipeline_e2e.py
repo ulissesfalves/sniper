@@ -178,7 +178,10 @@ class UnlockPipelineE2ETest(unittest.TestCase):
                 index=ohlcv_index,
             )
 
-            with patch.object(ml_main, "PARQUET_BASE", str(tmp_path / "parquet")):
+            with (
+                patch.object(ml_main, "PARQUET_BASE", str(tmp_path / "parquet")),
+                patch.object(ml_main, "UNLOCK_MODEL_FEATURE_SET", "full"),
+            ):
                 for symbol in ["OBS", "REC", "PFULL", "PFB", "MISS"]:
                     unlock_frame = ml_main.load_unlock_feature_frame(symbol)
                     self.assertTrue(set(UNLOCK_MODEL_FEATURE_COLUMNS).issubset(unlock_frame.columns))

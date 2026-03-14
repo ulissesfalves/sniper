@@ -154,6 +154,7 @@ class UnlockMlIntegrationTest(unittest.TestCase):
 
         with (
             patch.object(ml_main, "MODEL_PATH", "tests_tmp_models"),
+            patch.object(ml_main, "UNLOCK_MODEL_FEATURE_SET", "full"),
             patch("meta_labeling.uniqueness.compute_label_uniqueness", side_effect=fake_compute_label_uniqueness),
             patch("meta_labeling.uniqueness.compute_effective_n", side_effect=fake_compute_effective_n),
             patch("meta_labeling.uniqueness.compute_meta_sample_weights", side_effect=fake_compute_meta_sample_weights),
@@ -280,6 +281,7 @@ class UnlockMlIntegrationTest(unittest.TestCase):
 
         with (
             patch.object(ml_main, "MODEL_PATH", "tests_tmp_models"),
+            patch.object(ml_main, "UNLOCK_MODEL_FEATURE_SET", "full"),
             patch("vi_cfi.vi.compute_vi_distance_matrix", side_effect=fake_compute_vi_distance_matrix),
             patch("vi_cfi.vi.cluster_features", side_effect=fake_cluster_features),
         ):

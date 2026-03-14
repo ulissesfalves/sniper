@@ -1,0 +1,5 @@
+redis>=5.0.0,<6.0
+pandas>=2.1.0,<3.0
+pyarrow>=22.0.0,<24.0.0
+pytest>=8.0.0
+nautilus_trader==1.224.0

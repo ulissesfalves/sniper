@@ -108,6 +108,12 @@ services:
       PARQUET_BASE_PATH: /data/parquet
       MODEL_ARTIFACTS_PATH: /data/models
       SQLITE_PATH: /data/sqlite/sniper.db
+      UNLOCK_MODEL_FEATURE_SET: ${UNLOCK_MODEL_FEATURE_SET:-baseline}
+      META_TARGET_MODE: ${META_TARGET_MODE:-tp_only}
+      HMM_META_FEATURE_MODE: ${HMM_META_FEATURE_MODE:-include}
+      HMM_HARD_GATE_MODE: ${HMM_HARD_GATE_MODE:-off}
+      TB_EVENT_FILTER_MODE: ${TB_EVENT_FILTER_MODE:-hmm_sigma}
+      PHASE4_META_PROB_MODE: ${PHASE4_META_PROB_MODE:-calibrated}
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       REDIS_URL: redis://redis:6379/0
@@ -150,6 +156,12 @@ services:
       PARQUET_BASE_PATH: /workspace/data/parquet
       MODEL_ARTIFACTS_PATH: /workspace/data/models
       SQLITE_PATH: /workspace/data/sqlite/sniper.db
+      UNLOCK_MODEL_FEATURE_SET: ${UNLOCK_MODEL_FEATURE_SET:-baseline}
+      META_TARGET_MODE: ${META_TARGET_MODE:-tp_only}
+      HMM_META_FEATURE_MODE: ${HMM_META_FEATURE_MODE:-include}
+      HMM_HARD_GATE_MODE: ${HMM_HARD_GATE_MODE:-off}
+      TB_EVENT_FILTER_MODE: ${TB_EVENT_FILTER_MODE:-hmm_sigma}
+      PHASE4_META_PROB_MODE: ${PHASE4_META_PROB_MODE:-calibrated}
       REDIS_URL: redis://redis:6379/0
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
     volumes:

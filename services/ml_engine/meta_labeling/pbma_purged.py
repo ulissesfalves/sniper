@@ -377,6 +377,7 @@ def generate_pbma_purged_kfold(
     model_types:     list[str] | None = None,
     hmm_series:      pd.Series | None = None,
     vi_cluster_map:  dict[str, list[str]] | None = None,
+    drop_hmm_feature: bool = True,
 ) -> pd.Series:
     """
     P_bma via Purged K-Fold + VI feature selection + HMM hard gate.
@@ -421,9 +422,11 @@ def generate_pbma_purged_kfold(
         hmm_gate = feature_df["hmm_prob_bull"]
 
     # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ 3. Remover hmm das features (agora ÃƒÆ’Ã‚Â© gate, nÃƒÆ’Ã‚Â£o feature) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
-    if "hmm_prob_bull" in train_df.columns:
+    if drop_hmm_feature and "hmm_prob_bull" in train_df.columns:
         train_df = train_df.drop(columns=["hmm_prob_bull"])
         log.info("pbma.hmm_to_gate")
+    elif "hmm_prob_bull" in train_df.columns:
+        log.info("pbma.hmm_as_feature")
 
     # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ 4. PurgedKFold BMA (v10.10.6: classe real, nÃƒÆ’Ã‚Â£o KFold+purge manual) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
     target_series = target_series.reindex(train_df.index).fillna(0).astype(int)

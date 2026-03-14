@@ -59,6 +59,14 @@ PHASE4_TAIL_THRESHOLD = float(os.getenv("PHASE4_TAIL_THRESHOLD", "0.80"))
 PHASE4_TOP_N_PER_DAY = int(os.getenv("PHASE4_TOP_N_PER_DAY", "1"))
 PHASE4_REGIME_MIN = float(os.getenv("PHASE4_REGIME_MIN", "0.55"))
 PHASE4_DECISION_POLICY = os.getenv("PHASE4_DECISION_POLICY", "fixed_small_080").strip().lower()
+PHASE4_LOCAL_THRESHOLD_GRID = [0.78, 0.80, 0.82, 0.85]
+PHASE4_POLICY_HOLDOUT_FRACTION = float(os.getenv("PHASE4_POLICY_HOLDOUT_FRACTION", "0.20"))
+PHASE4_POLICY_FORWARD_FOLDS = int(os.getenv("PHASE4_POLICY_FORWARD_FOLDS", "4"))
+PHASE4_POLICY_FORWARD_TEST_FRACTION = float(os.getenv("PHASE4_POLICY_FORWARD_TEST_FRACTION", "0.10"))
+PHASE4_POLICY_ROLLING_WINDOW_DAYS = int(os.getenv("PHASE4_POLICY_ROLLING_WINDOW_DAYS", "365"))
+PHASE4_POLICY_ROLLING_STEP_DAYS = int(os.getenv("PHASE4_POLICY_ROLLING_STEP_DAYS", "30"))
+PHASE4_POLICY_COOLDOWN_DAYS = int(os.getenv("PHASE4_POLICY_COOLDOWN_DAYS", "3"))
+PHASE4_POLICY_DAILY_CAP_FRAC = float(os.getenv("PHASE4_POLICY_DAILY_CAP_FRAC", "0.02"))
 PHASE4_SCORE_BUCKETS = [
     (0.55, 0.60),
     (0.60, 0.65),
@@ -66,6 +74,12 @@ PHASE4_SCORE_BUCKETS = [
     (0.70, 0.75),
     (0.75, 0.80),
     (0.80, None),
+]
+PHASE4_FRICTION_STRESS_SPECS = [
+    {"label": "base", "slippage_mult": 1.0, "extra_cost_bps": 0.0},
+    {"label": "mild", "slippage_mult": 1.25, "extra_cost_bps": 5.0},
+    {"label": "medium", "slippage_mult": 1.50, "extra_cost_bps": 10.0},
+    {"label": "hard", "slippage_mult": 2.00, "extra_cost_bps": 20.0},
 ]
 UNLOCK_PROXY_FEATURE_COLUMNS = [
     "unlock_overhang_proxy_rank_full",
@@ -743,24 +757,132 @@ def _build_policy_signal(
     top_n_per_day: int | None = None,
     regime_col: str | None = None,
     regime_min: float | None = None,
+    cooldown_days: int | None = None,
+    max_daily_exposure_frac: float | None = None,
+    alloc_frac: float | None = None,
 ) -> pd.Series:
     score = pd.to_numeric(df.get(score_col), errors="coerce").fillna(0.0)
     eligible = score > float(threshold)
+    dates = pd.to_datetime(df["date"], errors="coerce").dt.normalize() if "date" in df.columns else None
 
     if regime_col and regime_col in df.columns and regime_min is not None:
         regime = pd.to_numeric(df.get(regime_col), errors="coerce").fillna(0.0)
         eligible &= regime >= float(regime_min)
 
-    if top_n_per_day is not None and top_n_per_day > 0 and "date" in df.columns:
-        dates = pd.to_datetime(df["date"], errors="coerce").dt.normalize()
-        ranked = score.where(eligible).groupby(dates).rank(method="first", ascending=False)
-        eligible &= ranked.fillna(float(top_n_per_day) + 1.0) <= float(top_n_per_day)
+    if cooldown_days is not None and cooldown_days > 0 and dates is not None and "symbol" in df.columns:
+        kept = pd.Series(False, index=df.index, dtype=bool)
+        symbols = df["symbol"].astype(str)
+        ordering = (
+            pd.DataFrame(
+                {
+                    "date": dates,
+                    "score": score,
+                    "symbol": symbols,
+                    "eligible": eligible,
+                },
+                index=df.index,
+            )
+            .sort_values(["date", "score", "symbol"], ascending=[True, False, True], kind="mergesort")
+        )
+        last_trade_dt: dict[str, pd.Timestamp] = {}
+        for idx, row in ordering.iterrows():
+            if not bool(row["eligible"]) or pd.isna(row["date"]):
+                continue
+            symbol = str(row["symbol"])
+            current_dt = pd.Timestamp(row["date"])
+            last_dt = last_trade_dt.get(symbol)
+            if last_dt is not None and (current_dt - last_dt).days <= int(cooldown_days):
+                continue
+            kept.loc[idx] = True
+            last_trade_dt[symbol] = current_dt
+        eligible &= kept
+
+    effective_top_n = top_n_per_day
+    if max_daily_exposure_frac is not None and alloc_frac is not None and alloc_frac > 0:
+        max_daily_trades = int(np.floor(float(max_daily_exposure_frac) / float(alloc_frac) + 1e-12))
+        if effective_top_n is None:
+            effective_top_n = max_daily_trades
+        else:
+            effective_top_n = min(int(effective_top_n), max_daily_trades)
+
+    if effective_top_n is not None and dates is not None:
+        if effective_top_n <= 0:
+            eligible &= False
+        else:
+            ranked = score.where(eligible).groupby(dates).rank(method="first", ascending=False)
+            eligible &= ranked.fillna(float(effective_top_n) + 1.0) <= float(effective_top_n)
 
     return score.where(eligible, 0.0)
 
 
 def _sanitize_policy_stats(result: dict) -> dict:
     return {k: v for k, v in result.items() if k not in {"subperiods", "active_port_returns"}}
+
+
+def _summarize_subperiods(subperiods: list[dict]) -> dict:
+    tested = [row for row in subperiods if row.get("positive") is not None]
+    positive = [row["period"] for row in tested if row.get("positive") is True]
+    negative = [row["period"] for row in tested if row.get("positive") is False]
+    skipped = [row["period"] for row in subperiods if row.get("positive") is None]
+    tested_count = len(tested)
+    positive_count = len(positive)
+    return {
+        "positive_count": int(positive_count),
+        "tested_count": int(tested_count),
+        "pass_rate": round(float(positive_count / tested_count), 4) if tested_count else 0.0,
+        "positive_periods": positive,
+        "negative_periods": negative,
+        "skipped_periods": skipped,
+    }
+
+
+def _attach_friction_stress_pnl(
+    df: pd.DataFrame,
+    *,
+    base_pnl_col: str,
+    base_slippage_col: str,
+    position_col: str,
+    output_col: str,
+    slippage_mult: float,
+    extra_cost_bps: float,
+) -> pd.DataFrame:
+    out = df.copy()
+    stressed = pd.to_numeric(out.get(base_pnl_col), errors="coerce").fillna(0.0).to_numpy(dtype=float, copy=True)
+    base_slippage = pd.to_numeric(out.get(base_slippage_col), errors="coerce").fillna(0.0)
+    labels = pd.to_numeric(out.get("label"), errors="coerce")
+    barrier_sl = pd.to_numeric(out.get("barrier_sl"), errors="coerce")
+    p0 = pd.to_numeric(out.get("p0"), errors="coerce")
+    positions = pd.to_numeric(out.get(position_col), errors="coerce").fillna(0.0)
+
+    labels_arr = labels.to_numpy(dtype=float, copy=False)
+    barrier_sl_arr = barrier_sl.to_numpy(dtype=float, copy=False)
+    p0_arr = p0.to_numpy(dtype=float, copy=False)
+    base_slip_arr = base_slippage.to_numpy(dtype=float, copy=False)
+    position_arr = positions.to_numpy(dtype=float, copy=False)
+
+    stop_mask = (
+        np.isfinite(labels_arr)
+        & (labels_arr == -1)
+        & np.isfinite(barrier_sl_arr)
+        & (barrier_sl_arr > 0)
+        & np.isfinite(p0_arr)
+        & (p0_arr > 0)
+        & np.isfinite(base_slip_arr)
+        & (base_slip_arr > 0)
+    )
+    if np.any(stop_mask):
+        stressed_slippage = np.clip(base_slip_arr[stop_mask] * float(slippage_mult), 0.0, 0.50)
+        stressed[stop_mask] = (barrier_sl_arr[stop_mask] * (1.0 - stressed_slippage) / p0_arr[stop_mask]) - 1.0
+
+    active_mask = np.isfinite(position_arr) & (position_arr > 0)
+    if extra_cost_bps > 0 and np.any(active_mask):
+        stressed[active_mask] -= float(extra_cost_bps) / 10_000.0
+
+    suffix = output_col[4:] if output_col.startswith("pnl_") else output_col
+    out[output_col] = stressed
+    out[f"stress_slippage_mult_{suffix}"] = float(slippage_mult)
+    out[f"stress_extra_cost_bps_{suffix}"] = float(extra_cost_bps)
+    return out
 
 
 def _build_score_bucket_diagnostics(
@@ -863,6 +985,402 @@ def _evaluate_decision_policy(
         "capped_slippage_ref_active": capped_active,
         "subperiods": subperiods,
         "active_port_returns": pr,
+    }
+
+
+def _policy_signal_column(label: str) -> str:
+    safe = "".join(ch if ch.isalnum() else "_" for ch in label)
+    return f"signal_policy_{safe}"
+
+
+def _evaluate_policy_spec_on_frame(
+    df: pd.DataFrame,
+    *,
+    label: str,
+    threshold: float,
+    position_col: str,
+    pnl_col: str,
+    score_col: str = "p_bma_pkf_exec",
+    signal_kwargs: dict | None = None,
+) -> tuple[pd.DataFrame, str, dict]:
+    work = df.copy()
+    signal_col = _policy_signal_column(label)
+    work[signal_col] = _build_policy_signal(
+        work,
+        score_col=score_col,
+        threshold=threshold,
+        **(signal_kwargs or {}),
+    )
+    result = _evaluate_decision_policy(
+        work,
+        label=label,
+        threshold=threshold,
+        signal_col=signal_col,
+        position_col=position_col,
+        pnl_col=pnl_col,
+    )
+    return work, signal_col, result
+
+
+def _sort_policy_candidates(candidates: list[dict]) -> list[dict]:
+    return sorted(
+        candidates,
+        key=lambda item: (
+            float(item.get("sharpe", 0.0)),
+            float(item.get("cum_return", 0.0)),
+            -float(item.get("max_dd", 1.0)),
+            int(item.get("subperiods_positive", 0)),
+            int(item.get("n_active", 0)),
+        ),
+        reverse=True,
+    )
+
+
+def _evaluate_policy_holdout_validation(
+    df: pd.DataFrame,
+    *,
+    candidate_specs: list[dict],
+    benchmark_label: str,
+    score_col: str = "p_bma_pkf_exec",
+) -> dict:
+    if df.empty or "date" not in df.columns:
+        return {"status": "missing_date"}
+
+    dates = pd.Series(pd.to_datetime(df["date"], errors="coerce").dt.normalize().dropna().unique()).sort_values()
+    unique_dates = dates.tolist()
+    if len(unique_dates) < 320:
+        return {"status": "insufficient_history", "n_dates": int(len(unique_dates))}
+
+    holdout_n = max(int(len(unique_dates) * PHASE4_POLICY_HOLDOUT_FRACTION), 90)
+    holdout_n = min(holdout_n, max(len(unique_dates) - 252, 90))
+    if holdout_n <= 0 or (len(unique_dates) - holdout_n) < 252:
+        return {"status": "insufficient_history", "n_dates": int(len(unique_dates))}
+
+    holdout_start = pd.Timestamp(unique_dates[-holdout_n])
+    train_df = df[pd.to_datetime(df["date"], errors="coerce").dt.normalize() < holdout_start].copy()
+    holdout_df = df[pd.to_datetime(df["date"], errors="coerce").dt.normalize() >= holdout_start].copy()
+    if train_df.empty or holdout_df.empty:
+        return {"status": "empty_split"}
+
+    train_rankings: list[dict] = []
+    by_label: dict[str, dict] = {}
+    for spec in candidate_specs:
+        _, _, result = _evaluate_policy_spec_on_frame(
+            train_df,
+            label=spec["label"],
+            threshold=float(spec["threshold"]),
+            position_col=spec["position_col"],
+            pnl_col=spec["pnl_col"],
+            score_col=score_col,
+            signal_kwargs=spec.get("signal_kwargs"),
+        )
+        clean = _sanitize_policy_stats(result)
+        by_label[spec["label"]] = clean
+        train_rankings.append(clean)
+
+    ranked = _sort_policy_candidates(train_rankings)
+    chosen_label = ranked[0]["policy"] if ranked else benchmark_label
+    chosen_spec = next((spec for spec in candidate_specs if spec["label"] == chosen_label), candidate_specs[0])
+    benchmark_spec = next((spec for spec in candidate_specs if spec["label"] == benchmark_label), chosen_spec)
+
+    _, _, holdout_chosen = _evaluate_policy_spec_on_frame(
+        holdout_df,
+        label=f"{chosen_label}_holdout",
+        threshold=float(chosen_spec["threshold"]),
+        position_col=chosen_spec["position_col"],
+        pnl_col=chosen_spec["pnl_col"],
+        score_col=score_col,
+        signal_kwargs=chosen_spec.get("signal_kwargs"),
+    )
+    _, _, holdout_benchmark = _evaluate_policy_spec_on_frame(
+        holdout_df,
+        label=f"{benchmark_label}_holdout",
+        threshold=float(benchmark_spec["threshold"]),
+        position_col=benchmark_spec["position_col"],
+        pnl_col=benchmark_spec["pnl_col"],
+        score_col=score_col,
+        signal_kwargs=benchmark_spec.get("signal_kwargs"),
+    )
+
+    return {
+        "status": "ok",
+        "train_start": str(pd.Timestamp(unique_dates[0]).date()),
+        "train_end": str((holdout_start - pd.Timedelta(days=1)).date()),
+        "holdout_start": str(holdout_start.date()),
+        "holdout_end": str(pd.Timestamp(unique_dates[-1]).date()),
+        "train_n_dates": int(len(pd.Series(pd.to_datetime(train_df["date"]).dt.normalize().unique()))),
+        "holdout_n_dates": int(len(pd.Series(pd.to_datetime(holdout_df["date"]).dt.normalize().unique()))),
+        "train_n_rows": int(len(train_df)),
+        "holdout_n_rows": int(len(holdout_df)),
+        "candidate_rankings_train": ranked,
+        "chosen_policy_label": chosen_label,
+        "chosen_matches_benchmark": bool(chosen_label == benchmark_label),
+        "benchmark_label": benchmark_label,
+        "benchmark_holdout": _sanitize_policy_stats(holdout_benchmark),
+        "chosen_policy_holdout": _sanitize_policy_stats(holdout_chosen),
+    }
+
+
+def _evaluate_policy_forward_validation(
+    df: pd.DataFrame,
+    *,
+    candidate_specs: list[dict],
+    benchmark_label: str,
+    score_col: str = "p_bma_pkf_exec",
+) -> dict:
+    if df.empty or "date" not in df.columns:
+        return {"status": "missing_date"}
+
+    dates = pd.Series(pd.to_datetime(df["date"], errors="coerce").dt.normalize().dropna().unique()).sort_values()
+    unique_dates = dates.tolist()
+    if len(unique_dates) < 400:
+        return {"status": "insufficient_history", "n_dates": int(len(unique_dates))}
+
+    test_block = max(int(len(unique_dates) * PHASE4_POLICY_FORWARD_TEST_FRACTION), 90)
+    max_folds = min(PHASE4_POLICY_FORWARD_FOLDS, max((len(unique_dates) - 252) // test_block, 0))
+    if max_folds <= 0:
+        return {"status": "insufficient_history", "n_dates": int(len(unique_dates))}
+
+    first_test_idx = len(unique_dates) - max_folds * test_block
+    folds: list[dict] = []
+    threshold_counts: dict[str, int] = {}
+
+    for fold_idx in range(max_folds):
+        split_idx = first_test_idx + fold_idx * test_block
+        train_dates = unique_dates[:split_idx]
+        test_dates = unique_dates[split_idx : split_idx + test_block]
+        if len(train_dates) < 252 or not test_dates:
+            continue
+        train_end = pd.Timestamp(train_dates[-1])
+        test_start = pd.Timestamp(test_dates[0])
+        test_end = pd.Timestamp(test_dates[-1])
+        train_df = df[pd.to_datetime(df["date"], errors="coerce").dt.normalize() <= train_end].copy()
+        test_df = df[
+            (pd.to_datetime(df["date"], errors="coerce").dt.normalize() >= test_start)
+            & (pd.to_datetime(df["date"], errors="coerce").dt.normalize() <= test_end)
+        ].copy()
+        if train_df.empty or test_df.empty:
+            continue
+
+        rankings: list[dict] = []
+        for spec in candidate_specs:
+            _, _, train_result = _evaluate_policy_spec_on_frame(
+                train_df,
+                label=spec["label"],
+                threshold=float(spec["threshold"]),
+                position_col=spec["position_col"],
+                pnl_col=spec["pnl_col"],
+                score_col=score_col,
+                signal_kwargs=spec.get("signal_kwargs"),
+            )
+            rankings.append(_sanitize_policy_stats(train_result))
+        ranked = _sort_policy_candidates(rankings)
+        chosen_label = ranked[0]["policy"] if ranked else benchmark_label
+        threshold_counts[chosen_label] = threshold_counts.get(chosen_label, 0) + 1
+        chosen_spec = next((spec for spec in candidate_specs if spec["label"] == chosen_label), candidate_specs[0])
+        benchmark_spec = next((spec for spec in candidate_specs if spec["label"] == benchmark_label), chosen_spec)
+
+        _, _, chosen_test = _evaluate_policy_spec_on_frame(
+            test_df,
+            label=f"{chosen_label}_forward",
+            threshold=float(chosen_spec["threshold"]),
+            position_col=chosen_spec["position_col"],
+            pnl_col=chosen_spec["pnl_col"],
+            score_col=score_col,
+            signal_kwargs=chosen_spec.get("signal_kwargs"),
+        )
+        _, _, benchmark_test = _evaluate_policy_spec_on_frame(
+            test_df,
+            label=f"{benchmark_label}_forward",
+            threshold=float(benchmark_spec["threshold"]),
+            position_col=benchmark_spec["position_col"],
+            pnl_col=benchmark_spec["pnl_col"],
+            score_col=score_col,
+            signal_kwargs=benchmark_spec.get("signal_kwargs"),
+        )
+
+        folds.append(
+            {
+                "fold": int(fold_idx + 1),
+                "train_end": str(train_end.date()),
+                "test_start": str(test_start.date()),
+                "test_end": str(test_end.date()),
+                "chosen_policy_label": chosen_label,
+                "benchmark_label": benchmark_label,
+                "chosen_test": _sanitize_policy_stats(chosen_test),
+                "benchmark_test": _sanitize_policy_stats(benchmark_test),
+            }
+        )
+
+    if not folds:
+        return {"status": "insufficient_history", "n_dates": int(len(unique_dates))}
+
+    chosen_sharpes = [float(f["chosen_test"].get("sharpe", 0.0)) for f in folds]
+    benchmark_sharpes = [float(f["benchmark_test"].get("sharpe", 0.0)) for f in folds]
+    chosen_positive = sum(1 for f in folds if float(f["chosen_test"].get("cum_return", 0.0)) > 0)
+    benchmark_positive = sum(1 for f in folds if float(f["benchmark_test"].get("cum_return", 0.0)) > 0)
+
+    return {
+        "status": "ok",
+        "n_folds": int(len(folds)),
+        "test_block_dates": int(test_block),
+        "threshold_selection_counts": threshold_counts,
+        "chosen_mean_sharpe": round(float(np.mean(chosen_sharpes)), 4),
+        "benchmark_mean_sharpe": round(float(np.mean(benchmark_sharpes)), 4),
+        "chosen_positive_folds": int(chosen_positive),
+        "benchmark_positive_folds": int(benchmark_positive),
+        "folds": folds,
+    }
+
+
+def _build_operational_policy_robustness(
+    df: pd.DataFrame,
+    *,
+    score_col: str,
+    position_col: str,
+    pnl_col: str,
+) -> dict:
+    operational_specs = [
+        {
+            "label": "fixed_small_080",
+            "threshold": PHASE4_TAIL_THRESHOLD,
+            "position_col": position_col,
+            "pnl_col": pnl_col,
+            "signal_kwargs": {},
+        },
+        {
+            "label": "fixed_small_080_top1",
+            "threshold": PHASE4_TAIL_THRESHOLD,
+            "position_col": position_col,
+            "pnl_col": pnl_col,
+            "signal_kwargs": {"top_n_per_day": 1},
+        },
+        {
+            "label": "fixed_small_080_cooldown3",
+            "threshold": PHASE4_TAIL_THRESHOLD,
+            "position_col": position_col,
+            "pnl_col": pnl_col,
+            "signal_kwargs": {"cooldown_days": PHASE4_POLICY_COOLDOWN_DAYS},
+        },
+        {
+            "label": "fixed_small_080_cap2pct",
+            "threshold": PHASE4_TAIL_THRESHOLD,
+            "position_col": position_col,
+            "pnl_col": pnl_col,
+            "signal_kwargs": {
+                "max_daily_exposure_frac": PHASE4_POLICY_DAILY_CAP_FRAC,
+                "alloc_frac": PHASE4_FIXED_ALLOC_SMALL,
+            },
+        },
+    ]
+    results: dict[str, dict] = {}
+    for spec in operational_specs:
+        _, _, result = _evaluate_policy_spec_on_frame(
+            df,
+            label=spec["label"],
+            threshold=float(spec["threshold"]),
+            position_col=spec["position_col"],
+            pnl_col=spec["pnl_col"],
+            score_col=score_col,
+            signal_kwargs=spec.get("signal_kwargs"),
+        )
+        results[spec["label"]] = _sanitize_policy_stats(result)
+    return results
+
+
+def _build_rolling_policy_stability(
+    df: pd.DataFrame,
+    *,
+    label: str,
+    threshold: float,
+    position_col: str,
+    pnl_col: str,
+    score_col: str = "p_bma_pkf_exec",
+    signal_kwargs: dict | None = None,
+) -> dict:
+    if df.empty or "date" not in df.columns:
+        return {"status": "missing_date"}
+
+    work, signal_col, _ = _evaluate_policy_spec_on_frame(
+        df,
+        label=label,
+        threshold=threshold,
+        position_col=position_col,
+        pnl_col=pnl_col,
+        score_col=score_col,
+        signal_kwargs=signal_kwargs,
+    )
+    work_dates = pd.to_datetime(work["date"], errors="coerce").dt.normalize()
+    unique_dates = pd.Series(work_dates.dropna().unique()).sort_values()
+    if unique_dates.empty:
+        return {"status": "missing_date"}
+
+    start_anchor = pd.Timestamp(unique_dates.iloc[0]) + pd.Timedelta(days=PHASE4_POLICY_ROLLING_WINDOW_DAYS)
+    end_anchor = pd.Timestamp(unique_dates.iloc[-1])
+    if start_anchor > end_anchor:
+        return {"status": "insufficient_history"}
+
+    anchor_dates = pd.date_range(start=start_anchor, end=end_anchor, freq=f"{PHASE4_POLICY_ROLLING_STEP_DAYS}D")
+    if len(anchor_dates) == 0 or anchor_dates[-1] != end_anchor:
+        anchor_dates = anchor_dates.append(pd.DatetimeIndex([end_anchor]))
+
+    windows: list[dict] = []
+    for anchor in anchor_dates:
+        window_start = anchor - pd.Timedelta(days=PHASE4_POLICY_ROLLING_WINDOW_DAYS)
+        mask = (work_dates > window_start) & (work_dates <= anchor)
+        window_df = work.loc[mask.fillna(False)].copy()
+        if window_df.empty:
+            continue
+        result = _evaluate_decision_policy(
+            window_df,
+            label=f"{label}_{anchor.date()}",
+            threshold=threshold,
+            signal_col=signal_col,
+            position_col=position_col,
+            pnl_col=pnl_col,
+        )
+        windows.append(
+            {
+                "window_end": str(pd.Timestamp(anchor).date()),
+                "window_start": str(pd.Timestamp(window_start + pd.Timedelta(days=1)).date()),
+                **_sanitize_policy_stats(result),
+            }
+        )
+
+    valid = [row for row in windows if int(row.get("n_active", 0)) >= 5]
+    if not valid:
+        return {"status": "insufficient_activity", "windows": windows}
+
+    sharpe_vals = np.array([float(row["sharpe"]) for row in valid], dtype=float)
+    dd_vals = np.array([float(row["max_dd"]) for row in valid], dtype=float)
+    win_vals = np.array([float(row["win_rate"]) for row in valid], dtype=float)
+    trades_vals = np.array([int(row["n_active"]) for row in valid], dtype=float)
+
+    worst_window = min(valid, key=lambda row: (float(row["sharpe"]), float(row["cum_return"])))
+    best_window = max(valid, key=lambda row: (float(row["sharpe"]), float(row["cum_return"])))
+
+    return {
+        "status": "ok",
+        "window_days": PHASE4_POLICY_ROLLING_WINDOW_DAYS,
+        "step_days": PHASE4_POLICY_ROLLING_STEP_DAYS,
+        "n_windows": int(len(windows)),
+        "n_valid_windows": int(len(valid)),
+        "sharpe_min": round(float(np.min(sharpe_vals)), 4),
+        "sharpe_median": round(float(np.median(sharpe_vals)), 4),
+        "sharpe_max": round(float(np.max(sharpe_vals)), 4),
+        "max_dd_min": round(float(np.min(dd_vals)), 4),
+        "max_dd_median": round(float(np.median(dd_vals)), 4),
+        "max_dd_max": round(float(np.max(dd_vals)), 4),
+        "win_rate_min": round(float(np.min(win_vals)), 4),
+        "win_rate_median": round(float(np.median(win_vals)), 4),
+        "win_rate_max": round(float(np.max(win_vals)), 4),
+        "n_active_min": int(np.min(trades_vals)),
+        "n_active_median": int(np.median(trades_vals)),
+        "n_active_max": int(np.max(trades_vals)),
+        "worst_window": worst_window,
+        "best_window": best_window,
+        "latest_window": valid[-1],
+        "windows": windows,
     }
 
 
@@ -1376,6 +1894,17 @@ def evaluate_fallback(pooled_df):
     fallback_df = _attach_execution_pnl(fallback_df, "position_usdt_policy_fixed", "pnl_exec_fixed")
     fallback_df = _attach_execution_pnl(fallback_df, "position_usdt_policy_conservative", "pnl_exec_conservative")
     fallback_df = _attach_execution_pnl(fallback_df, "position_usdt_policy_selective", "pnl_exec_selective")
+    local_threshold_specs = [
+        {
+            "label": f"fixed_small_{int(round(thr * 100)):03d}",
+            "threshold": float(thr),
+            "signal_col": f"signal_policy_fixed_small_{int(round(thr * 100)):03d}",
+            "position_col": "position_usdt_policy_selective",
+            "pnl_col": "pnl_exec_selective",
+            "signal_kwargs": {},
+        }
+        for thr in PHASE4_LOCAL_THRESHOLD_GRID
+    ]
     policy_specs = [
         {
             "label": "current_kelly_065",
@@ -1418,7 +1947,7 @@ def evaluate_fallback(pooled_df):
             "signal_kwargs": {"regime_col": "hmm_prob_bull", "regime_min": PHASE4_REGIME_MIN},
         },
     ]
-    for spec in policy_specs:
+    for spec in [*policy_specs, *local_threshold_specs]:
         fallback_df[spec["signal_col"]] = _build_policy_signal(
             fallback_df,
             score_col="p_bma_pkf_exec",
@@ -1439,6 +1968,23 @@ def evaluate_fallback(pooled_df):
         )
         policy_results[spec["label"]] = result
         policy_ablation[spec["label"]] = _sanitize_policy_stats(result)
+    local_threshold_sensitivity: dict[str, dict] = {}
+    temporal_robustness: dict[str, dict] = {}
+    for spec in local_threshold_specs:
+        result = _evaluate_decision_policy(
+            fallback_df,
+            label=spec["label"],
+            threshold=spec["threshold"],
+            signal_col=spec["signal_col"],
+            position_col=spec["position_col"],
+            pnl_col=spec["pnl_col"],
+        )
+        local_threshold_sensitivity[spec["label"]] = _sanitize_policy_stats(result)
+        temporal_robustness[spec["label"]] = {
+            "threshold": round(float(spec["threshold"]), 4),
+            "summary": _summarize_subperiods(result["subperiods"]),
+            "subperiods": result["subperiods"],
+        }
 
     selected_label = PHASE4_DECISION_POLICY if PHASE4_DECISION_POLICY in policy_results else "fixed_small_080"
     selected_spec = next((spec for spec in policy_specs if spec["label"] == selected_label), policy_specs[2])
@@ -1459,6 +2005,63 @@ def evaluate_fallback(pooled_df):
         pnl_col="pnl_exec_selective",
         position_col="position_usdt_policy_selective",
     )
+    operational_robustness = _build_operational_policy_robustness(
+        fallback_df,
+        score_col="p_bma_pkf_exec",
+        position_col="position_usdt_policy_tail",
+        pnl_col="pnl_exec_selective",
+    )
+    holdout_validation = _evaluate_policy_holdout_validation(
+        fallback_df,
+        candidate_specs=local_threshold_specs,
+        benchmark_label="fixed_small_080",
+        score_col="p_bma_pkf_exec",
+    )
+    forward_validation = _evaluate_policy_forward_validation(
+        fallback_df,
+        candidate_specs=local_threshold_specs,
+        benchmark_label="fixed_small_080",
+        score_col="p_bma_pkf_exec",
+    )
+    rolling_stability = _build_rolling_policy_stability(
+        fallback_df,
+        label="fixed_small_080",
+        threshold=PHASE4_TAIL_THRESHOLD,
+        position_col="position_usdt_policy_tail",
+        pnl_col="pnl_exec_selective",
+        score_col="p_bma_pkf_exec",
+    )
+    friction_stress: dict[str, dict] = {}
+    selected_pnl_col = selected_spec["pnl_col"]
+    selected_position_col = selected_spec["position_col"]
+    selected_signal_col = selected_spec["signal_col"]
+    selected_slippage_col = f"slippage_{selected_pnl_col[4:] if selected_pnl_col.startswith('pnl_') else selected_pnl_col}"
+    for stress in PHASE4_FRICTION_STRESS_SPECS:
+        label = f"stress_{stress['label']}"
+        stress_pnl_col = f"pnl_exec_{label}"
+        stressed_df = _attach_friction_stress_pnl(
+            fallback_df,
+            base_pnl_col=selected_pnl_col,
+            base_slippage_col=selected_slippage_col,
+            position_col=selected_position_col,
+            output_col=stress_pnl_col,
+            slippage_mult=float(stress["slippage_mult"]),
+            extra_cost_bps=float(stress["extra_cost_bps"]),
+        )
+        stress_result = _evaluate_decision_policy(
+            stressed_df,
+            label=label,
+            threshold=selected_spec["threshold"],
+            signal_col=selected_signal_col,
+            position_col=selected_position_col,
+            pnl_col=stress_pnl_col,
+        )
+        friction_stress[label] = {
+            **_sanitize_policy_stats(stress_result),
+            "slippage_mult": float(stress["slippage_mult"]),
+            "extra_cost_bps": float(stress["extra_cost_bps"]),
+            "subperiod_summary": _summarize_subperiods(stress_result["subperiods"]),
+        }
     return {
         "policy": selected_label,
         "threshold": selected_spec["threshold"],
@@ -1475,6 +2078,13 @@ def evaluate_fallback(pooled_df):
         },
         "score_bucket_diagnostics": bucket_diagnostics,
         "policy_ablation": policy_ablation,
+        "local_threshold_sensitivity": local_threshold_sensitivity,
+        "temporal_robustness": temporal_robustness,
+        "operational_robustness": operational_robustness,
+        "holdout_validation": holdout_validation,
+        "forward_validation": forward_validation,
+        "rolling_stability": rolling_stability,
+        "friction_stress": friction_stress,
         "sensitivity":{k:{kk:vv for kk,vv in v.items()
                           if kk in ("sharpe","cum_return","max_dd","n_active","win_rate","avg_alloc","dsr_honest","subperiods_positive","subperiods_total","capped_slippage_ref_active")}
                        for k,v in threshold_results.items()},
@@ -1677,6 +2287,100 @@ def main():
             f"Ret={row['cum_return']:.1%}  Sharpe={row['sharpe']:.2f}  DD={row['max_dd']:.1%}  "
             f"Sub={row.get('subperiods_positive',0)}/{row.get('subperiods_total',0)}"
         )
+
+    print(f"\n-- LOCAL THRESHOLD SENSITIVITY (fixed small) --")
+    for name, stats in fallback.get("local_threshold_sensitivity", {}).items():
+        print(
+            f"    {name}: Sharpe={stats['sharpe']:.2f}  CumRet={stats['cum_return']:.1%}  "
+            f"DD={stats['max_dd']:.1%}  WR={stats['win_rate']:.1%}  Active={stats['n_active']}  "
+            f"Alloc={stats.get('avg_alloc',0):.1%}  DSR={stats.get('dsr_honest',0):.3f}  "
+            f"Sub={stats.get('subperiods_positive',0)}/{stats.get('subperiods_total',0)}"
+        )
+
+    print(f"\n-- TEMPORAL ROBUSTNESS (fixed small) --")
+    for name, payload in fallback.get("temporal_robustness", {}).items():
+        summary = payload.get("summary", {})
+        print(
+            f"    {name}: Sub={summary.get('positive_count',0)}/{summary.get('tested_count',0)}  "
+            f"PassRate={summary.get('pass_rate',0):.0%}  "
+            f"Pos={summary.get('positive_periods', [])}  Neg={summary.get('negative_periods', [])}  "
+            f"Skip={summary.get('skipped_periods', [])}"
+        )
+
+    print(f"\n-- FRICTION STRESS ({fallback.get('policy', 'unknown')}) --")
+    for name, stats in fallback.get("friction_stress", {}).items():
+        print(
+            f"    {name}: slip_x={stats.get('slippage_mult',1.0):.2f}  cost={stats.get('extra_cost_bps',0):.0f}bps  "
+            f"Sharpe={stats['sharpe']:.2f}  CumRet={stats['cum_return']:.1%}  DD={stats['max_dd']:.1%}  "
+            f"WR={stats['win_rate']:.1%}  Active={stats['n_active']}  "
+            f"Sub={stats.get('subperiod_summary',{}).get('positive_count',0)}/{stats.get('subperiod_summary',{}).get('tested_count',0)}"
+        )
+
+    print(f"\n-- HOLDOUT / FORWARD VALIDATION --")
+    holdout = fallback.get("holdout_validation", {})
+    if holdout.get("status") == "ok":
+        bench = holdout.get("benchmark_holdout", {})
+        chosen = holdout.get("chosen_policy_holdout", {})
+        print(
+            f"  Holdout: {holdout.get('holdout_start')} -> {holdout.get('holdout_end')}  "
+            f"chosen={holdout.get('chosen_policy_label')}  matches_benchmark={holdout.get('chosen_matches_benchmark')}"
+        )
+        print(
+            f"    benchmark fixed_small_080: Sharpe={bench.get('sharpe',0):.2f}  CumRet={bench.get('cum_return',0):.1%}  "
+            f"DD={bench.get('max_dd',0):.1%}  Active={bench.get('n_active',0)}  "
+            f"Sub={bench.get('subperiods_positive',0)}/{bench.get('subperiods_total',0)}"
+        )
+        print(
+            f"    chosen policy holdout:    Sharpe={chosen.get('sharpe',0):.2f}  CumRet={chosen.get('cum_return',0):.1%}  "
+            f"DD={chosen.get('max_dd',0):.1%}  Active={chosen.get('n_active',0)}  "
+            f"Sub={chosen.get('subperiods_positive',0)}/{chosen.get('subperiods_total',0)}"
+        )
+    else:
+        print(f"  Holdout: {holdout.get('status', 'unavailable')}")
+
+    forward = fallback.get("forward_validation", {})
+    if forward.get("status") == "ok":
+        print(
+            f"  Forward folds={forward.get('n_folds',0)}  "
+            f"chosen_mean_sharpe={forward.get('chosen_mean_sharpe',0):.2f}  "
+            f"benchmark_mean_sharpe={forward.get('benchmark_mean_sharpe',0):.2f}  "
+            f"chosen_positive={forward.get('chosen_positive_folds',0)}/{forward.get('n_folds',0)}  "
+            f"benchmark_positive={forward.get('benchmark_positive_folds',0)}/{forward.get('n_folds',0)}"
+        )
+        print(f"    threshold_counts={forward.get('threshold_selection_counts', {})}")
+    else:
+        print(f"  Forward: {forward.get('status', 'unavailable')}")
+
+    print(f"\n-- OPERATIONAL ROBUSTNESS (fixed_small_080) --")
+    for name, stats in fallback.get("operational_robustness", {}).items():
+        print(
+            f"    {name}: Sharpe={stats['sharpe']:.2f}  CumRet={stats['cum_return']:.1%}  "
+            f"DD={stats['max_dd']:.1%}  WR={stats['win_rate']:.1%}  Active={stats['n_active']}  "
+            f"Alloc={stats.get('avg_alloc',0):.1%}  Sub={stats.get('subperiods_positive',0)}/{stats.get('subperiods_total',0)}"
+        )
+
+    print(f"\n-- ROLLING STABILITY (fixed_small_080) --")
+    rolling = fallback.get("rolling_stability", {})
+    if rolling.get("status") == "ok":
+        print(
+            f"  windows={rolling.get('n_valid_windows',0)}/{rolling.get('n_windows',0)}  "
+            f"Sharpe[min/med/max]={rolling.get('sharpe_min',0):.2f}/{rolling.get('sharpe_median',0):.2f}/{rolling.get('sharpe_max',0):.2f}  "
+            f"DD[min/med/max]={rolling.get('max_dd_min',0):.1%}/{rolling.get('max_dd_median',0):.1%}/{rolling.get('max_dd_max',0):.1%}  "
+            f"WR[min/med/max]={rolling.get('win_rate_min',0):.1%}/{rolling.get('win_rate_median',0):.1%}/{rolling.get('win_rate_max',0):.1%}  "
+            f"Trades[min/med/max]={rolling.get('n_active_min',0)}/{rolling.get('n_active_median',0)}/{rolling.get('n_active_max',0)}"
+        )
+        worst = rolling.get("worst_window", {})
+        latest = rolling.get("latest_window", {})
+        print(
+            f"    worst={worst.get('window_start')}->{worst.get('window_end')}  Sharpe={worst.get('sharpe',0):.2f}  "
+            f"Ret={worst.get('cum_return',0):.1%}  DD={worst.get('max_dd',0):.1%}  Active={worst.get('n_active',0)}"
+        )
+        print(
+            f"    latest={latest.get('window_start')}->{latest.get('window_end')}  Sharpe={latest.get('sharpe',0):.2f}  "
+            f"Ret={latest.get('cum_return',0):.1%}  DD={latest.get('max_dd',0):.1%}  Active={latest.get('n_active',0)}"
+        )
+    else:
+        print(f"  Rolling: {rolling.get('status', 'unavailable')}")
 
     print(f"\n-- DSR Honesto [10] --")
     print(f"  Sharpe IS (fallback): {dsr_result['sharpe_is']:.4f}")
