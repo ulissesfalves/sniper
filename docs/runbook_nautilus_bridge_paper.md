@@ -52,6 +52,27 @@ Snapshot de teste com delta nao zero:
 docker compose --profile paper run --rm -e SNIPER_BRIDGE_PHASE4_SNAPSHOT=/app/data/models/phase4/phase4_execution_snapshot_test_nonzero.parquet nautilus_bridge python -m services.nautilus_bridge.phase4_publisher
 ```
 
+## Ciclo paper real em um comando
+Pre-condicao: `nautilus_bridge` ja esta rodando via compose.
+
+```powershell
+docker compose --profile paper exec -T nautilus_bridge python -m services.nautilus_bridge.run_phase4_paper_once
+```
+
+Saida esperada com snapshot oficial:
+```text
+RESULT=SUCCESS
+MESSAGE_ID=<uuid>
+FINAL_STATUSES=received,accepted,noop_band
+```
+
+Saida esperada quando houver delta real:
+```text
+RESULT=SUCCESS
+MESSAGE_ID=<uuid>
+FINAL_STATUSES=received,accepted,submitted,filled
+```
+
 ## Validar status stream
 ```powershell
 docker compose exec redis redis-cli -n 0 XRANGE sniper:portfolio_status:v1 - +
