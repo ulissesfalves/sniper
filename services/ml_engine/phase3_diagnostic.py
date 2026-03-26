@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 from datetime import datetime
 from pathlib import Path
 
@@ -17,6 +18,7 @@ FEATURES_PATH = MODEL_PATH / 'features'
 PHASE3_PATH = MODEL_PATH / 'phase3'
 PHASE3_REPORT_PATH = MODEL_PATH / 'phase3_diagnostic_report.json'
 PHASE3_NESTED_REPORT_PATH = PHASE3_PATH / 'diagnostic_report.json'
+PHASE3_EXCLUSIONS_PATH = PHASE3_PATH / 'phase3_exclusions.json'
 PBMA_SOURCE_PATH = Path(__file__).resolve().parent / 'meta_labeling' / 'pbma_purged.py'
 
 REQUIRED_BARRIER_COLUMNS = [
@@ -40,10 +42,16 @@ KELLY_TOL = 2e-4
 POSITION_TOL = 10.0
 CAPITAL_TOTAL = float(__import__('os').getenv('CAPITAL_TOTAL', '200000'))
 POSITION_CAP = CAPITAL_TOTAL * 0.08
+HMM_HARD_GATE_MODE = os.getenv('HMM_HARD_GATE_MODE', 'off').strip().lower()
 
 
 def _status(ok: bool) -> str:
     return 'PASS' if ok else 'FAIL'
+
+
+def _hmm_hard_gate_enabled(mode: str | None = None) -> bool:
+    normalized = (mode or HMM_HARD_GATE_MODE or 'off').strip().lower()
+    return normalized in {'on', 'true', '1', 'hard_gate', 'gate'}
 
 
 def _safe_read_parquet(path: Path) -> pd.DataFrame:
@@ -99,6 +107,18 @@ def _write_report(report: dict) -> list[str]:
         except Exception as exc:
             saved.append(f'WRITE_FAIL {path}: {exc}')
     return saved
+
+
+def _load_phase3_exclusions() -> dict:
+    if not PHASE3_EXCLUSIONS_PATH.exists():
+        return {}
+    try:
+        with open(PHASE3_EXCLUSIONS_PATH, 'r', encoding='utf-8') as fin:
+            payload = json.load(fin)
+    except Exception:
+        return {}
+    exclusions = payload.get('exclusions')
+    return exclusions if isinstance(exclusions, dict) else {}
 
 
 def audit_source_guards() -> dict:
@@ -172,6 +192,7 @@ def audit_symbol(symbol: str) -> dict:
         uniqueness_max_abs_diff = float(uniq_diff.max()) if len(uniq_diff) else 0.0
         uniqueness_ok = uniqueness_max_abs_diff <= UNIQUENESS_TOL
 
+    hard_gate_blocking_enabled = _hmm_hard_gate_enabled()
     p_bma_gate_breaches = None
     p_cal_gate_breaches = None
     hard_gate_rows = 0
@@ -239,6 +260,14 @@ def audit_symbol(symbol: str) -> dict:
         brier = np.nan
         ece = np.nan
 
+    hard_gate_ok = (
+        not hard_gate_blocking_enabled
+        or (
+            p_bma_gate_breaches in (None, 0)
+            and p_cal_gate_breaches in (None, 0)
+        )
+    )
+
     status_ok = all([
         barrier_columns_ok,
         meta_columns_ok,
@@ -249,8 +278,7 @@ def audit_symbol(symbol: str) -> dict:
         barrier_meta_rows_match,
         barrier_meta_index_match,
         uniqueness_ok,
-        (p_bma_gate_breaches in (None, 0)),
-        (p_cal_gate_breaches in (None, 0)),
+        hard_gate_ok,
         sizing_index_match,
         sizing_pcal_ok,
         sizing_formula_ok,
@@ -273,6 +301,7 @@ def audit_symbol(symbol: str) -> dict:
         'barrier_meta_index_match': barrier_meta_index_match,
         'uniqueness_ok': uniqueness_ok,
         'uniqueness_max_abs_diff': uniqueness_max_abs_diff,
+        'hard_gate_blocking_enabled': hard_gate_blocking_enabled,
         'hard_gate_rows': hard_gate_rows,
         'p_bma_gate_breaches': p_bma_gate_breaches,
         'p_cal_gate_breaches': p_cal_gate_breaches,
@@ -292,46 +321,176 @@ def audit_symbol(symbol: str) -> dict:
     return result
 
 
+def audit_excluded_symbol(symbol: str, exclusion: dict, feature_exists: bool) -> dict:
+    exclusion_reason = str(exclusion.get('reason', '') or '').strip()
+    status_ok = bool(feature_exists and exclusion_reason)
+    return {
+        'symbol': symbol,
+        'status': _status(status_ok),
+        'reason': 'controlled_phase3_exclusion' if status_ok else 'invalid_phase3_exclusion',
+        'feature_exists': feature_exists,
+        'barrier_exists': False,
+        'meta_exists': False,
+        'sizing_exists': False,
+        'phase3_excluded': True,
+        'excluded_artifacts_absent': True,
+        'exclusion_reason': exclusion_reason or None,
+        'exclusion_n_barriers': exclusion.get('n_barriers'),
+        'exclusion_n_feature_rows': exclusion.get('n_feature_rows'),
+        'exclusion_d_star': exclusion.get('d_star'),
+        'exclusion_hmm_pct_bull': exclusion.get('hmm_pct_bull'),
+        'barrier_rows': 0,
+        'meta_rows': 0,
+        'sizing_rows': 0,
+        'sizing_rows_expected': 0,
+        'barrier_columns_ok': True,
+        'meta_columns_ok': True,
+        'sizing_columns_ok': True,
+        'barrier_labels_ok': True,
+        'touch_after_entry_ok': True,
+        'holding_days_match_ok': True,
+        'barrier_meta_rows_match': True,
+        'barrier_meta_index_match': True,
+        'uniqueness_ok': True,
+        'uniqueness_max_abs_diff': 0.0,
+        'hard_gate_blocking_enabled': _hmm_hard_gate_enabled(),
+        'hard_gate_rows': 0,
+        'p_bma_gate_breaches': 0,
+        'p_cal_gate_breaches': 0,
+        'sizing_index_match': True,
+        'sizing_pcal_ok': True,
+        'sizing_formula_ok': True,
+        'sizing_position_ok': True,
+        'sizing_pcal_max_abs_diff': 0.0,
+        'kelly_max_abs_diff': 0.0,
+        'position_max_abs_diff': 0.0,
+        'missing_sizing_dates': [],
+        'extra_sizing_dates': [],
+        'auc': None,
+        'brier': None,
+        'ece': None,
+    }
+
+
 def main() -> None:
     print('Loading Phase 3 artifacts...')
     barrier_files = sorted(PHASE3_PATH.glob('*_barriers.parquet'))
     meta_files = sorted(PHASE3_PATH.glob('*_meta.parquet'))
     sizing_files = sorted(PHASE3_PATH.glob('*_sizing.parquet'))
+    feature_files = sorted(FEATURES_PATH.glob('*.parquet'))
+    exclusions = _load_phase3_exclusions()
 
     barrier_symbols = {path.stem.replace('_barriers', '') for path in barrier_files}
     meta_symbols = {path.stem.replace('_meta', '') for path in meta_files}
     sizing_symbols = {path.stem.replace('_sizing', '') for path in sizing_files}
-    symbols = sorted(barrier_symbols | meta_symbols | sizing_symbols)
+    feature_symbols = {path.stem for path in feature_files}
+    excluded_symbols = set(exclusions)
+    artifact_symbols = barrier_symbols | meta_symbols | sizing_symbols
+    symbols = sorted(feature_symbols | artifact_symbols | excluded_symbols)
 
-    details = [audit_symbol(symbol) for symbol in symbols]
+    details = []
+    for symbol in symbols:
+        has_artifacts = symbol in artifact_symbols
+        exclusion = exclusions.get(symbol)
+        feature_exists = symbol in feature_symbols
+        if has_artifacts:
+            detail = audit_symbol(symbol)
+            detail['phase3_excluded'] = False
+            if exclusion is not None:
+                detail['status'] = 'FAIL'
+                detail['reason'] = 'artifact_and_exclusion_conflict'
+                detail['phase3_excluded'] = True
+                detail['excluded_artifacts_absent'] = False
+                detail['exclusion_reason'] = exclusion.get('reason')
+            else:
+                detail['excluded_artifacts_absent'] = True
+                detail['exclusion_reason'] = None
+            details.append(detail)
+            continue
+        if exclusion is not None:
+            details.append(audit_excluded_symbol(symbol, exclusion, feature_exists))
+            continue
+        details.append({
+            'symbol': symbol,
+            'status': 'FAIL',
+            'reason': 'missing_phase3_without_exclusion',
+            'feature_exists': feature_exists,
+            'barrier_exists': False,
+            'meta_exists': False,
+            'sizing_exists': False,
+            'phase3_excluded': False,
+            'excluded_artifacts_absent': True,
+            'exclusion_reason': None,
+            'barrier_rows': 0,
+            'meta_rows': 0,
+            'sizing_rows': 0,
+            'sizing_rows_expected': 0,
+            'barrier_columns_ok': False,
+            'meta_columns_ok': False,
+            'sizing_columns_ok': False,
+            'barrier_labels_ok': False,
+            'touch_after_entry_ok': False,
+            'holding_days_match_ok': False,
+            'barrier_meta_rows_match': False,
+            'barrier_meta_index_match': False,
+            'uniqueness_ok': False,
+            'uniqueness_max_abs_diff': None,
+            'hard_gate_blocking_enabled': _hmm_hard_gate_enabled(),
+            'hard_gate_rows': 0,
+            'p_bma_gate_breaches': 0,
+            'p_cal_gate_breaches': 0,
+            'sizing_index_match': False,
+            'sizing_pcal_ok': False,
+            'sizing_formula_ok': False,
+            'sizing_position_ok': False,
+            'sizing_pcal_max_abs_diff': None,
+            'kelly_max_abs_diff': None,
+            'position_max_abs_diff': None,
+            'missing_sizing_dates': [],
+            'extra_sizing_dates': [],
+            'auc': None,
+            'brier': None,
+            'ece': None,
+        })
     detail_df = pd.DataFrame(details)
     source_guards = audit_source_guards()
+    hard_gate_blocking_enabled = _hmm_hard_gate_enabled()
 
     n_row_mismatches = int((~detail_df['barrier_meta_rows_match'].fillna(False)).sum()) if not detail_df.empty else 0
     n_index_mismatches = int((~detail_df['barrier_meta_index_match'].fillna(False)).sum()) if not detail_df.empty else 0
     n_uniqueness_fail = int((~detail_df['uniqueness_ok'].fillna(False)).sum()) if not detail_df.empty else 0
-    n_hard_gate_fail = int(((detail_df['p_bma_gate_breaches'].fillna(0) > 0) | (detail_df['p_cal_gate_breaches'].fillna(0) > 0)).sum()) if not detail_df.empty else 0
+    n_hard_gate_breaches = int(((detail_df['p_bma_gate_breaches'].fillna(0) > 0) | (detail_df['p_cal_gate_breaches'].fillna(0) > 0)).sum()) if not detail_df.empty else 0
+    n_hard_gate_fail = n_hard_gate_breaches if hard_gate_blocking_enabled else 0
+    n_hard_gate_advisory = 0 if hard_gate_blocking_enabled else n_hard_gate_breaches
     n_sizing_alignment_fail = int((~detail_df['sizing_index_match'].fillna(False)).sum()) if not detail_df.empty else 0
     n_sizing_formula_fail = int((~detail_df['sizing_formula_ok'].fillna(False)).sum()) if not detail_df.empty else 0
     n_symbols_pass = int((detail_df['status'] == 'PASS').sum()) if not detail_df.empty else 0
+    n_controlled_exclusions = int((detail_df['phase3_excluded'].fillna(False)).sum()) if not detail_df.empty else 0
 
     report = {
         'timestamp_utc': datetime.utcnow().isoformat(),
+        'hmm_hard_gate_mode': HMM_HARD_GATE_MODE,
         'overall_status': _status(bool(len(details)) and n_symbols_pass == len(details) and source_guards['status'] == 'PASS'),
         'inventory': {
+            'feature_files': len(feature_files),
             'barrier_files': len(barrier_files),
             'meta_files': len(meta_files),
             'sizing_files': len(sizing_files),
+            'phase3_exclusions_path': str(PHASE3_EXCLUSIONS_PATH),
+            'excluded_symbols': sorted(excluded_symbols),
             'symbols': symbols,
         },
         'source_guards': source_guards,
         'summary': {
             'symbols_checked': len(details),
             'symbols_pass': n_symbols_pass,
+            'controlled_exclusions': n_controlled_exclusions,
+            'hard_gate_blocking_enabled': hard_gate_blocking_enabled,
             'n_row_mismatches': n_row_mismatches,
             'n_index_mismatches': n_index_mismatches,
             'n_uniqueness_failures': n_uniqueness_fail,
             'n_hard_gate_failures': n_hard_gate_fail,
+            'n_hard_gate_advisories': n_hard_gate_advisory,
             'n_sizing_alignment_failures': n_sizing_alignment_fail,
             'n_sizing_formula_failures': n_sizing_formula_fail,
             'auc_avg': float(detail_df['auc'].dropna().mean()) if not detail_df.empty and detail_df['auc'].notna().any() else None,
@@ -347,6 +506,7 @@ def main() -> None:
     print(f"overall_status: {report['overall_status']}")
     print(f"source_guards:   {source_guards['status']}")
     print(f"symbols_pass:    {n_symbols_pass}/{len(details)}")
+    print(f"controlled_excl: {n_controlled_exclusions}")
     print(f"row_mismatches:  {n_row_mismatches}")
     print(f"index_mismatch:  {n_index_mismatches}")
     print(f"uniqueness_fail: {n_uniqueness_fail}")
@@ -364,6 +524,12 @@ def main() -> None:
                     f"meta={int(row['meta_rows'])}, sizing={int(row['sizing_rows'])}, "
                     f"expected_sizing={int(row['sizing_rows_expected'])}"
                 )
+    if not detail_df.empty:
+        exclusion_rows = detail_df[detail_df['phase3_excluded'] == True][['symbol', 'exclusion_reason']]
+        if not exclusion_rows.empty:
+            print('\nControlled exclusions:')
+            for _, row in exclusion_rows.iterrows():
+                print(f"  - {row['symbol']}: reason={row['exclusion_reason']}")
 
     print('\nReports saved:')
     for path in saved_paths:

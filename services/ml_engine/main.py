@@ -55,6 +55,9 @@ UNLOCK_PROXY_FEATURE_COLUMNS = [
     "unlock_overhang_proxy_rank_full",
     "unlock_fragility_proxy_rank_fallback",
 ]
+REFERENCE_ONLY_SYMBOLS = {"BTC"}
+BTC_REFERENCE_SYMBOLS = ("BTC",)
+PHASE3_EXCLUSIONS_FILENAME = "phase3_exclusions.json"
 
 # Minimum assets para pipeline viÃ¡vel
 MIN_ASSETS_PIPELINE = 10
@@ -149,7 +152,10 @@ def discover_symbols() -> list[str]:
         p.stem for p in ohlcv_dir.glob("*.parquet")
         if p.stat().st_size > 1000  # ignora arquivos vazios
     ]
-    return sorted(symbols)
+    return sorted(
+        symbol for symbol in symbols
+        if symbol.upper() not in REFERENCE_ONLY_SYMBOLS
+    )
 
 
 def _read_parquet_df(path: Path) -> pd.DataFrame:
@@ -179,6 +185,74 @@ def _write_parquet_df(df: pd.DataFrame, path: Path) -> None:
             df.to_parquet(path, index=False)
         except Exception:
             df.to_pickle(path)
+
+
+def _phase3_output_dir() -> Path:
+    out_dir = Path(MODEL_PATH) / "phase3"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    return out_dir
+
+
+def _phase3_artifact_paths(symbol: str) -> dict[str, Path]:
+    out_dir = _phase3_output_dir()
+    return {
+        "barriers": out_dir / f"{symbol}_barriers.parquet",
+        "meta": out_dir / f"{symbol}_meta.parquet",
+        "sizing": out_dir / f"{symbol}_sizing.parquet",
+    }
+
+
+def clear_phase3_results(symbol: str) -> list[str]:
+    removed: list[str] = []
+    for path in _phase3_artifact_paths(symbol).values():
+        if path.exists():
+            path.unlink()
+            removed.append(str(path))
+    return removed
+
+
+def _phase3_exclusions_path() -> Path:
+    return _phase3_output_dir() / PHASE3_EXCLUSIONS_FILENAME
+
+
+def _record_phase3_exclusion(
+    exclusions: dict[str, dict],
+    symbol: str,
+    reason: str,
+    *,
+    n_barriers: int,
+    n_feature_rows: int,
+    d_star: float | None = None,
+    hmm_pct_bull: float | None = None,
+    cleared_artifacts: list[str] | None = None,
+) -> None:
+    exclusions[symbol] = {
+        "reason": reason,
+        "n_barriers": int(n_barriers),
+        "n_feature_rows": int(n_feature_rows),
+        "d_star": round(float(d_star), 6) if d_star is not None else None,
+        "hmm_pct_bull": round(float(hmm_pct_bull), 6) if hmm_pct_bull is not None else None,
+        "cleared_artifacts": list(cleared_artifacts or []),
+    }
+
+
+def save_phase3_exclusions(exclusions: dict[str, dict], symbols_considered: list[str]) -> Path:
+    path = _phase3_exclusions_path()
+    payload = {
+        "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+        "model_run_tag": MODEL_RUN_TAG,
+        "hmm_hard_gate_mode": HMM_HARD_GATE_MODE,
+        "meta_target_mode": META_TARGET_MODE,
+        "symbols_considered": sorted(symbols_considered),
+        "n_symbols_considered": int(len(symbols_considered)),
+        "n_excluded_symbols": int(len(exclusions)),
+        "exclusions": dict(sorted(exclusions.items())),
+    }
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    with open(tmp, "w", encoding="utf-8") as fout:
+        json.dump(payload, fout, indent=2, ensure_ascii=True)
+    tmp.replace(path)
+    return path
 
 
 def load_ohlcv(symbol: str) -> pd.DataFrame | None:
@@ -217,6 +291,22 @@ def load_ohlcv(symbol: str) -> pd.DataFrame | None:
     except Exception as e:
         log.error("load.error", symbol=symbol, error=str(e))
         return None
+
+
+def load_required_btc_reference() -> tuple[str, pd.DataFrame]:
+    for symbol in BTC_REFERENCE_SYMBOLS:
+        df = load_ohlcv(symbol)
+        if df is not None and len(df) > 200:
+            return symbol, df
+
+    expected_paths = [
+        str(Path(PARQUET_BASE) / "ohlcv_daily" / f"{symbol}.parquet")
+        for symbol in BTC_REFERENCE_SYMBOLS
+    ]
+    raise RuntimeError(
+        "Missing official BTC reference asset for btc_ma200_flag. "
+        f"Expected one of {list(BTC_REFERENCE_SYMBOLS)} at {expected_paths}."
+    )
 
 
 def load_funding(symbol: str) -> pd.Series:
@@ -995,15 +1085,19 @@ def run_kelly_sizing_for_symbol(
     for dt in p_calibrated.dropna().index:
         p_cal = float(p_calibrated.get(dt, 0.5))
         sigma = float(sigma_ewma.get(dt, 0.01))
+        mu_adj = p_cal * avg_tp - (1 - p_cal) * avg_sl
 
         if sigma < 1e-6 or p_cal < 0.50:
             # Sem edge ou sem dados â†’ skip
-            results.append({"date": dt, "kelly_frac": 0.0, "position_usdt": 0.0,
-                            "p_cal": p_cal, "sigma": sigma})
+            results.append({
+                "date": dt,
+                "kelly_frac": 0.0,
+                "position_usdt": 0.0,
+                "p_cal": round(p_cal, 4),
+                "sigma": round(sigma, 6),
+                "mu_adj": round(mu_adj, 6),
+            })
             continue
-
-        # Î¼ adjusted por P_calibrada (Parte 10.1)
-        mu_adj = p_cal * avg_tp - (1 - p_cal) * avg_sl
 
         kelly_f = compute_kelly_fraction(
             mu=mu_adj, sigma=sigma, p_cal=p_cal, kappa=KELLY_KAPPA,
@@ -1043,8 +1137,8 @@ def save_phase3_results(
     sizing_df: pd.DataFrame,
 ) -> None:
     """Salva resultados da Fase 3 em parquet."""
-    out_dir = Path(MODEL_PATH) / "phase3"
-    out_dir.mkdir(parents=True, exist_ok=True)
+    out_dir = _phase3_output_dir()
+    clear_phase3_results(symbol)
 
     # Barrier labels
     barrier_path = out_dir / f"{symbol}_barriers.parquet"
@@ -1126,12 +1220,22 @@ async def rerun_phase3_from_saved_features(symbols: list[str] | None = None) -> 
     ok = 0
     skipped = 0
     errors: dict[str, str] = {}
+    exclusions: dict[str, dict] = {}
 
     for symbol in symbols:
         try:
             features = _load_saved_feature_artifact(symbol)
             barrier_df = _load_saved_barrier_artifact(symbol)
             if features.empty or barrier_df.empty:
+                cleared = clear_phase3_results(symbol)
+                _record_phase3_exclusion(
+                    exclusions,
+                    symbol,
+                    "missing_feature_or_barrier_artifact",
+                    n_barriers=len(barrier_df),
+                    n_feature_rows=len(features),
+                    cleared_artifacts=cleared,
+                )
                 skipped += 1
                 continue
             if "hmm_prob_bull" not in features.columns:
@@ -1148,6 +1252,15 @@ async def rerun_phase3_from_saved_features(symbols: list[str] | None = None) -> 
             sigma_ewma = compute_sigma_ewma(returns, span=20).reindex(features.index, fill_value=0.0)
             meta_result = run_meta_labeling_for_symbol(features, barrier_df, hmm_result, sigma_ewma, symbol)
             if meta_result is None:
+                cleared = clear_phase3_results(symbol)
+                _record_phase3_exclusion(
+                    exclusions,
+                    symbol,
+                    "meta_returned_none",
+                    n_barriers=len(barrier_df),
+                    n_feature_rows=len(features),
+                    cleared_artifacts=cleared,
+                )
                 errors[symbol] = "meta_result_none"
                 continue
             sizing_df = run_kelly_sizing_for_symbol(
@@ -1157,15 +1270,20 @@ async def rerun_phase3_from_saved_features(symbols: list[str] | None = None) -> 
                 symbol,
             )
             save_phase3_results(symbol, barrier_df, meta_result, sizing_df)
+            exclusions.pop(symbol, None)
             ok += 1
         except Exception as exc:
             errors[symbol] = str(exc)
+
+    exclusions_path = save_phase3_exclusions(exclusions, symbols)
 
     result = {
         "status": "ok" if not errors else "partial",
         "ok": ok,
         "skipped": skipped,
         "errors": errors,
+        "phase3_exclusions_path": str(exclusions_path),
+        "phase3_excluded_symbols": sorted(exclusions),
         "unlock_model_feature_set": UNLOCK_MODEL_FEATURE_SET,
         "unlock_model_columns": get_unlock_model_feature_columns(),
         "meta_target_mode": META_TARGET_MODE,
@@ -1217,24 +1335,23 @@ async def run_ml_pipeline_full() -> dict:
 
     # â”€â”€ Load BTC reference data ONCE (for btc_ma200_flag) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     btc_ref = None
-    for btc_sym in ["BTC", "BTCUSDT"]:
+    for btc_sym in BTC_REFERENCE_SYMBOLS:
         btc_ref = load_ohlcv(btc_sym)
         if btc_ref is not None and len(btc_ref) > 200:
             log.info("pipeline.btc_reference_loaded",
                      symbol=btc_sym, rows=len(btc_ref))
             break
 
-    # Fallback: usar primeiro ativo grande como proxy de mercado
+    # BTC benchmark must be explicit and official.
     if btc_ref is None:
-        for proxy_sym in ["BNB", "ETH", "SOL", "XRP"]:
-            btc_ref = load_ohlcv(proxy_sym)
-            if btc_ref is not None and len(btc_ref) > 200:
-                log.warning("pipeline.btc_proxy",
-                            proxy=proxy_sym, rows=len(btc_ref),
-                            msg="BTC parquet nÃ£o encontrado, usando proxy")
-                break
+        raise RuntimeError("""
+            Missing official BTC reference asset for btc_ma200_flag.
+            Expected one of BTC_REFERENCE_SYMBOLS under PARQUET_BASE/ohlcv_daily.
+            Legacy proxy fallback is disabled.
+        """)
 
     results = {}
+    phase3_exclusions: dict[str, dict] = {}
     all_features: dict[str, pd.DataFrame] = {}
     phase2_cache: dict[str, dict] = {}
     skipped = []
@@ -1373,6 +1490,7 @@ async def run_ml_pipeline_full() -> dict:
                     save_phase3_results(symbol, barrier_df, meta_result, sizing_df)
                     phase3_ok = True
                     meta_auc = meta_result.get("auc", 0.0)
+                    phase3_exclusions.pop(symbol, None)
 
                     log.info("phase3.SAVED_OK", symbol=symbol,
                              n_barriers=len(barrier_df),
@@ -1389,10 +1507,32 @@ async def run_ml_pipeline_full() -> dict:
                               exc_info=True)
                     raise
             else:
+                cleared = clear_phase3_results(symbol)
+                _record_phase3_exclusion(
+                    phase3_exclusions,
+                    symbol,
+                    "meta_returned_none",
+                    n_barriers=len(barrier_df),
+                    n_feature_rows=len(features),
+                    d_star=d_star,
+                    hmm_pct_bull=float(hmm_result["hmm_is_bull"].mean()),
+                    cleared_artifacts=cleared,
+                )
                 log.warning("phase3.meta_returned_none", symbol=symbol,
                             msg="N_eff too low or insufficient data - skipping, NOT fatal")
         else:
             n_ev = len(barrier_df) if barrier_df is not None else 0
+            cleared = clear_phase3_results(symbol)
+            _record_phase3_exclusion(
+                phase3_exclusions,
+                symbol,
+                "insufficient_barrier_events",
+                n_barriers=n_ev,
+                n_feature_rows=len(features),
+                d_star=d_star,
+                hmm_pct_bull=float(hmm_result["hmm_is_bull"].mean()),
+                cleared_artifacts=cleared,
+            )
             log.warning("phase3.insufficient_barrier_events", symbol=symbol,
                         n_events=n_ev, min_required=20,
                         msg="Not enough HMM-bull events for this symbol - skipping")
@@ -1408,6 +1548,14 @@ async def run_ml_pipeline_full() -> dict:
             "n_barriers": len(barrier_df) if barrier_df is not None else 0,
         }
         log.info("pipeline.symbol_done", symbol=symbol, **results[symbol])
+
+    phase3_exclusions_path = save_phase3_exclusions(phase3_exclusions, symbols)
+    log.info(
+        "phase3.exclusions_saved",
+        path=str(phase3_exclusions_path),
+        n_excluded_symbols=len(phase3_exclusions),
+        excluded_symbols=sorted(phase3_exclusions),
+    )
 
     phase4_status = None
     n_phase3_ready = sum(1 for r in results.values() if r.get("phase3") is True)
@@ -1492,6 +1640,7 @@ async def run_ml_pipeline_full() -> dict:
     log.info("phase3.summary",
              n_phase3_ok=n_phase3_ok,
              n_total=len(results),
+             n_phase3_excluded=len(phase3_exclusions),
              avg_meta_auc=avg_auc,
              n_portfolio_positions=len(portfolio_fracs),
              phase4_status=phase4_status)
@@ -1507,6 +1656,7 @@ async def run_ml_pipeline_full() -> dict:
             "n_error":  sum(1 for r in results.values() if r.get("status") == "error"),
             "n_skipped": len(skipped),
             "n_phase3_ok": n_phase3_ok,
+            "n_phase3_excluded": len(phase3_exclusions),
             "avg_meta_auc": avg_auc,
             "n_portfolio": len(portfolio_fracs),
             "phase4_status": phase4_status,
@@ -1527,7 +1677,14 @@ async def run_ml_pipeline_full() -> dict:
              errors=sum(1 for r in results.values() if r.get("status") == "error"),
              skipped=len(skipped))
 
-    return {"status": "complete", "elapsed_s": elapsed, "results": results, "phase4_status": phase4_status}
+    return {
+        "status": "complete",
+        "elapsed_s": elapsed,
+        "results": results,
+        "phase4_status": phase4_status,
+        "phase3_exclusions_path": str(phase3_exclusions_path),
+        "phase3_excluded_symbols": sorted(phase3_exclusions),
+    }
 
 
 # â”€â”€â”€ MAIN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€

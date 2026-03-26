@@ -1,0 +1,130 @@
+from __future__ import annotations
+
+import pandas as pd
+
+from services.ml_engine.phase4_stage_a_experiment import (
+    _apply_cross_sectional_ranking_proxy,
+    _build_stage_a_target,
+    _build_cross_sectional_relative_target,
+    _build_cross_sectional_ranking_frame,
+    _compute_cluster_local_target_thresholds,
+    _evaluate_stage_a_gate,
+)
+
+
+def test_build_stage_a_target_uses_cost_adjusted_edge_rule():
+    df = pd.DataFrame(
+        {
+            "pnl_real": [0.03, 0.01, -0.02],
+            "avg_sl_train": [0.02, 0.02, 0.01],
+        }
+    )
+    target = _build_stage_a_target(df)
+    assert target.tolist() == [1, 0, 0]
+
+
+def test_evaluate_stage_a_gate_requires_latest_activity_or_headroom():
+    operational_report = {
+        "sharpe": 0.9,
+        "dsr_honest": 0.1,
+        "n_active": 95,
+        "subperiod_summary": {"negative_periods": []},
+        "activation_funnel": {
+            "latest_snapshot_active_count": 0,
+            "latest_snapshot_p_meta_calibrated_gt_050": 1,
+            "latest_snapshot_mu_adj_meta_gt_0": 1,
+        },
+    }
+    gate = _evaluate_stage_a_gate(operational_report, ece_calibrated=0.03, positive_rate_oos=0.10)
+    assert gate["status"] == "PASS"
+    assert gate["headroom_real_documented"] is True
+
+
+def test_cluster_local_thresholds_use_global_fallback_when_support_is_small():
+    train_df = pd.DataFrame(
+        {
+            "cluster_name": ["cluster_1", "cluster_1", "cluster_1", "cluster_2", "cluster_2"],
+            "pnl_real": [0.10, 0.12, 0.14, 0.08, -0.02],
+        }
+    )
+    thresholds, summary = _compute_cluster_local_target_thresholds(
+        train_df,
+        quantile=0.60,
+        min_positive_count_per_cluster=2,
+    )
+    assert thresholds["cluster_1"]["threshold_source"] == "cluster_local_q_train_positive"
+    assert thresholds["cluster_2"]["threshold_source"] == "global_positive_q_train_fallback"
+    assert summary["train_positive_count_global"] == 4
+
+
+def test_evaluate_stage_a_gate_fails_when_positive_rate_collapses():
+    operational_report = {
+        "sharpe": 1.2,
+        "dsr_honest": 0.2,
+        "n_active": 95,
+        "subperiod_summary": {"negative_periods": []},
+        "activation_funnel": {
+            "latest_snapshot_active_count": 1,
+            "latest_snapshot_p_meta_calibrated_gt_050": 1,
+            "latest_snapshot_mu_adj_meta_gt_0": 1,
+        },
+    }
+    gate = _evaluate_stage_a_gate(operational_report, ece_calibrated=0.03, positive_rate_oos=0.03)
+    assert gate["status"] == "FAIL"
+    assert gate["checks"]["positive_rate_min"] is False
+    assert gate["abort_early"] is True
+
+
+def test_cross_sectional_relative_target_uses_local_top1_and_date_fallback():
+    df = pd.DataFrame(
+        {
+            "date": pd.to_datetime(["2026-01-01"] * 4),
+            "symbol": ["A", "B", "C", "D"],
+            "cluster_name": ["cluster_1", "cluster_1", "cluster_2", "cluster_2"],
+            "pnl_real": [0.03, 0.04, 0.05, -0.01],
+            "avg_sl_train": [0.02, 0.02, 0.02, 0.02],
+        }
+    )
+    out, summary = _build_cross_sectional_relative_target(df, min_eligible_per_date_cluster=2)
+    assert out["y_stage_a"].tolist() == [0, 1, 1, 0]
+    assert summary["groups_local_target"] == 1
+    assert summary["groups_fallback_target"] == 1
+    assert summary["groups_without_eligible"] == 0
+
+
+def test_cross_sectional_ranking_frame_exposes_truth_top1_and_rank_target():
+    df = pd.DataFrame(
+        {
+            "date": pd.to_datetime(["2026-01-01"] * 4),
+            "symbol": ["A", "B", "C", "D"],
+            "cluster_name": ["cluster_1", "cluster_1", "cluster_2", "cluster_2"],
+            "pnl_real": [0.03, 0.04, 0.05, -0.01],
+            "avg_sl_train": [0.02, 0.02, 0.02, 0.02],
+        }
+    )
+    out, summary = _build_cross_sectional_ranking_frame(df, min_eligible_per_date_cluster=2)
+    assert out["y_stage_a_truth_top1"].tolist() == [0, 1, 1, 0]
+    assert out["rank_target_stage_a"].round(4).tolist() == [1.5, 2.0, 2.5, 0.0]
+    assert summary["groups_local_target"] == 1
+    assert summary["groups_fallback_target"] == 1
+
+
+def test_cross_sectional_ranking_proxy_reports_hit_rate_and_min_alloc_counts():
+    df = pd.DataFrame(
+        {
+            "date": pd.to_datetime(["2026-01-01"] * 4),
+            "symbol": ["A", "B", "C", "D"],
+            "cluster_name": ["cluster_1", "cluster_1", "cluster_2", "cluster_2"],
+            "pnl_real": [0.03, 0.04, 0.05, -0.01],
+            "avg_sl_train": [0.02, 0.02, 0.02, 0.02],
+            "p_bma_pkf": [0.55, 0.60, 0.65, 0.40],
+            "p_stage_a_raw": [0.20, 0.90, 0.80, 0.10],
+            "rank_score_stage_a": [0.20, 0.90, 0.80, 0.10],
+        }
+    )
+    out, summary = _apply_cross_sectional_ranking_proxy(df)
+    assert int(out["stage_a_selected_proxy"].sum()) == 1
+    assert summary["groups_local_selection"] == 1
+    assert summary["groups_fallback_selection"] == 1
+    assert summary["top1_hit_rate"] == 0.5
+    assert summary["naive_top1_hit_rate"] == 1.0

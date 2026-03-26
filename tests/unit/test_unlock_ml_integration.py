@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
+from pathlib import Path
 import sys
+import tempfile
 import types
 import unittest
 from unittest.mock import patch
@@ -19,6 +21,74 @@ def _flatten_cluster_map(cluster_map: dict[str, Iterable[str]]) -> set[str]:
 
 
 class UnlockMlIntegrationTest(unittest.TestCase):
+    def test_discover_symbols_excludes_reference_only_assets(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            ohlcv_dir = Path(tmp_dir) / "ohlcv_daily"
+            ohlcv_dir.mkdir(parents=True, exist_ok=True)
+            (ohlcv_dir / "BTC.parquet").write_bytes(b"0" * 1100)
+            (ohlcv_dir / "SOL.parquet").write_bytes(b"0" * 1100)
+
+            with patch.object(ml_main, "PARQUET_BASE", tmp_dir):
+                symbols = ml_main.discover_symbols()
+
+        self.assertEqual(symbols, ["SOL"])
+
+    def test_run_kelly_sizing_keeps_mu_adj_column_for_zero_allocation_rows(self) -> None:
+        index = pd.date_range("2024-01-01", periods=2, freq="D")
+        barrier_df = pd.DataFrame({"pnl_real": [0.04, -0.02]}, index=index)
+        p_calibrated = pd.Series([0.40, 0.45], index=index)
+        sigma_ewma = pd.Series([0.20, 0.25], index=index)
+
+        sizing_df = ml_main.run_kelly_sizing_for_symbol(barrier_df, p_calibrated, sigma_ewma, "TEST")
+
+        self.assertIn("mu_adj", sizing_df.columns)
+        self.assertTrue((sizing_df["kelly_frac"] == 0.0).all())
+        self.assertAlmostEqual(float(sizing_df.iloc[0]["mu_adj"]), 0.004, places=6)
+
+    def test_save_phase3_results_removes_stale_sizing_when_current_sizing_is_empty(self) -> None:
+        index = pd.date_range("2024-01-01", periods=2, freq="D")
+        barrier_df = pd.DataFrame(
+            {
+                "t_touch": index + pd.Timedelta(days=1),
+                "label": [1, 0],
+                "barrier_tp": [1.0, 1.0],
+                "barrier_sl": [1.0, 1.0],
+                "exit_price": [1.0, 1.0],
+                "pnl_real": [0.05, 0.0],
+                "slippage_frac": [0.0, 0.0],
+                "sigma_at_entry": [0.2, 0.2],
+                "p0": [1.0, 1.0],
+                "holding_days": [1, 1],
+            },
+            index=index,
+        )
+        meta_result = {
+            "p_bma": pd.Series([0.6, 0.55], index=index),
+            "p_calibrated": pd.Series([0.6, 0.55], index=index),
+            "y_target": pd.Series([1, 0], index=index),
+            "uniqueness": pd.Series([1.0, 1.0], index=index),
+        }
+        stale_sizing_df = pd.DataFrame(
+            {
+                "date": index,
+                "kelly_frac": [0.1, 0.1],
+                "position_usdt": [1000.0, 1000.0],
+                "p_cal": [0.6, 0.55],
+                "sigma": [0.2, 0.2],
+                "mu_adj": [0.01, 0.01],
+            }
+        ).set_index("date")
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            with patch.object(ml_main, "MODEL_PATH", tmp_dir):
+                ml_main.save_phase3_results("TEST", barrier_df, meta_result, stale_sizing_df)
+                sizing_path = Path(tmp_dir) / "phase3" / "TEST_sizing.parquet"
+                self.assertTrue(sizing_path.exists())
+
+                ml_main.save_phase3_results("TEST", barrier_df, meta_result, pd.DataFrame())
+
+                self.assertFalse(sizing_path.exists())
+
     def test_run_hmm_for_symbol_degrades_sparse_derivative_inputs_explicitly(self) -> None:
         index = pd.date_range("2024-01-01", periods=220, freq="D")
         features = pd.DataFrame(

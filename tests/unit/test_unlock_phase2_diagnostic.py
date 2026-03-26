@@ -18,10 +18,14 @@ from tests import _path_setup  # noqa: F401
 if "regime" not in sys.modules:
     regime_stub = types.ModuleType("regime")
     pca_robust_stub = types.ModuleType("regime.pca_robust")
+    hmm_filter_stub = types.ModuleType("regime.hmm_filter")
     pca_robust_stub.transform_robust_pca = lambda values, pipeline: values
+    hmm_filter_stub.build_regime_target = lambda returns: (pd.Series(returns).fillna(0) < 0).astype(int)
     regime_stub.pca_robust = pca_robust_stub
+    regime_stub.hmm_filter = hmm_filter_stub
     sys.modules["regime"] = regime_stub
     sys.modules["regime.pca_robust"] = pca_robust_stub
+    sys.modules["regime.hmm_filter"] = hmm_filter_stub
 
 from services.ml_engine import phase2_diagnostic as phase2_diag
 
@@ -53,7 +57,7 @@ class UnlockPhase2DiagnosticTest(unittest.TestCase):
                 "unlock_fragility_proxy_rank_fallback": [0.5] * 400,
             }
 
-            for symbol, periods in [("AAA", 400), ("LUNA", 400), ("FTT", 400), ("LUNA2", 90), ("CEL", 90)]:
+            for symbol, periods in [("AAA", 400), ("BTC", 400), ("LUNA", 400), ("FTT", 400), ("LUNA2", 90), ("CEL", 90)]:
                 pd.DataFrame(
                     {
                         "timestamp": pd.date_range("2024-01-01", periods=periods, freq="D", tz="UTC"),
@@ -79,6 +83,7 @@ class UnlockPhase2DiagnosticTest(unittest.TestCase):
         self.assertEqual(report["expected_assets"], 3)
         self.assertEqual(report["missing_eligible_assets"], [])
         self.assertEqual(set(report["collapsed_below_history_threshold"]), {"LUNA2", "CEL"})
+        self.assertNotIn("BTC", report["eligible_symbols"])
 
     def test_audit_hmm_outputs_counts_degraded_inputs_without_marking_hard_missing(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -125,6 +130,57 @@ class UnlockPhase2DiagnosticTest(unittest.TestCase):
 
         self.assertEqual(report["assets_with_missing_hmm_inputs"], 0)
         self.assertEqual(report["assets_with_degraded_inputs"], 1)
+        self.assertEqual(report["assets_pass"], 1)
+
+    def test_audit_hmm_outputs_treats_predictive_quality_as_advisory_when_hard_gate_is_off(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            base = Path(tmp_dir)
+            features_path = base / "models" / "features"
+            hmm_path = base / "models" / "hmm" / "AAA"
+            features_path.mkdir(parents=True, exist_ok=True)
+            hmm_path.mkdir(parents=True, exist_ok=True)
+
+            rows = 180
+            feature_frame = pd.DataFrame(
+                {
+                    "timestamp": pd.date_range("2024-01-01", periods=rows, freq="D", tz="UTC"),
+                    "ret_1d": np.where(np.arange(rows) % 3 == 0, 0.03, -0.02),
+                    "ret_5d": np.linspace(-0.02, 0.04, rows),
+                    "realized_vol_30d": np.linspace(0.2, 0.3, rows),
+                    "vol_ratio": np.linspace(0.8, 1.4, rows),
+                    "funding_rate_ma7d": [0.001] * rows,
+                    "basis_3m": [0.01] * rows,
+                    "stablecoin_chg30": np.linspace(-0.01, 0.02, rows),
+                    "btc_ma200_flag": [1.0] * rows,
+                    "dvol_zscore": np.linspace(-1.0, 1.0, rows),
+                    "hmm_prob_bull": [0.9] * rows,
+                    "hmm_is_bull": [False] * rows,
+                }
+            )
+            feature_frame.to_pickle(features_path / "AAA.parquet")
+
+            fitted = SimpleNamespace(
+                pca_pipeline=SimpleNamespace(scaler=RobustScaler(), winsorizer=object(), feature_names=[]),
+                var_explained=0.85,
+                n_pca_components=2,
+                threshold=0.5,
+                train_end_date="2024-06-01",
+            )
+            with open(hmm_path / "hmm_t150.pkl", "wb") as fout:
+                pickle.dump(fitted, fout)
+
+            with (
+                patch.object(phase2_diag, "FEATURES_PATH", features_path),
+                patch.object(phase2_diag, "HMM_PATH", base / "models" / "hmm"),
+                patch.object(phase2_diag, "HMM_HARD_GATE_MODE", "off"),
+            ):
+                report = phase2_diag.audit_hmm_outputs()
+
+        self.assertEqual(report["status"], "PASS")
+        self.assertFalse(report["quality_checks_blocking"])
+        self.assertEqual(report["assets_with_low_f1_oos"], 1)
+        self.assertEqual(report["assets_with_advisory_low_f1_oos"], 1)
+        self.assertEqual(report["assets_with_blocking_low_f1_oos"], 0)
         self.assertEqual(report["assets_pass"], 1)
 
     def test_audit_unlock_shadow_mode_reports_coverage_and_quality_summary(self) -> None:

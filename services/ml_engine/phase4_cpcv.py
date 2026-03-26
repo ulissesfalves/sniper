@@ -58,7 +58,7 @@ PHASE4_SELECTIVE_THRESHOLD = float(os.getenv("PHASE4_SELECTIVE_THRESHOLD", "0.75
 PHASE4_TAIL_THRESHOLD = float(os.getenv("PHASE4_TAIL_THRESHOLD", "0.80"))
 PHASE4_TOP_N_PER_DAY = int(os.getenv("PHASE4_TOP_N_PER_DAY", "1"))
 PHASE4_REGIME_MIN = float(os.getenv("PHASE4_REGIME_MIN", "0.55"))
-PHASE4_DECISION_POLICY = os.getenv("PHASE4_DECISION_POLICY", "fixed_small_080").strip().lower()
+PHASE4_DECISION_POLICY = os.getenv("PHASE4_DECISION_POLICY", "fixed_small_080_cooldown3").strip().lower()
 PHASE4_LOCAL_THRESHOLD_GRID = [0.78, 0.80, 0.82, 0.85]
 PHASE4_POLICY_HOLDOUT_FRACTION = float(os.getenv("PHASE4_POLICY_HOLDOUT_FRACTION", "0.20"))
 PHASE4_POLICY_FORWARD_FOLDS = int(os.getenv("PHASE4_POLICY_FORWARD_FOLDS", "4"))
@@ -1611,6 +1611,190 @@ def _build_execution_snapshot(predictions_df):
     return latest
 
 
+def _build_operational_path_report(
+    predictions_df: pd.DataFrame,
+    execution_snapshot_df: pd.DataFrame,
+) -> dict:
+    path_summary = {
+        "path_name": "operational_meta_path",
+        "governs_snapshot": True,
+        "score_col": "p_meta_calibrated",
+        "kelly_col": "kelly_frac_meta",
+        "position_col": "position_usdt_meta",
+        "pnl_col": "pnl_exec_meta",
+        "signal_threshold": 0.50,
+        "snapshot_fields": {
+            "p_calibrated": "p_meta_calibrated",
+            "kelly_frac": "kelly_frac_meta",
+            "position_usdt": "position_usdt_meta",
+        },
+    }
+    if predictions_df.empty:
+        return {
+            **path_summary,
+            "status": "MISSING_AGGREGATED_PREDICTIONS",
+            "activation_funnel": {},
+            "sparsity": {},
+            "choke_point": {"latest_snapshot_stage": "missing_predictions"},
+            "latest_top_candidates": [],
+        }
+
+    work = predictions_df.copy()
+    work["_signal_operational_meta_path"] = (
+        pd.to_numeric(work.get("p_meta_calibrated"), errors="coerce").fillna(0.0)
+    )
+    metrics = _evaluate_decision_policy(
+        work,
+        label="operational_meta_path",
+        threshold=0.50,
+        signal_col="_signal_operational_meta_path",
+        position_col="position_usdt_meta",
+        pnl_col="pnl_exec_meta",
+    )
+
+    latest = execution_snapshot_df.copy()
+    if latest.empty:
+        latest = _build_execution_snapshot(work)
+
+    agg_raw = pd.to_numeric(work.get("p_meta_raw"), errors="coerce").fillna(0.0)
+    agg_prob = pd.to_numeric(work.get("p_meta_calibrated"), errors="coerce").fillna(0.0)
+    agg_mu = pd.to_numeric(work.get("mu_adj_meta"), errors="coerce").fillna(0.0)
+    agg_kelly = pd.to_numeric(work.get("kelly_frac_meta"), errors="coerce").fillna(0.0)
+    agg_pos = pd.to_numeric(work.get("position_usdt_meta"), errors="coerce").fillna(0.0)
+
+    latest_raw = pd.to_numeric(latest.get("p_meta_raw"), errors="coerce").fillna(0.0)
+    latest_prob = pd.to_numeric(
+        latest.get("p_calibrated", latest.get("p_meta_calibrated", 0.0)),
+        errors="coerce",
+    ).fillna(0.0)
+    latest_mu = pd.to_numeric(latest.get("mu_adj_meta"), errors="coerce").fillna(0.0)
+    latest_kelly = pd.to_numeric(
+        latest.get("kelly_frac", latest.get("kelly_frac_meta", 0.0)),
+        errors="coerce",
+    ).fillna(0.0)
+    latest_pos = pd.to_numeric(
+        latest.get("position_usdt", latest.get("position_usdt_meta", 0.0)),
+        errors="coerce",
+    ).fillna(0.0)
+    latest_active = latest_pos > 0
+
+    latest_rows = int(len(latest))
+    latest_active_count = int(latest_active.sum())
+    latest_prob_gt_050 = int((latest_prob > 0.50).sum())
+    latest_mu_gt_0 = int((latest_mu > 0).sum())
+    latest_kelly_gt_0 = int((latest_kelly > 0).sum())
+    latest_pos_gt_0 = int((latest_pos > 0).sum())
+    if latest_rows == 0:
+        latest_stage = "missing_snapshot_rows"
+    elif latest_prob_gt_050 == 0:
+        latest_stage = "score_calibration"
+    elif latest_mu_gt_0 == 0:
+        latest_stage = "mu_adjustment"
+    elif latest_kelly_gt_0 == 0:
+        latest_stage = "kelly_sizing"
+    elif latest_pos_gt_0 == 0:
+        latest_stage = "position_conversion"
+    else:
+        latest_stage = "active_positions_present"
+
+    top_candidates: list[dict] = []
+    if not latest.empty:
+        latest_sorted = (
+            latest.assign(_p_meta_calibrated_report=latest_prob)
+            .sort_values(
+                ["_p_meta_calibrated_report", "symbol"],
+                ascending=[False, True],
+                kind="mergesort",
+            )
+            .head(5)
+        )
+        for _, row in latest_sorted.iterrows():
+            top_candidates.append(
+                {
+                    "symbol": str(row.get("symbol", "")),
+                    "p_meta_raw": round(float(pd.to_numeric(row.get("p_meta_raw"), errors="coerce") or 0.0), 4),
+                    "p_meta_calibrated": round(float(pd.to_numeric(row.get("p_calibrated"), errors="coerce") or 0.0), 4),
+                    "mu_adj_meta": round(float(pd.to_numeric(row.get("mu_adj_meta"), errors="coerce") or 0.0), 6),
+                    "kelly_frac_meta": round(float(pd.to_numeric(row.get("kelly_frac"), errors="coerce") or 0.0), 6),
+                    "position_usdt_meta": round(float(pd.to_numeric(row.get("position_usdt"), errors="coerce") or 0.0), 2),
+                    "p_bma_pkf": round(float(pd.to_numeric(row.get("p_bma_pkf"), errors="coerce") or 0.0), 4),
+                }
+            )
+
+    activation_funnel = {
+        "aggregated_rows_total": int(len(work)),
+        "aggregated_symbols_total": int(work["symbol"].nunique()) if "symbol" in work.columns else 0,
+        "aggregated_p_meta_raw_gt_050": int((agg_raw > 0.50).sum()),
+        "aggregated_p_meta_calibrated_gt_050": int((agg_prob > 0.50).sum()),
+        "aggregated_p_meta_calibrated_gt_051": int((agg_prob > 0.51).sum()),
+        "aggregated_mu_adj_meta_gt_0": int((agg_mu > 0).sum()),
+        "aggregated_kelly_frac_meta_gt_0": int((agg_kelly > 0).sum()),
+        "aggregated_position_usdt_meta_gt_0": int((agg_pos > 0).sum()),
+        "latest_snapshot_rows": latest_rows,
+        "latest_snapshot_symbols_total": int(latest["symbol"].nunique()) if "symbol" in latest.columns else latest_rows,
+        "latest_snapshot_p_meta_raw_gt_050": int((latest_raw > 0.50).sum()),
+        "latest_snapshot_p_meta_calibrated_gt_050": latest_prob_gt_050,
+        "latest_snapshot_mu_adj_meta_gt_0": latest_mu_gt_0,
+        "latest_snapshot_kelly_frac_meta_gt_0": latest_kelly_gt_0,
+        "latest_snapshot_position_usdt_meta_gt_0": latest_pos_gt_0,
+        "latest_snapshot_active_count": latest_active_count,
+    }
+    sparsity = {
+        "historical_active_rate": round(float(metrics["n_active"] / len(work)), 4) if len(work) else 0.0,
+        "latest_snapshot_active_rate": round(float(latest_active_count / latest_rows), 4) if latest_rows else 0.0,
+        "latest_snapshot_max_p_meta_calibrated": round(float(latest_prob.max()), 4) if latest_rows else 0.0,
+        "latest_snapshot_max_position_usdt": round(float(latest_pos.max()), 2) if latest_rows else 0.0,
+        "historical_active_events": int(metrics["n_active"]),
+        "latest_snapshot_active_symbols": latest_active_count,
+    }
+    choke_point = {
+        "latest_snapshot_stage": latest_stage,
+        "aggregated_raw_gt_050_but_calibrated_le_050": int(((agg_raw > 0.50) & (agg_prob <= 0.50)).sum()),
+        "latest_raw_gt_050_but_calibrated_le_050": int(((latest_raw > 0.50) & (latest_prob <= 0.50)).sum()),
+    }
+
+    sanitized_metrics = {k: v for k, v in metrics.items() if k != "active_port_returns"}
+    return {
+        **path_summary,
+        **sanitized_metrics,
+        "status": "OK",
+        "subperiod_summary": _summarize_subperiods(metrics["subperiods"]),
+        "activation_funnel": activation_funnel,
+        "sparsity": sparsity,
+        "choke_point": choke_point,
+        "latest_top_candidates": top_candidates,
+    }
+
+
+def _build_report_paths_summary() -> dict:
+    return {
+        "snapshot_governed_by": "operational_meta_path",
+        "operational_meta_path": {
+            "governs_snapshot": True,
+            "report_block": "operational_path",
+            "score_col": "p_meta_calibrated",
+            "kelly_col": "kelly_frac_meta",
+            "position_col": "position_usdt_meta",
+            "pnl_col": "pnl_exec_meta",
+        },
+        "fallback_policy_path": {
+            "governs_snapshot": False,
+            "report_blocks": ["fallback", "dsr", "subperiods"],
+            "score_col": "p_bma_pkf_exec",
+            "position_col": "position_usdt_policy_tail",
+            "pnl_col": "pnl_exec_selective",
+            "selected_policy": PHASE4_DECISION_POLICY,
+        },
+        "cpcv_meta_path": {
+            "governs_snapshot": False,
+            "report_blocks": ["cpcv", "cpcv_trajectories"],
+            "score_col": "p_meta_calibrated",
+            "position_col": "position_usdt_meta",
+            "pnl_col": "pnl_exec_meta",
+        },
+    }
+
+
 def _aggregate_oos_predictions(oos_df):
     if oos_df.empty:
         return pd.DataFrame()
@@ -1931,6 +2115,14 @@ def evaluate_fallback(pooled_df):
             "signal_kwargs": {},
         },
         {
+            "label": "fixed_small_080_cooldown3",
+            "threshold": PHASE4_TAIL_THRESHOLD,
+            "signal_col": "signal_policy_fixed_small_080_cooldown3",
+            "position_col": "position_usdt_policy_tail",
+            "pnl_col": "pnl_exec_selective",
+            "signal_kwargs": {"cooldown_days": PHASE4_POLICY_COOLDOWN_DAYS},
+        },
+        {
             "label": "fixed_small_075_top1",
             "threshold": PHASE4_SELECTIVE_THRESHOLD,
             "signal_col": "signal_policy_fixed_small_075_top1",
@@ -2226,6 +2418,13 @@ def main():
     )
 
     elapsed = time.time() - start
+    aggregated_predictions_df = cpcv_result.get("aggregated_predictions_df", pd.DataFrame())
+    execution_snapshot_df = _build_execution_snapshot(aggregated_predictions_df)
+    operational_path = _build_operational_path_report(
+        aggregated_predictions_df,
+        execution_snapshot_df,
+    )
+    report_paths = _build_report_paths_summary()
 
     # ====================== REPORT ======================
     print("\n" + "=" * 72)
@@ -2252,6 +2451,18 @@ def main():
     if "mean_predictions_per_obs" in cpcv_result:
         print(f"  Mean preds/obs:   {cpcv_result['mean_predictions_per_obs']:.2f}")
     print(f"  Status: {cpcv_result['status']}")
+
+    print(f"\n-- OPERATIONAL META PATH [REAL SNAPSHOT PATH] --")
+    print(f"  Governs snapshot: {'YES' if operational_path.get('governs_snapshot') else 'NO'}")
+    print(f"  Score: {operational_path.get('score_col')}  Kelly: {operational_path.get('kelly_col')}  Position: {operational_path.get('position_col')}")
+    print(f"  Historical active events: {operational_path.get('n_active', 0)} / {operational_path.get('activation_funnel', {}).get('aggregated_rows_total', 0)}")
+    print(f"  Latest snapshot active:   {operational_path.get('activation_funnel', {}).get('latest_snapshot_active_count', 0)} / {operational_path.get('activation_funnel', {}).get('latest_snapshot_symbols_total', 0)}")
+    print(f"  Sharpe:         {operational_path.get('sharpe', 0):.4f}")
+    print(f"  DSR honesto:    {operational_path.get('dsr_honest', 0):.4f}")
+    print(f"  Subperiodos:    {operational_path.get('subperiods_positive', 0)}/{operational_path.get('subperiods_total', 0)}")
+    print(f"  Choke point:    {operational_path.get('choke_point', {}).get('latest_snapshot_stage', 'unknown')}")
+    print(f"  Max p_meta_cal: {operational_path.get('sparsity', {}).get('latest_snapshot_max_p_meta_calibrated', 0):.4f}")
+    print(f"  Max position:   ${operational_path.get('sparsity', {}).get('latest_snapshot_max_position_usdt', 0):,.2f}")
 
     print(f"\n-- FALLBACK POLICY [{fallback.get('policy', 'unknown')}] [15.1] --")
     print(f"  Threshold:      > {float(fallback.get('threshold', PBMA_FALLBACK_THR)):.2f}")
@@ -2459,8 +2670,6 @@ def main():
     # Save
     OUTPUT_PATH.mkdir(parents=True, exist_ok=True)
     oos_predictions_df = cpcv_result.get("oos_predictions_df", pd.DataFrame())
-    aggregated_predictions_df = cpcv_result.get("aggregated_predictions_df", pd.DataFrame())
-    execution_snapshot_df = _build_execution_snapshot(aggregated_predictions_df)
     if not oos_predictions_df.empty:
         oos_predictions_df.to_parquet(OUTPUT_PATH / "phase4_oos_predictions.parquet", index=False)
     if not aggregated_predictions_df.empty:
@@ -2480,8 +2689,11 @@ def main():
         "selected_features": feature_cols,
         "selected_feature_stats": selected_feature_stats,
         "unlock_feature_coverage": unlock_feature_coverage,
+        "snapshot_governed_by": report_paths["snapshot_governed_by"],
+        "report_paths": report_paths,
         "cpcv": {k: v for k, v in cpcv_result.items() if k not in ("trajectories", "oos_predictions_df", "aggregated_predictions_df")},
         "cpcv_trajectories": cpcv_result.get("trajectories", []),
+        "operational_path": operational_path,
         "fallback": {k: v for k, v in fallback.items() if k not in {"signals_df", "active_port_returns"}},
         "dsr": dsr_result,
         "subperiods": subperiods,

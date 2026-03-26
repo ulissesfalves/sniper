@@ -17,13 +17,17 @@ from collectors.coingecko import CoinGeckoCollector
 from collectors.binance import BinanceCollector
 from collectors.stablecoin import StablecoinCollector
 from collectors.token_unlocks import TokenUnlocksCollector
-from validators.anti_survivorship import AntiSurvivorshipValidator
+from validators.anti_survivorship import AntiSurvivorshipValidator, AssetRecord
 
 log = structlog.get_logger(__name__)
 
 PARQUET_BASE = config("PARQUET_BASE_PATH", default="/data/parquet")
 SQLITE_PATH = config("SQLITE_PATH", default="/data/sqlite/sniper.db")
 SCHEDULE = config("SCHEDULE_CRON", default="0 */4 * * *")   # every 4h
+REFERENCE_ONLY_ASSET_SPECS = (
+    {"symbol": "BTC", "coingecko_id": "bitcoin"},
+)
+REFERENCE_ONLY_SYMBOLS = {spec["symbol"] for spec in REFERENCE_ONLY_ASSET_SPECS}
 
 
 def _probe_runtime_dir(path: Path) -> dict[str, object]:
@@ -84,6 +88,40 @@ def _load_symbols_from_existing_ohlcv(parquet_base: str) -> list[str]:
     return sorted(set(symbols))
 
 
+def _build_reference_only_assets() -> list[AssetRecord]:
+    return [
+        AssetRecord(
+            symbol=spec["symbol"],
+            coingecko_id=spec["coingecko_id"],
+            market_cap_usd=0.0,
+            volume_24h_usd=0.0,
+            age_months=999,
+            ups_score=0.0,
+            ups_data_available=False,
+            is_collapsed=False,
+        )
+        for spec in REFERENCE_ONLY_ASSET_SPECS
+    ]
+
+
+def _extend_with_reference_assets(universe: list[AssetRecord]) -> list[AssetRecord]:
+    seen = {asset.symbol.upper() for asset in universe}
+    additions = [
+        asset for asset in _build_reference_only_assets()
+        if asset.symbol.upper() not in seen
+    ]
+    if additions:
+        log.info(
+            "ingest.reference_assets_added",
+            symbols=[asset.symbol for asset in additions],
+        )
+    return universe + additions
+
+
+def _exclude_reference_only_symbols(symbols: list[str]) -> list[str]:
+    return [symbol for symbol in symbols if symbol.upper() not in REFERENCE_ONLY_SYMBOLS]
+
+
 async def _resolve_universe() -> list:
     validator = AntiSurvivorshipValidator()
     universe = await validator.build_universe_point_in_time(
@@ -104,8 +142,14 @@ async def run_missing_feature_collectors() -> None:
     symbols = _load_symbols_from_existing_ohlcv(PARQUET_BASE)
     if not symbols:
         raise RuntimeError("Nenhum parquet em /data/parquet/ohlcv_daily encontrado.")
+    unlock_symbols = _exclude_reference_only_symbols(symbols)
 
-    log.info("ingest.missing_features_start", n_symbols=len(symbols))
+    log.info(
+        "ingest.missing_features_start",
+        n_symbols=len(symbols),
+        unlock_symbols=len(unlock_symbols),
+        reference_only_symbols=sorted(REFERENCE_ONLY_SYMBOLS),
+    )
     bn = BinanceCollector(parquet_base=PARQUET_BASE)
     await bn.fetch_and_store(symbols)
 
@@ -113,7 +157,7 @@ async def run_missing_feature_collectors() -> None:
     await stable.fetch_and_store()
 
     unlocks = TokenUnlocksCollector(parquet_base=PARQUET_BASE)
-    await unlocks.fetch_and_store(symbols)
+    await unlocks.fetch_and_store(unlock_symbols)
 
     elapsed = (datetime.utcnow() - start).total_seconds()
     log.info("ingest.missing_features_complete", elapsed_s=round(elapsed, 1))
@@ -134,12 +178,13 @@ async def run_full_ingest() -> None:
     try:
         audit_runtime_storage()
         universe = await _resolve_universe()
+        market_data_universe = _extend_with_reference_assets(universe)
 
         cg = CoinGeckoCollector(parquet_base=PARQUET_BASE)
-        await cg.fetch_and_store(universe)
+        await cg.fetch_and_store(market_data_universe)
 
         bn = BinanceCollector(parquet_base=PARQUET_BASE)
-        await bn.fetch_and_store(universe)
+        await bn.fetch_and_store(market_data_universe)
 
         stable = StablecoinCollector(parquet_base=PARQUET_BASE)
         await stable.fetch_and_store()

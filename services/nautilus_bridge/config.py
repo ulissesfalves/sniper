@@ -28,6 +28,18 @@ def portfolio_state_key(portfolio_id: str, environment: str, suffix: str) -> str
     return f"{STATE_PREFIX}:{portfolio_id}:{environment}:{suffix}"
 
 
+def daemon_lock_key(portfolio_id: str, environment: str) -> str:
+    return portfolio_state_key(portfolio_id, environment, "paper_daemon_lock")
+
+
+def heartbeat_key(portfolio_id: str, environment: str) -> str:
+    return portfolio_state_key(portfolio_id, environment, "paper_daemon_heartbeat")
+
+
+def run_summary_key(portfolio_id: str, environment: str) -> str:
+    return portfolio_state_key(portfolio_id, environment, "paper_daemon_summary")
+
+
 @dataclass(frozen=True)
 class ManagedUniverse:
     version: str
@@ -86,8 +98,12 @@ class BridgeConfig:
     target_stream_key: str = TARGET_STREAM_KEY
     status_stream_key: str = STATUS_STREAM_KEY
     max_signal_age_secs: int = int(os.getenv("SNIPER_BRIDGE_MAX_SIGNAL_AGE_SECS", "86400"))
+    status_timeout_secs: float = float(os.getenv("SNIPER_BRIDGE_STATUS_TIMEOUT_SECS", "30.0"))
     poll_block_ms: int = int(os.getenv("SNIPER_BRIDGE_POLL_BLOCK_MS", "5000"))
     poll_interval_secs: float = float(os.getenv("SNIPER_BRIDGE_POLL_INTERVAL_SECS", "1.0"))
+    daemon_interval_secs: float = float(os.getenv("SNIPER_BRIDGE_DAEMON_INTERVAL_SECS", "300.0"))
+    daemon_lock_ttl_secs: int = int(os.getenv("SNIPER_BRIDGE_DAEMON_LOCK_TTL_SECS", "120"))
+    heartbeat_interval_secs: float = float(os.getenv("SNIPER_BRIDGE_HEARTBEAT_INTERVAL_SECS", "15.0"))
     rebalance_band_bps: int = int(os.getenv("SNIPER_BRIDGE_REBALANCE_BAND_BPS", "25"))
     min_order_notional_usd: float = float(
         os.getenv("SNIPER_BRIDGE_MIN_ORDER_NOTIONAL_USD", "10.0"),
@@ -110,12 +126,24 @@ class BridgeConfig:
     phase4_capital_reference_notional: float = float(
         os.getenv("SNIPER_BRIDGE_PHASE4_CAPITAL_REFERENCE", "200000.0"),
     )
+    phase4_snapshot_max_asof_age_secs: int = int(
+        os.getenv("SNIPER_BRIDGE_PHASE4_MAX_ASOF_AGE_SECS", str(72 * 3600)),
+    )
     paper_starting_balances: tuple[str, ...] = (
         os.getenv("SNIPER_BRIDGE_PAPER_BALANCE", "200000 USDT"),
     )
 
     def cursor_key(self) -> str:
         return stream_cursor_key(self.bridge_id, self.environment)
+
+    def daemon_lock_key(self) -> str:
+        return daemon_lock_key(self.portfolio_id, self.environment)
+
+    def heartbeat_key(self) -> str:
+        return heartbeat_key(self.portfolio_id, self.environment)
+
+    def run_summary_key(self) -> str:
+        return run_summary_key(self.portfolio_id, self.environment)
 
     def managed_universe(self) -> ManagedUniverse:
         return load_managed_universe(self.managed_universe_path)

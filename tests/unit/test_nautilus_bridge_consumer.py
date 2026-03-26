@@ -14,11 +14,13 @@ from services.nautilus_bridge.contract import build_stream_envelope
 
 
 class FakeRedis:
-    def __init__(self, response):
-        self._response = response
+    def __init__(self, responses):
+        self._responses = list(responses)
 
     async def xread(self, *_args, **_kwargs):
-        return self._response
+        if self._responses:
+            return self._responses.pop(0)
+        return []
 
 
 @dataclass
@@ -35,10 +37,14 @@ class FakeStateStore:
         self.last_stream_cursor = stream_id
 
     async def get_last_revision_accepted(self, *_args) -> int | None:
-        return None
+        if self.last_accepted_signal is None:
+            return None
+        return self.last_accepted_signal.payload.portfolio_revision
 
     async def get_last_accepted_fingerprint(self, *_args) -> str | None:
-        return None
+        if self.last_accepted_signal is None:
+            return None
+        return self.last_accepted_signal.payload.signal_fingerprint
 
     async def set_last_accepted_target(self, signal) -> None:
         self.last_accepted_signal = signal
@@ -101,7 +107,7 @@ def test_consumer_normalizes_stream_id_from_xread_bytes() -> None:
         for key, value in envelope.to_stream_fields().items()
     }
     stream_id = b"1773505624555-0"
-    redis = FakeRedis([(b"sniper:portfolio_targets:v1", [(stream_id, fields)])])
+    redis = FakeRedis([[(b"sniper:portfolio_targets:v1", [(stream_id, fields)])]])
     state_store = FakeStateStore()
     status_publisher = FakeStatusPublisher(events=[])
     consumer = RedisSignalConsumer(
@@ -134,6 +140,61 @@ def test_consumer_normalizes_stream_id_from_xread_bytes() -> None:
     ]
     assert all(event["stream_id"] == "1773505624555-0" for event in status_publisher.events)
     assert all("b'" not in event["stream_id"] for event in status_publisher.events)
+
+
+def test_consumer_rejects_duplicate_replay_without_reapply() -> None:
+    payload = build_signal_payload(_payload())
+    envelope = build_stream_envelope(payload)
+    fields = {
+        key.encode("utf-8"): value.encode("utf-8")
+        for key, value in envelope.to_stream_fields().items()
+    }
+    redis = FakeRedis(
+        [
+            [(b"sniper:portfolio_targets:v1", [(b"1773505624555-0", fields)])],
+            [(b"sniper:portfolio_targets:v1", [(b"1773505624999-0", fields)])],
+        ],
+    )
+    state_store = FakeStateStore()
+    status_publisher = FakeStatusPublisher(events=[])
+    handler_calls = {"count": 0}
+
+    async def accepted_handler(_signal) -> SignalApplyResult:
+        handler_calls["count"] += 1
+        return SignalApplyResult.noop_band()
+
+    consumer = RedisSignalConsumer(
+        redis=redis,
+        config=BridgeConfig(),
+        managed_universe=ManagedUniverse(
+            version="calibration.v1",
+            venue="BINANCE_SPOT",
+            quote_currency="USDT",
+            instruments_by_symbol={
+                "ADA": "ADAUSDT.BINANCE_SPOT",
+                "SOL": "SOLUSDT.BINANCE_SPOT",
+            },
+        ),
+        state_store=state_store,
+        status_publisher=status_publisher,
+        accepted_handler=accepted_handler,
+    )
+
+    first_result = asyncio.run(consumer.consume_once(block_ms=1))
+    second_result = asyncio.run(consumer.consume_once(block_ms=1))
+
+    assert first_result is True
+    assert second_result is True
+    assert handler_calls["count"] == 1
+    assert state_store.last_applied_signal.stream_id == "1773505624555-0"
+    assert state_store.last_stream_cursor == "1773505624999-0"
+    assert [event["status"] for event in status_publisher.events] == [
+        "received",
+        "accepted",
+        "noop_band",
+        "received",
+        "rejected_duplicate",
+    ]
 
 
 async def _accepted_handler(_signal) -> SignalApplyResult:

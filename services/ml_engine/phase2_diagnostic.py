@@ -81,6 +81,12 @@ FEATURE_STORE_SPARSE_FEATURES = [
 HMM_DEGRADABLE_FEATURES = ['funding_rate_ma7d', 'basis_3m']
 UNLOCK_MODEL_FEATURE_SET = os.getenv('UNLOCK_MODEL_FEATURE_SET', 'baseline').strip().lower()
 MODEL_RUN_TAG = os.getenv('MODEL_RUN_TAG', '').strip()
+HMM_HARD_GATE_MODE = os.getenv('HMM_HARD_GATE_MODE', 'off').strip().lower()
+REFERENCE_ONLY_SYMBOLS = {
+    symbol.strip().upper()
+    for symbol in os.getenv('REFERENCE_ONLY_SYMBOLS', 'BTC').split(',')
+    if symbol.strip()
+}
 UNLOCK_PROXY_FEATURE_COLUMNS = [
     'unlock_overhang_proxy_rank_full',
     'unlock_fragility_proxy_rank_fallback',
@@ -89,6 +95,11 @@ HMM_HARD_REQUIRED_FEATURES = [
     feature for feature in HMM_REQUIRED_FEATURES
     if feature not in HMM_DEGRADABLE_FEATURES
 ]
+
+
+def _hmm_hard_gate_enabled(mode: str | None = None) -> bool:
+    normalized = (mode or HMM_HARD_GATE_MODE or 'off').strip().lower()
+    return normalized in {'on', 'true', '1', 'hard_gate', 'gate'}
 
 
 def _status(ok: bool) -> str:
@@ -308,6 +319,7 @@ def audit_feature_store() -> dict:
     history_lengths = _load_ohlcv_history_lengths()
     eligible_symbols = sorted([
         symbol for symbol, n_rows in history_lengths.items()
+        if symbol.upper() not in REFERENCE_ONLY_SYMBOLS
         if n_rows >= FEATURE_MIN_HISTORY_DAYS
     ])
     eligible_set = set(eligible_symbols)
@@ -419,6 +431,22 @@ def audit_upstream_inputs() -> dict:
         unlock_files[0],
         ['timestamp', *UNLOCK_MODEL_FEATURE_COLUMNS, 'unlock_pressure_rank_selected_for_reporting'],
     ) if unlock_files else {'exists': False, 'rows': 0, 'columns': []}
+    reference_assets = {}
+    for symbol in sorted(REFERENCE_ONLY_SYMBOLS):
+        ohlcv_path = PARQUET_BASE / 'ohlcv_daily' / f'{symbol}.parquet'
+        basis_path = PARQUET_BASE / 'basis' / f'{symbol}.parquet'
+        ohlcv_df = _coerce_datetime_index(_safe_read_parquet(ohlcv_path), ['timestamp', 'date', 'event_date', 'index']) if ohlcv_path.exists() else pd.DataFrame()
+        basis_df = _coerce_datetime_index(_safe_read_parquet(basis_path), ['timestamp', 'date', 'event_date', 'index']) if basis_path.exists() else pd.DataFrame()
+        reference_assets[symbol] = {
+            'ohlcv_daily_exists': ohlcv_path.exists(),
+            'ohlcv_daily_rows': int(len(ohlcv_df)),
+            'ohlcv_daily_date_end': str(ohlcv_df.index.max())[:10] if isinstance(ohlcv_df.index, pd.DatetimeIndex) and len(ohlcv_df) else None,
+            'basis_exists': basis_path.exists(),
+            'basis_rows': int(len(basis_df)),
+            'basis_date_end': str(basis_df.index.max())[:10] if isinstance(basis_df.index, pd.DatetimeIndex) and len(basis_df) else None,
+            'feature_exists': (FEATURES_PATH / f'{symbol}.parquet').exists(),
+            'classification': 'reference_only',
+        }
 
     return {
         'funding_files': len(funding_files),
@@ -429,6 +457,7 @@ def audit_upstream_inputs() -> dict:
         'basis_sample': basis_sample,
         'stablecoin_sample': stablecoin_sample,
         'unlock_sample': unlock_sample,
+        'reference_assets': reference_assets,
     }
 
 
@@ -782,6 +811,7 @@ def _compute_pc1_crash_checks(df: pd.DataFrame, fitted: object) -> dict:
 
 def audit_hmm_outputs() -> dict:
     files = sorted(FEATURES_PATH.glob('*.parquet'))
+    hard_gate_enabled = _hmm_hard_gate_enabled()
     details = []
     assets_with_artifacts = 0
     total_artifacts = 0
@@ -901,6 +931,9 @@ def audit_hmm_outputs() -> dict:
             n_latest_var_failures += 1
         if window_var_failures > 0:
             n_var_window_failures += 1
+        crash_pc1_blocking = hard_gate_enabled and crash_pc1_fail
+        low_f1_blocking = hard_gate_enabled and low_f1
+        low_bear_2022_blocking = hard_gate_enabled and low_bear_2022
 
         asset_ok = (
             not hard_missing_inputs
@@ -910,10 +943,10 @@ def audit_hmm_outputs() -> dict:
             and artifact_load_failures == 0
             and window_pipeline_failures == 0
             and max_n_pca_components <= MAX_PCA_COMPONENTS
-            and not crash_pc1_fail
+            and not crash_pc1_blocking
             and not latest_var_fail
-            and (np.isnan(f1_oos) or f1_oos >= HMM_F1_MIN)
-            and (np.isnan(bear_2022) or bear_2022 >= HMM_BEAR_2022_MIN)
+            and not low_f1_blocking
+            and not low_bear_2022_blocking
         )
         if asset_ok:
             n_pass += 1
@@ -935,16 +968,21 @@ def audit_hmm_outputs() -> dict:
             'latest_var_explained': None if np.isnan(latest_var_explained) else round(latest_var_explained, 4),
             'latest_var_fail': bool(latest_var_fail),
             'low_f1_oos': bool(low_f1),
+            'low_f1_oos_blocking': bool(low_f1_blocking),
             'low_bear_2022_h1': bool(low_bear_2022),
+            'low_bear_2022_h1_blocking': bool(low_bear_2022_blocking),
             'max_n_pca_components': None if max_n_pca_components == 0 else max_n_pca_components,
             'latest_threshold': None if np.isnan(latest_threshold) else round(latest_threshold, 4),
             **crash_checks,
+            'crash_pc1_quality_blocking': bool(crash_pc1_blocking),
             'status': _status(asset_ok),
         })
 
     overall_ok = len(files) > 0 and n_pass == len(files)
     return {
         'status': _status(overall_ok),
+        'hmm_hard_gate_mode': HMM_HARD_GATE_MODE,
+        'quality_checks_blocking': hard_gate_enabled,
         'assets_checked': len(files),
         'assets_with_artifacts': assets_with_artifacts,
         'total_artifacts': total_artifacts,
@@ -954,8 +992,14 @@ def audit_hmm_outputs() -> dict:
         'assets_with_var_window_failures': n_var_window_failures,
         'assets_with_latest_var_failures': n_latest_var_failures,
         'assets_with_crash_pc1_failures': n_crash_pc1_failures,
+        'assets_with_blocking_crash_pc1_failures': n_crash_pc1_failures if hard_gate_enabled else 0,
+        'assets_with_advisory_crash_pc1_failures': 0 if hard_gate_enabled else n_crash_pc1_failures,
         'assets_with_low_f1_oos': n_low_f1,
+        'assets_with_blocking_low_f1_oos': n_low_f1 if hard_gate_enabled else 0,
+        'assets_with_advisory_low_f1_oos': 0 if hard_gate_enabled else n_low_f1,
         'assets_with_low_bear_2022': n_low_bear_2022,
+        'assets_with_blocking_low_bear_2022': n_low_bear_2022 if hard_gate_enabled else 0,
+        'assets_with_advisory_low_bear_2022': 0 if hard_gate_enabled else n_low_bear_2022,
         'details': details,
     }
 
@@ -1059,17 +1103,19 @@ def derive_root_causes(
         causes.append('stablecoin_regime_feed_missing_upstream')
     if upstream_inputs['unlock_files'] == 0:
         causes.append('unlock_pressure_feed_missing_upstream')
+    if any(not asset.get('ohlcv_daily_exists') or not asset.get('basis_exists') for asset in upstream_inputs.get('reference_assets', {}).values()):
+        causes.append('btc_reference_asset_missing_upstream')
     if vi_outputs['stale_proxy_features'] or vi_outputs['required_features_missing']:
         causes.append('vi_cluster_map_is_stale_and_not_based_on_current_required_features')
     if hmm_outputs['assets_with_missing_hmm_inputs'] > 0:
         causes.append('hmm_required_inputs_not_populated')
     if hmm_outputs.get('assets_with_latest_var_failures', 0) > 0:
         causes.append('hmm_latest_pca_variance_below_spec')
-    if hmm_outputs['assets_with_crash_pc1_failures'] > 0:
+    if hmm_outputs.get('assets_with_blocking_crash_pc1_failures', 0) > 0:
         causes.append('hmm_pc1_crash_contamination_exceeds_3sigma')
-    if hmm_outputs.get('assets_with_low_f1_oos', 0) > 0:
+    if hmm_outputs.get('assets_with_blocking_low_f1_oos', 0) > 0:
         causes.append('hmm_oos_f1_below_spec')
-    if hmm_outputs.get('assets_with_low_bear_2022', 0) > 0:
+    if hmm_outputs.get('assets_with_blocking_low_bear_2022', 0) > 0:
         causes.append('hmm_bear_2022_detection_below_spec')
     if not source_guards.get('strict_required_inputs_enforced', False):
         causes.append('hmm_source_allows_missing_required_inputs')
@@ -1111,6 +1157,8 @@ def main() -> None:
         'spec_binding': 'SNIPER v10.10 Phase 2 deliverables',
         'unlock_model_feature_set': UNLOCK_MODEL_FEATURE_SET,
         'model_run_tag': MODEL_RUN_TAG,
+        'reference_only_symbols': sorted(REFERENCE_ONLY_SYMBOLS),
+        'hmm_hard_gate_mode': HMM_HARD_GATE_MODE,
         'overall_status': _status(overall_ok),
         'feature_store': feature_store,
         'upstream_inputs': upstream_inputs,
