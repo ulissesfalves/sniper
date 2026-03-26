@@ -1,0 +1,120 @@
+{
+  "gate_slug": "bootstrap_gates",
+  "phase_family": "governance_bootstrap",
+  "status": "PASS",
+  "decision": "advance",
+  "baseline_commit": "d6d9adf7743cdaf0b1922c742f302af88baa7ee3",
+  "working_tree_dirty": false,
+  "branch": "codex/bootstrap-gates",
+  "official_artifacts_used": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+      "sha256_before": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9",
+      "sha256_after": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "sha256_before": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB",
+      "sha256_after": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+      "sha256_before": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23",
+      "sha256_after": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23"
+    }
+  ],
+  "research_artifacts_generated": [],
+  "summary": {
+    "sharpe_operational": null,
+    "dsr_honest": null,
+    "latest_active_count": null,
+    "headroom_real": null,
+    "historical_active_events": null
+  },
+  "gates": [
+    {
+      "name": "gate_report_json_present",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "gate_report_md_present",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "gate_manifest_json_present",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "gate_metrics_parquet_present",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "json_schema_valid",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "markdown_sections_valid",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "official_artifacts_unchanged",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "tests_passed",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "branch_prepared",
+      "value": true,
+      "threshold": "branch starts with codex/",
+      "status": "PASS"
+    },
+    {
+      "name": "commit_created",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "push_attempted",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "compare_url_generated",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "push_succeeded",
+      "value": true,
+      "threshold": "informational",
+      "status": "PASS"
+    }
+  ],
+  "blockers": [],
+  "risks_residual": [
+    "Writer padronizado ainda nao foi integrado aos runners research; isso entra na proxima rodada tecnica.",
+    "gate_manifest.json nao carrega o proprio sha256 internamente para evitar auto-referencia."
+  ],
+  "next_recommended_step": "Usar services/common/gate_reports.py no proximo experimento research-only e manter os gate packs em reports/gates/<gate_slug>/."
+}

@@ -1,0 +1,84 @@
+{
+  "gate_slug": "bootstrap_gates",
+  "timestamp_utc": "2026-03-26T23:57:26+00:00",
+  "baseline_commit": "d6d9adf7743cdaf0b1922c742f302af88baa7ee3",
+  "branch": "codex/bootstrap-gates",
+  "working_tree_dirty_before": false,
+  "working_tree_dirty_after": false,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\services\\ml_engine\\phase4_stage_a_experiment.py",
+      "sha256": "568DA7C716A3A9C564F9F3DF9B64A9D36E3D6E1AF4BFCCE1F81DB7B45BDB834D",
+      "role": "reference_pattern"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\tests\\unit\\test_phase4_stage_a_experiment.py",
+      "sha256": "B7C2FF2A150269D4319A11457A537F549BAB4F0FEAB3FB3ABACA1FEE59291216",
+      "role": "reference_pattern"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+      "sha256": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9",
+      "role": "official_baseline",
+      "sha256_before": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9",
+      "sha256_after": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "sha256": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB",
+      "role": "official_baseline",
+      "sha256_before": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB",
+      "sha256_after": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+      "sha256": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23",
+      "role": "official_baseline",
+      "sha256_before": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23",
+      "sha256_after": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\bootstrap_gates\\gate_report.json",
+      "sha256": "4F9F2D3B2F32F0C3942B7BAC61A6C2861808B6FB19B8166E341BE4A87AAAC59B"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\bootstrap_gates\\gate_report.md",
+      "sha256": "A0ABF15698FD60872B923E6CF0422B15C5476EF49993C7791F167A25EA74B64C"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\bootstrap_gates\\gate_metrics.parquet",
+      "sha256": "3557A283A05BF1978A4F20D5BD058DDBB91A926DAF00DC2818952CC7401F9A44"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\bootstrap_gates\\gate_manifest.json",
+      "sha256_note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    "git branch --show-current",
+    "git rev-parse HEAD",
+    "git status --short",
+    "git diff --stat",
+    "Get-FileHash data\\models\\phase4\\phase4_report_v4.json,data\\models\\phase4\\phase4_execution_snapshot.parquet,data\\models\\phase4\\phase4_aggregated_predictions.parquet -Algorithm SHA256 | Select-Object Path,Hash",
+    "Get-ChildItem services -Recurse -Depth 2 | Where-Object { $_.PSIsContainer -and ($_.FullName -match common|utils) } | Select-Object FullName",
+    "Get-Content services\\ml_engine\\phase4_stage_a_experiment.py | Select-Object -Skip 0 -First 220",
+    "Get-Content tests\\unit\\test_phase4_stage_a_experiment.py | Select-Object -First 260",
+    "Get-ChildItem services | Select-Object Name,PSIsContainer",
+    "Get-ChildItem services\\ml_engine | Select-Object -First 20 Name",
+    "Get-ChildItem services -Recurse -Filter __init__.py | Select-Object -ExpandProperty FullName",
+    "python -m py_compile services\\common\\gate_reports.py tests\\unit\\test_gate_reports.py",
+    "python -m pytest tests\\unit\\test_gate_reports.py -q",
+    "git add services\\common\\__init__.py services\\common\\gate_reports.py tests\\unit\\test_gate_reports.py",
+    "git commit -m \"chore(gates): bootstrap standardized gate reports\"",
+    "git push -u origin codex/bootstrap-gates",
+    "@...bootstrap gate generation script...@ | python -"
+  ],
+  "notes": [
+    "Bootstrap somente da governanca de gates; nenhum experimento Stage A foi executado nesta rodada.",
+    "Compare URL: https://github.com/ulissesfalves/sniper/compare/main...codex/bootstrap-gates?expand=1",
+    "PR open URL: https://github.com/ulissesfalves/sniper/pull/new/codex/bootstrap-gates",
+    "Push succeeded: True"
+  ]
+}
