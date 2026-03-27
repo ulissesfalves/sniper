@@ -1,0 +1,109 @@
+{
+  "gate_slug": "phase4_cross_sectional_decision_space_latest_eval",
+  "phase_family": "phase4_research_cross_sectional",
+  "status": "PASS",
+  "decision": "correct",
+  "baseline_commit": "010260b0b3e10a1fbf582a9eb4493c869d4d72c1",
+  "working_tree_dirty": true,
+  "branch": "codex/phase4-cross-sectional-decision-space-latest-eval",
+  "official_artifacts_used": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+      "sha256_before": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9",
+      "sha256_after": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "sha256_before": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB",
+      "sha256_after": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+      "sha256_before": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23",
+      "sha256_after": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23"
+    }
+  ],
+  "research_artifacts_generated": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_decision_space_latest_eval\\decision_space_latest_eval.parquet",
+      "sha256": "A932E8E9D822E2A4AB0B81A6A5010DEF89D8815E833CF073C431C9BFE5152127"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_decision_space_latest_eval\\label_vs_decision_space_metrics.parquet",
+      "sha256": "F8348FBDF8ACCC78CF5F99196B10DAE4FAE30B61403DA2C12D81448F15DA811D"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_decision_space_latest_eval\\decision_space_eval_definition.json",
+      "sha256": "55F39F6FC8EAE200708FFA9B291F46F5ECA50CE2D9F574D5134B4A3D411604EA"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_decision_space_latest_eval\\cross_sectional_decision_space_eval_summary.json",
+      "sha256": "84BA758E7D2E103654549AD416DDF9E91425DCF02FF9AFEC6C8397EDAE2D985B"
+    }
+  ],
+  "summary": {
+    "sharpe_operational": 16.6648,
+    "dsr_honest": 1.0,
+    "latest_active_count": 0,
+    "headroom_real": false,
+    "historical_active_events": 1290
+  },
+  "gates": [
+    {
+      "name": "official_artifacts_unchanged",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "no_official_research_mixing",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "decision_space_eval_defined",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "label_vs_decision_metrics_materialized",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "latest_decision_space_trace_materialized",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "recent_window_reinterpreted",
+      "value": 8,
+      "threshold": ">=8",
+      "status": "PASS"
+    },
+    {
+      "name": "final_classification_assigned",
+      "value": "DECISION_SPACE_EVAL_VALIDATED",
+      "threshold": "one_of(DECISION_SPACE_EVAL_VALIDATED,DECISION_SPACE_EVAL_REJECTED,INCONCLUSIVE_EVAL_REDESIGN)",
+      "status": "PASS"
+    },
+    {
+      "name": "tests_passed",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    }
+  ],
+  "blockers": [
+    "A lente antiga de latest/headroom continua invalida para esta familia porque zera o contest usando elegibilidade realizada; sob decision-space causal o latest permanece vivo com candidatos selecionados e posicao > 0."
+  ],
+  "risks_residual": [
+    "O gate summary continua em compatibilidade com a lente antiga; a leitura operacional desta familia deve usar os equivalentes causais desta rodada.",
+    "A familia continua research-only; nenhum resultado desta rodada governa snapshot oficial, fast path ou bridge."
+  ],
+  "next_recommended_step": "Abrir uma ultima rodada research-only para usar a regua causal como avaliacao soberana de latest/headroom desta familia e decidir o fechamento da Fase 4 sem tocar no official."
+}

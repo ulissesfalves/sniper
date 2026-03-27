@@ -1,0 +1,93 @@
+{
+  "gate_slug": "phase4_cross_sectional_decision_space_latest_eval",
+  "timestamp_utc": "2026-03-27T15:38:57+00:00",
+  "baseline_commit": "010260b0b3e10a1fbf582a9eb4493c869d4d72c1",
+  "branch": "codex/phase4-cross-sectional-decision-space-latest-eval",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_ranking_baseline\\gate_report.json",
+      "sha256": "9EDA0BDF42F273C690DE5FE66B3CFD4827DC16911D4FB3F3B70DE57829DADAF1"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\cross_sectional_diagnostics.json",
+      "sha256": "D5CB69772AE66FBC17663DEBFDAF33DE2542166844C9D00A80655E1027DFC6D4"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\cross_sectional_eval_summary.json",
+      "sha256": "FEAC05CF6F143BCDD3A0B090CE23DACCB1F524F042EECAA3F936777059DAB3BA"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_no_contest_vs_ranking_failure\\gate_report.json",
+      "sha256": "FA72856A15C18831EAE40685F8E5B0D21484E9626B8C1A1AD48513BA2B9E7F3A"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_no_contest_vs_ranking_failure\\latest_definition_alignment.json",
+      "sha256": "E1381D8D3C4A6EA3FE0D92C44FDBD17AC549DBD116CFE6E2F1FA913D1CBDE588"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\cross_sectional_predictions.parquet",
+      "sha256": "A78AE2B87EF3048C53727B6D975C9644B30BAE268065D5DD70112937644B3950"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+      "sha256": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "sha256": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+      "sha256": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_decision_space_latest_eval\\gate_report.json",
+      "sha256": "AC34A0F78BB6D3F59EAA84AE4B804CF28752CC4DBFBD6A5E33CEB549E7A515CE"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_decision_space_latest_eval\\gate_report.md",
+      "sha256": "5FB2E66F81C8E09ACD8DB2ECD074626405D9E287D010364FF17F0118D723F8AE"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_decision_space_latest_eval\\gate_metrics.parquet",
+      "sha256": "E980BEBCA7D95F5D8A4FB664F9689F271025EC932049509754AACE9AA90ABFE6"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_decision_space_latest_eval\\gate_manifest.json",
+      "sha256_note": "self hash omitted inside manifest to avoid self-reference"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_decision_space_latest_eval\\decision_space_latest_eval.parquet",
+      "sha256": "A932E8E9D822E2A4AB0B81A6A5010DEF89D8815E833CF073C431C9BFE5152127"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_decision_space_latest_eval\\label_vs_decision_space_metrics.parquet",
+      "sha256": "F8348FBDF8ACCC78CF5F99196B10DAE4FAE30B61403DA2C12D81448F15DA811D"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_decision_space_latest_eval\\decision_space_eval_definition.json",
+      "sha256": "55F39F6FC8EAE200708FFA9B291F46F5ECA50CE2D9F574D5134B4A3D411604EA"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_decision_space_latest_eval\\cross_sectional_decision_space_eval_summary.json",
+      "sha256": "84BA758E7D2E103654549AD416DDF9E91425DCF02FF9AFEC6C8397EDAE2D985B"
+    }
+  ],
+  "commands_executed": [
+    "git branch --show-current",
+    "git rev-parse HEAD",
+    "git status --short",
+    "git diff --stat",
+    "python -m py_compile services\\ml_engine\\phase4_cross_sectional_decision_space_latest_eval.py tests\\unit\\test_phase4_cross_sectional_decision_space_latest_eval.py",
+    "python -m pytest tests\\unit\\test_phase4_cross_sectional_decision_space_latest_eval.py -q",
+    "$env:PHASE4_CROSS_SECTIONAL_DECISION_SPACE_EVAL_TESTS_PASSED='1'; python services\\ml_engine\\phase4_cross_sectional_decision_space_latest_eval.py"
+  ],
+  "notes": [
+    "Gate report summary preserves the legacy label-space latest/headroom values for compatibility with prior rounds.",
+    "Decision-space causal equivalents are materialized explicitly in the research artifacts of this round."
+  ]
+}

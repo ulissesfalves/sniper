@@ -1,0 +1,107 @@
+{
+  "gate_slug": "phase4_cross_sectional_decision_space_latest_eval",
+  "generated_at_utc": "2026-03-27T15:38:57+00:00",
+  "legacy_label_space_lens": {
+    "latest_active_count_label_space_definition": "count(position_usdt_stage_a > 0) on the latest date after stage_a_selected_proxy, where stage_a_selected_proxy is defined only over realized eligible = (pnl_real > avg_sl_train).",
+    "headroom_label_space_definition": "max(position_usdt_stage_a) > 0 on the latest date under the same realized-space proxy.",
+    "fields_used": [
+      {
+        "field": "pnl_real",
+        "available_ex_ante": false,
+        "role": "realized eligible gate"
+      },
+      {
+        "field": "avg_sl_train",
+        "available_ex_ante": true,
+        "role": "train-side hurdle statistic"
+      },
+      {
+        "field": "stage_a_selected_proxy",
+        "available_ex_ante": false,
+        "role": "selection after realized eligible filter"
+      },
+      {
+        "field": "position_usdt_stage_a",
+        "available_ex_ante": false,
+        "role": "position after realized eligible filter"
+      }
+    ],
+    "causal_valid_for_latest": false,
+    "why_not": "It zeroes the latest contest before ranking whenever no row satisfies realized eligible = (pnl_real > avg_sl_train), even if ex-ante rank scores and ex-ante sizing inputs are present."
+  },
+  "decision_space_causal_lens": {
+    "latest_active_count_decision_space_definition": "count(decision_selected and decision_position_usdt > 0) on the latest date, using only rank_score_stage_a, cluster contest scope, avg_tp_train and avg_sl_train.",
+    "headroom_decision_space_definition": "max(decision_position_usdt) > 0 on the latest date under decision-space selection.",
+    "fields_used": [
+      {
+        "field": "rank_score_stage_a",
+        "available_ex_ante": true,
+        "role": "OOS score used to rank the latest contest"
+      },
+      {
+        "field": "cluster_name",
+        "available_ex_ante": true,
+        "role": "contest scope"
+      },
+      {
+        "field": "avg_tp_train",
+        "available_ex_ante": true,
+        "role": "ex-ante sizing input"
+      },
+      {
+        "field": "avg_sl_train",
+        "available_ex_ante": true,
+        "role": "ex-ante sizing input"
+      },
+      {
+        "field": "decision_selection_mode",
+        "available_ex_ante": true,
+        "role": "local vs fallback contest routing"
+      },
+      {
+        "field": "decision_position_usdt",
+        "available_ex_ante": true,
+        "role": "proxy position generated from ex-ante score plus train-side sizing inputs"
+      }
+    ],
+    "operational_availability_definition": "decision_space_available = non-null rank_score_stage_a + positive avg_tp_train + positive avg_sl_train + non-empty cluster_name",
+    "selection_policy": "Select top1 by rank_score_stage_a within (date, cluster_name) among decision_space_available rows; fallback to top1(date-universe) when available_count(date, cluster_name) < 2.",
+    "causal_valid_for_latest": true
+  },
+  "latest_side_by_side": {
+    "latest_date": "2026-03-20",
+    "latest_active_count_label_space": 0,
+    "latest_active_count_decision_space": 2,
+    "headroom_label_space": false,
+    "headroom_decision_space": true,
+    "label_space_status": "dead_no_label_contest",
+    "decision_space_status": "live",
+    "label_selected_symbols": [],
+    "decision_selected_symbols": [
+      "ENA",
+      "TAO"
+    ]
+  },
+  "recent_window_reinterpretation": {
+    "n_dates": 8,
+    "dead_to_live_shift_dates": [
+      "2026-03-20"
+    ],
+    "dead_to_live_shift_count": 1,
+    "live_to_dead_shift_count": 0,
+    "label_live_dates": 7,
+    "decision_live_dates": 8,
+    "full_history_dead_to_live_count": 970
+  },
+  "baseline_reference": {
+    "baseline_gate_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_ranking_baseline\\gate_report.json",
+    "baseline_summary_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\cross_sectional_eval_summary.json",
+    "no_contest_gate_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_no_contest_vs_ranking_failure\\gate_report.json",
+    "no_contest_alignment_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_no_contest_vs_ranking_failure\\latest_definition_alignment.json",
+    "baseline_classification": "INCONCLUSIVE_BASELINE",
+    "no_contest_classification": "LATEST_EVALUATION_MISALIGNED",
+    "no_contest_gate_status": "PASS"
+  },
+  "final_classification": "DECISION_SPACE_EVAL_VALIDATED",
+  "blocker_real": "A lente antiga de latest/headroom continua invalida para esta familia porque zera o contest usando elegibilidade realizada; sob decision-space causal o latest permanece vivo com candidatos selecionados e posicao > 0."
+}

@@ -1,0 +1,31 @@
+{
+  "classification": "DECISION_SPACE_EVAL_VALIDATED",
+  "decision": "correct",
+  "summary_compatibility_note": "gate_report.summary remains on the legacy label-space lens for schema compatibility with prior rounds; decision-space causal equivalents are materialized side by side in this artifact set.",
+  "legacy_summary": {
+    "sharpe_operational": 16.6648,
+    "dsr_honest": 1.0,
+    "latest_active_count": 0,
+    "headroom_real": false,
+    "historical_active_events": 1290
+  },
+  "latest_metrics": {
+    "label_space": {
+      "latest_active_count": 0,
+      "headroom": false,
+      "status": "dead_no_label_contest"
+    },
+    "decision_space": {
+      "latest_active_count": 2,
+      "headroom": true,
+      "status": "live"
+    }
+  },
+  "recent_window": {
+    "n_dates": 8,
+    "dead_to_live_shift_count": 1,
+    "decision_live_dates": 8,
+    "label_live_dates": 7
+  },
+  "next_recommended_step": "Abrir uma ultima rodada research-only para usar a regua causal como avaliacao soberana de latest/headroom desta familia e decidir o fechamento da Fase 4 sem tocar no official."
+}
