@@ -1,0 +1,103 @@
+{
+  "gate_slug": "phase4_cross_sectional_latest_choke_audit",
+  "phase_family": "phase4_research_cross_sectional",
+  "status": "PASS",
+  "decision": "correct",
+  "baseline_commit": "e0aac7a379e6a639ee3109aea448c547382ea970",
+  "working_tree_dirty": true,
+  "branch": "codex/phase4-cross-sectional-latest-choke-audit",
+  "official_artifacts_used": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+      "sha256_before": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9",
+      "sha256_after": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "sha256_before": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB",
+      "sha256_after": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+      "sha256_before": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23",
+      "sha256_after": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23"
+    }
+  ],
+  "research_artifacts_generated": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_latest_choke_audit\\latest_choke_funnel.parquet",
+      "sha256": "8BDBA16F8FDB9EAC01EBDCD54464EEC3F6C8DAAD93CD867106D7FB1D6339C59F"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_latest_choke_audit\\latest_candidate_trace.parquet",
+      "sha256": "B324E0736774FB7CE28361CEB1C29B1F516B0BD537DF27770D4F972BC4FBE5A4"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_latest_choke_audit\\cross_sectional_latest_choke_diagnostics.json",
+      "sha256": "CC86F2FBB7092B8DBBABFF102852B977DFE4A4A139FBE33DB844E26C5A638DA6"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_latest_choke_audit\\cross_sectional_latest_choke_summary.json",
+      "sha256": "FCA226177E1D5D250E891E10374710AFC102D543EF06F1BF6C3B465249531DCA"
+    }
+  ],
+  "summary": {
+    "sharpe_operational": 16.6648,
+    "dsr_honest": 1.0,
+    "latest_active_count": 0,
+    "headroom_real": false,
+    "historical_active_events": 1290
+  },
+  "gates": [
+    {
+      "name": "official_artifacts_unchanged",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "no_official_research_mixing",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "latest_funnel_measured",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "latest_candidate_trace_materialized",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "recent_window_compared",
+      "value": 8,
+      "threshold": ">=8",
+      "status": "PASS"
+    },
+    {
+      "name": "final_classification_assigned",
+      "value": "LATEST_CHOKE_IDENTIFIED",
+      "threshold": "one_of(LATEST_CHOKE_IDENTIFIED,NO_LATEST_HEADROOM_STRUCTURAL,INCONCLUSIVE_LATEST_AUDIT)",
+      "status": "PASS"
+    },
+    {
+      "name": "tests_passed",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    }
+  ],
+  "blockers": [
+    "O latest morre no eligibility_gate: na data mais recente nao houve nenhum candidato com pnl_real > avg_sl_train, embora a janela imediatamente anterior tenha produzido selecao e posicao > 0."
+  ],
+  "risks_residual": [
+    "O latest continua soberano; historico forte nao resolve latest morto por si so.",
+    "O baseline cross-sectional ainda precisa distinguir explicitamente 'no contest' de 'ranking failure' no corte mais recente."
+  ],
+  "next_recommended_step": "Abrir uma rodada corretiva curta para separar explicitamente 'no contest' de 'ranking failure' no latest desta familia."
+}

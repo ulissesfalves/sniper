@@ -1,0 +1,83 @@
+{
+  "gate_slug": "phase4_cross_sectional_latest_choke_audit",
+  "timestamp_utc": "2026-03-27T02:40:13+00:00",
+  "baseline_commit": "e0aac7a379e6a639ee3109aea448c547382ea970",
+  "branch": "codex/phase4-cross-sectional-latest-choke-audit",
+  "working_tree_dirty_before": false,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\cross_sectional_predictions.parquet",
+      "sha256": "A78AE2B87EF3048C53727B6D975C9644B30BAE268065D5DD70112937644B3950",
+      "role": "baseline_cross_sectional_predictions"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\cross_sectional_latest_snapshot.parquet",
+      "sha256": "FE1E050820ABE77C7DF35318F13301F2A7443AE45B75B2D322CAC0AF233032B7",
+      "role": "baseline_cross_sectional_snapshot"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\cross_sectional_diagnostics.json",
+      "sha256": "D5CB69772AE66FBC17663DEBFDAF33DE2542166844C9D00A80655E1027DFC6D4",
+      "role": "baseline_cross_sectional_diagnostics"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\cross_sectional_eval_summary.json",
+      "sha256": "FEAC05CF6F143BCDD3A0B090CE23DACCB1F524F042EECAA3F936777059DAB3BA",
+      "role": "baseline_cross_sectional_summary"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_ranking_baseline\\gate_report.json",
+      "sha256": "9EDA0BDF42F273C690DE5FE66B3CFD4827DC16911D4FB3F3B70DE57829DADAF1",
+      "role": "baseline_cross_sectional_gate"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+      "sha256": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9",
+      "role": "official_phase4_report"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "sha256": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB",
+      "role": "official_phase4_snapshot"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+      "sha256": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23",
+      "role": "official_phase4_aggregated_predictions"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_latest_choke_audit\\gate_report.json",
+      "sha256": "F277A8E4C3D5C9DDF947659EB6D7357A4AFFA0640D20AB8DC308C1125DA7CBD6"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_latest_choke_audit\\gate_report.md",
+      "sha256": "B1B2D744B93F241ABCC7576CE1C7975476655821B6AD112BC8F0F4BFD653CF3D"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_latest_choke_audit\\gate_metrics.parquet",
+      "sha256": "DE54A3B8194CA98A6EAAF043CABA7A7B54BAFC042C99B871788F3C6EBB0B108F"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_latest_choke_audit\\gate_manifest.json",
+      "sha256_note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    "git branch --show-current",
+    "git rev-parse HEAD",
+    "git status --short --untracked-files=all",
+    "git diff --stat",
+    "Get-FileHash data\\models\\phase4\\phase4_report_v4.json,data\\models\\phase4\\phase4_execution_snapshot.parquet,data\\models\\phase4\\phase4_aggregated_predictions.parquet -Algorithm SHA256 | Select-Object Path,Hash",
+    "python -m py_compile services\\ml_engine\\phase4_cross_sectional_latest_choke_audit.py tests\\unit\\test_phase4_cross_sectional_latest_choke_audit.py",
+    "python -m pytest tests\\unit\\test_phase4_cross_sectional_latest_choke_audit.py -q",
+    "python services\\ml_engine\\phase4_cross_sectional_latest_choke_audit.py"
+  ],
+  "notes": [
+    "final_classification=LATEST_CHOKE_IDENTIFIED",
+    "decision=correct",
+    "latest actual date is 2026-03-20 while latest date with eligible candidates is 2026-03-16"
+  ]
+}
