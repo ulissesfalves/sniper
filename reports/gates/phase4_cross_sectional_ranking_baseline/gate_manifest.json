@@ -1,0 +1,74 @@
+{
+  "gate_slug": "phase4_cross_sectional_ranking_baseline",
+  "timestamp_utc": "2026-03-27T01:47:08+00:00",
+  "baseline_commit": "120ba6866f32284c0f1ffa54d5faefad03682549",
+  "branch": "codex/phase4-cross-sectional-ranking-baseline",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\services\\ml_engine\\phase4_stage_a_experiment.py",
+      "sha256": "568DA7C716A3A9C564F9F3DF9B64A9D36E3D6E1AF4BFCCE1F81DB7B45BDB834D",
+      "role": "cross_sectional_stage_a_runner"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+      "sha256": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9",
+      "role": "official_phase4_report"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "sha256": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB",
+      "role": "official_phase4_snapshot"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+      "sha256": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23",
+      "role": "official_phase4_aggregated_predictions"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_meta_upstream_remediation\\gate_report.json",
+      "sha256": "4E6EED10D7B277DC16A39106DAE850CE18BE1D9BF5D57B29625DC34DB341182C",
+      "role": "prior_meta_remediation_gate"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_meta_upstream_remediation\\meta_upstream_remediation_summary.json",
+      "sha256": "8B57B28C506B6E6C37FF8CEC8A697B315BA0D1C314D6EE03003868FA384B4916",
+      "role": "prior_meta_remediation_summary"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_ranking_baseline\\gate_report.json",
+      "sha256": "9EDA0BDF42F273C690DE5FE66B3CFD4827DC16911D4FB3F3B70DE57829DADAF1"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_ranking_baseline\\gate_report.md",
+      "sha256": "4AD0D85098DDC3046AC6A86DD89774CB2381CFD9B682541ECB88FC222E817CC3"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_ranking_baseline\\gate_metrics.parquet",
+      "sha256": "FD5444615341EB0EAB29025B87EE27A9647F45B0494E9D324C0CA316C5E32D84"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_ranking_baseline\\gate_manifest.json",
+      "sha256_note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    "git branch --show-current",
+    "git rev-parse HEAD",
+    "git status --short --untracked-files=all",
+    "git diff --stat",
+    "Get-FileHash data\\models\\phase4\\phase4_report_v4.json,data\\models\\phase4\\phase4_execution_snapshot.parquet,data\\models\\phase4\\phase4_aggregated_predictions.parquet -Algorithm SHA256 | Select-Object Path,Hash",
+    "python -m py_compile services\\ml_engine\\phase4_cross_sectional_ranking_baseline.py tests\\unit\\test_phase4_cross_sectional_ranking_baseline.py",
+    "python -m pytest tests\\unit\\test_phase4_cross_sectional_ranking_baseline.py tests\\unit\\test_phase4_stage_a_experiment.py -q",
+    "python services\\ml_engine\\phase4_cross_sectional_ranking_baseline.py"
+  ],
+  "notes": [
+    "final_classification=INCONCLUSIVE_BASELINE",
+    "decision=correct",
+    "research-only baseline; official phase4 artifacts unchanged by hash",
+    "cross-sectional proxy uses top1(date,cluster_name) among eligible rows with fallback to date-universe top1 when local support < 2"
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "gate_slug": "phase4_cross_sectional_ranking_baseline",
+  "phase_family": "phase4_research_cross_sectional",
+  "status": "PASS",
+  "decision": "correct",
+  "baseline_commit": "120ba6866f32284c0f1ffa54d5faefad03682549",
+  "working_tree_dirty": true,
+  "branch": "codex/phase4-cross-sectional-ranking-baseline",
+  "official_artifacts_used": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+      "sha256_before": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9",
+      "sha256_after": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "sha256_before": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB",
+      "sha256_after": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+      "sha256_before": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23",
+      "sha256_after": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23"
+    }
+  ],
+  "research_artifacts_generated": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\cross_sectional_predictions.parquet",
+      "sha256": "A78AE2B87EF3048C53727B6D975C9644B30BAE268065D5DD70112937644B3950"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\cross_sectional_latest_snapshot.parquet",
+      "sha256": "FE1E050820ABE77C7DF35318F13301F2A7443AE45B75B2D322CAC0AF233032B7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\cross_sectional_diagnostics.json",
+      "sha256": "D5CB69772AE66FBC17663DEBFDAF33DE2542166844C9D00A80655E1027DFC6D4"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\cross_sectional_eval_summary.json",
+      "sha256": "FEAC05CF6F143BCDD3A0B090CE23DACCB1F524F042EECAA3F936777059DAB3BA"
+    }
+  ],
+  "summary": {
+    "sharpe_operational": 16.6648,
+    "dsr_honest": 1.0,
+    "latest_active_count": 0,
+    "headroom_real": false,
+    "historical_active_events": 1290
+  },
+  "gates": [
+    {
+      "name": "official_artifacts_unchanged",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "no_official_research_mixing",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "cross_sectional_task_defined",
+      "value": "truth_top1 within (date, cluster_name) among eligible rows where eligible = (pnl_real > avg_sl_train); fallback to top1(date-universe) when eligible_count(date, cluster_name) < 2",
+      "threshold": "non_empty",
+      "status": "PASS"
+    },
+    {
+      "name": "baseline_runner_executed",
+      "value": 0,
+      "threshold": "0",
+      "status": "PASS"
+    },
+    {
+      "name": "research_artifacts_generated",
+      "value": 4,
+      "threshold": "4",
+      "status": "PASS"
+    },
+    {
+      "name": "latest_snapshot_materialized",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "operational_metrics_materialized",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "final_classification_assigned",
+      "value": "INCONCLUSIVE_BASELINE",
+      "threshold": "one_of(PROMISING_OPERATIONAL_BASELINE,WEAK_OPERATIONAL_BASELINE,INCONCLUSIVE_BASELINE)",
+      "status": "PASS"
+    },
+    {
+      "name": "tests_passed",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    }
+  ],
+  "blockers": [
+    "O baseline cross-sectional melhora historico/priorizacao sobre a familia abandonada, mas ainda nao abre latest activation/headroom suficiente."
+  ],
+  "risks_residual": [
+    "Ranking metrics auxiliares nao sao tratadas como merito operacional suficiente por si so.",
+    "Latest snapshot continua soberano para dizer se o baseline realmente abriu headroom util ou nao."
+  ],
+  "next_recommended_step": "Executar uma unica rodada tecnica para explicar o choke do latest dentro desta nova familia antes de qualquer endurecimento maior."
+}
