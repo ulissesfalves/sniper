@@ -1,0 +1,86 @@
+{
+  "gate_slug": "phase4_cross_sectional_closure_gate",
+  "generated_at_utc": "2026-03-27T17:08:22+00:00",
+  "sovereign_eval_definition": {
+    "latest_active_count": "latest_active_count_decision_space = count(decision_selected and decision_position_usdt > 0) on the latest date.",
+    "headroom_real": "headroom_decision_space = max(decision_position_usdt) > 0 on the latest date.",
+    "historical_active_events": "count(decision_position_usdt > 0) across the full research history.",
+    "source_fields": [
+      {
+        "field": "rank_score_stage_a",
+        "available_ex_ante": true,
+        "role": "OOS score used to rank the latest contest"
+      },
+      {
+        "field": "cluster_name",
+        "available_ex_ante": true,
+        "role": "contest scope"
+      },
+      {
+        "field": "avg_tp_train",
+        "available_ex_ante": true,
+        "role": "ex-ante sizing input"
+      },
+      {
+        "field": "avg_sl_train",
+        "available_ex_ante": true,
+        "role": "ex-ante sizing input"
+      },
+      {
+        "field": "decision_selection_mode",
+        "available_ex_ante": true,
+        "role": "local vs fallback contest routing"
+      },
+      {
+        "field": "decision_position_usdt",
+        "available_ex_ante": true,
+        "role": "proxy position generated from ex-ante score plus train-side sizing inputs"
+      }
+    ],
+    "operational_availability_definition": "decision_space_available = non-null rank_score_stage_a + positive avg_tp_train + positive avg_sl_train + non-empty cluster_name",
+    "selection_policy": "Select top1 by rank_score_stage_a within (date, cluster_name) among decision_space_available rows; fallback to top1(date-universe) when available_count(date, cluster_name) < 2."
+  },
+  "compatibility_only_metrics": {
+    "latest_active_count_legacy": 0,
+    "headroom_real_legacy": false,
+    "why_compat_only": "These values depend on realized-space eligible = (pnl_real > avg_sl_train) and are kept only for backward compatibility in gate_report.summary."
+  },
+  "phase4_closure_governance": {
+    "sovereign_gates": [
+      {
+        "name": "dsr_honest",
+        "threshold": "> 0"
+      },
+      {
+        "name": "sharpe_operational",
+        "threshold": ">= 0.70"
+      },
+      {
+        "name": "latest_active_count_decision_space",
+        "threshold": ">= 1"
+      },
+      {
+        "name": "headroom_decision_space",
+        "threshold": "true"
+      },
+      {
+        "name": "recent_live_dates_decision_space",
+        "threshold": ">= 7 of last 8"
+      },
+      {
+        "name": "historical_active_events_decision_space",
+        "threshold": ">= historical_active_events_legacy"
+      }
+    ],
+    "legacy_summary_note": "gate_report.summary remains in legacy compatibility mode, but the final closure decision of this round is governed only by the sovereign decision-space metrics."
+  },
+  "latest_side_by_side": {
+    "latest_date": "2026-03-20",
+    "latest_active_count_legacy": 0,
+    "latest_active_count_sovereign": 2,
+    "headroom_legacy": false,
+    "headroom_sovereign": true
+  },
+  "final_classification": "PHASE4_APPROVED_FOR_HARDENING",
+  "next_recommended_step": "Fase 4 fechada para esta familia; a proxima rodada pode abrir Fase 5 sem promover nada ao official nesta mesma entrega."
+}

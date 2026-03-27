@@ -1,0 +1,101 @@
+{
+  "gate_slug": "phase4_cross_sectional_closure_gate",
+  "phase_family": "phase4_research_cross_sectional",
+  "status": "PASS",
+  "decision": "advance",
+  "baseline_commit": "4b121d82e2a22069c00d0355f94bbec7f578f064",
+  "working_tree_dirty": true,
+  "branch": "codex/phase4-cross-sectional-closure-gate",
+  "official_artifacts_used": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+      "sha256_before": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9",
+      "sha256_after": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "sha256_before": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB",
+      "sha256_after": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+      "sha256_before": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23",
+      "sha256_after": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23"
+    }
+  ],
+  "research_artifacts_generated": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_closure_gate\\cross_sectional_closure_eval.parquet",
+      "sha256": "E51E7579CF421E4B2B8A6349C749D7C91AEA84274AC6A2445E0357DE3740288D"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_closure_gate\\causal_latest_history_summary.parquet",
+      "sha256": "0A151D5902BFEA337C44F2A725A9C3DAA645D0FED1A8A6B7C5D31FF81AE725D6"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_closure_gate\\phase4_closure_definition.json",
+      "sha256": "867C42DA26D6947BC045055FE0A717E7E75704E9E2BF3A368E7C6DE6AF257CEB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_closure_gate\\phase4_cross_sectional_closure_summary.json",
+      "sha256": "4B1C6437FDC2CFEDA5A6D37B5A58E2B340BE0B8242BACB902731F54B90EEC658"
+    }
+  ],
+  "summary": {
+    "sharpe_operational": 16.6648,
+    "dsr_honest": 1.0,
+    "latest_active_count": 0,
+    "headroom_real": false,
+    "historical_active_events": 1290
+  },
+  "gates": [
+    {
+      "name": "official_artifacts_unchanged",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "no_official_research_mixing",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "causal_eval_declared_sovereign",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "latest_reinterpreted_under_causal_eval",
+      "value": 2,
+      "threshold": ">=1",
+      "status": "PASS"
+    },
+    {
+      "name": "recent_history_reinterpreted",
+      "value": 8,
+      "threshold": ">=7",
+      "status": "PASS"
+    },
+    {
+      "name": "final_phase4_classification_assigned",
+      "value": "PHASE4_APPROVED_FOR_HARDENING",
+      "threshold": "one_of(PHASE4_APPROVED_FOR_HARDENING,PHASE4_REJECTED_OPERATIONALLY,PHASE4_CLOSURE_INCONCLUSIVE)",
+      "status": "PASS"
+    },
+    {
+      "name": "tests_passed",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    }
+  ],
+  "blockers": [],
+  "risks_residual": [
+    "O gate summary permanece em compatibilidade com a lente antiga, mas a decisao final desta rodada foi governada pela regua causal soberana.",
+    "A familia continua research-only ate uma liberacao explicita da proxima fase; nenhum artifact official foi alterado nesta rodada."
+  ],
+  "next_recommended_step": "Fase 4 fechada para esta familia; a proxima rodada pode abrir Fase 5 sem promover nada ao official nesta mesma entrega."
+}

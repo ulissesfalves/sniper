@@ -1,0 +1,31 @@
+{
+  "classification": "PHASE4_APPROVED_FOR_HARDENING",
+  "decision": "advance",
+  "summary_compatibility_note": "gate_report.summary preserves the legacy label-space latest/headroom values for cross-round compatibility; the closure decision below is governed by the sovereign decision-space metrics.",
+  "legacy_summary": {
+    "sharpe_operational": 16.6648,
+    "dsr_honest": 1.0,
+    "latest_active_count": 0,
+    "headroom_real": false,
+    "historical_active_events": 1290
+  },
+  "sovereign_summary": {
+    "latest_active_count": 2,
+    "headroom_real": true,
+    "historical_active_events": 3939,
+    "historical_live_dates": 2112,
+    "recent_live_dates": 8,
+    "recent_window_dates": 8
+  },
+  "phase4_decision_basis": {
+    "sharpe_operational": 16.6648,
+    "dsr_honest": 1.0,
+    "latest_active_count_decision_space": 2,
+    "headroom_decision_space": true,
+    "historical_active_events_decision_space": 3939,
+    "historical_active_events_legacy": 1290,
+    "label_live_dates": 1142,
+    "decision_live_dates": 2112
+  },
+  "next_recommended_step": "Fase 4 fechada para esta familia; a proxima rodada pode abrir Fase 5 sem promover nada ao official nesta mesma entrega."
+}
