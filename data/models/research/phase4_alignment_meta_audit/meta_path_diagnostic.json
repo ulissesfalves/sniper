@@ -1,0 +1,75 @@
+{
+  "classification": "META_PATH_CHOKEPOINT_IDENTIFIED",
+  "blocker_real": "O snapshot oficial esta alinhado ao report; o sinal morre entre p_meta_raw e p_meta_calibrated no corte mais recente.",
+  "where_signal_dies": "score_calibration",
+  "local_fix_possible": false,
+  "needs_upstream_remediation": true,
+  "operational_path_choke_point": {
+    "latest_snapshot_stage": "score_calibration",
+    "aggregated_raw_gt_050_but_calibrated_le_050": 2958,
+    "latest_raw_gt_050_but_calibrated_le_050": 3
+  },
+  "operational_path_sparsity": {
+    "historical_active_rate": 0.0032,
+    "latest_snapshot_active_rate": 0.0,
+    "latest_snapshot_max_p_meta_calibrated": 0.4602,
+    "latest_snapshot_max_position_usdt": 0.0,
+    "historical_active_events": 60,
+    "latest_snapshot_active_symbols": 0
+  },
+  "latest_top_candidates": [
+    {
+      "symbol": "TAO",
+      "p_meta_raw": 0.4949,
+      "p_meta_calibrated": 0.4602,
+      "mu_adj_meta": 0.0,
+      "kelly_frac_meta": 0.0,
+      "position_usdt_meta": 0.0,
+      "p_bma_pkf": 0.3135
+    },
+    {
+      "symbol": "ADA",
+      "p_meta_raw": 0.5097,
+      "p_meta_calibrated": 0.4316,
+      "mu_adj_meta": 0.0,
+      "kelly_frac_meta": 0.0,
+      "position_usdt_meta": 0.0,
+      "p_bma_pkf": 0.4138
+    },
+    {
+      "symbol": "LUNA",
+      "p_meta_raw": 0.5037,
+      "p_meta_calibrated": 0.4253,
+      "mu_adj_meta": 0.0,
+      "kelly_frac_meta": 0.0,
+      "position_usdt_meta": 0.0,
+      "p_bma_pkf": 0.3024
+    },
+    {
+      "symbol": "TRX",
+      "p_meta_raw": 0.4643,
+      "p_meta_calibrated": 0.4105,
+      "mu_adj_meta": 0.0,
+      "kelly_frac_meta": 0.0,
+      "position_usdt_meta": 0.0,
+      "p_bma_pkf": 0.2951
+    },
+    {
+      "symbol": "BNB",
+      "p_meta_raw": 0.4672,
+      "p_meta_calibrated": 0.4101,
+      "mu_adj_meta": 0.0,
+      "kelly_frac_meta": 0.0,
+      "position_usdt_meta": 0.0,
+      "p_bma_pkf": 0.5822
+    }
+  ],
+  "lineage_aligned": true,
+  "paper_environment": {
+    "daemon_available": false,
+    "stdout": "",
+    "stderr": "failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: O sistema nÃ£o pode encontrar o arquivo especificado.",
+    "clean": true,
+    "status": "docker_daemon_unavailable"
+  }
+}

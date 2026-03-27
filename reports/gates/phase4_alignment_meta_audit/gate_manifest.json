@@ -1,0 +1,71 @@
+{
+  "gate_slug": "phase4_alignment_meta_audit",
+  "timestamp_utc": "2026-03-27T00:36:53+00:00",
+  "baseline_commit": "633214cf4388c79de0f03c75cf0739da3f70287e",
+  "branch": "codex/phase4-alignment-meta-audit",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": false,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\services\\ml_engine\\phase4_cpcv.py",
+      "sha256": "F60D00E5CFC043963E4DFCA9565920FEC27BB480D72A1AEC385B27F256793C1A",
+      "role": "source_of_lineage_logic"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+      "sha256": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9",
+      "role": "official_phase4_report"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4_report_v4.json",
+      "sha256": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9",
+      "role": "official_phase4_report_root_duplicate"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "sha256": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB",
+      "role": "official_phase4_snapshot"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+      "sha256": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23",
+      "role": "official_phase4_aggregated"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_alignment_meta_audit\\gate_report.json",
+      "sha256": "F2364C76C1C1C64948388FE039D34BDFBF14A3940CB7ED0D2FBF2723803D024F"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_alignment_meta_audit\\gate_report.md",
+      "sha256": "82B9191594CB6DE739946F4E9119D1E9A07D287F203DB34860F78FAB4A91E20B"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_alignment_meta_audit\\gate_metrics.parquet",
+      "sha256": "0C0B39574347F01FCD9048B4B0296647F722347922D02E656D26F6646E8F6BE0"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_alignment_meta_audit\\gate_manifest.json",
+      "sha256_note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    "git branch --show-current",
+    "git rev-parse HEAD",
+    "git status --short",
+    "git diff --stat",
+    "Get-FileHash data\\models\\phase4\\phase4_report_v4.json,data\\models\\phase4\\phase4_execution_snapshot.parquet,data\\models\\phase4\\phase4_aggregated_predictions.parquet -Algorithm SHA256 | Select-Object Path,Hash",
+    "docker version --format '{{.Server.Version}}'",
+    "Select-String -Path services\\ml_engine\\phase4_cpcv.py -Pattern 'phase4_report_v4|phase4_execution_snapshot|phase4_aggregated_predictions|snapshot_governed_by|p_meta_calibrated|kelly_frac_meta|position_usdt_meta|def _build_execution_snapshot|def _build_operational_path_report|run_id|policy_name|as_of'",
+    "Get-Content services\\ml_engine\\phase4_cpcv.py | Select-Object -Skip 1480 -First 260",
+    "python -m py_compile services\\ml_engine\\phase4_alignment_meta_audit.py tests\\unit\\test_phase4_alignment_meta_audit.py",
+    "python -m pytest tests\\unit\\test_phase4_alignment_meta_audit.py -q",
+    "python services\\ml_engine\\phase4_alignment_meta_audit.py"
+  ],
+  "notes": [
+    "classification=META_PATH_CHOKEPOINT_IDENTIFIED",
+    "paper_environment=docker_daemon_unavailable",
+    "snapshot_governed_by=operational_meta_path"
+  ]
+}

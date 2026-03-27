@@ -145,6 +145,8 @@ def build_gate_metrics_frame(metrics: list[Mapping[str, Any]]) -> pd.DataFrame:
     for column in GATE_METRICS_REQUIRED_COLUMNS:
         if column not in frame.columns:
             frame[column] = None
+    for column in GATE_METRICS_REQUIRED_COLUMNS:
+        frame[column] = frame[column].map(lambda value: json.dumps(value, ensure_ascii=False) if isinstance(value, (dict, list)) else ("" if value is None else str(value)))
     ordered = list(GATE_METRICS_REQUIRED_COLUMNS) + [col for col in frame.columns if col not in GATE_METRICS_REQUIRED_COLUMNS]
     return frame[ordered]
 

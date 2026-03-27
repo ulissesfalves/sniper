@@ -1,0 +1,45 @@
+{
+  "report_phase4_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+  "report_phase4_root_duplicate_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4_report_v4.json",
+  "snapshot_phase4_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+  "aggregated_phase4_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+  "report_timestamp": "2026-03-24T00:38:40.483764",
+  "report_mtime_utc": "2026-03-24T00:38:40+00:00",
+  "root_report_mtime_utc": "2026-03-24T00:38:40+00:00",
+  "snapshot_mtime_utc": "2026-03-24T00:38:40+00:00",
+  "aggregated_mtime_utc": "2026-03-24T00:38:40+00:00",
+  "report_as_of_data_date": "2026-03-20",
+  "snapshot_as_of_data_date": "2026-03-20",
+  "aggregated_as_of_data_date": "2026-03-20",
+  "report_run_id": null,
+  "snapshot_run_id": null,
+  "report_policy_name": "fixed_small_080_cooldown3",
+  "snapshot_policy_name": null,
+  "snapshot_governed_by": "operational_meta_path",
+  "nested_root_report_hash_match": true,
+  "paths_exist": true,
+  "snapshot_lineage": {
+    "latest_rows_from_aggregated": 36,
+    "snapshot_rows": 36,
+    "merge_counts": {
+      "both": 36,
+      "left_only": 0,
+      "right_only": 0
+    },
+    "field_mismatches": {
+      "p_meta_raw": 0,
+      "p_meta_calibrated": 0,
+      "mu_adj_meta": 0,
+      "kelly_frac_meta": 0,
+      "position_usdt_meta": 0
+    },
+    "aligned": true
+  },
+  "recomputed_funnel_matches_report": true,
+  "funnel_mismatches": {},
+  "lineage_aligned": true,
+  "same_logical_execution": true,
+  "lineage_notes": [
+    "Snapshot oficial coincide exatamente com a ultima linha por simbolo das aggregated predictions nos campos governantes."
+  ]
+}
