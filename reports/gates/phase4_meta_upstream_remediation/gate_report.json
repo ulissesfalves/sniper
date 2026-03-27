@@ -1,0 +1,120 @@
+{
+  "gate_slug": "phase4_meta_upstream_remediation",
+  "phase_family": "phase4_research_upstream",
+  "status": "PASS",
+  "decision": "abandon",
+  "baseline_commit": "48bd8d191fc63806dd14256c5b9873f72aaab785",
+  "working_tree_dirty": true,
+  "branch": "codex/phase4-meta-upstream-remediation",
+  "official_artifacts_used": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+      "sha256_before": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9",
+      "sha256_after": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "sha256_before": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB",
+      "sha256_after": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+      "sha256_before": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23",
+      "sha256_after": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+      "sha256_before": "5B3144578BB99D48E2A67B3AB60B2B0AD25787A92B8488AFD1D1D5C08AE8F6C7",
+      "sha256_after": "5B3144578BB99D48E2A67B3AB60B2B0AD25787A92B8488AFD1D1D5C08AE8F6C7"
+    }
+  ],
+  "research_artifacts_generated": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_meta_upstream_remediation\\calibration_shrinkage.parquet",
+      "sha256": "D1DD54AD20FF43CF1A29EFAD99AEE6E62C685DD401F05798474F5695661676CC"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_meta_upstream_remediation\\threshold_survival.parquet",
+      "sha256": "B261B510B026E7B07DA83890E4A7A9BE4CE81632F74C29EFC91890F642207A10"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_meta_upstream_remediation\\calibration_diagnostics.json",
+      "sha256": "65F1D5E0AC5A11DC47E310620DD5D0CAF6EF253098FCBF83D30DF73375419DE8"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_meta_upstream_remediation\\meta_upstream_remediation_summary.json",
+      "sha256": "8B57B28C506B6E6C37FF8CEC8A697B315BA0D1C314D6EE03003868FA384B4916"
+    }
+  ],
+  "summary": {
+    "sharpe_operational": 1.0315,
+    "dsr_honest": 0.0,
+    "latest_active_count": 0,
+    "headroom_real": false,
+    "historical_active_events": 60
+  },
+  "gates": [
+    {
+      "name": "official_artifacts_unchanged",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "no_official_research_mixing",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "raw_calibrated_path_mapped",
+      "value": "score_compression_raw_to_calibrated",
+      "threshold": "mapped",
+      "status": "PASS"
+    },
+    {
+      "name": "calibration_oos_logic_mapped",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "shrinkage_measured",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "bounded_research_challengers_executed",
+      "value": 2,
+      "threshold": ">=2",
+      "status": "PASS"
+    },
+    {
+      "name": "final_classification_assigned",
+      "value": "META_FAMILY_OPERATIONALLY_WEAK",
+      "threshold": "one_of(UPSTREAM_FIX_FOUND,UPSTREAM_REMEDIATION_INCONCLUSIVE,META_FAMILY_OPERATIONALLY_WEAK)",
+      "status": "PASS"
+    },
+    {
+      "name": "paper_environment_clean",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "tests_passed",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    }
+  ],
+  "blockers": [
+    "A familia atual continua sem remediation upstream bounded que recupere latest headroom com merito operacional."
+  ],
+  "risks_residual": [
+    "A calibracao oficial melhora ECE, mas comprime scores perto do corte operacional e interage com o hard cutoff de Kelly em 0.51.",
+    "Nenhum challenger bounded e defensavel nesta rodada recuperou latest_active_count com melhoria honesta de DSR."
+  ],
+  "next_recommended_step": "Encerrar remediation bounded nesta familia e preparar pivot estrutural somente quando explicitamente autorizado."
+}

@@ -1,0 +1,93 @@
+{
+  "gate_slug": "phase4_meta_upstream_remediation",
+  "timestamp_utc": "2026-03-27T01:13:02+00:00",
+  "baseline_commit": "48bd8d191fc63806dd14256c5b9873f72aaab785",
+  "branch": "codex/phase4-meta-upstream-remediation",
+  "working_tree_dirty_before": false,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\services\\ml_engine\\phase4_cpcv.py",
+      "sha256": "F60D00E5CFC043963E4DFCA9565920FEC27BB480D72A1AEC385B27F256793C1A",
+      "role": "official_phase4_logic"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\services\\ml_engine\\meta_labeling\\isotonic_calibration.py",
+      "sha256": "573075C1CDD9DD2543E9CF978B10DC7A26B7A90113668BD0CDAF600DF7D66762",
+      "role": "official_calibration_logic"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\services\\ml_engine\\sizing\\kelly_cvar.py",
+      "sha256": "5F6609893A27F9D6FF9289D0D9EDA20724BEEB62581D4C0415BF0A2130AF8BFB",
+      "role": "official_kelly_logic"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+      "sha256": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9",
+      "role": "official_phase4_report"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "sha256": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB",
+      "role": "official_phase4_snapshot"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+      "sha256": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23",
+      "role": "official_phase4_aggregated_predictions"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+      "sha256": "5B3144578BB99D48E2A67B3AB60B2B0AD25787A92B8488AFD1D1D5C08AE8F6C7",
+      "role": "official_phase4_oos_predictions"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_alignment_meta_audit\\gate_report.json",
+      "sha256": "F2364C76C1C1C64948388FE039D34BDFBF14A3940CB7ED0D2FBF2723803D024F",
+      "role": "prior_alignment_gate"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_alignment_meta_audit\\meta_path_diagnostic.json",
+      "sha256": "97E9F7B32C559FF3C33ACACA65BBF482CACA29BE3C054256FAD09CC473C2D2B5",
+      "role": "prior_alignment_diagnostic"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_meta_upstream_remediation\\gate_report.json",
+      "sha256": "4E6EED10D7B277DC16A39106DAE850CE18BE1D9BF5D57B29625DC34DB341182C"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_meta_upstream_remediation\\gate_report.md",
+      "sha256": "12359A684F3E74FF843A3CD3D0F62A88EA5CD6F39F9EBC2B6FD3ABBC84FA3E94"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_meta_upstream_remediation\\gate_metrics.parquet",
+      "sha256": "18A6BF0CED46B4C9C7DBC0181152F7B7EBAF6E1820C8AFCD197536A76C49A532"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_meta_upstream_remediation\\gate_manifest.json",
+      "sha256_note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    "git branch --show-current",
+    "git rev-parse HEAD",
+    "git status --short --untracked-files=all",
+    "git diff --stat",
+    "Get-FileHash data\\models\\phase4\\phase4_report_v4.json,data\\models\\phase4\\phase4_execution_snapshot.parquet,data\\models\\phase4\\phase4_aggregated_predictions.parquet,data\\models\\phase4\\phase4_oos_predictions.parquet -Algorithm SHA256 | Select-Object Path,Hash",
+    "Select-String -Path services\\ml_engine\\phase4_cpcv.py -Pattern '_fit_cluster_calibrators|_apply_cluster_calibration|_compute_phase4_sizing|_build_execution_snapshot|_build_operational_path_report|PHASE4_META_PROB_MODE'",
+    "Get-Content services\\ml_engine\\phase4_cpcv.py | Select-Object -Skip 1540 -First 180",
+    "Get-Content services\\ml_engine\\meta_labeling\\isotonic_calibration.py | Select-Object -First 260",
+    "Get-Content services\\ml_engine\\sizing\\kelly_cvar.py | Select-Object -Skip 40 -First 120",
+    "python -m py_compile services\\ml_engine\\phase4_meta_upstream_remediation.py tests\\unit\\test_phase4_meta_upstream_remediation.py",
+    "python -m pytest tests\\unit\\test_phase4_meta_upstream_remediation.py -q",
+    "python services\\ml_engine\\phase4_meta_upstream_remediation.py"
+  ],
+  "notes": [
+    "final_classification=META_FAMILY_OPERATIONALLY_WEAK",
+    "decision=abandon",
+    "paper_environment=docker_daemon_unavailable",
+    "diagnostic challenger raw_passthrough is not promotable and is used only to bound headroom without calibration"
+  ]
+}

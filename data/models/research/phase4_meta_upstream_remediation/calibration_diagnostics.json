@@ -1,0 +1,219 @@
+{
+  "phase4_alignment_meta_audit_reference": {
+    "gate_report_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_alignment_meta_audit\\gate_report.json",
+    "diagnostic_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_alignment_meta_audit\\meta_path_diagnostic.json",
+    "status": "PASS",
+    "decision": "correct",
+    "classification": "META_PATH_CHOKEPOINT_IDENTIFIED"
+  },
+  "official_phase4_paths": {
+    "report_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+    "snapshot_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+    "aggregated_predictions_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+    "oos_predictions_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_oos_predictions.parquet"
+  },
+  "calibration_oos_logic": {
+    "phase4_cpcv._fit_cluster_calibrators": {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\services\\ml_engine\\phase4_cpcv.py",
+      "line_start": 1443,
+      "qualname": "_fit_cluster_calibrators"
+    },
+    "phase4_cpcv._apply_cluster_calibration": {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\services\\ml_engine\\phase4_cpcv.py",
+      "line_start": 1497,
+      "qualname": "_apply_cluster_calibration"
+    },
+    "isotonic_calibration.fit_isotonic_calibrator": {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\services\\ml_engine\\meta_labeling\\isotonic_calibration.py",
+      "line_start": 177,
+      "qualname": "fit_isotonic_calibrator"
+    },
+    "isotonic_calibration._kfold_isotonic_fit": {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\services\\ml_engine\\meta_labeling\\isotonic_calibration.py",
+      "line_start": 85,
+      "qualname": "_kfold_isotonic_fit"
+    },
+    "kelly_cvar.compute_kelly_fraction": {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\services\\ml_engine\\sizing\\kelly_cvar.py",
+      "line_start": 78,
+      "qualname": "compute_kelly_fraction"
+    },
+    "phase4_prob_mode": "calibrated",
+    "cluster_calibration_mode": "artifact",
+    "cluster_calibration_artifact": "/data/models/vi_asset_clusters_baseline.json",
+    "kelly_hard_cutoff": 0.51,
+    "oos_flow": [
+      "prediction_rows -> oos_df pooled by CPCV trajectory",
+      "_fit_cluster_calibrators(oos_df) ajusta isotonic por cluster com fallback global usando date/y_meta/p_meta_raw OOS",
+      "_apply_cluster_calibration(oos_df, calibrators, symbol_to_cluster) produz p_meta_calibrated por linha OOS",
+      "_compute_phase4_sizing(... prob_col='p_meta_calibrated' ...) aplica hard cutoff 0.51 e Kelly",
+      "_aggregate_oos_predictions(oos_df) consolida (date,symbol)",
+      "_compute_phase4_sizing(aggregated_predictions, prob_col='p_meta_calibrated', ...) governa o snapshot oficial"
+    ]
+  },
+  "shrinkage_overall_aggregated": {
+    "source_name": "aggregated",
+    "scope_type": "overall",
+    "scope_value": "all",
+    "n_rows": 18986,
+    "p_meta_raw_mean": 0.397652,
+    "p_meta_raw_p50": 0.388936,
+    "p_meta_raw_p90": 0.545826,
+    "p_meta_calibrated_mean": 0.36708,
+    "p_meta_calibrated_p50": 0.364727,
+    "p_meta_calibrated_p90": 0.459602,
+    "shrinkage_mean": 0.030571,
+    "shrinkage_p50": 0.024613,
+    "shrinkage_p90": 0.119548,
+    "shrinkage_min": -0.200877,
+    "shrinkage_max": 0.366284,
+    "raw_gt_050": 3408,
+    "calibrated_gt_050": 450,
+    "raw_gt_051": 3027,
+    "calibrated_gt_051": 300,
+    "survival_050": 0.132042,
+    "survival_051": 0.099108
+  },
+  "shrinkage_latest_snapshot": {
+    "source_name": "latest_snapshot",
+    "scope_type": "overall",
+    "scope_value": "all",
+    "n_rows": 36,
+    "p_meta_raw_mean": 0.359702,
+    "p_meta_raw_p50": 0.367137,
+    "p_meta_raw_p90": 0.481028,
+    "p_meta_calibrated_mean": 0.340388,
+    "p_meta_calibrated_p50": 0.339097,
+    "p_meta_calibrated_p90": 0.410303,
+    "shrinkage_mean": 0.019314,
+    "shrinkage_p50": 0.011908,
+    "shrinkage_p90": 0.115897,
+    "shrinkage_min": -0.099503,
+    "shrinkage_max": 0.246663,
+    "raw_gt_050": 3,
+    "calibrated_gt_050": 0,
+    "raw_gt_051": 1,
+    "calibrated_gt_051": 0,
+    "survival_050": 0.0,
+    "survival_051": 0.0
+  },
+  "raw_gt_threshold_context": {
+    "historical_raw_gt_050": {
+      "threshold": 0.5,
+      "rows_total": 18986,
+      "raw_gt_threshold": 3408,
+      "calibrated_gt_threshold": 450,
+      "survival_vs_raw": 0.132042,
+      "shrinkage_mean_on_raw_gt_threshold": 0.111155,
+      "raw_mean_on_raw_gt_threshold": 0.569327,
+      "calibrated_mean_on_raw_gt_threshold": 0.458172,
+      "clusters_present": [
+        "cluster_1",
+        "cluster_2",
+        "cluster_3"
+      ]
+    },
+    "historical_raw_gt_051": {
+      "threshold": 0.51,
+      "rows_total": 18986,
+      "raw_gt_threshold": 3027,
+      "calibrated_gt_threshold": 300,
+      "survival_vs_raw": 0.099108,
+      "shrinkage_mean_on_raw_gt_threshold": 0.114784,
+      "raw_mean_on_raw_gt_threshold": 0.577446,
+      "calibrated_mean_on_raw_gt_threshold": 0.462661,
+      "clusters_present": [
+        "cluster_1",
+        "cluster_2",
+        "cluster_3"
+      ]
+    },
+    "latest_raw_gt_050": {
+      "threshold": 0.5,
+      "rows_total": 36,
+      "raw_gt_threshold": 3,
+      "calibrated_gt_threshold": 0,
+      "survival_vs_raw": 0.0,
+      "shrinkage_mean_on_raw_gt_threshold": 0.134365,
+      "raw_mean_on_raw_gt_threshold": 0.51178,
+      "calibrated_mean_on_raw_gt_threshold": 0.377415,
+      "clusters_present": [
+        "cluster_1",
+        "cluster_2"
+      ]
+    },
+    "latest_raw_gt_051": {
+      "threshold": 0.51,
+      "rows_total": 36,
+      "raw_gt_threshold": 1,
+      "calibrated_gt_threshold": 0,
+      "survival_vs_raw": 0.0,
+      "shrinkage_mean_on_raw_gt_threshold": 0.246663,
+      "raw_mean_on_raw_gt_threshold": 0.521998,
+      "calibrated_mean_on_raw_gt_threshold": 0.275335,
+      "clusters_present": [
+        "cluster_1"
+      ]
+    }
+  },
+  "challenger_summaries": [
+    {
+      "variant_name": "official_cluster_calibrated",
+      "selected_prob_label": "p_meta_calibrated",
+      "diagnostic_only": false,
+      "candidate_fix": false,
+      "sharpe_operational": 1.0315,
+      "dsr_honest": 0.0,
+      "latest_active_count": 0,
+      "headroom_real": false,
+      "historical_active_events": 60,
+      "latest_stage": "score_calibration",
+      "latest_snapshot_max_p_meta_calibrated": 0.4602,
+      "latest_snapshot_max_position_usdt": 0.0,
+      "position_gt_0_rows_final": 92,
+      "position_gt_0_latest": 0,
+      "rank_margin_latest": 0.0286
+    },
+    {
+      "variant_name": "diagnostic_raw_passthrough",
+      "selected_prob_label": "p_meta_raw_passthrough",
+      "diagnostic_only": true,
+      "candidate_fix": false,
+      "sharpe_operational": -0.4444,
+      "dsr_honest": 0.0,
+      "latest_active_count": 1,
+      "headroom_real": true,
+      "historical_active_events": 1376,
+      "latest_stage": "active_positions_present",
+      "latest_snapshot_max_p_meta_calibrated": 0.522,
+      "latest_snapshot_max_position_usdt": 299.96,
+      "position_gt_0_rows_final": 1703,
+      "position_gt_0_latest": 1,
+      "rank_margin_latest": 0.0123
+    },
+    {
+      "variant_name": "research_global_isotonic",
+      "selected_prob_label": "p_meta_calibrated_global_isotonic",
+      "diagnostic_only": false,
+      "candidate_fix": true,
+      "sharpe_operational": 1.5367,
+      "dsr_honest": 0.0,
+      "latest_active_count": 0,
+      "headroom_real": false,
+      "historical_active_events": 22,
+      "latest_stage": "score_calibration",
+      "latest_snapshot_max_p_meta_calibrated": 0.4346,
+      "latest_snapshot_max_position_usdt": 0.0,
+      "position_gt_0_rows_final": 32,
+      "position_gt_0_latest": 0,
+      "rank_margin_latest": 0.0067
+    }
+  ],
+  "dominant_cause": "score_compression_raw_to_calibrated",
+  "compression_notes": [
+    "O choke dominante continua em raw -> calibrated no latest cut oficial.",
+    "O hard cutoff de Kelly em 0.51 amplifica pequenas compressoes perto do threshold operacional."
+  ],
+  "final_classification": "META_FAMILY_OPERATIONALLY_WEAK",
+  "blocker_real": "Mesmo apos challengers bounded e OOS-honestos, a familia atual continua sem latest headroom ou melhora honesta de DSR; o unico alivio aparece no raw passthrough diagnostico, mas com degradacao operacional."
+}

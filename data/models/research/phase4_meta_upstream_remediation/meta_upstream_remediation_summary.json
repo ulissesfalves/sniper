@@ -1,0 +1,59 @@
+{
+  "classification": "META_FAMILY_OPERATIONALLY_WEAK",
+  "decision": "abandon",
+  "official_baseline_summary": {
+    "variant_name": "official_cluster_calibrated",
+    "selected_prob_label": "p_meta_calibrated",
+    "diagnostic_only": false,
+    "candidate_fix": false,
+    "sharpe_operational": 1.0315,
+    "dsr_honest": 0.0,
+    "latest_active_count": 0,
+    "headroom_real": false,
+    "historical_active_events": 60,
+    "latest_stage": "score_calibration",
+    "latest_snapshot_max_p_meta_calibrated": 0.4602,
+    "latest_snapshot_max_position_usdt": 0.0,
+    "position_gt_0_rows_final": 92,
+    "position_gt_0_latest": 0,
+    "rank_margin_latest": 0.0286
+  },
+  "challengers": [
+    {
+      "variant_name": "diagnostic_raw_passthrough",
+      "selected_prob_label": "p_meta_raw_passthrough",
+      "diagnostic_only": true,
+      "candidate_fix": false,
+      "sharpe_operational": -0.4444,
+      "dsr_honest": 0.0,
+      "latest_active_count": 1,
+      "headroom_real": true,
+      "historical_active_events": 1376,
+      "latest_stage": "active_positions_present",
+      "latest_snapshot_max_p_meta_calibrated": 0.522,
+      "latest_snapshot_max_position_usdt": 299.96,
+      "position_gt_0_rows_final": 1703,
+      "position_gt_0_latest": 1,
+      "rank_margin_latest": 0.0123
+    },
+    {
+      "variant_name": "research_global_isotonic",
+      "selected_prob_label": "p_meta_calibrated_global_isotonic",
+      "diagnostic_only": false,
+      "candidate_fix": true,
+      "sharpe_operational": 1.5367,
+      "dsr_honest": 0.0,
+      "latest_active_count": 0,
+      "headroom_real": false,
+      "historical_active_events": 22,
+      "latest_stage": "score_calibration",
+      "latest_snapshot_max_p_meta_calibrated": 0.4346,
+      "latest_snapshot_max_position_usdt": 0.0,
+      "position_gt_0_rows_final": 32,
+      "position_gt_0_latest": 0,
+      "rank_margin_latest": 0.0067
+    }
+  ],
+  "bounded_fix_found": false,
+  "next_recommended_step": "Encerrar remediation bounded nesta familia e preparar pivot estrutural somente quando explicitamente autorizado."
+}
