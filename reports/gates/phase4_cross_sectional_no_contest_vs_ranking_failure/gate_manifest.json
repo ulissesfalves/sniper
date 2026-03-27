@@ -1,0 +1,94 @@
+{
+  "gate_slug": "phase4_cross_sectional_no_contest_vs_ranking_failure",
+  "timestamp_utc": "2026-03-27T03:05:15+00:00",
+  "baseline_commit": "4b81a3b9d1a98e8e986cd0f88c3eec6235b9a531",
+  "branch": "codex/phase4-cross-sectional-no-contest-vs-ranking-failure",
+  "working_tree_dirty_before": false,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\cross_sectional_predictions.parquet",
+      "sha256": "A78AE2B87EF3048C53727B6D975C9644B30BAE268065D5DD70112937644B3950",
+      "role": "baseline_cross_sectional_predictions"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\cross_sectional_latest_snapshot.parquet",
+      "sha256": "FE1E050820ABE77C7DF35318F13301F2A7443AE45B75B2D322CAC0AF233032B7",
+      "role": "baseline_cross_sectional_snapshot"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\cross_sectional_diagnostics.json",
+      "sha256": "D5CB69772AE66FBC17663DEBFDAF33DE2542166844C9D00A80655E1027DFC6D4",
+      "role": "baseline_cross_sectional_diagnostics"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\cross_sectional_eval_summary.json",
+      "sha256": "FEAC05CF6F143BCDD3A0B090CE23DACCB1F524F042EECAA3F936777059DAB3BA",
+      "role": "baseline_cross_sectional_summary"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_ranking_baseline\\gate_report.json",
+      "sha256": "9EDA0BDF42F273C690DE5FE66B3CFD4827DC16911D4FB3F3B70DE57829DADAF1",
+      "role": "baseline_cross_sectional_gate"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_latest_choke_audit\\cross_sectional_latest_choke_summary.json",
+      "sha256": "FCA226177E1D5D250E891E10374710AFC102D543EF06F1BF6C3B465249531DCA",
+      "role": "latest_choke_summary"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_latest_choke_audit\\gate_report.json",
+      "sha256": "F277A8E4C3D5C9DDF947659EB6D7357A4AFFA0640D20AB8DC308C1125DA7CBD6",
+      "role": "latest_choke_gate"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+      "sha256": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9",
+      "role": "official_phase4_report"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "sha256": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB",
+      "role": "official_phase4_snapshot"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+      "sha256": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23",
+      "role": "official_phase4_aggregated_predictions"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_no_contest_vs_ranking_failure\\gate_report.json",
+      "sha256": "FA72856A15C18831EAE40685F8E5B0D21484E9626B8C1A1AD48513BA2B9E7F3A"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_no_contest_vs_ranking_failure\\gate_report.md",
+      "sha256": "B37AC508EEEAA8A23C82152CF6624F7283C854C9D631B842554D014F2A4A8FB7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_no_contest_vs_ranking_failure\\gate_metrics.parquet",
+      "sha256": "19329E37B9800C932A0EE9D7FA2E6D4E57030803903E056E77599DC99E60D1BE"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_no_contest_vs_ranking_failure\\gate_manifest.json",
+      "sha256_note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    "git branch --show-current",
+    "git rev-parse HEAD",
+    "git status --short --untracked-files=all",
+    "git diff --stat",
+    "Get-FileHash data\\models\\phase4\\phase4_report_v4.json,data\\models\\phase4\\phase4_execution_snapshot.parquet,data\\models\\phase4\\phase4_aggregated_predictions.parquet -Algorithm SHA256 | Select-Object Path,Hash",
+    "python -m py_compile services\\ml_engine\\phase4_cross_sectional_no_contest_vs_ranking_failure.py tests\\unit\\test_phase4_cross_sectional_no_contest_vs_ranking_failure.py",
+    "python -m pytest tests\\unit\\test_phase4_cross_sectional_no_contest_vs_ranking_failure.py -q",
+    "python services\\ml_engine\\phase4_cross_sectional_no_contest_vs_ranking_failure.py"
+  ],
+  "notes": [
+    "final_classification=LATEST_EVALUATION_MISALIGNED",
+    "decision=correct",
+    "latest_case_classification=metric_misalignment",
+    "latest latest_active_count/headroom_real from baseline are preserved in summary, but the audit concludes they are judged through a label-space lens."
+  ]
+}

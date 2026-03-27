@@ -1,0 +1,94 @@
+{
+  "gate_slug": "phase4_cross_sectional_no_contest_vs_ranking_failure",
+  "generated_at_utc": "2026-03-27T03:05:15+00:00",
+  "definition_audit": {
+    "current_latest_metric_source": {
+      "latest_active_count_path": "operational_proxy.activation_funnel.latest_snapshot_active_count",
+      "headroom_real_path": "gate_do_experimento_stage_a.headroom_real_documented",
+      "score_field_used_in_cross_sectional_proxy": "stage_a_selected_proxy",
+      "probability_field_written": "p_stage_a_calibrated = stage_a_selected_proxy.astype(float)"
+    },
+    "label_space_fields": [
+      {
+        "field": "pnl_real",
+        "available_ex_ante": false,
+        "role": "realized-space target gating"
+      },
+      {
+        "field": "avg_sl_train",
+        "available_ex_ante": true,
+        "role": "train-side hurdle statistic"
+      }
+    ],
+    "decision_space_fields": [
+      {
+        "field": "rank_score_stage_a",
+        "available_ex_ante": true,
+        "role": "OOS model score used for ranking"
+      },
+      {
+        "field": "avg_tp_train",
+        "available_ex_ante": true,
+        "role": "ex-ante sizing input"
+      },
+      {
+        "field": "avg_sl_train",
+        "available_ex_ante": true,
+        "role": "ex-ante sizing input"
+      },
+      {
+        "field": "cluster_name",
+        "available_ex_ante": true,
+        "role": "contest scope"
+      }
+    ],
+    "operational_availability_definition": "decision_space_available = non-null rank_score_stage_a + positive avg_tp_train + positive avg_sl_train + non-empty cluster_name",
+    "selection_policy_under_label_space": "Select TOP 1 by rank_score_stage_a within (date, cluster_name) among eligible rows; fallback to TOP 1 in the date-universe when local eligible support < 2.",
+    "selection_policy_under_decision_space": "Select top1 by rank_score_stage_a within (date, cluster_name) among decision_space_available rows; fallback to top1(date-universe) when available_count(date, cluster_name) < 2.",
+    "latest_evaluation_causally_valid": false,
+    "why_not": "The current latest/headroom metrics zero the contest before ranking when no row satisfies realized eligible = (pnl_real > avg_sl_train), even though the latest still has ex-ante candidates and ex-ante rank scores."
+  },
+  "latest_comparison": {
+    "latest_date": "2026-03-20",
+    "label_space": {
+      "rows_total": 9,
+      "eligible_count": 0,
+      "selected_count": 0,
+      "position_gt_0_count": 0,
+      "selected_symbols": []
+    },
+    "decision_space": {
+      "available_count": 9,
+      "selected_count": 2,
+      "position_gt_0_count": 2,
+      "selected_symbols": [
+        "ENA",
+        "TAO"
+      ]
+    },
+    "latest_case_classification": "metric_misalignment"
+  },
+  "recent_window_frequency": [
+    {
+      "classification": "aligned_live_contest",
+      "n_dates": 6
+    },
+    {
+      "classification": "ranking_failure",
+      "n_dates": 1
+    },
+    {
+      "classification": "metric_misalignment",
+      "n_dates": 1
+    }
+  ],
+  "baseline_reference": {
+    "baseline_gate_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_ranking_baseline\\gate_report.json",
+    "latest_choke_gate_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase4_cross_sectional_latest_choke_audit\\gate_report.json",
+    "baseline_classification": "INCONCLUSIVE_BASELINE",
+    "latest_choke_classification": "LATEST_CHOKE_IDENTIFIED",
+    "latest_choke_gate_status": "PASS"
+  },
+  "final_classification": "LATEST_EVALUATION_MISALIGNED",
+  "blocker_real": "A avaliacao atual do latest mistura label-space realizado com decision-space ex-ante: o latest teve candidatos operacionais e selecao research-only plausivel, mas zerou porque a definicao vigente de disponibilidade depende de pnl_real > avg_sl_train."
+}

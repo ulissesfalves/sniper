@@ -1,0 +1,109 @@
+{
+  "gate_slug": "phase4_cross_sectional_no_contest_vs_ranking_failure",
+  "phase_family": "phase4_research_cross_sectional",
+  "status": "PASS",
+  "decision": "correct",
+  "baseline_commit": "4b81a3b9d1a98e8e986cd0f88c3eec6235b9a531",
+  "working_tree_dirty": true,
+  "branch": "codex/phase4-cross-sectional-no-contest-vs-ranking-failure",
+  "official_artifacts_used": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+      "sha256_before": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9",
+      "sha256_after": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "sha256_before": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB",
+      "sha256_after": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+      "sha256_before": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23",
+      "sha256_after": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23"
+    }
+  ],
+  "research_artifacts_generated": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_no_contest_vs_ranking_failure\\latest_label_vs_operational_trace.parquet",
+      "sha256": "5009169A57EB58B9B90018C818C8EDEC792B3524836855F094CECD09932AFC65"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_no_contest_vs_ranking_failure\\no_contest_frequency.parquet",
+      "sha256": "D43F4D45A99A015D11CCDCA7AFE0DEB9F1E8EC9AA53267A0A721044F4F74D30D"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_no_contest_vs_ranking_failure\\latest_definition_alignment.json",
+      "sha256": "E1381D8D3C4A6EA3FE0D92C44FDBD17AC549DBD116CFE6E2F1FA913D1CBDE588"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_no_contest_vs_ranking_failure\\cross_sectional_no_contest_summary.json",
+      "sha256": "E094C47DDBA7BAC472C430642ED00BE131E018BFFB89AE84FC6D13CF1459B44C"
+    }
+  ],
+  "summary": {
+    "sharpe_operational": 16.6648,
+    "dsr_honest": 1.0,
+    "latest_active_count": 0,
+    "headroom_real": false,
+    "historical_active_events": 1290
+  },
+  "gates": [
+    {
+      "name": "official_artifacts_unchanged",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "no_official_research_mixing",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "latest_definition_audited",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "label_vs_decision_space_separated",
+      "value": "metric_misalignment",
+      "threshold": "non_empty_classification",
+      "status": "PASS"
+    },
+    {
+      "name": "latest_trace_materialized",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    },
+    {
+      "name": "recent_window_frequency_measured",
+      "value": 8,
+      "threshold": ">=8",
+      "status": "PASS"
+    },
+    {
+      "name": "final_classification_assigned",
+      "value": "LATEST_EVALUATION_MISALIGNED",
+      "threshold": "one_of(NO_CONTEST_CONFIRMED,RANKING_FAILURE_CONFIRMED,LATEST_EVALUATION_MISALIGNED)",
+      "status": "PASS"
+    },
+    {
+      "name": "tests_passed",
+      "value": true,
+      "threshold": "true",
+      "status": "PASS"
+    }
+  ],
+  "blockers": [
+    "A avaliacao atual do latest mistura label-space realizado com decision-space ex-ante: o latest teve candidatos operacionais e selecao research-only plausivel, mas zerou porque a definicao vigente de disponibilidade depende de pnl_real > avg_sl_train."
+  ],
+  "risks_residual": [
+    "Historico forte continua insuficiente para validar latest/headroom enquanto a avaliacao do latest permanecer acoplada ao label-space realizado.",
+    "A familia continua research-only; nenhum resultado desta rodada governa snapshot ou fast path oficial."
+  ],
+  "next_recommended_step": "Abrir uma rodada curta, ainda research-only, para redesenhar a avaliacao do latest/headroom desta familia em decisao-space causal, sem tocar no official."
+}

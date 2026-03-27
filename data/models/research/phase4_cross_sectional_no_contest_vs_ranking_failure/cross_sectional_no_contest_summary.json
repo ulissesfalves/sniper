@@ -1,0 +1,37 @@
+{
+  "classification": "LATEST_EVALUATION_MISALIGNED",
+  "decision": "correct",
+  "latest_case_classification": "metric_misalignment",
+  "recent_window_frequency": [
+    {
+      "classification": "aligned_live_contest",
+      "n_dates": 6
+    },
+    {
+      "classification": "ranking_failure",
+      "n_dates": 1
+    },
+    {
+      "classification": "metric_misalignment",
+      "n_dates": 1
+    }
+  ],
+  "latest_date": "2026-03-20",
+  "label_space_latest": {
+    "rows_total": 9,
+    "eligible_count": 0,
+    "selected_count": 0,
+    "position_gt_0_count": 0,
+    "selected_symbols": []
+  },
+  "decision_space_latest": {
+    "available_count": 9,
+    "selected_count": 2,
+    "position_gt_0_count": 2,
+    "selected_symbols": [
+      "ENA",
+      "TAO"
+    ]
+  },
+  "next_recommended_step": "Abrir uma rodada curta, ainda research-only, para redesenhar a avaliacao do latest/headroom desta familia em decisao-space causal, sem tocar no official."
+}
