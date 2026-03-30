@@ -4,9 +4,12 @@ import pandas as pd
 
 from services.ml_engine.phase4_stage_a_experiment import (
     _apply_cross_sectional_ranking_proxy,
+    _apply_two_stage_activation_utility_proxy,
     _build_stage_a_target,
+    _build_stage2_training_payload,
     _build_cross_sectional_relative_target,
     _build_cross_sectional_ranking_frame,
+    _compute_two_stage_activation_thresholds,
     _compute_cluster_local_target_thresholds,
     _evaluate_stage_a_gate,
 )
@@ -128,3 +131,58 @@ def test_cross_sectional_ranking_proxy_reports_hit_rate_and_min_alloc_counts():
     assert summary["groups_fallback_selection"] == 1
     assert summary["top1_hit_rate"] == 0.5
     assert summary["naive_top1_hit_rate"] == 1.0
+
+
+def test_two_stage_thresholds_use_u_real_and_global_fallback():
+    train_df = pd.DataFrame(
+        {
+            "cluster_name": ["cluster_1", "cluster_1", "cluster_1", "cluster_2", "cluster_2"],
+            "pnl_real": [0.08, 0.10, 0.12, 0.03, 0.01],
+            "avg_sl_train": [0.02, 0.02, 0.02, 0.02, 0.02],
+        }
+    )
+    thresholds, summary = _compute_two_stage_activation_thresholds(
+        train_df,
+        quantile=0.60,
+        min_positive_count_per_cluster=2,
+    )
+    assert thresholds["cluster_1"]["threshold_source"] == "cluster_local_q_train_positive"
+    assert thresholds["cluster_2"]["threshold_source"] == "global_positive_q_train_fallback"
+    assert summary["train_positive_count_global"] == 4
+
+
+def test_stage2_training_payload_uses_only_activated_rows():
+    train_df = pd.DataFrame(
+        {
+            "y_stage_a": [0, 1, 0, 1, 1],
+            "stage_a_utility_surplus": [0.0, 0.3, 0.0, 0.5, 0.2],
+        }
+    )
+    X_tr = pd.DataFrame({"f1": [1, 2, 3, 4, 5]}).values
+    w_tr = pd.Series([1.0, 1.1, 1.2, 1.3, 1.4])
+    X2, y2, w2, payload = _build_stage2_training_payload(train_df, X_tr, w_tr, min_rows=2)
+    assert payload["stage2_training_policy"] == "activated_train_subset_only"
+    assert payload["is_valid"] is True
+    assert payload["train_rows_stage2"] == 3
+    assert y2.tolist() == [0.3, 0.5, 0.2]
+    assert X2.shape[0] == 3
+    assert w2.tolist() == [1.1, 1.3, 1.4]
+
+
+def test_two_stage_proxy_uses_same_geometry_with_predicted_activation():
+    df = pd.DataFrame(
+        {
+            "date": pd.to_datetime(["2026-01-01"] * 4),
+            "symbol": ["A", "B", "C", "D"],
+            "cluster_name": ["cluster_1", "cluster_1", "cluster_2", "cluster_2"],
+            "p_stage_a_calibrated": [0.60, 0.80, 0.70, 0.20],
+            "p_activate_calibrated_stage_a": [0.60, 0.80, 0.70, 0.20],
+            "utility_surplus_pred_stage_a": [0.10, 0.20, 0.30, 0.00],
+        }
+    )
+    out, summary = _apply_two_stage_activation_utility_proxy(df)
+    assert int(out["stage_a_selected_proxy"].sum()) == 2
+    assert summary["groups_local_selection"] == 1
+    assert summary["groups_fallback_selection"] == 1
+    assert bool(out.loc[out["symbol"] == "B", "stage_a_selected_proxy"].iloc[0]) is True
+    assert bool(out.loc[out["symbol"] == "C", "stage_a_selected_proxy"].iloc[0]) is True

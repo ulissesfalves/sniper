@@ -43,12 +43,20 @@ PROBLEM_TYPE = os.environ.get("STAGE_A_PROBLEM_TYPE", "binary_classification").s
 TARGET_MODE = os.environ.get("STAGE_A_TARGET_MODE", "sl_mult").strip().lower() or "sl_mult"
 TARGET_SL_MULT = float(os.environ.get("STAGE_A_TARGET_SL_MULT", "1.0"))
 TARGET_CLUSTER_Q = float(os.environ.get("STAGE_A_TARGET_CLUSTER_Q", "0.60"))
+TARGET_Q_CANDIDATES = tuple(
+    float(item.strip())
+    for item in os.environ.get("STAGE_A_Q_CANDIDATES", "0.40,0.50,0.60").split(",")
+    if item.strip()
+)
+PRIMARY_Q = float(os.environ.get("STAGE_A_PRIMARY_Q", "0.60"))
 MIN_TRAIN_POSITIVE_COUNT_PER_CLUSTER = int(os.environ.get("STAGE_A_MIN_TRAIN_POSITIVE_COUNT_PER_CLUSTER", "100"))
 MIN_ELIGIBLE_PER_DATE_CLUSTER = int(os.environ.get("STAGE_A_MIN_ELIGIBLE_PER_DATE_CLUSTER", "2"))
+MIN_STAGE2_TRAIN_ROWS = int(os.environ.get("STAGE_A_MIN_STAGE2_TRAIN_ROWS", "25"))
 BASELINE_HISTORICAL_ACTIVE = 60
 MIN_ALLOC_FRAC = 0.001
 TARGET_FALLBACK_POLICY = "global_positive_q_train_fallback"
 TARGET_GROUP_FALLBACK_POLICY = "date_universe_top1_when_cluster_support_lt_min"
+TARGET_ACTIVATION_THRESHOLD = 0.50
 
 
 def _utc_now_iso() -> str:
@@ -118,6 +126,8 @@ def _research_path(model_path: Path) -> Path:
 def _target_name() -> str:
     if PROBLEM_TYPE == "cross_sectional_ranking":
         return "cross_sectional_relative_rank_score"
+    if TARGET_MODE == "two_stage_activation_utility":
+        return f"two_stage_activation_utility_q{int(round(PRIMARY_Q * 100)):02d}"
     if TARGET_MODE == "cross_sectional_relative_activation":
         return "cross_sectional_relative_activation_binary"
     if TARGET_MODE == "cluster_local_q_positive":
@@ -135,6 +145,16 @@ def _target_definition() -> str:
             "rank_target_stage_a = pnl_real / avg_sl_train for eligible = (pnl_real > avg_sl_train); "
             "proxy selection = top1(rank_score_stage_a) within (date, cluster_name) among eligible rows; "
             "fallback to top1(date-universe) when eligible_count(date, cluster_name) < "
+            f"{MIN_ELIGIBLE_PER_DATE_CLUSTER}"
+        )
+    if TARGET_MODE == "two_stage_activation_utility":
+        return (
+            "stage1: y_activate = 1[u_real >= Q"
+            f"{int(round(PRIMARY_Q * 100)):02d}_train(u_real | cluster_name, u_real > 1)] "
+            "with u_real = pnl_real / avg_sl_train and global fallback when train support is sparse; "
+            "stage2: regress utility_surplus = max(u_real - threshold_train, 0) on activated-train rows only; "
+            "decision proxy = activated rows with p_activate_calibrated > 0.50 ranked by predicted utility_surplus, "
+            "top1 within (date, cluster_name), fallback to top1(date-universe) when activated_count(date, cluster_name) < "
             f"{MIN_ELIGIBLE_PER_DATE_CLUSTER}"
         )
     if TARGET_MODE == "cross_sectional_relative_activation":
@@ -297,6 +317,158 @@ def _build_cross_sectional_ranking_frame(
     return work, summary
 
 
+def _compute_stage_a_utility_real(df: pd.DataFrame) -> pd.Series:
+    pnl_source = df.get("pnl_real", pd.Series(np.nan, index=df.index))
+    sl_source = df.get("avg_sl_train", pd.Series(np.nan, index=df.index))
+    pnl_real = pd.to_numeric(pnl_source, errors="coerce")
+    avg_sl_train = pd.to_numeric(sl_source, errors="coerce")
+    if not isinstance(pnl_real, pd.Series):
+        pnl_real = pd.Series(pnl_real, index=df.index)
+    if not isinstance(avg_sl_train, pd.Series):
+        avg_sl_train = pd.Series(avg_sl_train, index=df.index)
+    avg_sl_train = avg_sl_train.replace(0, np.nan)
+    utility_real = pnl_real / avg_sl_train
+    return utility_real.where(pnl_real.notna() & avg_sl_train.notna() & (avg_sl_train > 0))
+
+
+def _compute_two_stage_activation_thresholds(
+    train_df: pd.DataFrame,
+    *,
+    quantile: float = PRIMARY_Q,
+    min_positive_count_per_cluster: int = MIN_TRAIN_POSITIVE_COUNT_PER_CLUSTER,
+) -> tuple[dict[str, dict[str, float | int | str]], dict]:
+    work = train_df.copy()
+    work["cluster_name"] = work.get("cluster_name", pd.Series("cluster_global", index=work.index)).astype(str).fillna("cluster_global")
+    work["stage_a_utility_real"] = _compute_stage_a_utility_real(work)
+    eligible_train = work.loc[work["stage_a_utility_real"] > 1.0].copy()
+
+    global_positive_count = int(len(eligible_train))
+    if global_positive_count > 0:
+        global_threshold = float(eligible_train["stage_a_utility_real"].quantile(quantile))
+    else:
+        global_threshold = float("inf")
+
+    cluster_thresholds: dict[str, dict[str, float | int | str]] = {}
+    cluster_rows: list[dict] = []
+
+    for cluster_name in sorted(work["cluster_name"].dropna().astype(str).unique().tolist()):
+        cluster_eligible = eligible_train.loc[
+            eligible_train["cluster_name"].astype(str) == cluster_name,
+            "stage_a_utility_real",
+        ].dropna()
+        train_positive_count = int(len(cluster_eligible))
+        if train_positive_count >= int(min_positive_count_per_cluster):
+            threshold = float(cluster_eligible.quantile(quantile))
+            threshold_source = "cluster_local_q_train_positive"
+        else:
+            threshold = global_threshold
+            threshold_source = TARGET_FALLBACK_POLICY
+        row = {
+            "cluster_name": cluster_name,
+            "train_positive_count_cluster": train_positive_count,
+            "train_positive_count_global": global_positive_count,
+            "threshold_train": None if not np.isfinite(threshold) else round(float(threshold), 6),
+            "threshold_source": threshold_source,
+        }
+        cluster_rows.append(row)
+        cluster_thresholds[cluster_name] = row
+
+    summary = {
+        "target_mode": TARGET_MODE,
+        "primary_q": round(float(quantile), 4),
+        "min_train_positive_count_per_cluster": int(min_positive_count_per_cluster),
+        "fallback_policy": TARGET_FALLBACK_POLICY,
+        "train_positive_count_global": global_positive_count,
+        "global_threshold_train": None if not np.isfinite(global_threshold) else round(float(global_threshold), 6),
+        "cluster_rows": cluster_rows,
+        "activation_definition": "y_activate = 1[u_real >= threshold_train(cluster)] with u_real = pnl_real / avg_sl_train",
+        "stage2_training_policy": "activated_train_subset_only",
+    }
+    return cluster_thresholds, summary
+
+
+def _attach_two_stage_target_metadata(
+    df: pd.DataFrame,
+    *,
+    cluster_thresholds: dict[str, dict[str, float | int | str]] | None,
+    threshold_summary: dict | None,
+) -> pd.DataFrame:
+    work = df.copy()
+    work["cluster_name"] = work.get("cluster_name", pd.Series("cluster_global", index=work.index)).astype(str).fillna("cluster_global")
+    work["stage_a_utility_real"] = _compute_stage_a_utility_real(work)
+    cluster_thresholds = cluster_thresholds or {}
+    threshold_summary = threshold_summary or {}
+    global_threshold = threshold_summary.get("global_threshold_train")
+    global_positive_count = int(threshold_summary.get("train_positive_count_global", 0))
+    fallback_threshold = float(global_threshold) if global_threshold is not None else float("inf")
+
+    def _meta_for_cluster(cluster_name: str) -> dict[str, float | int | str]:
+        meta = cluster_thresholds.get(cluster_name)
+        if meta is None:
+            return {
+                "cluster_name": cluster_name,
+                "train_positive_count_cluster": 0,
+                "train_positive_count_global": global_positive_count,
+                "threshold_train": None if not np.isfinite(fallback_threshold) else round(float(fallback_threshold), 6),
+                "threshold_source": TARGET_FALLBACK_POLICY,
+            }
+        return meta
+
+    mapped = work["cluster_name"].map(lambda cluster: _meta_for_cluster(str(cluster)))
+    work["stage_a_threshold_train"] = pd.to_numeric(mapped.map(lambda meta: meta.get("threshold_train")), errors="coerce")
+    work["stage_a_threshold_source"] = mapped.map(lambda meta: meta.get("threshold_source"))
+    work["stage_a_train_positive_count_cluster"] = mapped.map(lambda meta: int(meta.get("train_positive_count_cluster", 0)))
+    work["stage_a_train_positive_count_global"] = mapped.map(lambda meta: int(meta.get("train_positive_count_global", 0)))
+    work["stage_a_positive_support"] = work["stage_a_utility_real"] > 1.0
+    work["stage_a_eligible"] = (
+        work["stage_a_utility_real"].notna()
+        & work["stage_a_threshold_train"].notna()
+        & (work["stage_a_utility_real"] >= work["stage_a_threshold_train"])
+    )
+    work["stage_a_score_realized"] = work["stage_a_utility_real"]
+    work["stage_a_utility_surplus"] = (
+        work["stage_a_utility_real"] - work["stage_a_threshold_train"]
+    ).clip(lower=0.0)
+    work["y_stage_a"] = work["stage_a_eligible"].astype(int)
+    work["stage_a_target_source"] = np.where(
+        work["stage_a_eligible"],
+        "two_stage_activation_target",
+        "below_cluster_threshold",
+    )
+    return work
+
+
+def _build_stage2_training_payload(
+    train_df: pd.DataFrame,
+    X_tr,
+    w_tr,
+    *,
+    min_rows: int = MIN_STAGE2_TRAIN_ROWS,
+) -> tuple[np.ndarray | None, np.ndarray | None, np.ndarray | None, dict]:
+    activated_mask = pd.to_numeric(train_df.get("y_stage_a"), errors="coerce").fillna(0).astype(int) == 1
+    utility_surplus = pd.to_numeric(train_df.get("stage_a_utility_surplus"), errors="coerce").fillna(0.0)
+    selected_idx = np.where(activated_mask.to_numpy(dtype=bool))[0]
+    payload = {
+        "stage2_training_policy": "activated_train_subset_only",
+        "train_rows_total": int(len(train_df)),
+        "train_rows_stage2": int(len(selected_idx)),
+        "min_rows_required": int(min_rows),
+        "all_zero_target": False,
+        "is_valid": False,
+        "reason": "insufficient_support",
+    }
+    if len(selected_idx) < int(min_rows):
+        return None, None, None, payload
+    y_stage2 = utility_surplus.iloc[selected_idx].to_numpy(dtype=float, copy=True)
+    if len(y_stage2) == 0 or np.allclose(y_stage2, 0.0):
+        payload["all_zero_target"] = True
+        payload["reason"] = "all_zero_stage2_target"
+        return None, None, None, payload
+    payload["is_valid"] = True
+    payload["reason"] = "ok"
+    return X_tr[selected_idx], y_stage2, np.asarray(w_tr, dtype=float)[selected_idx], payload
+
+
 def _compute_cluster_local_target_thresholds(
     train_df: pd.DataFrame,
     *,
@@ -389,6 +561,11 @@ def _attach_stage_a_target_metadata(
 def _build_stage_a_target(df: pd.DataFrame) -> pd.Series:
     pnl_real = pd.to_numeric(df.get("pnl_real"), errors="coerce")
     avg_sl_train = pd.to_numeric(df.get("avg_sl_train"), errors="coerce")
+    if TARGET_MODE == "two_stage_activation_utility":
+        utility_real = pd.to_numeric(df.get("stage_a_utility_real"), errors="coerce")
+        threshold_train = pd.to_numeric(df.get("stage_a_threshold_train"), errors="coerce")
+        target = utility_real.notna() & threshold_train.notna() & (utility_real >= threshold_train)
+        return target.astype(int)
     if TARGET_MODE == "cross_sectional_relative_activation":
         selected = pd.to_numeric(df.get("y_stage_a"), errors="coerce")
         if selected.notna().any():
@@ -480,6 +657,12 @@ def _prepare_stage_a_fold_frame(
     if TARGET_MODE == "cross_sectional_relative_activation":
         work, _ = _build_cross_sectional_relative_target(work)
         return work
+    if TARGET_MODE == "two_stage_activation_utility":
+        return _attach_two_stage_target_metadata(
+            work,
+            cluster_thresholds=cluster_thresholds,
+            threshold_summary=threshold_summary,
+        )
     work = _attach_stage_a_target_metadata(
         work,
         cluster_thresholds=cluster_thresholds,
@@ -504,7 +687,7 @@ def _aggregate_stage_a_predictions(oos_df: pd.DataFrame) -> pd.DataFrame:
     if "p_meta_calibrated" not in alias_df.columns:
         alias_df["p_meta_calibrated"] = pd.to_numeric(alias_df.get("p_meta_raw"), errors="coerce").fillna(0.0)
     aggregated = phase4._aggregate_oos_predictions(alias_df)
-    return aggregated.rename(
+    aggregated = aggregated.rename(
         columns={
             "y_meta": "y_stage_a",
             "p_meta_raw": "p_stage_a_raw",
@@ -515,6 +698,32 @@ def _aggregate_stage_a_predictions(oos_df: pd.DataFrame) -> pd.DataFrame:
             "position_usdt_meta": "position_usdt_stage_a",
         }
     )
+    extra_agg_spec: dict[str, str] = {}
+    for col in [
+        "stage_a_utility_real",
+        "stage_a_utility_surplus",
+        "stage_a_threshold_train",
+        "utility_surplus_pred_stage_a",
+        "p_activate_raw_stage_a",
+        "p_activate_calibrated_stage_a",
+    ]:
+        if col in oos_df.columns:
+            extra_agg_spec[col] = "mean"
+    for col in [
+        "stage_a_threshold_source",
+        "stage2_training_policy",
+    ]:
+        if col in oos_df.columns:
+            extra_agg_spec[col] = "first"
+    if extra_agg_spec:
+        extras = (
+            oos_df.groupby(["date", "symbol"], as_index=False)
+            .agg(extra_agg_spec)
+            .sort_values(["date", "symbol"], kind="mergesort")
+            .reset_index(drop=True)
+        )
+        aggregated = aggregated.merge(extras, on=["date", "symbol"], how="left")
+    return aggregated
 
 
 def _build_stage_a_snapshot_proxy(predictions_df: pd.DataFrame) -> pd.DataFrame:
@@ -529,6 +738,8 @@ def _build_stage_a_snapshot_proxy(predictions_df: pd.DataFrame) -> pd.DataFrame:
     )
     latest = latest.copy()
     latest["p_stage_a"] = pd.to_numeric(latest.get("p_stage_a_calibrated"), errors="coerce").fillna(0.0)
+    latest["decision_selected"] = pd.Series(latest.get("decision_selected", False), index=latest.index).fillna(False).astype(bool)
+    latest["decision_score_stage_a"] = pd.to_numeric(latest.get("decision_score_stage_a"), errors="coerce").fillna(0.0)
     latest["kelly_frac_stage_a_proxy"] = pd.to_numeric(latest.get("kelly_frac_stage_a"), errors="coerce").fillna(0.0)
     latest["position_usdt_stage_a_proxy"] = pd.to_numeric(latest.get("position_usdt_stage_a"), errors="coerce").fillna(0.0)
     latest["side"] = np.where(latest["position_usdt_stage_a_proxy"] > 0, "BUY", "FLAT")
@@ -691,6 +902,158 @@ def _apply_cross_sectional_ranking_proxy(predictions_df: pd.DataFrame) -> tuple[
         "naive_top1_hit_rate": round(float(contest_df["naive_hit"].mean()), 4) if not contest_df.empty else 0.0,
         "mrr": round(float(contest_df["reciprocal_rank"].mean()), 4) if not contest_df.empty else 0.0,
         "rank_margin_latest": rank_margin_latest,
+        "predicted_top_candidate_per_date": predicted_rows,
+    }
+    return work, summary
+
+
+def _apply_two_stage_activation_utility_proxy(predictions_df: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
+    if predictions_df.empty:
+        return predictions_df.copy(), {
+            "activated_candidates_per_date": [],
+            "groups_local_selection": 0,
+            "groups_fallback_selection": 0,
+            "groups_without_eligible": 0,
+            "groups_total": 0,
+            "rank_margin_latest": 0.0,
+            "predicted_top_candidate_per_date": [],
+        }
+
+    work = predictions_df.copy()
+    work["date"] = pd.to_datetime(work["date"], errors="coerce")
+    work["cluster_name"] = work.get("cluster_name", pd.Series("cluster_global", index=work.index)).astype(str).fillna("cluster_global")
+    work["p_activate_calibrated_stage_a"] = pd.to_numeric(
+        work.get("p_activate_calibrated_stage_a", work.get("p_stage_a_calibrated")),
+        errors="coerce",
+    ).fillna(0.0)
+    work["utility_surplus_pred_stage_a"] = pd.to_numeric(
+        work.get("utility_surplus_pred_stage_a"),
+        errors="coerce",
+    ).fillna(0.0)
+    work["stage_a_predicted_activated"] = work["p_activate_calibrated_stage_a"] > TARGET_ACTIVATION_THRESHOLD
+    work["stage_a_group_eligible_count"] = 0
+    work["stage_a_selection_mode"] = "no_eligible"
+    work["stage_a_selected_proxy_local"] = False
+    work["stage_a_selected_proxy_fallback"] = False
+    work["stage_a_selected_proxy"] = False
+
+    activated_per_date = (
+        work.assign(_date_str=work["date"].dt.strftime("%Y-%m-%d"))
+        .groupby("_date_str", sort=True)["stage_a_predicted_activated"]
+        .sum()
+        .reset_index()
+        .rename(columns={"_date_str": "date", "stage_a_predicted_activated": "activated_candidates"})
+        .to_dict(orient="records")
+    )
+
+    predicted_rows: list[dict] = []
+    group_rows: list[dict] = []
+
+    def _rank_contest(contest_df: pd.DataFrame) -> pd.DataFrame:
+        return contest_df.sort_values(
+            ["utility_surplus_pred_stage_a", "p_activate_calibrated_stage_a", "symbol"],
+            ascending=[False, False, True],
+            kind="mergesort",
+        )
+
+    local_groups = []
+    fallback_dates = set()
+    for (date_value, cluster_name), grp in work.groupby(["date", "cluster_name"], sort=True):
+        activated_grp = grp.loc[grp["stage_a_predicted_activated"].fillna(False)].copy()
+        activated_count = int(len(activated_grp))
+        work.loc[grp.index, "stage_a_group_eligible_count"] = activated_count
+        if activated_count >= int(MIN_ELIGIBLE_PER_DATE_CLUSTER):
+            ranked = _rank_contest(activated_grp)
+            top_idx = int(ranked.index[0])
+            work.loc[grp.index, "stage_a_selection_mode"] = "cluster_local_top1"
+            work.loc[top_idx, "stage_a_selected_proxy_local"] = True
+            selection_mode = "cluster_local_top1"
+            local_groups.append((pd.Timestamp(date_value), str(cluster_name), ranked))
+        elif activated_count > 0:
+            work.loc[grp.index, "stage_a_selection_mode"] = "date_universe_fallback"
+            fallback_dates.add(pd.Timestamp(date_value))
+            selection_mode = "date_universe_fallback"
+        else:
+            work.loc[grp.index, "stage_a_selection_mode"] = "no_eligible"
+            selection_mode = "no_eligible"
+        group_rows.append(
+            {
+                "date": pd.Timestamp(date_value).strftime("%Y-%m-%d"),
+                "cluster_name": str(cluster_name),
+                "eligible_count": activated_count,
+                "selection_mode": selection_mode,
+            }
+        )
+
+    for date_value, cluster_name, ranked in local_groups:
+        top_row = ranked.iloc[0]
+        predicted_rows.append(
+            {
+                "date": date_value.strftime("%Y-%m-%d"),
+                "cluster_name": cluster_name,
+                "selection_mode": "cluster_local_top1",
+                "symbol": str(top_row.get("symbol", "")),
+                "p_activate_calibrated_stage_a": round(float(top_row["p_activate_calibrated_stage_a"]), 6),
+                "utility_surplus_pred_stage_a": round(float(top_row["utility_surplus_pred_stage_a"]), 6),
+                "eligible_count": int(len(ranked)),
+                "rank_margin": round(
+                    float(top_row["utility_surplus_pred_stage_a"] - ranked.iloc[1]["utility_surplus_pred_stage_a"]),
+                    6,
+                )
+                if len(ranked) > 1
+                else 0.0,
+            }
+        )
+
+    for date_value in sorted(fallback_dates):
+        contest_df = work.loc[
+            (work["date"] == pd.Timestamp(date_value))
+            & work["stage_a_predicted_activated"].fillna(False)
+        ].copy()
+        if contest_df.empty:
+            continue
+        ranked = _rank_contest(contest_df)
+        top_idx = int(ranked.index[0])
+        work.loc[top_idx, "stage_a_selected_proxy_fallback"] = True
+        top_row = ranked.iloc[0]
+        predicted_rows.append(
+            {
+                "date": pd.Timestamp(date_value).strftime("%Y-%m-%d"),
+                "cluster_name": "date_universe",
+                "selection_mode": "date_universe_fallback",
+                "symbol": str(top_row.get("symbol", "")),
+                "p_activate_calibrated_stage_a": round(float(top_row["p_activate_calibrated_stage_a"]), 6),
+                "utility_surplus_pred_stage_a": round(float(top_row["utility_surplus_pred_stage_a"]), 6),
+                "eligible_count": int(len(ranked)),
+                "rank_margin": round(
+                    float(top_row["utility_surplus_pred_stage_a"] - ranked.iloc[1]["utility_surplus_pred_stage_a"]),
+                    6,
+                )
+                if len(ranked) > 1
+                else 0.0,
+            }
+        )
+
+    work["stage_a_selected_proxy"] = work["stage_a_selected_proxy_local"] | work["stage_a_selected_proxy_fallback"]
+    work["decision_selected"] = work["stage_a_selected_proxy"].astype(bool)
+    work["decision_score_stage_a"] = np.where(
+        work["decision_selected"],
+        work["p_activate_calibrated_stage_a"],
+        0.0,
+    )
+
+    latest_date = pd.to_datetime(work["date"], errors="coerce").max()
+    latest_date_str = latest_date.strftime("%Y-%m-%d") if pd.notna(latest_date) else None
+    latest_predicted = [row for row in predicted_rows if row.get("date") == latest_date_str]
+    rank_margin_latest = max((float(row.get("rank_margin", 0.0)) for row in latest_predicted), default=0.0)
+    group_df = pd.DataFrame(group_rows)
+    summary = {
+        "activated_candidates_per_date": activated_per_date,
+        "groups_local_selection": int((group_df["selection_mode"] == "cluster_local_top1").sum()) if not group_df.empty else 0,
+        "groups_fallback_selection": int((group_df["selection_mode"] == "date_universe_fallback").sum()) if not group_df.empty else 0,
+        "groups_without_eligible": int((group_df["selection_mode"] == "no_eligible").sum()) if not group_df.empty else 0,
+        "groups_total": int(len(group_df)),
+        "rank_margin_latest": round(float(rank_margin_latest), 6),
         "predicted_top_candidate_per_date": predicted_rows,
     }
     return work, summary
@@ -1138,6 +1501,14 @@ def run_stage_a_experiment() -> dict:
         train_df = pooled_df.iloc[train_idx].copy()
         test_df = pooled_df.iloc[test_idx].copy()
         symbol_stats, global_tp, global_sl = phase4._compute_symbol_trade_stats(train_df)
+        train_df_with_stats = phase4._attach_trade_stats(
+            train_df,
+            symbol_stats,
+            global_tp,
+            global_sl,
+            tp_col="avg_tp_train",
+            sl_col="avg_sl_train",
+        )
         train_df["cluster_name"] = train_df["symbol"].astype(str).map(symbol_to_cluster).fillna("cluster_global")
         test_df["cluster_name"] = test_df["symbol"].astype(str).map(symbol_to_cluster).fillna("cluster_global")
         cluster_thresholds = None
@@ -1148,6 +1519,19 @@ def run_stage_a_experiment() -> dict:
                 target_policy_rows.append(
                     {
                         "combo": str(combo),
+                        **row,
+                    }
+                )
+        elif TARGET_MODE == "two_stage_activation_utility":
+            cluster_thresholds, threshold_summary = _compute_two_stage_activation_thresholds(
+                train_df_with_stats.assign(cluster_name=train_df["cluster_name"].values),
+                quantile=PRIMARY_Q,
+            )
+            for row in threshold_summary.get("cluster_rows", []):
+                target_policy_rows.append(
+                    {
+                        "combo": str(combo),
+                        "primary_q": round(float(PRIMARY_Q), 4),
                         **row,
                     }
                 )
@@ -1213,6 +1597,37 @@ def run_stage_a_experiment() -> dict:
                 p_oos_raw = np.where(hmm_te < 0.50, 0.0, p_oos_raw)
             auc_raw = roc_auc_score(y_te, p_oos_raw) if len(np.unique(y_te)) >= 2 else 0.5
 
+            stage2_payload = {
+                "stage2_training_policy": "not_applicable",
+                "train_rows_total": int(len(train_df)),
+                "train_rows_stage2": int(len(train_df)),
+                "min_rows_required": 0,
+                "all_zero_target": False,
+                "is_valid": True,
+                "reason": "not_applicable",
+            }
+            utility_pred_oos = np.full(len(test_df), np.nan, dtype=float)
+            if TARGET_MODE == "two_stage_activation_utility":
+                X_tr_stage2, y_tr_stage2, w_tr_stage2, stage2_payload = _build_stage2_training_payload(
+                    train_df,
+                    X_tr,
+                    w_tr,
+                )
+                if not stage2_payload.get("is_valid"):
+                    print(
+                        f"  [SKIP] combo={combo} invalid stage2 support "
+                        f"rows={stage2_payload.get('train_rows_stage2')} reason={stage2_payload.get('reason')}"
+                    )
+                    continue
+                stage2_model = _train_stage_a_ranker(
+                    X_tr_stage2,
+                    y_tr_stage2,
+                    w_tr_stage2,
+                    float(len(y_tr_stage2)),
+                )
+                utility_pred_oos = np.asarray(stage2_model.predict(X_te), dtype=float)
+                utility_pred_oos = np.maximum(utility_pred_oos, 0.0)
+
             trajectories.append(
                 {
                     "combo": str(combo),
@@ -1222,6 +1637,9 @@ def run_stage_a_experiment() -> dict:
                     "positive_rate_train": round(float(np.mean(y_tr)), 4),
                     "positive_rate_test": round(float(np.mean(y_te)), 4),
                     "auc_raw": round(float(auc_raw), 4),
+                    "stage2_train_rows": int(stage2_payload.get("train_rows_stage2", 0)),
+                    "stage2_valid": bool(stage2_payload.get("is_valid", True)),
+                    "stage2_reason": str(stage2_payload.get("reason", "not_applicable")),
                 }
             )
             print(f"  combo={combo} AUC_raw={auc_raw:.4f} train={len(train_idx)} test={len(test_idx)}")
@@ -1275,6 +1693,11 @@ def run_stage_a_experiment() -> dict:
                     "stage_a_threshold_source": str(row.get("stage_a_threshold_source") or ""),
                     "stage_a_train_positive_count_cluster": int(_coerce_float(row.get("stage_a_train_positive_count_cluster"))),
                     "stage_a_train_positive_count_global": int(_coerce_float(row.get("stage_a_train_positive_count_global"))),
+                    "stage_a_utility_real": _coerce_float(row.get("stage_a_utility_real"), default=np.nan),
+                    "stage_a_utility_surplus": _coerce_float(row.get("stage_a_utility_surplus"), default=np.nan),
+                    "p_activate_raw_stage_a": float(p_oos_raw[row_idx]) if TARGET_MODE == "two_stage_activation_utility" else np.nan,
+                    "utility_surplus_pred_stage_a": float(utility_pred_oos[row_idx]) if TARGET_MODE == "two_stage_activation_utility" else np.nan,
+                    "stage2_training_policy": str(stage2_payload.get("stage2_training_policy", "not_applicable")),
                     "y_stage_a_truth_top1": int(_coerce_float(row.get("y_stage_a_truth_top1"))),
                     "rank_target_stage_a": _coerce_float(row.get("rank_target_stage_a")),
                 }
@@ -1345,6 +1768,18 @@ def run_stage_a_experiment() -> dict:
         calibrators, cluster_summary, symbol_to_cluster, cluster_mode, artifact_path = phase4._fit_cluster_calibrators(calibration_df)
         oos_df["cluster_name"] = oos_df["symbol"].astype(str).map(symbol_to_cluster).fillna("cluster_global")
         oos_df["p_stage_a_calibrated"] = phase4._apply_cluster_calibration(calibration_df, calibrators, symbol_to_cluster)
+        aggregated_predictions = _aggregate_stage_a_predictions(oos_df)
+        ranking_summary = {}
+        if TARGET_MODE == "two_stage_activation_utility":
+            oos_df["p_activate_calibrated_stage_a"] = oos_df["p_stage_a_calibrated"]
+            aggregated_predictions["p_activate_calibrated_stage_a"] = pd.to_numeric(
+                aggregated_predictions.get("p_activate_calibrated_stage_a", aggregated_predictions.get("p_stage_a_calibrated")),
+                errors="coerce",
+            ).fillna(0.0)
+            aggregated_predictions, ranking_summary = _apply_two_stage_activation_utility_proxy(aggregated_predictions)
+            sizing_prob_col = "decision_score_stage_a"
+        else:
+            sizing_prob_col = "p_stage_a_calibrated"
         oos_df = phase4._compute_phase4_sizing(
             oos_df,
             prob_col="p_stage_a_calibrated",
@@ -1353,11 +1788,9 @@ def run_stage_a_experiment() -> dict:
             avg_sl_col="avg_sl_train",
         )
         oos_df = phase4._attach_execution_pnl(oos_df, position_col="position_usdt_stage_a", output_col="pnl_exec_stage_a")
-
-        aggregated_predictions = _aggregate_stage_a_predictions(oos_df)
         aggregated_predictions = phase4._compute_phase4_sizing(
             aggregated_predictions,
-            prob_col="p_stage_a_calibrated",
+            prob_col=sizing_prob_col,
             prefix="stage_a",
             avg_tp_col="avg_tp_train",
             avg_sl_col="avg_sl_train",
@@ -1380,7 +1813,6 @@ def run_stage_a_experiment() -> dict:
         ece_cal = phase4._compute_ece(oos_df["p_stage_a_calibrated"].values, oos_df["y_stage_a"].values)
         positive_rate_oos = float(oos_df["y_stage_a"].mean())
         gate = _evaluate_stage_a_gate(operational_report, ece_calibrated=ece_cal, positive_rate_oos=positive_rate_oos)
-        ranking_summary = {}
         if TARGET_MODE == "cross_sectional_relative_activation":
             target_selection_policy = {
                 "target_mode": TARGET_MODE,
@@ -1396,6 +1828,25 @@ def run_stage_a_experiment() -> dict:
                 "groups_total": int(len(target_policy_rows)),
                 "target_cluster_mode": target_cluster_mode,
                 "target_cluster_artifact_path": target_cluster_artifact_path,
+            }
+        elif TARGET_MODE == "two_stage_activation_utility":
+            target_selection_policy = {
+                "target_mode": TARGET_MODE,
+                "primary_q": round(float(PRIMARY_Q), 4),
+                "q_candidates": [round(float(item), 4) for item in TARGET_Q_CANDIDATES],
+                "selection_basis": "ex_ante_precommitted",
+                "stage1_training": "calibrated_binary_activation_classifier",
+                "stage2_training_policy": "activated_train_subset_only",
+                "min_stage2_train_rows": int(MIN_STAGE2_TRAIN_ROWS),
+                "min_eligible_per_date_cluster": MIN_ELIGIBLE_PER_DATE_CLUSTER,
+                "fallback_policy": TARGET_GROUP_FALLBACK_POLICY,
+                "groups_local_selection": int(ranking_summary.get("groups_local_selection", 0)),
+                "groups_fallback_selection": int(ranking_summary.get("groups_fallback_selection", 0)),
+                "groups_without_eligible": int(ranking_summary.get("groups_without_eligible", 0)),
+                "groups_total": int(ranking_summary.get("groups_total", 0)),
+                "target_cluster_mode": target_cluster_mode,
+                "target_cluster_artifact_path": target_cluster_artifact_path,
+                "threshold_coverage": _summarize_cluster_threshold_coverage(target_policy_rows),
             }
         else:
             target_selection_policy = _summarize_cluster_threshold_coverage(target_policy_rows)
