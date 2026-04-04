@@ -52,6 +52,13 @@ PRIMARY_Q = float(os.environ.get("STAGE_A_PRIMARY_Q", "0.60"))
 MIN_TRAIN_POSITIVE_COUNT_PER_CLUSTER = int(os.environ.get("STAGE_A_MIN_TRAIN_POSITIVE_COUNT_PER_CLUSTER", "100"))
 MIN_ELIGIBLE_PER_DATE_CLUSTER = int(os.environ.get("STAGE_A_MIN_ELIGIBLE_PER_DATE_CLUSTER", "2"))
 MIN_STAGE2_TRAIN_ROWS = int(os.environ.get("STAGE_A_MIN_STAGE2_TRAIN_ROWS", "25"))
+DATASET_STRESS_SCENARIO = os.environ.get("STAGE_A_DATASET_STRESS_SCENARIO", "").strip()
+NEUTRALIZE_FEATURES = tuple(
+    item.strip()
+    for item in os.environ.get("STAGE_A_NEUTRALIZE_FEATURES", "").split(",")
+    if item.strip()
+)
+UNIVERSE_FILTER_RULE = os.environ.get("STAGE_A_UNIVERSE_FILTER_RULE", "").strip().lower()
 BASELINE_HISTORICAL_ACTIVE = 60
 MIN_ALLOC_FRAC = 0.001
 TARGET_FALLBACK_POLICY = "global_positive_q_train_fallback"
@@ -121,6 +128,55 @@ def _configure_phase4_paths(model_path: Path) -> None:
 
 def _research_path(model_path: Path) -> Path:
     return model_path / "research" / EXPERIMENT_NAME
+
+
+def _default_stage2_payload(train_rows_total: int) -> dict[str, int | float | bool | str]:
+    train_rows_total = int(train_rows_total)
+    return {
+        "stage2_training_policy": "not_applicable",
+        "train_rows_total": train_rows_total,
+        "train_rows_stage2": train_rows_total,
+        "min_rows_required": 0,
+        "all_zero_target": False,
+        "is_valid": True,
+        "reason": "not_applicable",
+    }
+
+
+def _apply_dataset_stress_overrides(pooled_df: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
+    work = pooled_df.copy()
+    metadata: dict[str, object] = {}
+
+    neutralized_features: list[str] = []
+    for feature in NEUTRALIZE_FEATURES:
+        if feature not in work.columns:
+            continue
+        work[feature] = phase4._phase4_neutral_fill(feature)
+        neutralized_features.append(feature)
+    if neutralized_features:
+        metadata["neutralized_features"] = neutralized_features
+
+    if UNIVERSE_FILTER_RULE:
+        if UNIVERSE_FILTER_RULE != "median_history":
+            raise ValueError(f"Unsupported STAGE_A_UNIVERSE_FILTER_RULE={UNIVERSE_FILTER_RULE}")
+        counts = work["symbol"].astype(str).value_counts()
+        median_count = float(counts.median()) if not counts.empty else 0.0
+        keep_symbols = counts.loc[counts >= median_count].index.astype(str).tolist()
+        work = work.loc[work["symbol"].astype(str).isin(keep_symbols)].reset_index(drop=True)
+        metadata["universe_filter_rule"] = UNIVERSE_FILTER_RULE
+        metadata["universe_filter_threshold"] = round(median_count, 4)
+        metadata["symbols_before"] = int(counts.size)
+        metadata["symbols_after"] = int(len(keep_symbols))
+        metadata["rows_after_filter"] = int(len(work))
+
+    if DATASET_STRESS_SCENARIO or metadata:
+        metadata["scenario"] = DATASET_STRESS_SCENARIO or "dataset_stress_override"
+        metadata["applied"] = True
+        metadata["rows_total"] = int(len(work))
+        metadata["symbols_total"] = int(work["symbol"].astype(str).nunique()) if "symbol" in work.columns else 0
+        return work, metadata
+
+    return work, {}
 
 
 def _target_name() -> str:
@@ -739,7 +795,10 @@ def _build_stage_a_snapshot_proxy(predictions_df: pd.DataFrame) -> pd.DataFrame:
     latest = latest.copy()
     latest["p_stage_a"] = pd.to_numeric(latest.get("p_stage_a_calibrated"), errors="coerce").fillna(0.0)
     latest["decision_selected"] = pd.Series(latest.get("decision_selected", False), index=latest.index).fillna(False).astype(bool)
-    latest["decision_score_stage_a"] = pd.to_numeric(latest.get("decision_score_stage_a"), errors="coerce").fillna(0.0)
+    decision_score_source = latest.get("decision_score_stage_a")
+    if decision_score_source is None:
+        decision_score_source = latest.get("p_stage_a_calibrated", pd.Series(0.0, index=latest.index))
+    latest["decision_score_stage_a"] = pd.to_numeric(decision_score_source, errors="coerce").fillna(0.0)
     latest["kelly_frac_stage_a_proxy"] = pd.to_numeric(latest.get("kelly_frac_stage_a"), errors="coerce").fillna(0.0)
     latest["position_usdt_stage_a_proxy"] = pd.to_numeric(latest.get("position_usdt_stage_a"), errors="coerce").fillna(0.0)
     latest["side"] = np.where(latest["position_usdt_stage_a_proxy"] > 0, "BUY", "FLAT")
@@ -1386,9 +1445,10 @@ def _stage_a_manifest(
     feature_cols: list[str],
     source_hashes: dict[str, str],
     target_selection_policy: dict,
+    dataset_stress_metadata: dict | None = None,
 ) -> dict:
     git_status_short = _git_output("status", "--short")
-    return {
+    manifest = {
         "experiment_name": EXPERIMENT_NAME,
         "generated_at_utc": _utc_now_iso(),
         "repo_root": str(REPO_ROOT),
@@ -1448,6 +1508,9 @@ def _stage_a_manifest(
         ],
         "source_hashes": source_hashes,
     }
+    if dataset_stress_metadata:
+        manifest["dataset_stress_metadata"] = dataset_stress_metadata
+    return manifest
 
 
 def _collect_source_hashes(model_path: Path) -> dict[str, str]:
@@ -1470,6 +1533,7 @@ def run_stage_a_experiment() -> dict:
     research_path.mkdir(parents=True, exist_ok=True)
 
     pooled_df = phase4.load_pooled_meta_df()
+    pooled_df, dataset_stress_metadata = _apply_dataset_stress_overrides(pooled_df)
     feature_cols = phase4.select_features(pooled_df)
     _, symbol_to_cluster, target_cluster_mode, target_cluster_artifact_path = phase4._load_symbol_vi_clusters(
         pooled_df["symbol"].astype(str).unique().tolist()
@@ -1559,6 +1623,8 @@ def run_stage_a_experiment() -> dict:
         X_tr = phase4._prepare_feature_matrix(train_df, feature_cols)
         X_te = phase4._prepare_feature_matrix(test_df, feature_cols)
         w_tr = phase4.compute_sample_weights(train_df)
+        stage2_payload = _default_stage2_payload(len(train_df))
+        utility_pred_oos = np.full(len(test_df), np.nan, dtype=float)
 
         if PROBLEM_TYPE == "cross_sectional_ranking":
             y_tr_truth = train_df["y_stage_a_truth_top1"].values
@@ -1596,17 +1662,6 @@ def run_stage_a_experiment() -> dict:
                 hmm_te = pd.to_numeric(test_df["hmm_prob_bull"], errors="coerce").fillna(0.0).values
                 p_oos_raw = np.where(hmm_te < 0.50, 0.0, p_oos_raw)
             auc_raw = roc_auc_score(y_te, p_oos_raw) if len(np.unique(y_te)) >= 2 else 0.5
-
-            stage2_payload = {
-                "stage2_training_policy": "not_applicable",
-                "train_rows_total": int(len(train_df)),
-                "train_rows_stage2": int(len(train_df)),
-                "min_rows_required": 0,
-                "all_zero_target": False,
-                "is_valid": True,
-                "reason": "not_applicable",
-            }
-            utility_pred_oos = np.full(len(test_df), np.nan, dtype=float)
             if TARGET_MODE == "two_stage_activation_utility":
                 X_tr_stage2, y_tr_stage2, w_tr_stage2, stage2_payload = _build_stage2_training_payload(
                     train_df,
@@ -1861,6 +1916,7 @@ def run_stage_a_experiment() -> dict:
         feature_cols=feature_cols,
         source_hashes=source_hashes,
         target_selection_policy=target_selection_policy,
+        dataset_stress_metadata=dataset_stress_metadata,
     )
     reference_report = _load_stage_a_report(model_path, REFERENCE_EXPERIMENT_NAME)
 
@@ -1887,6 +1943,8 @@ def run_stage_a_experiment() -> dict:
         "comparison_vs_stage_a_baselines": {},
         "source_hashes": source_hashes,
     }
+    if dataset_stress_metadata:
+        report["dataset_stress_metadata"] = dataset_stress_metadata
     if PROBLEM_TYPE == "cross_sectional_ranking":
         report["classification_metrics"] = {
             "positive_rate_oos": round(float(positive_rate_oos), 4),

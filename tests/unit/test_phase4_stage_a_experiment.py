@@ -6,6 +6,8 @@ from services.ml_engine.phase4_stage_a_experiment import (
     _apply_cross_sectional_ranking_proxy,
     _apply_two_stage_activation_utility_proxy,
     _build_stage_a_target,
+    _build_stage_a_snapshot_proxy,
+    _default_stage2_payload,
     _build_stage2_training_payload,
     _build_cross_sectional_relative_target,
     _build_cross_sectional_ranking_frame,
@@ -24,6 +26,31 @@ def test_build_stage_a_target_uses_cost_adjusted_edge_rule():
     )
     target = _build_stage_a_target(df)
     assert target.tolist() == [1, 0, 0]
+
+
+def test_default_stage2_payload_keeps_ranking_path_non_blocking():
+    payload = _default_stage2_payload(17)
+    assert payload["stage2_training_policy"] == "not_applicable"
+    assert payload["train_rows_total"] == 17
+    assert payload["train_rows_stage2"] == 17
+    assert payload["is_valid"] is True
+    assert payload["reason"] == "not_applicable"
+
+
+def test_build_stage_a_snapshot_proxy_falls_back_to_calibrated_score_when_missing():
+    frame = pd.DataFrame(
+        {
+            "date": pd.to_datetime(["2026-01-01", "2026-01-02"]),
+            "symbol": ["A", "A"],
+            "p_stage_a_calibrated": [0.0, 1.0],
+            "decision_selected": [False, True],
+            "kelly_frac_stage_a": [0.0, 0.1],
+            "position_usdt_stage_a": [0.0, 1000.0],
+        }
+    )
+    snapshot = _build_stage_a_snapshot_proxy(frame)
+    assert snapshot["decision_score_stage_a"].tolist() == [1.0]
+    assert snapshot["is_active"].tolist() == [True]
 
 
 def test_evaluate_stage_a_gate_requires_latest_activity_or_headroom():
