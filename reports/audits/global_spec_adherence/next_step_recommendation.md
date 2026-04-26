@@ -2,96 +2,97 @@
 
 ## Gate sugerido
 
-`phase6_global_reproducibility_source_alignment_gate`
+`phase6_source_doc_and_regeneration_preflight_gate`
+
+## Origem da recomendacao
+
+O gate `phase6_global_reproducibility_source_alignment_gate` foi executado em `codex/autonomous-sniper-implementation` e retornou `PARTIAL/correct`.
+
+Blockers atuais:
+
+- `phase4_r4_source_doc_mismatch`
+- `cvar_zero_exposure_not_economic_robustness`
+- `clean_regeneration_not_proven_in_clean_clone_or_equivalent`
+- `local_regeneration_probe_failed`
 
 ## Objetivo
 
-Executar uma rodada de evidência reproduzível que alinhe documentação, source rastreado e artifacts de gate. O gate deve fechar lacunas de auditoria sem promover modelo, sem reabrir A3/A4 e sem transformar research em official.
+Corrigir o proximo blocker material sem promover modelo: alinhar a memoria Phase 4-R4 ao source rastreado e transformar a falha de regeneracao por artifact ausente em preflight claro, auditavel e sem stacktrace.
+
+Este gate deve continuar sendo de governanca/reprodutibilidade, nao de performance.
 
 ## Branch sugerida
 
-`codex/phase6-global-reproducibility-source-alignment`
+`codex/autonomous-sniper-implementation`
 
-## Arquivos provavelmente alterados
+## Escopo
 
-- `reports/gates/phase6_global_reproducibility_source_alignment_gate/gate_report.json`
-- `reports/gates/phase6_global_reproducibility_source_alignment_gate/gate_report.md`
-- `reports/gates/phase6_global_reproducibility_source_alignment_gate/gate_manifest.json`
-- `reports/gates/phase6_global_reproducibility_source_alignment_gate/source_doc_alignment.json`
-- `reports/gates/phase6_global_reproducibility_source_alignment_gate/portfolio_cvar_report.json`
-- `docs/SNIPER_openclaw_handoff.md`
-- `docs/SNIPER_regeneration_guide.md`
-- Opcionalmente, source Fase 4 se a decisão for restaurar os módulos documentados em vez de corrigir a documentação.
+- Revisar `docs/SNIPER_memoria_especificacao_controle_fase4R_v3.md` e alinhar a narrativa Phase 4-R4 com o source realmente rastreado.
+- Decidir explicitamente entre:
+  - restaurar modulos Phase 4-R4 documentados; ou
+  - registrar correcao documental versionada quando o source atual preserva a funcionalidade por `phase4_cpcv.py`, `phase4_gate_diagnostic.py` e `phase4_stage_a_experiment.py`.
+- Endurecer `services/ml_engine/phase6_global_reproducibility_source_alignment_gate.py` para classificar `data/models/phase4` ausente como `MISSING_OFFICIAL_PHASE4_ARTIFACTS`.
+- Atualizar ou adicionar testes unitarios para a classificacao de preflight.
+- Regenerar artifacts de gate.
+
+## Fora de escopo
+
+- Nao promover artifacts para official.
+- Nao reabrir A3/A4.
+- Nao tratar `ALIVE_BUT_NOT_PROMOTABLE` como promotable.
+- Nao usar RiskLabAI como official.
+- Nao alterar thresholds de DSR, Sharpe, PBO, ECE, N_eff ou subperiodos.
+- Nao declarar readiness de paper/capital.
+- Nao mascarar `PASS_ZERO_EXPOSURE` como robustez economica completa.
 
 ## Artifacts esperados
 
-- Manifest de source-doc-artifact com hashes.
-- Resultado de clean regeneration dos gates Phase 5 relevantes.
-- Relatório de alinhamento Fase 4-R4: módulos presentes, módulos ausentes, decisão de restauração ou atualização documental.
-- Relatório empírico de CVaR/stress `rho=1`, drawdown e exposure para snapshot/portfolio current.
-- Sumário explicitando `official`, `research`, `sandbox` e `shadow`.
-- Registro de blockers quantitativos preservados: DSR, Sharpe, subperíodos, cross-sectional status.
+- `reports/gates/phase6_source_doc_and_regeneration_preflight_gate/gate_report.json`
+- `reports/gates/phase6_source_doc_and_regeneration_preflight_gate/gate_report.md`
+- `reports/gates/phase6_source_doc_and_regeneration_preflight_gate/gate_manifest.json`
+- `reports/gates/phase6_source_doc_and_regeneration_preflight_gate/gate_metrics.parquet`
+- `reports/gates/phase6_source_doc_and_regeneration_preflight_gate/source_doc_alignment.json`
+- `reports/gates/phase6_source_doc_and_regeneration_preflight_gate/clean_regeneration_preflight.json`
 
-## Critérios objetivos
-
-PASS:
-
-- Clean regeneration reproduz os artifacts esperados ou explica diferenças com hashes e causa objetiva.
-- Source e documentação Fase 4-R4 ficam alinhados por restauração de módulos ou correção documental versionada.
-- CVaR empirical artifact é persistido e validável.
-- Nenhum artifact research/RiskLabAI é tratado como official.
-- A3/A4 permanecem fechados.
-
-PARTIAL:
-
-- Regeneration roda, mas algum artifact local não reproduz exatamente e a divergência fica explicada.
-- CVaR é persistido, mas ainda não há PASS quantitativo global.
-- Technical Architecture PDF permanece inconclusivo, mas a lacuna fica documentada e isolada.
-
-FAIL:
-
-- Regeneration não roda.
-- Artifacts official divergem sem explicação objetiva.
-- Source-doc Fase 4-R4 permanece contraditório.
-- Qualquer research/shadow é promovido como official.
-- A3/A4 são reabertos sem nova evidência causal forte.
-
-## Comandos sugeridos
+## Validacoes obrigatorias
 
 ```powershell
-$env:PYTHONUTF8='1'
-git switch -c codex/phase6-global-reproducibility-source-alignment
-python services/ml_engine/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate.py
-python services/ml_engine/phase5_cross_sectional_sovereign_hardening_recheck.py
-python services/ml_engine/phase5_cross_sectional_operational_fragility_audit_and_bounded_correction.py
-python services/ml_engine/phase5_cross_sectional_recent_regime_policy_falsification.py
-python services/ml_engine/phase4_gate_diagnostic.py
-python -m pytest tests/unit/test_nautilus_bridge_contract.py tests/unit/test_nautilus_bridge_acceptance.py tests/unit/test_nautilus_bridge_publisher.py tests/unit/test_nautilus_bridge_consumer.py tests/unit/test_nautilus_bridge_reconciler.py tests/unit/test_nautilus_bridge_daemon.py
-git status --short
+.\\.venv\\Scripts\\python.exe -m pytest tests/unit/test_phase6_global_reproducibility_source_alignment_gate.py -q
+.\\.venv\\Scripts\\python.exe -m pytest tests/unit/test_gate_reports.py tests/unit/test_hmm_regime_alignment.py -q
+.\\.venv\\Scripts\\python.exe -m pytest tests/unit/test_phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate.py tests/unit/test_phase5_cross_sectional_sovereign_hardening_recheck.py -q
+.\\.venv\\Scripts\\python.exe services\\ml_engine\\phase6_global_reproducibility_source_alignment_gate.py
 ```
 
-Adicionar ao gate, se ainda não existir script dedicado:
+## Criterios PASS
 
-```powershell
-$env:PYTHONUTF8='1'
-python services/ml_engine/phase6_global_reproducibility_source_alignment_gate.py
-```
+- A divergencia Phase 4-R4 entre documentacao e source rastreado fica resolvida por decisao versionada e auditavel.
+- Artifact official ausente e classificado por preflight como blocker de artifact, sem stacktrace.
+- O gate nao promove official, nao reabre A3/A4 e nao altera thresholds.
+- Testes obrigatorios passam.
 
-## Riscos a controlar
+## Criterios PARTIAL
 
-- Confundir implementação existente com aprovação quantitativa.
-- Reabrir A3/A4 por conveniência narrativa.
-- Promover `ALIVE_BUT_NOT_PROMOTABLE`.
-- Usar RiskLabAI como official.
-- Aceitar artifacts locais sem hash/regeneration.
-- Tratar CVaR estrutural em código como CVaR empírico aprovado.
-- Ignorar a divergência Fase 4-R4 entre documentação e source rastreado.
+- Source-doc fica alinhado, mas clean regeneration continua bloqueada por artifact official ausente.
+- O preflight melhora a evidencia, mas ainda nao ha clone limpo ou ambiente equivalente.
 
-## O que não deve ser feito na próxima rodada
+## Criterios FAIL
 
-- Não implementar ajustes de performance antes do gate de alinhamento.
-- Não alterar thresholds de DSR, Sharpe, PBO, ECE, N_eff ou subperíodos para forçar PASS.
-- Não promover snapshots para paper official.
-- Não declarar capital readiness.
-- Não substituir evidência por narrativa.
+- Qualquer research/shadow vira official.
+- A3/A4 sao reabertos sem evidencia causal nova forte.
+- A documentacao e alterada para fabricar PASS.
+- DSR 0.0 e mascarado ou thresholds sao relaxados.
 
+## Criterios INCONCLUSIVE
+
+- Ambiente, artifact base ou clean workspace ausente impede validar os criterios materiais.
+
+## Riscos
+
+- Confundir correcao documental com mudanca de especificacao.
+- Restaurar modulos grandes sem necessidade e aumentar blast radius.
+- Aceitar clean regeneration sem clone limpo ou equivalente.
+- Tratar CVaR de exposicao zero como robustez economica.
+
+## Skill recomendada
+
+`sniper-next-step-prompt-builder`
