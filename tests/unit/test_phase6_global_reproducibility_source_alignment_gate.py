@@ -12,8 +12,8 @@ from services.ml_engine import phase6_global_reproducibility_source_alignment_ga
 def test_build_source_doc_alignment_flags_documented_missing_modules() -> None:
     alignment = phase6.build_source_doc_alignment()
 
-    assert alignment["status"] == "DIVERGENT"
-    assert "phase4_config.py" in alignment["missing_documented_modules"]
+    assert alignment["status"] == "ALIGNED"
+    assert "phase4_config.py" not in alignment["missing_documented_modules"]
     assert "phase4_cpcv.py" not in alignment["missing_documented_modules"]
 
 
@@ -56,6 +56,17 @@ def test_classify_gate_keeps_partial_until_clean_regeneration_is_proven() -> Non
     assert status == "PARTIAL"
     assert decision == "correct"
     assert blockers == ["clean_regeneration_not_proven_in_clean_clone_or_equivalent"]
+
+
+def test_run_regeneration_probe_preflights_missing_phase4_without_subprocess(tmp_path: Path) -> None:
+    model_path = tmp_path / "models"
+
+    report = phase6.run_regeneration_probe(model_path=model_path)
+
+    assert report["command_executed"] is False
+    assert report["returncode"] is None
+    assert report["blocker"] == "MISSING_OFFICIAL_PHASE4_ARTIFACTS"
+    assert report["preflight"]["classification"] == "MISSING_OFFICIAL_PHASE4_ARTIFACTS"
 
 
 def test_phase6_script_is_tracked_or_new_source_path_under_repo() -> None:

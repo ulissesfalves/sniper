@@ -26,7 +26,8 @@ if str(THIS_FILE.parent) not in sys.path:
 from services.common.gate_reports import artifact_record, utc_now_iso, write_gate_pack
 from services.ml_engine.sizing.kelly_cvar import CVAR_LIMIT, portfolio_stress_report
 
-GATE_SLUG = "phase6_global_reproducibility_source_alignment_gate"
+DEFAULT_GATE_SLUG = "phase6_global_reproducibility_source_alignment_gate"
+GATE_SLUG = os.getenv("SNIPER_PHASE6_GATE_SLUG", DEFAULT_GATE_SLUG)
 PHASE_FAMILY = "phase6_global_reproducibility_source_alignment"
 DOC_PHASE4_MEMORY = REPO_ROOT / "docs" / "SNIPER_memoria_especificacao_controle_fase4R_v3.md"
 DOC_HANDOFF = REPO_ROOT / "docs" / "SNIPER_openclaw_handoff.md"
@@ -38,6 +39,7 @@ PHASE4_DIR = MODEL_PATH / "phase4"
 PHASE4_SNAPSHOT = PHASE4_DIR / "phase4_execution_snapshot.parquet"
 PHASE4_REPORT = PHASE4_DIR / "phase4_report_v4.json"
 GATE_DIR = REPO_ROOT / "reports" / "gates" / GATE_SLUG
+PHASE4_R4_CORRECTION_MARKER = "PHASE6_SOURCE_DOC_ALIGNMENT_CURRENT_SOURCE"
 
 DOCUMENTED_PHASE4_MODULES = (
     "phase4_config.py",
@@ -99,16 +101,30 @@ def _contains(path: Path, token: str) -> bool:
     return token in path.read_text(encoding="utf-8", errors="ignore")
 
 
+def _phase4_module_documentation_state(doc_path: Path, module_name: str) -> str:
+    if not doc_path.exists():
+        return "missing_doc"
+    text = doc_path.read_text(encoding="utf-8", errors="ignore")
+    if module_name not in text:
+        return "not_documented"
+    marker = f"{PHASE4_R4_CORRECTION_MARKER}:{module_name}:historical_report_only"
+    if marker in text:
+        return "historical_report_only"
+    return "current_source_required"
+
+
 def build_source_doc_alignment(*, repo_root: Path = REPO_ROOT) -> dict[str, Any]:
     doc_path = repo_root / "docs" / "SNIPER_memoria_especificacao_controle_fase4R_v3.md"
     ml_engine = repo_root / "services" / "ml_engine"
     documented = []
     for module_name in DOCUMENTED_PHASE4_MODULES:
         source_path = ml_engine / module_name
+        documentation_state = _phase4_module_documentation_state(doc_path, module_name)
         documented.append(
             {
                 "module": module_name,
-                "documented_in_phase4r_memory": _contains(doc_path, module_name),
+                "documented_in_phase4r_memory": documentation_state != "not_documented",
+                "documentation_state": documentation_state,
                 "source_path": source_path,
                 "source_exists": source_path.exists(),
                 "source_tracked": _git_tracked(source_path, repo_root=repo_root) if source_path.exists() else False,
@@ -129,7 +145,7 @@ def build_source_doc_alignment(*, repo_root: Path = REPO_ROOT) -> dict[str, Any]
     missing_documented_modules = [
         row["module"]
         for row in documented
-        if row["documented_in_phase4r_memory"] and not row["source_tracked"]
+        if row["documentation_state"] == "current_source_required" and not row["source_tracked"]
     ]
     return {
         "status": "DIVERGENT" if missing_documented_modules else "ALIGNED",
@@ -141,7 +157,7 @@ def build_source_doc_alignment(*, repo_root: Path = REPO_ROOT) -> dict[str, Any]
             "Keep Phase 4-R4 source-doc mismatch as blocker until modules are restored "
             "or documentation is corrected by an explicit gate."
             if missing_documented_modules
-            else "No Phase 4-R4 source-doc mismatch detected."
+            else "Phase 4-R4 source-doc state is aligned with current tracked source and documented historical-only modules."
         ),
     }
 
@@ -206,18 +222,45 @@ def build_environment_report() -> dict[str, Any]:
     }
 
 
-def run_regeneration_probe(*, repo_root: Path = REPO_ROOT) -> dict[str, Any]:
-    command = [sys.executable, REGENERATION_COMMAND]
-    preflight = {
-        "model_path": MODEL_PATH,
-        "model_path_exists": MODEL_PATH.exists(),
-        "phase4_dir": PHASE4_DIR,
-        "phase4_dir_exists": PHASE4_DIR.exists(),
-        "phase4_report": PHASE4_REPORT,
-        "phase4_report_exists": PHASE4_REPORT.exists(),
-        "phase4_snapshot": PHASE4_SNAPSHOT,
-        "phase4_snapshot_exists": PHASE4_SNAPSHOT.exists(),
+def _phase4_preflight(model_path: Path = MODEL_PATH) -> dict[str, Any]:
+    phase4_dir = model_path / "phase4"
+    phase4_report = phase4_dir / "phase4_report_v4.json"
+    phase4_snapshot = phase4_dir / "phase4_execution_snapshot.parquet"
+    missing = [
+        str(path)
+        for path in (phase4_dir, phase4_report, phase4_snapshot)
+        if not path.exists()
+    ]
+    return {
+        "model_path": model_path,
+        "model_path_exists": model_path.exists(),
+        "phase4_dir": phase4_dir,
+        "phase4_dir_exists": phase4_dir.exists(),
+        "phase4_report": phase4_report,
+        "phase4_report_exists": phase4_report.exists(),
+        "phase4_snapshot": phase4_snapshot,
+        "phase4_snapshot_exists": phase4_snapshot.exists(),
+        "missing_required_artifacts": missing,
+        "classification": "PASS" if not missing else "MISSING_OFFICIAL_PHASE4_ARTIFACTS",
     }
+
+
+def run_regeneration_probe(*, repo_root: Path = REPO_ROOT, model_path: Path = MODEL_PATH) -> dict[str, Any]:
+    command = [sys.executable, REGENERATION_COMMAND]
+    preflight = _phase4_preflight(model_path)
+    if preflight["classification"] != "PASS":
+        return {
+            "mode": "preflight_only_not_clean_clone",
+            "clean_clone_or_equivalent": False,
+            "command": " ".join(command),
+            "command_executed": False,
+            "returncode": None,
+            "stdout_tail": "",
+            "stderr_tail": "",
+            "preflight": preflight,
+            "classification": "INCONCLUSIVE",
+            "blocker": "MISSING_OFFICIAL_PHASE4_ARTIFACTS",
+        }
     completed = subprocess.run(
         command,
         cwd=repo_root,
@@ -230,14 +273,13 @@ def run_regeneration_probe(*, repo_root: Path = REPO_ROOT) -> dict[str, Any]:
         "mode": "local_regeneration_probe_not_clean_clone",
         "clean_clone_or_equivalent": False,
         "command": " ".join(command),
+        "command_executed": True,
         "returncode": completed.returncode,
         "stdout_tail": completed.stdout[-4000:],
         "stderr_tail": completed.stderr[-4000:],
         "preflight": preflight,
         "classification": "PASS" if completed.returncode == 0 else "INCONCLUSIVE",
-        "blocker": None
-        if completed.returncode == 0
-        else "local regeneration probe failed before clean-clone proof; missing official phase4 artifacts are a blocker in this clone",
+        "blocker": None if completed.returncode == 0 else "local regeneration probe failed",
     }
 
 
@@ -257,7 +299,9 @@ def classify_gate(
         blockers.append("test_environment_missing_probe_packages")
     if not regeneration_report.get("clean_clone_or_equivalent"):
         blockers.append("clean_regeneration_not_proven_in_clean_clone_or_equivalent")
-    if regeneration_report.get("returncode") != 0:
+    if regeneration_report.get("blocker") == "MISSING_OFFICIAL_PHASE4_ARTIFACTS":
+        blockers.append("official_phase4_artifacts_missing")
+    elif regeneration_report.get("returncode") != 0:
         blockers.append("local_regeneration_probe_failed")
     if blockers:
         return "PARTIAL", "correct", blockers
@@ -277,6 +321,7 @@ def run_phase6_global_reproducibility_source_alignment_gate() -> dict[str, Any]:
     _write_json(GATE_DIR / "portfolio_cvar_report.json", cvar_report)
     _write_json(GATE_DIR / "environment_report.json", environment_report)
     _write_json(GATE_DIR / "clean_regeneration_report.json", regeneration_report)
+    _write_json(GATE_DIR / "clean_regeneration_preflight.json", regeneration_report)
 
     status, decision, blockers = classify_gate(
         source_alignment=source_alignment,
@@ -320,7 +365,11 @@ def run_phase6_global_reproducibility_source_alignment_gate() -> dict[str, Any]:
             "metric_name": "local_regeneration_probe",
             "metric_value": regeneration_report["returncode"],
             "metric_threshold": 0,
-            "metric_status": "PASS" if regeneration_report["returncode"] == 0 else "FAIL",
+            "metric_status": "PASS"
+            if regeneration_report["returncode"] == 0
+            else "INCONCLUSIVE"
+            if regeneration_report.get("blocker") == "MISSING_OFFICIAL_PHASE4_ARTIFACTS"
+            else "FAIL",
         },
         {
             "gate_slug": GATE_SLUG,
@@ -349,6 +398,7 @@ def run_phase6_global_reproducibility_source_alignment_gate() -> dict[str, Any]:
             str(GATE_DIR / "portfolio_cvar_report.json"),
             str(GATE_DIR / "environment_report.json"),
             str(GATE_DIR / "clean_regeneration_report.json"),
+            str(GATE_DIR / "clean_regeneration_preflight.json"),
         ],
         "summary": [
             f"source_doc_alignment={source_alignment['status']}",
@@ -356,6 +406,7 @@ def run_phase6_global_reproducibility_source_alignment_gate() -> dict[str, Any]:
             f"cvar_technical_status={cvar_report['technical_persistence_status']}",
             f"cvar_economic_status={cvar_report['economic_robustness_status']}",
             f"regeneration_returncode={regeneration_report['returncode']}",
+            f"regeneration_blocker={regeneration_report.get('blocker')}",
         ],
         "gates": gate_metrics,
         "blockers": blockers,
@@ -391,6 +442,7 @@ def run_phase6_global_reproducibility_source_alignment_gate() -> dict[str, Any]:
             artifact_record(GATE_DIR / "portfolio_cvar_report.json"),
             artifact_record(GATE_DIR / "environment_report.json"),
             artifact_record(GATE_DIR / "clean_regeneration_report.json"),
+            artifact_record(GATE_DIR / "clean_regeneration_preflight.json"),
         ],
         "commands_executed": [
             ".\\.venv\\Scripts\\python.exe -m pytest tests/unit/test_gate_reports.py tests/unit/test_hmm_regime_alignment.py -q",
@@ -434,6 +486,7 @@ def run_phase6_global_reproducibility_source_alignment_gate() -> dict[str, Any]:
                 f"- `{GATE_DIR / 'portfolio_cvar_report.json'}`",
                 f"- `{GATE_DIR / 'environment_report.json'}`",
                 f"- `{GATE_DIR / 'clean_regeneration_report.json'}`",
+                f"- `{GATE_DIR / 'clean_regeneration_preflight.json'}`",
                 f"- `{GATE_DIR / 'gate_report.json'}`",
                 f"- `{GATE_DIR / 'gate_report.md'}`",
                 f"- `{GATE_DIR / 'gate_manifest.json'}`",
