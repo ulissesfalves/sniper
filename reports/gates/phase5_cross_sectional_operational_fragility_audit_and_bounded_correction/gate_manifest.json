@@ -1,8 +1,8 @@
 {
   "gate_slug": "phase5_cross_sectional_operational_fragility_audit_and_bounded_correction",
-  "timestamp_utc": "2026-04-05T16:54:40+00:00",
-  "baseline_commit": "1b5dbaefccbd9b1655e5551bcb5279e726c831d8",
-  "branch": "codex/phase5-cross-sectional-operational-fragility-bounded-correction",
+  "timestamp_utc": "2026-04-26T16:12:05+00:00",
+  "baseline_commit": "f68832974e898e87cf9c6f6e68a2e43127d44089",
+  "branch": "codex/phase6-clean-clone-environment-reproducibility",
   "working_tree_dirty_before": true,
   "working_tree_dirty_after": true,
   "source_artifacts": [
@@ -10,14 +10,14 @@
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_sovereign_restore\\sovereign_restore_replay_summary.json",
       "exists": true,
       "size_bytes": 3820,
-      "mtime_utc": "2026-04-05T01:39:29+00:00",
-      "sha256": "5347EDAAC68C07E6EDA2C1CFCC6FF0E77EFEDEF94336B53EC526558AFB787AEE"
+      "mtime_utc": "2026-04-26T16:11:08+00:00",
+      "sha256": "6776553E7906B10117C90DE51FAE6C46DA8A9B8E048834C881B341B43CDED948"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_sovereign_closure_restored\\restored_bundle_manifest.json",
       "exists": true,
       "size_bytes": 6199,
-      "mtime_utc": "2026-04-05T01:38:40+00:00",
+      "mtime_utc": "2026-04-26T16:10:50+00:00",
       "sha256": "A435853A2E57CC90AF6E50C2938B1F4FD37AE8CACF5DF298DC0543974953F07B"
     },
     {
@@ -33,56 +33,56 @@
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_operational_fragility\\operational_fragility_decomposition.parquet",
       "exists": true,
       "size_bytes": 15167,
-      "mtime_utc": "2026-04-05T16:54:26+00:00",
+      "mtime_utc": "2026-04-26T16:11:59+00:00",
       "sha256": "975160B5247317E436B61F44A82FF8EB14E2CA86C1460FA0A95693CC70B5AF4A"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_operational_fragility\\operational_fragility_challengers.parquet",
       "exists": true,
       "size_bytes": 25159,
-      "mtime_utc": "2026-04-05T16:54:39+00:00",
+      "mtime_utc": "2026-04-26T16:12:05+00:00",
       "sha256": "DA409E588BE0CCBE9D5AFC3857778BB5AF72EC0A20B89004BBE5776BA8B05A1C"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_operational_fragility\\operational_fragility_summary.json",
       "exists": true,
-      "size_bytes": 15599,
-      "mtime_utc": "2026-04-05T16:54:40+00:00",
-      "sha256": "845B98C3EA455D69C29C4D66DDAAB776009AD036E2AB2A66322D7769D040026E"
+      "size_bytes": 15582,
+      "mtime_utc": "2026-04-26T16:12:05+00:00",
+      "sha256": "A1AF83F498706B00B4DFEAF26D6D6425763060EE8299CCFEF6F1700F01AB3601"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_operational_fragility\\official_artifacts_integrity.json",
       "exists": true,
       "size_bytes": 146061,
-      "mtime_utc": "2026-04-05T16:54:40+00:00",
-      "sha256": "48FF528D8C756411D0B8876C8B205ECE74B51EC2F0194F30E57E70E3FDD4F45E"
+      "mtime_utc": "2026-04-26T16:12:05+00:00",
+      "sha256": "2AD7F9F9032AF21FB254AA09B500C1BC8A1A59DCBD3362F126507BA4D9828858"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_report.json",
       "exists": true,
-      "size_bytes": 4198,
-      "mtime_utc": "2026-04-05T16:54:40+00:00",
-      "sha256": "69788A04013376A9039595AA624AE5041981D8D60C43553FD5F0573A473BE3CA"
+      "size_bytes": 4181,
+      "mtime_utc": "2026-04-26T16:12:05+00:00",
+      "sha256": "696F0A2501DCDC82F766CD6B3A57C2F405A4BEF407700D2A16306ABAA36B36F7"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_report.md",
       "exists": true,
       "size_bytes": 5880,
-      "mtime_utc": "2026-04-05T16:54:40+00:00",
+      "mtime_utc": "2026-04-26T16:12:05+00:00",
       "sha256": "1E0F6023EDA3B6882085CB1C5EF2261377738DCE9F80EF344F2EE90020C213D8"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_metrics.parquet",
       "exists": true,
       "size_bytes": 4027,
-      "mtime_utc": "2026-04-05T16:54:40+00:00",
+      "mtime_utc": "2026-04-26T16:12:05+00:00",
       "sha256": "B55304BFE41A86150BFF6401E9F10452AA21CA31270DAF6763B9386D457BEFE5"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_manifest.json",
       "exists": true,
-      "size_bytes": 4854,
-      "mtime_utc": "2026-04-05T16:51:57+00:00",
+      "size_bytes": 4912,
+      "mtime_utc": "2026-04-26T16:09:38+00:00",
       "note": "self hash omitted inside manifest to avoid self-reference"
     }
   ],

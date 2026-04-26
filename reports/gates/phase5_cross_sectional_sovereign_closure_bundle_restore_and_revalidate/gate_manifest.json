@@ -1,8 +1,8 @@
 {
   "gate_slug": "phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate",
-  "timestamp_utc": "2026-04-05T01:39:28+00:00",
-  "baseline_commit": "b9f8cc55084a435110a5bff41c8fcdfaefadd4e7",
-  "branch": "codex/phase5-cross-sectional-sovereign-closure-bundle-restore",
+  "timestamp_utc": "2026-04-26T16:11:08+00:00",
+  "baseline_commit": "f68832974e898e87cf9c6f6e68a2e43127d44089",
+  "branch": "codex/phase6-clean-clone-environment-reproducibility",
   "working_tree_dirty_before": true,
   "working_tree_dirty_after": true,
   "source_artifacts": [
@@ -48,70 +48,70 @@
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_sovereign_closure_restored\\restored_bundle_manifest.json",
       "exists": true,
       "size_bytes": 6199,
-      "mtime_utc": "2026-04-05T01:38:40+00:00",
+      "mtime_utc": "2026-04-26T16:10:50+00:00",
       "sha256": "A435853A2E57CC90AF6E50C2938B1F4FD37AE8CACF5DF298DC0543974953F07B"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_sovereign_restore\\sovereign_restore_lineage.json",
       "exists": true,
       "size_bytes": 11031,
-      "mtime_utc": "2026-04-05T01:39:28+00:00",
-      "sha256": "702450A15CB753076E17995F5F932FD686460B8F60727AA7A791EEC72B80E38A"
+      "mtime_utc": "2026-04-26T16:11:07+00:00",
+      "sha256": "A7F8519780FAD987D58500917A2F86E6C8DC5A7B6E124B28518C38D97C7984CD"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_sovereign_restore\\sovereign_restore_equivalence.parquet",
       "exists": true,
       "size_bytes": 8855,
-      "mtime_utc": "2026-04-05T01:39:27+00:00",
+      "mtime_utc": "2026-04-26T16:11:07+00:00",
       "sha256": "5B01E1059FA5AF9D193A46593097B1271FDF9413FB9BBE5185C65641167EA79F"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_sovereign_restore\\sovereign_restore_replay_summary.json",
       "exists": true,
       "size_bytes": 3820,
-      "mtime_utc": "2026-04-05T01:39:28+00:00",
-      "sha256": "5347EDAAC68C07E6EDA2C1CFCC6FF0E77EFEDEF94336B53EC526558AFB787AEE"
+      "mtime_utc": "2026-04-26T16:11:08+00:00",
+      "sha256": "6776553E7906B10117C90DE51FAE6C46DA8A9B8E048834C881B341B43CDED948"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_sovereign_restore\\sovereign_restore_bundle_inventory.json",
       "exists": true,
       "size_bytes": 4745,
-      "mtime_utc": "2026-04-05T01:39:28+00:00",
-      "sha256": "A3CA2F58C49F3FB092DAFD7E3D78C1F00FCCB38AAC966BE972B0C87D48EC7983"
+      "mtime_utc": "2026-04-26T16:11:07+00:00",
+      "sha256": "7B86E19DD757CF7CE2549539461B5C3686058DD69FC40180349F48713E1B14D0"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_sovereign_restore\\official_artifacts_integrity.json",
       "exists": true,
       "size_bytes": 147613,
-      "mtime_utc": "2026-04-05T01:39:28+00:00",
-      "sha256": "842083BB9F3B05BED4048DA2420A1C4B0031C4D848256578F5A7A859FC20456F"
+      "mtime_utc": "2026-04-26T16:11:08+00:00",
+      "sha256": "6D570B17E159DAC67DBB42348A07E9A9827359A5CDE4680600835A46FED8721C"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_report.json",
       "exists": true,
-      "size_bytes": 4256,
-      "mtime_utc": "2026-04-05T01:39:29+00:00",
-      "sha256": "19F2565B3B4E16B989767AC6628A52B73275C7CA1E181AFD040DB7D494699A18"
+      "size_bytes": 4247,
+      "mtime_utc": "2026-04-26T16:11:08+00:00",
+      "sha256": "CF96FA8EBF6066DF236FBDB7FAFCE0E73956C78D95C72699B2416891D11981A1"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_report.md",
       "exists": true,
       "size_bytes": 7317,
-      "mtime_utc": "2026-04-05T01:39:29+00:00",
-      "sha256": "D1CB696DC424A2406F95D1A17B9CAF00BAD9FE908BE4A5E21D44778292EAD80A"
+      "mtime_utc": "2026-04-26T16:11:08+00:00",
+      "sha256": "6EC88AF245A40D28E5856CF2606E06ACFC68F2FED3B2B38350FC2A521C574E74"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_metrics.parquet",
       "exists": true,
       "size_bytes": 4013,
-      "mtime_utc": "2026-04-05T01:39:29+00:00",
+      "mtime_utc": "2026-04-26T16:11:08+00:00",
       "sha256": "224F764F026BD6D407809F39A5DAA00FDF822613EBCF7EF3AB04807D3B732743"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_manifest.json",
       "exists": true,
-      "size_bytes": 6481,
-      "mtime_utc": "2026-04-05T01:37:17+00:00",
+      "size_bytes": 6547,
+      "mtime_utc": "2026-04-26T16:08:41+00:00",
       "note": "self hash omitted inside manifest to avoid self-reference"
     }
   ],

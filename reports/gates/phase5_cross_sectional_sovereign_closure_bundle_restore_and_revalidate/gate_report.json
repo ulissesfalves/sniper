@@ -3,9 +3,9 @@
   "phase_family": "phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate",
   "status": "PASS",
   "decision": "advance",
-  "baseline_commit": "b9f8cc55084a435110a5bff41c8fcdfaefadd4e7",
+  "baseline_commit": "f68832974e898e87cf9c6f6e68a2e43127d44089",
   "working_tree_dirty": true,
-  "branch": "codex/phase5-cross-sectional-sovereign-closure-bundle-restore",
+  "branch": "codex/phase6-clean-clone-environment-reproducibility",
   "official_artifacts_used": [
     "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase3",
     "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\features",

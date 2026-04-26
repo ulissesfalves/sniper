@@ -3,9 +3,9 @@
   "phase_family": "phase5_cross_sectional_recent_regime_policy_falsification",
   "status": "PARTIAL",
   "decision": "correct",
-  "baseline_commit": "adce4c849849761653d5bb0342d8d47608a3ea8d",
+  "baseline_commit": "f68832974e898e87cf9c6f6e68a2e43127d44089",
   "working_tree_dirty": true,
-  "branch": "codex/phase5-cross-sectional-recent-regime-policy-falsification",
+  "branch": "codex/phase6-clean-clone-environment-reproducibility",
   "official_artifacts_used": [
     "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase3",
     "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\features",

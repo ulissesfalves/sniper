@@ -1,0 +1,81 @@
+{
+  "status": "PASS",
+  "decision": "document_current_checkout_as_source_of_truth",
+  "phase4_memory_doc": "docs\\SNIPER_memoria_especificacao_controle_fase4R_v3.md",
+  "correction_note_present": true,
+  "documented_phase4r_modules": [
+    {
+      "module": "phase4_config.py",
+      "documented_in_phase4r_memory": true,
+      "tracked_source_path": "services\\ml_engine\\phase4_config.py",
+      "exists_in_current_checkout": false,
+      "git_tracked": false
+    },
+    {
+      "module": "phase4_data.py",
+      "documented_in_phase4r_memory": true,
+      "tracked_source_path": "services\\ml_engine\\phase4_data.py",
+      "exists_in_current_checkout": false,
+      "git_tracked": false
+    },
+    {
+      "module": "phase4_dsr.py",
+      "documented_in_phase4r_memory": true,
+      "tracked_source_path": "services\\ml_engine\\phase4_dsr.py",
+      "exists_in_current_checkout": false,
+      "git_tracked": false
+    },
+    {
+      "module": "phase4_backtest.py",
+      "documented_in_phase4r_memory": true,
+      "tracked_source_path": "services\\ml_engine\\phase4_backtest.py",
+      "exists_in_current_checkout": false,
+      "git_tracked": false
+    },
+    {
+      "module": "phase4_calibration.py",
+      "documented_in_phase4r_memory": true,
+      "tracked_source_path": "services\\ml_engine\\phase4_calibration.py",
+      "exists_in_current_checkout": false,
+      "git_tracked": false
+    }
+  ],
+  "missing_documented_modules": [
+    "phase4_config.py",
+    "phase4_data.py",
+    "phase4_dsr.py",
+    "phase4_backtest.py",
+    "phase4_calibration.py"
+  ],
+  "current_tracked_phase4_sources": [
+    "services/ml_engine/phase4_cpcv.py",
+    "services/ml_engine/phase4_gate_diagnostic.py",
+    "services/ml_engine/phase4_stage_a_experiment.py"
+  ],
+  "current_expected_sources": [
+    {
+      "module": "phase4_cpcv.py",
+      "path": "services\\ml_engine\\phase4_cpcv.py",
+      "exists": true,
+      "git_tracked": true
+    },
+    {
+      "module": "phase4_gate_diagnostic.py",
+      "path": "services\\ml_engine\\phase4_gate_diagnostic.py",
+      "exists": true,
+      "git_tracked": true
+    },
+    {
+      "module": "phase4_stage_a_experiment.py",
+      "path": "services\\ml_engine\\phase4_stage_a_experiment.py",
+      "exists": true,
+      "git_tracked": true
+    }
+  ],
+  "interpretation": "Section 7 remains historical/reported memory; current tracked source is the operational truth for this branch.",
+  "non_actions": [
+    "No functional Phase 4 refactor was performed.",
+    "No model artifact was promoted to official.",
+    "A3/A4 were not reopened."
+  ]
+}

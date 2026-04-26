@@ -5,6 +5,12 @@ Este documento consolida a história técnica, a especificação operacional, o 
 
 Esta versão **v3** reavalia e atualiza a memória anterior à luz dos novos arquivos anexados, especialmente os snapshots adicionais de `walkthrough.md.resolved.*` e a própria memória consolidada anterior anexada pelo usuário.
 
+## Nota de alinhamento source-doc — Phase 6
+
+Auditoria em 2026-04-26 para o gate `phase6_global_reproducibility_source_alignment_gate`: a seção 7 registra a arquitetura final reportada da Fase 4-R4, mas o source rastreado atual da branch de continuidade não contém os módulos `phase4_config.py`, `phase4_data.py`, `phase4_dsr.py`, `phase4_backtest.py` e `phase4_calibration.py`. O source rastreado atual em `services/ml_engine/` contém `phase4_cpcv.py`, `phase4_gate_diagnostic.py` e `phase4_stage_a_experiment.py`.
+
+Para fins de regeneração e auditoria nesta branch, tratar o source rastreado atual como fonte operacional de verdade. A seção 7 permanece como memória histórica/reportada da intenção de refatoração, não como prova de que esses módulos existem no checkout atual. Essa nota não promove artifacts, não reabre A3/A4 e não altera critérios quantitativos.
+
 ---
 
 ## 2. Corpus integral considerado nesta versão

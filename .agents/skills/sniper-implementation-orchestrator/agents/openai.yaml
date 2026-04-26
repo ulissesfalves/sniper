@@ -1,0 +1,7 @@
+policy:
+  allow_implicit_invocation: false
+
+interface:
+  display_name: "SNIPER Implementation Orchestrator"
+  short_description: "Decide a próxima skill e gera o prompt do próximo gate do SNIPER."
+  default_prompt: "$sniper-implementation-orchestrator\n\nAvalie o estado atual do SNIPER e gere o prompt mais adequado para o próximo gate ou etapa."

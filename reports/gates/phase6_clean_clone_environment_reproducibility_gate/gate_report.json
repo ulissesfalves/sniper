@@ -1,0 +1,1614 @@
+{
+  "gate_slug": "phase6_clean_clone_environment_reproducibility_gate",
+  "phase_family": "phase6_clean_clone_environment_reproducibility_gate",
+  "status": "FAIL",
+  "decision": "correct",
+  "baseline_commit": "f68832974e898e87cf9c6f6e68a2e43127d44089",
+  "commit": "f68832974e898e87cf9c6f6e68a2e43127d44089",
+  "base_branch": "codex/phase6-global-reproducibility-source-alignment",
+  "working_tree_dirty": true,
+  "branch": "codex/phase6-clean-clone-environment-reproducibility",
+  "official_artifacts_used": [],
+  "research_artifacts_generated": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase6_clean_clone_environment_reproducibility_gate\\environment_reproducibility_report.json",
+      "exists": true,
+      "size_bytes": 4260,
+      "mtime_utc": "2026-04-26T16:13:23+00:00",
+      "sha256": "417A3BB69BA7CDC30C463CD519452708D70806353180F4AAE290D1B155755B74"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase6_clean_clone_environment_reproducibility_gate\\dependency_audit.json",
+      "exists": true,
+      "size_bytes": 15683,
+      "mtime_utc": "2026-04-26T16:13:23+00:00",
+      "sha256": "B6DF21570F0992532AB244B0A2A107A4EC39C53F8BC0DA2A87921A59C1643204"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase6_clean_clone_environment_reproducibility_gate\\clean_clone_regeneration_report.json",
+      "exists": true,
+      "size_bytes": 35573,
+      "mtime_utc": "2026-04-26T16:13:23+00:00",
+      "sha256": "66A9E8551A89D08F83E45719C8DBB278E485EB3F5342771062CB662929D7E9BC"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase6_clean_clone_environment_reproducibility_gate\\pytest_collection_report.json",
+      "exists": true,
+      "size_bytes": 21611,
+      "mtime_utc": "2026-04-26T16:13:23+00:00",
+      "sha256": "9B015AD25FC6C785321E33B7E702089BF8E35E9D0C2658AFDB1195B29A9C0AD0"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase6_clean_clone_environment_reproducibility_gate\\artifact_diff_report.json",
+      "exists": true,
+      "size_bytes": 12849,
+      "mtime_utc": "2026-04-26T16:13:23+00:00",
+      "sha256": "9C11A4DFAC919F6C2260E07D4872701D7E017437942E6E185C4D5813CDCDA70D"
+    }
+  ],
+  "artifacts_generated": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase6_clean_clone_environment_reproducibility_gate\\environment_reproducibility_report.json",
+      "exists": true,
+      "size_bytes": 4260,
+      "mtime_utc": "2026-04-26T16:13:23+00:00",
+      "sha256": "417A3BB69BA7CDC30C463CD519452708D70806353180F4AAE290D1B155755B74"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase6_clean_clone_environment_reproducibility_gate\\dependency_audit.json",
+      "exists": true,
+      "size_bytes": 15683,
+      "mtime_utc": "2026-04-26T16:13:23+00:00",
+      "sha256": "B6DF21570F0992532AB244B0A2A107A4EC39C53F8BC0DA2A87921A59C1643204"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase6_clean_clone_environment_reproducibility_gate\\clean_clone_regeneration_report.json",
+      "exists": true,
+      "size_bytes": 35573,
+      "mtime_utc": "2026-04-26T16:13:23+00:00",
+      "sha256": "66A9E8551A89D08F83E45719C8DBB278E485EB3F5342771062CB662929D7E9BC"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase6_clean_clone_environment_reproducibility_gate\\pytest_collection_report.json",
+      "exists": true,
+      "size_bytes": 21611,
+      "mtime_utc": "2026-04-26T16:13:23+00:00",
+      "sha256": "9B015AD25FC6C785321E33B7E702089BF8E35E9D0C2658AFDB1195B29A9C0AD0"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase6_clean_clone_environment_reproducibility_gate\\artifact_diff_report.json",
+      "exists": true,
+      "size_bytes": 12849,
+      "mtime_utc": "2026-04-26T16:13:23+00:00",
+      "sha256": "9C11A4DFAC919F6C2260E07D4872701D7E017437942E6E185C4D5813CDCDA70D"
+    }
+  ],
+  "dependency_audit": {
+    "status": "FAIL",
+    "classification": "DEPENDENCY_REPRODUCIBILITY_NOT_ESTABLISHED",
+    "python_executable": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe",
+    "requirements_file": "requirements.txt",
+    "pyproject_file": "pyproject.toml",
+    "root_pins": {
+      "polars": "0.20.16",
+      "pandas": "2.2.1",
+      "numpy": "1.26.4",
+      "pyarrow": "15.0.2",
+      "fastparquet": "2024.2.0",
+      "scikit-learn": "1.4.2",
+      "lightgbm": "4.3.0",
+      "hmmlearn": "0.3.2",
+      "statsmodels": "0.14.1",
+      "scipy": "1.13.0",
+      "joblib": "1.4.0",
+      "arch": "6.3.0",
+      "python-binance": "1.0.19",
+      "aiohttp": "3.9.5",
+      "tenacity": "8.2.3",
+      "fastapi": "0.110.2",
+      "uvicorn": "0.29.0",
+      "uvloop": "0.19.0",
+      "httptools": "0.6.1",
+      "httpx": "0.27.0",
+      "redis": "5.0.4",
+      "websockets": "12.0",
+      "aiosqlite": "0.20.0",
+      "sqlalchemy": "2.0.29",
+      "alembic": "1.13.1",
+      "python-decouple": "3.8",
+      "cryptography": "42.0.5",
+      "python-multipart": "0.0.9",
+      "pydantic": "2.7.0",
+      "pydantic-settings": "2.2.1",
+      "python-telegram-bot": "21.1.1",
+      "aiosmtplib": "3.0.1",
+      "apscheduler": "3.10.4",
+      "structlog": "24.1.0",
+      "prometheus-client": "0.20.0",
+      "matplotlib": "3.8.4",
+      "seaborn": "0.13.2"
+    },
+    "modules": [
+      {
+        "module": "polars",
+        "requirement_name": "polars",
+        "expected_pin": "0.20.16",
+        "required_attribute": "Date",
+        "importable": false,
+        "version": null,
+        "path": null,
+        "classification": "DEPENDENCY_BLOCKER",
+        "risk": "module_missing_from_runtime"
+      },
+      {
+        "module": "hmmlearn",
+        "requirement_name": "hmmlearn",
+        "expected_pin": "0.3.2",
+        "required_attribute": null,
+        "importable": false,
+        "version": null,
+        "path": null,
+        "classification": "DEPENDENCY_BLOCKER",
+        "risk": "module_missing_from_runtime"
+      },
+      {
+        "module": "pandas",
+        "requirement_name": "pandas",
+        "expected_pin": "2.2.1",
+        "required_attribute": null,
+        "importable": true,
+        "version": "2.3.1",
+        "path": "C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\pandas\\__init__.py",
+        "has_required_attribute": true,
+        "classification": "DEPENDENCY_DRIFT",
+        "risk": "installed_version_differs_from_root_pin"
+      },
+      {
+        "module": "pyarrow",
+        "requirement_name": "pyarrow",
+        "expected_pin": "15.0.2",
+        "required_attribute": null,
+        "importable": true,
+        "version": "23.0.1",
+        "path": "C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\pyarrow\\__init__.py",
+        "has_required_attribute": true,
+        "classification": "DEPENDENCY_DRIFT",
+        "risk": "installed_version_differs_from_root_pin"
+      },
+      {
+        "module": "sklearn",
+        "requirement_name": "scikit-learn",
+        "expected_pin": "1.4.2",
+        "required_attribute": null,
+        "importable": true,
+        "version": "1.7.2",
+        "path": "C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\sklearn\\__init__.py",
+        "has_required_attribute": true,
+        "classification": "DEPENDENCY_DRIFT",
+        "risk": "installed_version_differs_from_root_pin"
+      }
+    ],
+    "pip_check_passed": true,
+    "targeted_polars_hmmlearn_dry_run_passed": true,
+    "root_requirements_dry_run_passed": false,
+    "blockers": [
+      {
+        "module": "polars",
+        "requirement_name": "polars",
+        "expected_pin": "0.20.16",
+        "required_attribute": "Date",
+        "importable": false,
+        "version": null,
+        "path": null,
+        "classification": "DEPENDENCY_BLOCKER",
+        "risk": "module_missing_from_runtime"
+      },
+      {
+        "module": "hmmlearn",
+        "requirement_name": "hmmlearn",
+        "expected_pin": "0.3.2",
+        "required_attribute": null,
+        "importable": false,
+        "version": null,
+        "path": null,
+        "classification": "DEPENDENCY_BLOCKER",
+        "risk": "module_missing_from_runtime"
+      }
+    ],
+    "version_drift": [
+      {
+        "module": "pandas",
+        "requirement_name": "pandas",
+        "expected_pin": "2.2.1",
+        "required_attribute": null,
+        "importable": true,
+        "version": "2.3.1",
+        "path": "C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\pandas\\__init__.py",
+        "has_required_attribute": true,
+        "classification": "DEPENDENCY_DRIFT",
+        "risk": "installed_version_differs_from_root_pin"
+      },
+      {
+        "module": "pyarrow",
+        "requirement_name": "pyarrow",
+        "expected_pin": "15.0.2",
+        "required_attribute": null,
+        "importable": true,
+        "version": "23.0.1",
+        "path": "C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\pyarrow\\__init__.py",
+        "has_required_attribute": true,
+        "classification": "DEPENDENCY_DRIFT",
+        "risk": "installed_version_differs_from_root_pin"
+      },
+      {
+        "module": "sklearn",
+        "requirement_name": "scikit-learn",
+        "expected_pin": "1.4.2",
+        "required_attribute": null,
+        "importable": true,
+        "version": "1.7.2",
+        "path": "C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\sklearn\\__init__.py",
+        "has_required_attribute": true,
+        "classification": "DEPENDENCY_DRIFT",
+        "risk": "installed_version_differs_from_root_pin"
+      }
+    ],
+    "commands": [
+      {
+        "label": "python_version",
+        "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe --version",
+        "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+        "returncode": 0,
+        "duration_seconds": 0.062,
+        "timed_out": false,
+        "stdout_tail": "Python 3.13.13\n",
+        "stderr_tail": "",
+        "status": "PASS"
+      },
+      {
+        "label": "pip_version",
+        "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pip --version",
+        "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+        "returncode": 0,
+        "duration_seconds": 0.459,
+        "timed_out": false,
+        "stdout_tail": "pip 25.3 from C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\pip (python 3.13)\n\n",
+        "stderr_tail": "",
+        "status": "PASS"
+      },
+      {
+        "label": "pip_check",
+        "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pip check",
+        "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+        "returncode": 0,
+        "duration_seconds": 1.345,
+        "timed_out": false,
+        "stdout_tail": "No broken requirements found.\n",
+        "stderr_tail": "",
+        "status": "PASS"
+      },
+      {
+        "label": "pip_dry_run_polars_hmmlearn_pins",
+        "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pip install --dry-run polars==0.20.16 hmmlearn==0.3.2",
+        "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+        "returncode": 0,
+        "duration_seconds": 10.853,
+        "timed_out": false,
+        "stdout_tail": "Defaulting to user installation because normal site-packages is not writeable\nCollecting polars==0.20.16\n  Using cached polars-0.20.16-cp38-abi3-win_amd64.whl.metadata (15 kB)\nCollecting hmmlearn==0.3.2\n  Using cached hmmlearn-0.3.2.tar.gz (78 kB)\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'done'\n  Getting requirements to build wheel: started\n  Getting requirements to build wheel: finished with status 'done'\n  Installing backend dependencies: started\n  Installing backend dependencies: finished with status 'done'\n  Preparing metadata (pyproject.toml): started\n  Preparing metadata (pyproject.toml): finished with status 'done'\nRequirement already satisfied: numpy>=1.10 in c:\\users\\uliss\\appdata\\local\\packages\\pythonsoftwarefoundation.python.3.13_qbz5n2kfra8p0\\localcache\\local-packages\\python313\\site-packages (from hmmlearn==0.3.2) (2.3.2)\nRequirement already satisfied: scikit-learn!=0.22.0,>=0.16 in c:\\users\\uliss\\appdata\\local\\packages\\pythonsoftwarefoundation.python.3.13_qbz5n2kfra8p0\\localcache\\local-packages\\python313\\site-packages (from hmmlearn==0.3.2) (1.7.2)\nRequirement already satisfied: scipy>=0.19 in c:\\users\\uliss\\appdata\\local\\packages\\pythonsoftwarefoundation.python.3.13_qbz5n2kfra8p0\\localcache\\local-packages\\python313\\site-packages (from hmmlearn==0.3.2) (1.16.2)\nRequirement already satisfied: joblib>=1.2.0 in c:\\users\\uliss\\appdata\\local\\packages\\pythonsoftwarefoundation.python.3.13_qbz5n2kfra8p0\\localcache\\local-packages\\python313\\site-packages (from scikit-learn!=0.22.0,>=0.16->hmmlearn==0.3.2) (1.5.2)\nRequirement already satisfied: threadpoolctl>=3.1.0 in c:\\users\\uliss\\appdata\\local\\packages\\pythonsoftwarefoundation.python.3.13_qbz5n2kfra8p0\\localcache\\local-packages\\python313\\site-packages (from scikit-learn!=0.22.0,>=0.16->hmmlearn==0.3.2) (3.6.0)\nWould install hmmlearn-0.3.2 polars-0.20.16\n",
+        "stderr_tail": "\n[notice] A new release of pip is available: 25.3 -> 26.0.1\n[notice] To update, run: C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pip install --upgrade pip\n",
+        "status": "PASS"
+      },
+      {
+        "label": "pip_dry_run_root_requirements",
+        "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pip install --dry-run -r requirements.txt",
+        "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+        "returncode": 1,
+        "duration_seconds": 31.226,
+        "timed_out": false,
+        "stdout_tail": "Defaulting to user installation because normal site-packages is not writeable\nCollecting polars==0.20.16 (from -r requirements.txt (line 8))\n  Using cached polars-0.20.16-cp38-abi3-win_amd64.whl.metadata (15 kB)\nCollecting pandas==2.2.1 (from -r requirements.txt (line 9))\n  Using cached pandas-2.2.1.tar.gz (4.4 MB)\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'error'\n",
+        "stderr_tail": "B)\n      Collecting Cython==3.0.5\n        Using cached Cython-3.0.5-py2.py3-none-any.whl.metadata (3.2 kB)\n      Collecting numpy<=2.0.0.dev0,>1.22.4\n        Using cached numpy-1.26.4.tar.gz (15.8 MB)\n        Installing build dependencies: started\n        Installing build dependencies: finished with status 'done'\n        Getting requirements to build wheel: started\n        Getting requirements to build wheel: finished with status 'done'\n        Installing backend dependencies: started\n        Installing backend dependencies: finished with status 'done'\n        Preparing metadata (pyproject.toml): started\n        Preparing metadata (pyproject.toml): finished with status 'error'\n        error: subprocess-exited-with-error\n      \n        × Preparing metadata (pyproject.toml) did not run successfully.\n        │ exit code: 1\n        ╰─> [21 lines of output]\n            + C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe C:\\Users\\uliss\\AppData\\Local\\Temp\\pip-install-8lmw13vw\\numpy_37ab4053171a4e49a36e6306f76ffc16\\vendored-meson\\meson\\meson.py setup C:\\Users\\uliss\\AppData\\Local\\Temp\\pip-install-8lmw13vw\\numpy_37ab4053171a4e49a36e6306f76ffc16 C:\\Users\\uliss\\AppData\\Local\\Temp\\pip-install-8lmw13vw\\numpy_37ab4053171a4e49a36e6306f76ffc16\\.mesonpy-9zz47utk -Dbuildtype=release -Db_ndebug=if-release -Db_vscrt=md --native-file=C:\\Users\\uliss\\AppData\\Local\\Temp\\pip-install-8lmw13vw\\numpy_37ab4053171a4e49a36e6306f76ffc16\\.mesonpy-9zz47utk\\meson-python-native-file.ini\n            The Meson build system\n            Version: 1.2.99\n            Source dir: C:\\Users\\uliss\\AppData\\Local\\Temp\\pip-install-8lmw13vw\\numpy_37ab4053171a4e49a36e6306f76ffc16\n            Build dir: C:\\Users\\uliss\\AppData\\Local\\Temp\\pip-install-8lmw13vw\\numpy_37ab4053171a4e49a36e6306f76ffc16\\.mesonpy-9zz47utk\n            Build type: native build\n            Project name: NumPy\n            Project version: 1.26.4\n            WARNING: Failed to activate VS environment: Could not find C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\n      \n            ..\\meson.build:1:0: ERROR: Unknown compiler(s): [['icl'], ['cl'], ['cc'], ['gcc'], ['clang'], ['clang-cl'], ['pgcc']]\n            The following exception(s) were encountered:\n            Running `icl \"\"` gave \"[WinError 2] O sistema não pode encontrar o arquivo especificado\"\n            Running `cl /?` gave \"[WinError 2] O sistema não pode encontrar o arquivo especificado\"\n            Running `cc --version` gave \"[WinError 2] O sistema não pode encontrar o arquivo especificado\"\n            Running `gcc --version` gave \"[WinError 2] O sistema não pode encontrar o arquivo especificado\"\n            Running `clang --version` gave \"[WinError 2] O sistema não pode encontrar o arquivo especificado\"\n            Running `clang-cl /?` gave \"[WinError 2] O sistema não pode encontrar o arquivo especificado\"\n            Running `pgcc --version` gave \"[WinError 2] O sistema não pode encontrar o arquivo especificado\"\n      \n            A full log can be found at C:\\Users\\uliss\\AppData\\Local\\Temp\\pip-install-8lmw13vw\\numpy_37ab4053171a4e49a36e6306f76ffc16\\.mesonpy-9zz47utk\\meson-logs\\meson-log.txt\n            [end of output]\n      \n        note: This error originates from a subprocess, and is likely not a problem with pip.\n      error: metadata-generation-failed\n      \n      × Encountered error while generating package metadata.\n      ╰─> numpy\n      \n      note: This is an issue with the package mentioned above, not pip.\n      hint: See above for details.\n      [end of output]\n  \n  note: This error originates from a subprocess, and is likely not a problem with pip.\n\n[notice] A new release of pip is available: 25.3 -> 26.0.1\n[notice] To update, run: C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pip install --upgrade pip\nERROR: Failed to build 'pandas' when installing build dependencies for pandas\n",
+        "status": "FAIL"
+      }
+    ],
+    "objective_findings": [
+      "Root requirements are not reproducibly installable in this Python runtime.",
+      "polars and/or hmmlearn are missing or incompatible in the active runtime.",
+      "pip check only validates installed distributions; it does not prove that missing pinned requirements are installed."
+    ]
+  },
+  "pytest_collection": {
+    "status": "FAIL",
+    "classification": "PYTEST_COLLECTION_DEPENDENCY_BLOCKED",
+    "collect_only": {
+      "label": "pytest_unit_collect_only",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit --collect-only -q",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 2,
+      "duration_seconds": 6.772,
+      "timed_out": false,
+      "stdout_tail": "tegrationTest::test_run_vi_clustering_excludes_unlock_audit_columns\ntests/unit/test_unlock_ml_integration.py::UnlockMlIntegrationTest::test_save_phase3_results_removes_stale_sizing_when_current_sizing_is_empty\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_feature_store_uses_eligible_ohlcv_set_and_surfaces_collapsed_threshold_gap\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_hmm_outputs_counts_degraded_inputs_without_marking_hard_missing\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_hmm_outputs_treats_predictive_quality_as_advisory_when_hard_gate_is_off\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_unlock_shadow_mode_reports_coverage_and_quality_summary\ntests/unit/test_unlock_store.py::UnlockStoreTest::test_store_persists_sqlite_exports_parquet_and_closes_connections\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_compute_ups_raw_applies_30d_window_and_bucket_weights\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_compute_ups_raw_regression_includes_day_30_and_excludes_day_31\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_normalize_bucket_label_maps_canonical_buckets\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_percent_rank_average_handles_massive_zero_ties_without_ranking_nan\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_percent_rank_average_respects_ties_and_nan\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_percent_rank_average_single_observation_returns_half\n\n=================================== ERRORS ====================================\n___________ ERROR collecting tests/unit/test_collectors_runtime.py ____________\ntests\\unit\\test_collectors_runtime.py:15: in <module>\n    from services.data_inserter import bootstrap_phase2_inputs\nservices\\data_inserter\\bootstrap_phase2_inputs.py:24: in <module>\n    from collectors.binance import BinanceCollector\nservices\\data_inserter\\collectors\\binance.py:28: in <module>\n    \"timestamp\": pl.Date,\n                 ^^^^^^^\nE   AttributeError: module 'polars' has no attribute 'Date'\n__________ ERROR collecting tests/unit/test_hmm_regime_alignment.py ___________\nImportError while importing test module 'C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\tests\\unit\\test_hmm_regime_alignment.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\nC:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests\\unit\\test_hmm_regime_alignment.py:9: in <module>\n    from services.ml_engine.regime import hmm_filter\nservices\\ml_engine\\regime\\__init__.py:4: in <module>\n    from .hmm_filter import (\nservices\\ml_engine\\regime\\hmm_filter.py:10: in <module>\n    from hmmlearn.hmm import GaussianHMM\nE   ModuleNotFoundError: No module named 'hmmlearn'\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ===========================\nERROR tests/unit/test_collectors_runtime.py - AttributeError: module 'polars'...\nERROR tests/unit/test_hmm_regime_alignment.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!\n166 tests collected, 2 errors in 3.97s\n",
+      "stderr_tail": "",
+      "status": "FAIL"
+    },
+    "unit_full": {
+      "label": "pytest_unit_full",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit -q",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 2,
+      "duration_seconds": 4.386,
+      "timed_out": false,
+      "stdout_tail": "\n=================================== ERRORS ====================================\n___________ ERROR collecting tests/unit/test_collectors_runtime.py ____________\ntests\\unit\\test_collectors_runtime.py:15: in <module>\n    from services.data_inserter import bootstrap_phase2_inputs\nservices\\data_inserter\\bootstrap_phase2_inputs.py:24: in <module>\n    from collectors.binance import BinanceCollector\nservices\\data_inserter\\collectors\\binance.py:28: in <module>\n    \"timestamp\": pl.Date,\n                 ^^^^^^^\nE   AttributeError: module 'polars' has no attribute 'Date'\n__________ ERROR collecting tests/unit/test_hmm_regime_alignment.py ___________\nImportError while importing test module 'C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\tests\\unit\\test_hmm_regime_alignment.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\nC:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests\\unit\\test_hmm_regime_alignment.py:9: in <module>\n    from services.ml_engine.regime import hmm_filter\nservices\\ml_engine\\regime\\__init__.py:4: in <module>\n    from .hmm_filter import (\nservices\\ml_engine\\regime\\hmm_filter.py:10: in <module>\n    from hmmlearn.hmm import GaussianHMM\nE   ModuleNotFoundError: No module named 'hmmlearn'\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ===========================\nERROR tests/unit/test_collectors_runtime.py - AttributeError: module 'polars'...\nERROR tests/unit/test_hmm_regime_alignment.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!\n1 warning, 2 errors in 2.28s\n",
+      "stderr_tail": "",
+      "status": "FAIL"
+    },
+    "gate_reports": {
+      "label": "pytest_gate_reports",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit/test_gate_reports.py -q",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 0,
+      "duration_seconds": 2.203,
+      "timed_out": false,
+      "stdout_tail": ".                                                                        [100%]\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n1 passed, 1 warning in 0.75s\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    "bridge_nautilus": {
+      "label": "pytest_nautilus_bridge_existing",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit/test_nautilus_bridge_contract.py tests/unit/test_nautilus_bridge_acceptance.py tests/unit/test_nautilus_bridge_phase4_publisher.py tests/unit/test_nautilus_bridge_consumer.py tests/unit/test_nautilus_bridge_reconciler.py tests/unit/test_nautilus_bridge_phase4_paper_daemon.py tests/unit/test_nautilus_bridge_phase4_paper_once.py -q",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 0,
+      "duration_seconds": 2.352,
+      "timed_out": false,
+      "stdout_tail": ".........................................                                [100%]\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n41 passed, 1 warning in 0.79s\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    "collection_findings": [
+      {
+        "blocker": "polars_date_missing",
+        "classification": "DEPENDENCY_OR_API_COMPATIBILITY_BLOCKER",
+        "evidence": "collector schema references pl.Date but runtime polars lacks Date."
+      },
+      {
+        "blocker": "hmmlearn_missing",
+        "classification": "DEPENDENCY_BLOCKER",
+        "evidence": "regime HMM import cannot load hmmlearn."
+      }
+    ],
+    "full_suite_findings": [
+      {
+        "blocker": "polars_date_missing",
+        "classification": "DEPENDENCY_OR_API_COMPATIBILITY_BLOCKER",
+        "evidence": "collector schema references pl.Date but runtime polars lacks Date."
+      },
+      {
+        "blocker": "hmmlearn_missing",
+        "classification": "DEPENDENCY_BLOCKER",
+        "evidence": "regime HMM import cannot load hmmlearn."
+      }
+    ],
+    "bridge_passed": true,
+    "gate_report_test_passed": true,
+    "commands": [
+      {
+        "label": "pytest_unit_collect_only",
+        "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit --collect-only -q",
+        "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+        "returncode": 2,
+        "duration_seconds": 6.772,
+        "timed_out": false,
+        "stdout_tail": "tegrationTest::test_run_vi_clustering_excludes_unlock_audit_columns\ntests/unit/test_unlock_ml_integration.py::UnlockMlIntegrationTest::test_save_phase3_results_removes_stale_sizing_when_current_sizing_is_empty\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_feature_store_uses_eligible_ohlcv_set_and_surfaces_collapsed_threshold_gap\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_hmm_outputs_counts_degraded_inputs_without_marking_hard_missing\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_hmm_outputs_treats_predictive_quality_as_advisory_when_hard_gate_is_off\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_unlock_shadow_mode_reports_coverage_and_quality_summary\ntests/unit/test_unlock_store.py::UnlockStoreTest::test_store_persists_sqlite_exports_parquet_and_closes_connections\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_compute_ups_raw_applies_30d_window_and_bucket_weights\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_compute_ups_raw_regression_includes_day_30_and_excludes_day_31\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_normalize_bucket_label_maps_canonical_buckets\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_percent_rank_average_handles_massive_zero_ties_without_ranking_nan\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_percent_rank_average_respects_ties_and_nan\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_percent_rank_average_single_observation_returns_half\n\n=================================== ERRORS ====================================\n___________ ERROR collecting tests/unit/test_collectors_runtime.py ____________\ntests\\unit\\test_collectors_runtime.py:15: in <module>\n    from services.data_inserter import bootstrap_phase2_inputs\nservices\\data_inserter\\bootstrap_phase2_inputs.py:24: in <module>\n    from collectors.binance import BinanceCollector\nservices\\data_inserter\\collectors\\binance.py:28: in <module>\n    \"timestamp\": pl.Date,\n                 ^^^^^^^\nE   AttributeError: module 'polars' has no attribute 'Date'\n__________ ERROR collecting tests/unit/test_hmm_regime_alignment.py ___________\nImportError while importing test module 'C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\tests\\unit\\test_hmm_regime_alignment.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\nC:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests\\unit\\test_hmm_regime_alignment.py:9: in <module>\n    from services.ml_engine.regime import hmm_filter\nservices\\ml_engine\\regime\\__init__.py:4: in <module>\n    from .hmm_filter import (\nservices\\ml_engine\\regime\\hmm_filter.py:10: in <module>\n    from hmmlearn.hmm import GaussianHMM\nE   ModuleNotFoundError: No module named 'hmmlearn'\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ===========================\nERROR tests/unit/test_collectors_runtime.py - AttributeError: module 'polars'...\nERROR tests/unit/test_hmm_regime_alignment.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!\n166 tests collected, 2 errors in 3.97s\n",
+        "stderr_tail": "",
+        "status": "FAIL"
+      },
+      {
+        "label": "pytest_gate_reports",
+        "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit/test_gate_reports.py -q",
+        "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+        "returncode": 0,
+        "duration_seconds": 2.203,
+        "timed_out": false,
+        "stdout_tail": ".                                                                        [100%]\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n1 passed, 1 warning in 0.75s\n",
+        "stderr_tail": "",
+        "status": "PASS"
+      },
+      {
+        "label": "pytest_nautilus_bridge_existing",
+        "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit/test_nautilus_bridge_contract.py tests/unit/test_nautilus_bridge_acceptance.py tests/unit/test_nautilus_bridge_phase4_publisher.py tests/unit/test_nautilus_bridge_consumer.py tests/unit/test_nautilus_bridge_reconciler.py tests/unit/test_nautilus_bridge_phase4_paper_daemon.py tests/unit/test_nautilus_bridge_phase4_paper_once.py -q",
+        "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+        "returncode": 0,
+        "duration_seconds": 2.352,
+        "timed_out": false,
+        "stdout_tail": ".........................................                                [100%]\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n41 passed, 1 warning in 0.79s\n",
+        "stderr_tail": "",
+        "status": "PASS"
+      },
+      {
+        "label": "pytest_unit_full",
+        "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit -q",
+        "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+        "returncode": 2,
+        "duration_seconds": 4.386,
+        "timed_out": false,
+        "stdout_tail": "\n=================================== ERRORS ====================================\n___________ ERROR collecting tests/unit/test_collectors_runtime.py ____________\ntests\\unit\\test_collectors_runtime.py:15: in <module>\n    from services.data_inserter import bootstrap_phase2_inputs\nservices\\data_inserter\\bootstrap_phase2_inputs.py:24: in <module>\n    from collectors.binance import BinanceCollector\nservices\\data_inserter\\collectors\\binance.py:28: in <module>\n    \"timestamp\": pl.Date,\n                 ^^^^^^^\nE   AttributeError: module 'polars' has no attribute 'Date'\n__________ ERROR collecting tests/unit/test_hmm_regime_alignment.py ___________\nImportError while importing test module 'C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\tests\\unit\\test_hmm_regime_alignment.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\nC:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests\\unit\\test_hmm_regime_alignment.py:9: in <module>\n    from services.ml_engine.regime import hmm_filter\nservices\\ml_engine\\regime\\__init__.py:4: in <module>\n    from .hmm_filter import (\nservices\\ml_engine\\regime\\hmm_filter.py:10: in <module>\n    from hmmlearn.hmm import GaussianHMM\nE   ModuleNotFoundError: No module named 'hmmlearn'\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ===========================\nERROR tests/unit/test_collectors_runtime.py - AttributeError: module 'polars'...\nERROR tests/unit/test_hmm_regime_alignment.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!\n1 warning, 2 errors in 2.28s\n",
+        "stderr_tail": "",
+        "status": "FAIL"
+      }
+    ]
+  },
+  "clean_clone_regeneration": {
+    "status": "FAIL",
+    "classification": "CLEAN_CLONE_REGENERATION_NOT_PROVEN",
+    "current_workspace_regeneration": {
+      "all_exit_zero": true,
+      "commands": [
+        {
+          "label": "phase5_closure_bundle_restore_and_revalidate",
+          "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services/ml_engine/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate.py",
+          "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+          "returncode": 0,
+          "duration_seconds": 22.689,
+          "timed_out": false,
+          "stdout_tail": "e\",\n    \"timestamp_utc\": \"2026-04-26T16:08:40+00:00\",\n    \"branch\": \"codex/phase6-clean-clone-environment-reproducibility\",\n    \"baseline_commit\": \"f68832974e898e87cf9c6f6e68a2e43127d44089\",\n    \"historical_commit\": \"cb692cc4e37ec897d5265d7af0881a0f8986821a\",\n    \"classification_final\": \"SOVEREIGN_BASELINE_RESTORED_AND_VALID\",\n    \"equivalence_classification\": \"EXACT_RESTORE\",\n    \"restored_metrics\": {\n      \"latest_date\": \"2026-03-20\",\n      \"latest_active_count_decision_space\": 2,\n      \"headroom_decision_space\": true,\n      \"recent_live_dates_decision_space\": 8,\n      \"historical_active_events_decision_space\": 3939,\n      \"latest_selected_symbols\": [\n        \"ENA\",\n        \"TAO\"\n      ],\n      \"latest_rows_total\": 9,\n      \"latest_rows_available\": 9,\n      \"latest_rows_selected\": 2,\n      \"latest_rows_position_gt_0\": 2,\n      \"max_position_usdt_latest\": 2755.347917\n    },\n    \"historical_metrics\": {\n      \"latest_date\": \"2026-03-20\",\n      \"latest_active_count_decision_space\": 2,\n      \"headroom_decision_space\": true,\n      \"recent_live_dates_decision_space\": 8,\n      \"historical_active_events_decision_space\": 3939,\n      \"latest_selected_symbols\": [\n        \"ENA\",\n        \"TAO\"\n      ],\n      \"latest_rows_total\": 9,\n      \"latest_rows_available\": 9,\n      \"latest_rows_selected\": 2,\n      \"latest_rows_position_gt_0\": 2,\n      \"max_position_usdt_latest\": 2755.347917\n    },\n    \"regenerated_replay_metrics\": {\n      \"latest_date\": \"2026-03-20\",\n      \"latest_active_count_decision_space\": 2,\n      \"headroom_decision_space\": true,\n      \"recent_live_dates_decision_space\": 8,\n      \"historical_active_events_decision_space\": 3939,\n      \"latest_selected_symbols\": [\n        \"ENA\",\n        \"TAO\"\n      ],\n      \"latest_rows_total\": 9,\n      \"latest_rows_available\": 9,\n      \"latest_rows_selected\": 2,\n      \"latest_rows_position_gt_0\": 2,\n      \"max_position_usdt_latest\": 2755.347917\n    },\n    \"reproducibility\": {\n      \"frame_hash_run1\": \"C10621BC6AD4A11ADD7148ABEC26D7C603C103848913678A587DC3B0F726F668\",\n      \"frame_hash_run2\": \"C10621BC6AD4A11ADD7148ABEC26D7C603C103848913678A587DC3B0F726F668\",\n      \"metrics_run1\": {\n        \"latest_date\": \"2026-03-20\",\n        \"latest_active_count_decision_space\": 2,\n        \"headroom_decision_space\": true,\n        \"recent_live_dates_decision_space\": 8,\n        \"historical_active_events_decision_space\": 3939,\n        \"latest_selected_symbols\": [\n          \"ENA\",\n          \"TAO\"\n        ],\n        \"latest_rows_total\": 9,\n        \"latest_rows_available\": 9,\n        \"latest_rows_selected\": 2,\n        \"latest_rows_position_gt_0\": 2,\n        \"max_position_usdt_latest\": 2755.347917\n      },\n      \"metrics_run2\": {\n        \"latest_date\": \"2026-03-20\",\n        \"latest_active_count_decision_space\": 2,\n        \"headroom_decision_space\": true,\n        \"recent_live_dates_decision_space\": 8,\n        \"historical_active_events_decision_space\": 3939,\n        \"latest_selected_symbols\": [\n          \"ENA\",\n          \"TAO\"\n        ],\n        \"latest_rows_total\": 9,\n        \"latest_rows_available\": 9,\n        \"latest_rows_selected\": 2,\n        \"latest_rows_position_gt_0\": 2,\n        \"max_position_usdt_latest\": 2755.347917\n      },\n      \"pass\": true\n    },\n    \"bundle_completeness\": {\n      \"pass\": true,\n      \"restored_files_present\": 8,\n      \"required_restored_files\": 8,\n      \"missing_restored_files\": []\n    },\n    \"no_fallback\": {\n      \"pass\": true,\n      \"detail\": \"Replay used only the preserved stage_a_predictions bundle and the restored git-history sovereign closure bundle.\",\n      \"current_predictions_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\data\\\\models\\\\research\\\\phase4_cross_sectional_ranking_baseline\\\\stage_a_predictions.parquet\"\n    },\n    \"stale_contamination\": {\n      \"pass\": true,\n      \"detail\": \"Current preserved stage_a_predictions remain semantically aligned with the historical cross_sectional_predictions on decision-space inputs.\"\n    },\n    \"gate_pack_complete\": true\n  }\n}\n",
+          "stderr_tail": "",
+          "status": "PASS"
+        },
+        {
+          "label": "phase5_sovereign_hardening_recheck",
+          "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services/ml_engine/phase5_cross_sectional_sovereign_hardening_recheck.py",
+          "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+          "returncode": 0,
+          "duration_seconds": 23.278,
+          "timed_out": false,
+          "stdout_tail": "{\n  \"status\": \"PARTIAL\",\n  \"decision\": \"correct\",\n  \"classification_final\": \"SOVEREIGN_HARDENING_MIXED\",\n  \"research_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\data\\\\models\\\\research\\\\phase5_cross_sectional_sovereign_hardening_recheck\",\n  \"gate_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_sovereign_hardening_recheck\",\n  \"gate_outputs\": {\n    \"gate_report_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_sovereign_hardening_recheck\\\\gate_report.json\",\n    \"gate_report_markdown\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_sovereign_hardening_recheck\\\\gate_report.md\",\n    \"gate_manifest_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_sovereign_hardening_recheck\\\\gate_manifest.json\",\n    \"gate_metrics_parquet\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_sovereign_hardening_recheck\\\\gate_metrics.parquet\"\n  }\n}\n",
+          "stderr_tail": "",
+          "status": "PASS"
+        },
+        {
+          "label": "phase5_operational_fragility_audit_and_bounded_correction",
+          "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services/ml_engine/phase5_cross_sectional_operational_fragility_audit_and_bounded_correction.py",
+          "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+          "returncode": 0,
+          "duration_seconds": 33.565,
+          "timed_out": false,
+          "stdout_tail": "{\n  \"status\": \"PARTIAL\",\n  \"decision\": \"correct\",\n  \"classification_final\": \"OPERATIONAL_FRAGILITY_PERSISTS\",\n  \"dominant_operational_fragility\": \"REGIME_DEPENDENCE_DOMINANT\",\n  \"research_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\data\\\\models\\\\research\\\\phase5_cross_sectional_operational_fragility\",\n  \"gate_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\",\n  \"gate_outputs\": {\n    \"gate_report_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\\\gate_report.json\",\n    \"gate_report_markdown\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\\\gate_report.md\",\n    \"gate_manifest_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\\\gate_manifest.json\",\n    \"gate_metrics_parquet\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\\\gate_metrics.parquet\"\n  }\n}\n",
+          "stderr_tail": "",
+          "status": "PASS"
+        },
+        {
+          "label": "phase5_recent_regime_policy_falsification",
+          "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services/ml_engine/phase5_cross_sectional_recent_regime_policy_falsification.py",
+          "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+          "returncode": 0,
+          "duration_seconds": 54.777,
+          "timed_out": false,
+          "stdout_tail": "{\n  \"status\": \"PARTIAL\",\n  \"decision\": \"correct\",\n  \"classification_final\": \"ALIVE_BUT_NOT_PROMOTABLE\",\n  \"plausibility\": \"RECENT_REGIME_POLICY_FIX_PLAUSIBLE\",\n  \"research_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\data\\\\models\\\\research\\\\phase5_cross_sectional_recent_regime\",\n  \"gate_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_recent_regime_policy_falsification\",\n  \"gate_outputs\": {\n    \"gate_report_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_recent_regime_policy_falsification\\\\gate_report.json\",\n    \"gate_report_markdown\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_recent_regime_policy_falsification\\\\gate_report.md\",\n    \"gate_manifest_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_recent_regime_policy_falsification\\\\gate_manifest.json\",\n    \"gate_metrics_parquet\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_recent_regime_policy_falsification\\\\gate_metrics.parquet\"\n  }\n}\n",
+          "stderr_tail": "",
+          "status": "PASS"
+        },
+        {
+          "label": "phase4_gate_diagnostic",
+          "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services/ml_engine/phase4_gate_diagnostic.py",
+          "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+          "returncode": 0,
+          "duration_seconds": 13.448,
+          "timed_out": false,
+          "stdout_tail": "{\n  \"written\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\data\\\\models\\\\phase4\\\\phase4_gate_diagnostic.json\",\n  \"hard_blockers\": [\n    \"DSR honesto\",\n    \"DSR invalida\\u00e7\\u00e3o global\",\n    \"Sharpe OOS\",\n    \"Subperiodos\"\n  ],\n  \"ia_official_path_uses_ia\": false,\n  \"phase2_auc_directly_auditable\": false\n}\n",
+          "stderr_tail": "",
+          "status": "PASS"
+        },
+        {
+          "label": "phase6_global_reproducibility_source_alignment_gate",
+          "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services\\ml_engine\\phase6_global_reproducibility_source_alignment_gate.py",
+          "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+          "returncode": 0,
+          "duration_seconds": 156.864,
+          "timed_out": false,
+          "stdout_tail": "{\n  \"gate_slug\": \"phase6_global_reproducibility_source_alignment_gate\",\n  \"status\": \"PARTIAL\",\n  \"decision\": \"correct\",\n  \"outputs\": {\n    \"gate_report_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase6_global_reproducibility_source_alignment_gate\\\\gate_report.json\",\n    \"gate_report_markdown\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase6_global_reproducibility_source_alignment_gate\\\\gate_report.md\",\n    \"gate_manifest_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase6_global_reproducibility_source_alignment_gate\\\\gate_manifest.json\",\n    \"gate_metrics_parquet\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase6_global_reproducibility_source_alignment_gate\\\\gate_metrics.parquet\"\n  },\n  \"source_doc_alignment\": \"PASS\",\n  \"clean_regeneration\": \"PARTIAL\",\n  \"portfolio_cvar\": \"PASS_ZERO_EXPOSURE\",\n  \"dsr_honest\": 0.0\n}\n",
+          "stderr_tail": "",
+          "status": "PASS"
+        }
+      ]
+    },
+    "isolated_worktree_probe": {
+      "status": "FAIL",
+      "classification": "CLEAN_WORKTREE_CREATED_BUT_REGENERATION_FAILED",
+      "worktree": {
+        "created": true,
+        "path": "C:\\Users\\uliss\\AppData\\Local\\Temp\\sniper_clean_worktree_parent_h_e2q667\\sniper_clean_worktree",
+        "parent": "C:\\Users\\uliss\\AppData\\Local\\Temp\\sniper_clean_worktree_parent_h_e2q667",
+        "add_command": {
+          "label": "git_worktree_add_detached_head",
+          "command": "git worktree add --detach C:\\Users\\uliss\\AppData\\Local\\Temp\\sniper_clean_worktree_parent_h_e2q667\\sniper_clean_worktree HEAD",
+          "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+          "returncode": 0,
+          "duration_seconds": 1.304,
+          "timed_out": false,
+          "stdout_tail": "HEAD is now at f688329 Add next-step prompt builder skill\n",
+          "stderr_tail": "Preparing worktree (detached HEAD f688329)\nUpdating files:  90% (345/383)\nUpdating files:  91% (349/383)\nUpdating files:  92% (353/383)\nUpdating files:  93% (357/383)\nUpdating files:  94% (361/383)\nUpdating files:  95% (364/383)\nUpdating files:  96% (368/383)\nUpdating files:  97% (372/383)\nUpdating files:  98% (376/383)\nUpdating files:  99% (380/383)\nUpdating files: 100% (383/383)\nUpdating files: 100% (383/383), done.\n",
+          "status": "PASS"
+        },
+        "initial_worktree_clean": true,
+        "remove_command": {
+          "label": "git_worktree_remove_clean_probe",
+          "command": "git worktree remove --force C:\\Users\\uliss\\AppData\\Local\\Temp\\sniper_clean_worktree_parent_h_e2q667\\sniper_clean_worktree",
+          "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+          "returncode": 0,
+          "duration_seconds": 0.156,
+          "timed_out": false,
+          "stdout_tail": "",
+          "stderr_tail": "",
+          "status": "PASS"
+        }
+      },
+      "phase6_global_source_tracked": false,
+      "phase6_global_source_exists_current_workspace": true,
+      "commands": [
+        {
+          "label": "isolated_git_status_short",
+          "command": "git status --short",
+          "cwd": "C:\\Users\\uliss\\AppData\\Local\\Temp\\sniper_clean_worktree_parent_h_e2q667\\sniper_clean_worktree",
+          "returncode": 0,
+          "duration_seconds": 0.43,
+          "timed_out": false,
+          "stdout_tail": "",
+          "stderr_tail": "",
+          "status": "PASS"
+        },
+        {
+          "label": "isolated_python_version",
+          "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe --version",
+          "cwd": "C:\\Users\\uliss\\AppData\\Local\\Temp\\sniper_clean_worktree_parent_h_e2q667\\sniper_clean_worktree",
+          "returncode": 0,
+          "duration_seconds": 0.117,
+          "timed_out": false,
+          "stdout_tail": "Python 3.13.13\n",
+          "stderr_tail": "",
+          "status": "PASS"
+        },
+        {
+          "label": "isolated_pip_check",
+          "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pip check",
+          "cwd": "C:\\Users\\uliss\\AppData\\Local\\Temp\\sniper_clean_worktree_parent_h_e2q667\\sniper_clean_worktree",
+          "returncode": 0,
+          "duration_seconds": 1.036,
+          "timed_out": false,
+          "stdout_tail": "No broken requirements found.\n",
+          "stderr_tail": "",
+          "status": "PASS"
+        },
+        {
+          "label": "isolated_pytest_unit_collect_only",
+          "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit --collect-only -q",
+          "cwd": "C:\\Users\\uliss\\AppData\\Local\\Temp\\sniper_clean_worktree_parent_h_e2q667\\sniper_clean_worktree",
+          "returncode": 2,
+          "duration_seconds": 6.553,
+          "timed_out": false,
+          "stdout_tail": "ring_excludes_unlock_audit_columns\ntests/unit/test_unlock_ml_integration.py::UnlockMlIntegrationTest::test_save_phase3_results_removes_stale_sizing_when_current_sizing_is_empty\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_feature_store_uses_eligible_ohlcv_set_and_surfaces_collapsed_threshold_gap\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_hmm_outputs_counts_degraded_inputs_without_marking_hard_missing\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_hmm_outputs_treats_predictive_quality_as_advisory_when_hard_gate_is_off\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_unlock_shadow_mode_reports_coverage_and_quality_summary\ntests/unit/test_unlock_store.py::UnlockStoreTest::test_store_persists_sqlite_exports_parquet_and_closes_connections\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_compute_ups_raw_applies_30d_window_and_bucket_weights\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_compute_ups_raw_regression_includes_day_30_and_excludes_day_31\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_normalize_bucket_label_maps_canonical_buckets\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_percent_rank_average_handles_massive_zero_ties_without_ranking_nan\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_percent_rank_average_respects_ties_and_nan\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_percent_rank_average_single_observation_returns_half\n\n=================================== ERRORS ====================================\n___________ ERROR collecting tests/unit/test_collectors_runtime.py ____________\ntests\\unit\\test_collectors_runtime.py:15: in <module>\n    from services.data_inserter import bootstrap_phase2_inputs\nservices\\data_inserter\\bootstrap_phase2_inputs.py:24: in <module>\n    from collectors.binance import BinanceCollector\nservices\\data_inserter\\collectors\\binance.py:28: in <module>\n    \"timestamp\": pl.Date,\n                 ^^^^^^^\nE   AttributeError: module 'polars' has no attribute 'Date'\n__________ ERROR collecting tests/unit/test_hmm_regime_alignment.py ___________\nImportError while importing test module 'C:\\Users\\uliss\\AppData\\Local\\Temp\\sniper_clean_worktree_parent_h_e2q667\\sniper_clean_worktree\\tests\\unit\\test_hmm_regime_alignment.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\nC:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests\\unit\\test_hmm_regime_alignment.py:9: in <module>\n    from services.ml_engine.regime import hmm_filter\nservices\\ml_engine\\regime\\__init__.py:4: in <module>\n    from .hmm_filter import (\nservices\\ml_engine\\regime\\hmm_filter.py:10: in <module>\n    from hmmlearn.hmm import GaussianHMM\nE   ModuleNotFoundError: No module named 'hmmlearn'\n============================== warnings summary ===============================\n..\\..\\..\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ===========================\nERROR tests/unit/test_collectors_runtime.py - AttributeError: module 'polars'...\nERROR tests/unit/test_hmm_regime_alignment.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!\n166 tests collected, 2 errors in 4.58s\n",
+          "stderr_tail": "",
+          "status": "FAIL"
+        },
+        {
+          "label": "isolated_phase6_global_regeneration",
+          "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services/ml_engine/phase6_global_reproducibility_source_alignment_gate.py",
+          "cwd": "C:\\Users\\uliss\\AppData\\Local\\Temp\\sniper_clean_worktree_parent_h_e2q667\\sniper_clean_worktree",
+          "returncode": 2,
+          "duration_seconds": 0.14,
+          "timed_out": false,
+          "stdout_tail": "",
+          "stderr_tail": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe: can't open file 'C:\\\\Users\\\\uliss\\\\AppData\\\\Local\\\\Temp\\\\sniper_clean_worktree_parent_h_e2q667\\\\sniper_clean_worktree\\\\services\\\\ml_engine\\\\phase6_global_reproducibility_source_alignment_gate.py': [Errno 2] No such file or directory\n",
+          "status": "FAIL"
+        }
+      ],
+      "interpretation": "A detached clean worktree can be created, but it cannot reproduce the current Phase 6 source/artifact state until the prior gate source and artifacts are committed or otherwise materialized in a clean checkout."
+    },
+    "artifact_hashes_before": {
+      "reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_report.json": {
+        "exists": true,
+        "sha256": "AFC2087AD5E74D6D8BF280F80A5E4240691B30F8F71D6E66D58E175B1291AE58",
+        "size_bytes": 4247
+      },
+      "reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_manifest.json": {
+        "exists": true,
+        "sha256": "A2CF154A5F85EEA0670DB78CCBAEA6012108BCCADF10FF854835FBB7015B8E3E",
+        "size_bytes": 6547
+      },
+      "reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_report.json": {
+        "exists": true,
+        "sha256": "D2E5876B8FCA03895CC835545864169D7387728A4DC2AC009953F432D19F1AB5",
+        "size_bytes": 4168
+      },
+      "reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_manifest.json": {
+        "exists": true,
+        "sha256": "AC2FE010F54DCC14004E73B965FCE5B28D9FB6EEC30332615F7DD94A365E05B3",
+        "size_bytes": 5179
+      },
+      "reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_report.json": {
+        "exists": true,
+        "sha256": "4F5C9D6C9C8661BCD8D0CC4E97C220CD3A7F32E5387E4504367C0590CB70D4A4",
+        "size_bytes": 4181
+      },
+      "reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_manifest.json": {
+        "exists": true,
+        "sha256": "03BCB044D8EFA4B858601A4E4F6CC043D541A2F04B3861AB60359F87766ACF34",
+        "size_bytes": 4912
+      },
+      "reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_report.json": {
+        "exists": true,
+        "sha256": "7D70B37DDEB8583A9C97BA25313AD7F95A3798FE13858F9F42C931705D234408",
+        "size_bytes": 3986
+      },
+      "reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_manifest.json": {
+        "exists": true,
+        "sha256": "4751F83B3E32EBA9D142D8D5D0F4BC73BFA1BB80FFF818822704108A4CBAFC41",
+        "size_bytes": 4753
+      },
+      "data\\models\\phase4\\phase4_gate_diagnostic.json": {
+        "exists": true,
+        "sha256": "A8782BF44E2CAAE9051AE7CB9418D343C65765796132DF7B49B487AF02383061",
+        "size_bytes": 39354
+      },
+      "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_report.json": {
+        "exists": true,
+        "sha256": "98A932A6906F6D639B15C099CC10B176B02E9B2A439A86E44F4652599780A1D6",
+        "size_bytes": 62775
+      },
+      "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_manifest.json": {
+        "exists": true,
+        "sha256": "6CA9DDFF927A6792BD370E07493068B392D49A4F773CA8789BDDF29D42D986C3",
+        "size_bytes": 22149
+      },
+      "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_metrics.parquet": {
+        "exists": true,
+        "sha256": "7BE244016130326C23DE02FAD98BC2B0292C455B91A570295B60F2B263A6B781",
+        "size_bytes": 4517
+      },
+      "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\source_doc_alignment.json": {
+        "exists": true,
+        "sha256": "C7093F0CF20AF4D8C003FF676AAA597D2A3E8870E1E76ADA678A14AD3277ECA6",
+        "size_bytes": 2664
+      },
+      "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\portfolio_cvar_report.json": {
+        "exists": true,
+        "sha256": "E899A4C3807352A15C483C7128DDBCEF5A1F5A96A75930F9887FFE88E5D35E34",
+        "size_bytes": 1094
+      }
+    },
+    "artifact_hashes_after": {
+      "reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_report.json": {
+        "exists": true,
+        "sha256": "CF96FA8EBF6066DF236FBDB7FAFCE0E73956C78D95C72699B2416891D11981A1",
+        "size_bytes": 4247
+      },
+      "reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_manifest.json": {
+        "exists": true,
+        "sha256": "3EBB971F8A6984B15EAAF7C7A6971E87E4162EA116148A4B9520DFEF4DA97445",
+        "size_bytes": 6547
+      },
+      "reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_report.json": {
+        "exists": true,
+        "sha256": "2D063B59F8003490F76F23DB0471BCBABF3EAAF309D1D4ECCD441488A9E09D9B",
+        "size_bytes": 4168
+      },
+      "reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_manifest.json": {
+        "exists": true,
+        "sha256": "C66FC29CF46AA641729C0A0EDFA76725AEC132B7264D906E39E7ADE6E782F10C",
+        "size_bytes": 5179
+      },
+      "reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_report.json": {
+        "exists": true,
+        "sha256": "696F0A2501DCDC82F766CD6B3A57C2F405A4BEF407700D2A16306ABAA36B36F7",
+        "size_bytes": 4181
+      },
+      "reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_manifest.json": {
+        "exists": true,
+        "sha256": "82DB56D4988CE849290D8E286E44EE4E78E819A47A4E146E0383F74FB971FEBD",
+        "size_bytes": 4912
+      },
+      "reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_report.json": {
+        "exists": true,
+        "sha256": "8C10691E7924344A1DF53281942F4C797B21BB810465A2316CCBB30399E9F4CE",
+        "size_bytes": 3986
+      },
+      "reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_manifest.json": {
+        "exists": true,
+        "sha256": "89BAB1F68001BF09A4149C0A4D244E9D21F696336254787FE1A073A5EFC29EB1",
+        "size_bytes": 4753
+      },
+      "data\\models\\phase4\\phase4_gate_diagnostic.json": {
+        "exists": true,
+        "sha256": "383D4D29B0559B07757ECBDE3DB5F6549D6D26692244790591A9F01A6C6D31EE",
+        "size_bytes": 39749
+      },
+      "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_report.json": {
+        "exists": true,
+        "sha256": "040FA8AAE05B76CF403C50B6BBAA8586D9F1FB84611E44DCF78027250B26CCF8",
+        "size_bytes": 62771
+      },
+      "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_manifest.json": {
+        "exists": true,
+        "sha256": "DC89112CBDB365F2A1892A3AF4C6B921BF45863FC4325BC4664E8975E6591830",
+        "size_bytes": 22147
+      },
+      "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_metrics.parquet": {
+        "exists": true,
+        "sha256": "7BE244016130326C23DE02FAD98BC2B0292C455B91A570295B60F2B263A6B781",
+        "size_bytes": 4517
+      },
+      "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\source_doc_alignment.json": {
+        "exists": true,
+        "sha256": "C7093F0CF20AF4D8C003FF676AAA597D2A3E8870E1E76ADA678A14AD3277ECA6",
+        "size_bytes": 2664
+      },
+      "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\portfolio_cvar_report.json": {
+        "exists": true,
+        "sha256": "E899A4C3807352A15C483C7128DDBCEF5A1F5A96A75930F9887FFE88E5D35E34",
+        "size_bytes": 1094
+      }
+    },
+    "divergences": [
+      {
+        "artifact": "data\\models\\phase4\\phase4_gate_diagnostic.json",
+        "before": {
+          "exists": true,
+          "sha256": "A8782BF44E2CAAE9051AE7CB9418D343C65765796132DF7B49B487AF02383061",
+          "size_bytes": 39354
+        },
+        "after": {
+          "exists": true,
+          "sha256": "383D4D29B0559B07757ECBDE3DB5F6549D6D26692244790591A9F01A6C6D31EE",
+          "size_bytes": 39749
+        },
+        "classification": "HASH_CHANGED_DURING_REGENERATION"
+      },
+      {
+        "artifact": "reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_manifest.json",
+        "before": {
+          "exists": true,
+          "sha256": "03BCB044D8EFA4B858601A4E4F6CC043D541A2F04B3861AB60359F87766ACF34",
+          "size_bytes": 4912
+        },
+        "after": {
+          "exists": true,
+          "sha256": "82DB56D4988CE849290D8E286E44EE4E78E819A47A4E146E0383F74FB971FEBD",
+          "size_bytes": 4912
+        },
+        "classification": "HASH_CHANGED_DURING_REGENERATION"
+      },
+      {
+        "artifact": "reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_report.json",
+        "before": {
+          "exists": true,
+          "sha256": "4F5C9D6C9C8661BCD8D0CC4E97C220CD3A7F32E5387E4504367C0590CB70D4A4",
+          "size_bytes": 4181
+        },
+        "after": {
+          "exists": true,
+          "sha256": "696F0A2501DCDC82F766CD6B3A57C2F405A4BEF407700D2A16306ABAA36B36F7",
+          "size_bytes": 4181
+        },
+        "classification": "HASH_CHANGED_DURING_REGENERATION"
+      },
+      {
+        "artifact": "reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_manifest.json",
+        "before": {
+          "exists": true,
+          "sha256": "4751F83B3E32EBA9D142D8D5D0F4BC73BFA1BB80FFF818822704108A4CBAFC41",
+          "size_bytes": 4753
+        },
+        "after": {
+          "exists": true,
+          "sha256": "89BAB1F68001BF09A4149C0A4D244E9D21F696336254787FE1A073A5EFC29EB1",
+          "size_bytes": 4753
+        },
+        "classification": "HASH_CHANGED_DURING_REGENERATION"
+      },
+      {
+        "artifact": "reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_report.json",
+        "before": {
+          "exists": true,
+          "sha256": "7D70B37DDEB8583A9C97BA25313AD7F95A3798FE13858F9F42C931705D234408",
+          "size_bytes": 3986
+        },
+        "after": {
+          "exists": true,
+          "sha256": "8C10691E7924344A1DF53281942F4C797B21BB810465A2316CCBB30399E9F4CE",
+          "size_bytes": 3986
+        },
+        "classification": "HASH_CHANGED_DURING_REGENERATION"
+      },
+      {
+        "artifact": "reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_manifest.json",
+        "before": {
+          "exists": true,
+          "sha256": "A2CF154A5F85EEA0670DB78CCBAEA6012108BCCADF10FF854835FBB7015B8E3E",
+          "size_bytes": 6547
+        },
+        "after": {
+          "exists": true,
+          "sha256": "3EBB971F8A6984B15EAAF7C7A6971E87E4162EA116148A4B9520DFEF4DA97445",
+          "size_bytes": 6547
+        },
+        "classification": "HASH_CHANGED_DURING_REGENERATION"
+      },
+      {
+        "artifact": "reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_report.json",
+        "before": {
+          "exists": true,
+          "sha256": "AFC2087AD5E74D6D8BF280F80A5E4240691B30F8F71D6E66D58E175B1291AE58",
+          "size_bytes": 4247
+        },
+        "after": {
+          "exists": true,
+          "sha256": "CF96FA8EBF6066DF236FBDB7FAFCE0E73956C78D95C72699B2416891D11981A1",
+          "size_bytes": 4247
+        },
+        "classification": "HASH_CHANGED_DURING_REGENERATION"
+      },
+      {
+        "artifact": "reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_manifest.json",
+        "before": {
+          "exists": true,
+          "sha256": "AC2FE010F54DCC14004E73B965FCE5B28D9FB6EEC30332615F7DD94A365E05B3",
+          "size_bytes": 5179
+        },
+        "after": {
+          "exists": true,
+          "sha256": "C66FC29CF46AA641729C0A0EDFA76725AEC132B7264D906E39E7ADE6E782F10C",
+          "size_bytes": 5179
+        },
+        "classification": "HASH_CHANGED_DURING_REGENERATION"
+      },
+      {
+        "artifact": "reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_report.json",
+        "before": {
+          "exists": true,
+          "sha256": "D2E5876B8FCA03895CC835545864169D7387728A4DC2AC009953F432D19F1AB5",
+          "size_bytes": 4168
+        },
+        "after": {
+          "exists": true,
+          "sha256": "2D063B59F8003490F76F23DB0471BCBABF3EAAF309D1D4ECCD441488A9E09D9B",
+          "size_bytes": 4168
+        },
+        "classification": "HASH_CHANGED_DURING_REGENERATION"
+      },
+      {
+        "artifact": "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_manifest.json",
+        "before": {
+          "exists": true,
+          "sha256": "6CA9DDFF927A6792BD370E07493068B392D49A4F773CA8789BDDF29D42D986C3",
+          "size_bytes": 22149
+        },
+        "after": {
+          "exists": true,
+          "sha256": "DC89112CBDB365F2A1892A3AF4C6B921BF45863FC4325BC4664E8975E6591830",
+          "size_bytes": 22147
+        },
+        "classification": "HASH_CHANGED_DURING_REGENERATION"
+      },
+      {
+        "artifact": "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_report.json",
+        "before": {
+          "exists": true,
+          "sha256": "98A932A6906F6D639B15C099CC10B176B02E9B2A439A86E44F4652599780A1D6",
+          "size_bytes": 62775
+        },
+        "after": {
+          "exists": true,
+          "sha256": "040FA8AAE05B76CF403C50B6BBAA8586D9F1FB84611E44DCF78027250B26CCF8",
+          "size_bytes": 62771
+        },
+        "classification": "HASH_CHANGED_DURING_REGENERATION"
+      }
+    ],
+    "missing_artifacts_after": [],
+    "objective_limitation": "The active branch contains dirty/untracked gate work, so a clean checkout of HEAD is not equivalent to this working tree."
+  },
+  "artifact_diff": {
+    "status": "PARTIAL",
+    "artifact_hashes_before": {
+      "reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_report.json": {
+        "exists": true,
+        "sha256": "AFC2087AD5E74D6D8BF280F80A5E4240691B30F8F71D6E66D58E175B1291AE58",
+        "size_bytes": 4247
+      },
+      "reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_manifest.json": {
+        "exists": true,
+        "sha256": "A2CF154A5F85EEA0670DB78CCBAEA6012108BCCADF10FF854835FBB7015B8E3E",
+        "size_bytes": 6547
+      },
+      "reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_report.json": {
+        "exists": true,
+        "sha256": "D2E5876B8FCA03895CC835545864169D7387728A4DC2AC009953F432D19F1AB5",
+        "size_bytes": 4168
+      },
+      "reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_manifest.json": {
+        "exists": true,
+        "sha256": "AC2FE010F54DCC14004E73B965FCE5B28D9FB6EEC30332615F7DD94A365E05B3",
+        "size_bytes": 5179
+      },
+      "reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_report.json": {
+        "exists": true,
+        "sha256": "4F5C9D6C9C8661BCD8D0CC4E97C220CD3A7F32E5387E4504367C0590CB70D4A4",
+        "size_bytes": 4181
+      },
+      "reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_manifest.json": {
+        "exists": true,
+        "sha256": "03BCB044D8EFA4B858601A4E4F6CC043D541A2F04B3861AB60359F87766ACF34",
+        "size_bytes": 4912
+      },
+      "reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_report.json": {
+        "exists": true,
+        "sha256": "7D70B37DDEB8583A9C97BA25313AD7F95A3798FE13858F9F42C931705D234408",
+        "size_bytes": 3986
+      },
+      "reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_manifest.json": {
+        "exists": true,
+        "sha256": "4751F83B3E32EBA9D142D8D5D0F4BC73BFA1BB80FFF818822704108A4CBAFC41",
+        "size_bytes": 4753
+      },
+      "data\\models\\phase4\\phase4_gate_diagnostic.json": {
+        "exists": true,
+        "sha256": "A8782BF44E2CAAE9051AE7CB9418D343C65765796132DF7B49B487AF02383061",
+        "size_bytes": 39354
+      },
+      "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_report.json": {
+        "exists": true,
+        "sha256": "98A932A6906F6D639B15C099CC10B176B02E9B2A439A86E44F4652599780A1D6",
+        "size_bytes": 62775
+      },
+      "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_manifest.json": {
+        "exists": true,
+        "sha256": "6CA9DDFF927A6792BD370E07493068B392D49A4F773CA8789BDDF29D42D986C3",
+        "size_bytes": 22149
+      },
+      "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_metrics.parquet": {
+        "exists": true,
+        "sha256": "7BE244016130326C23DE02FAD98BC2B0292C455B91A570295B60F2B263A6B781",
+        "size_bytes": 4517
+      },
+      "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\source_doc_alignment.json": {
+        "exists": true,
+        "sha256": "C7093F0CF20AF4D8C003FF676AAA597D2A3E8870E1E76ADA678A14AD3277ECA6",
+        "size_bytes": 2664
+      },
+      "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\portfolio_cvar_report.json": {
+        "exists": true,
+        "sha256": "E899A4C3807352A15C483C7128DDBCEF5A1F5A96A75930F9887FFE88E5D35E34",
+        "size_bytes": 1094
+      }
+    },
+    "artifact_hashes_after": {
+      "reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_report.json": {
+        "exists": true,
+        "sha256": "CF96FA8EBF6066DF236FBDB7FAFCE0E73956C78D95C72699B2416891D11981A1",
+        "size_bytes": 4247
+      },
+      "reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_manifest.json": {
+        "exists": true,
+        "sha256": "3EBB971F8A6984B15EAAF7C7A6971E87E4162EA116148A4B9520DFEF4DA97445",
+        "size_bytes": 6547
+      },
+      "reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_report.json": {
+        "exists": true,
+        "sha256": "2D063B59F8003490F76F23DB0471BCBABF3EAAF309D1D4ECCD441488A9E09D9B",
+        "size_bytes": 4168
+      },
+      "reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_manifest.json": {
+        "exists": true,
+        "sha256": "C66FC29CF46AA641729C0A0EDFA76725AEC132B7264D906E39E7ADE6E782F10C",
+        "size_bytes": 5179
+      },
+      "reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_report.json": {
+        "exists": true,
+        "sha256": "696F0A2501DCDC82F766CD6B3A57C2F405A4BEF407700D2A16306ABAA36B36F7",
+        "size_bytes": 4181
+      },
+      "reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_manifest.json": {
+        "exists": true,
+        "sha256": "82DB56D4988CE849290D8E286E44EE4E78E819A47A4E146E0383F74FB971FEBD",
+        "size_bytes": 4912
+      },
+      "reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_report.json": {
+        "exists": true,
+        "sha256": "8C10691E7924344A1DF53281942F4C797B21BB810465A2316CCBB30399E9F4CE",
+        "size_bytes": 3986
+      },
+      "reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_manifest.json": {
+        "exists": true,
+        "sha256": "89BAB1F68001BF09A4149C0A4D244E9D21F696336254787FE1A073A5EFC29EB1",
+        "size_bytes": 4753
+      },
+      "data\\models\\phase4\\phase4_gate_diagnostic.json": {
+        "exists": true,
+        "sha256": "383D4D29B0559B07757ECBDE3DB5F6549D6D26692244790591A9F01A6C6D31EE",
+        "size_bytes": 39749
+      },
+      "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_report.json": {
+        "exists": true,
+        "sha256": "040FA8AAE05B76CF403C50B6BBAA8586D9F1FB84611E44DCF78027250B26CCF8",
+        "size_bytes": 62771
+      },
+      "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_manifest.json": {
+        "exists": true,
+        "sha256": "DC89112CBDB365F2A1892A3AF4C6B921BF45863FC4325BC4664E8975E6591830",
+        "size_bytes": 22147
+      },
+      "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_metrics.parquet": {
+        "exists": true,
+        "sha256": "7BE244016130326C23DE02FAD98BC2B0292C455B91A570295B60F2B263A6B781",
+        "size_bytes": 4517
+      },
+      "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\source_doc_alignment.json": {
+        "exists": true,
+        "sha256": "C7093F0CF20AF4D8C003FF676AAA597D2A3E8870E1E76ADA678A14AD3277ECA6",
+        "size_bytes": 2664
+      },
+      "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\portfolio_cvar_report.json": {
+        "exists": true,
+        "sha256": "E899A4C3807352A15C483C7128DDBCEF5A1F5A96A75930F9887FFE88E5D35E34",
+        "size_bytes": 1094
+      }
+    },
+    "divergences": [
+      {
+        "artifact": "data\\models\\phase4\\phase4_gate_diagnostic.json",
+        "before": {
+          "exists": true,
+          "sha256": "A8782BF44E2CAAE9051AE7CB9418D343C65765796132DF7B49B487AF02383061",
+          "size_bytes": 39354
+        },
+        "after": {
+          "exists": true,
+          "sha256": "383D4D29B0559B07757ECBDE3DB5F6549D6D26692244790591A9F01A6C6D31EE",
+          "size_bytes": 39749
+        },
+        "classification": "HASH_CHANGED_DURING_REGENERATION"
+      },
+      {
+        "artifact": "reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_manifest.json",
+        "before": {
+          "exists": true,
+          "sha256": "03BCB044D8EFA4B858601A4E4F6CC043D541A2F04B3861AB60359F87766ACF34",
+          "size_bytes": 4912
+        },
+        "after": {
+          "exists": true,
+          "sha256": "82DB56D4988CE849290D8E286E44EE4E78E819A47A4E146E0383F74FB971FEBD",
+          "size_bytes": 4912
+        },
+        "classification": "HASH_CHANGED_DURING_REGENERATION"
+      },
+      {
+        "artifact": "reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_report.json",
+        "before": {
+          "exists": true,
+          "sha256": "4F5C9D6C9C8661BCD8D0CC4E97C220CD3A7F32E5387E4504367C0590CB70D4A4",
+          "size_bytes": 4181
+        },
+        "after": {
+          "exists": true,
+          "sha256": "696F0A2501DCDC82F766CD6B3A57C2F405A4BEF407700D2A16306ABAA36B36F7",
+          "size_bytes": 4181
+        },
+        "classification": "HASH_CHANGED_DURING_REGENERATION"
+      },
+      {
+        "artifact": "reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_manifest.json",
+        "before": {
+          "exists": true,
+          "sha256": "4751F83B3E32EBA9D142D8D5D0F4BC73BFA1BB80FFF818822704108A4CBAFC41",
+          "size_bytes": 4753
+        },
+        "after": {
+          "exists": true,
+          "sha256": "89BAB1F68001BF09A4149C0A4D244E9D21F696336254787FE1A073A5EFC29EB1",
+          "size_bytes": 4753
+        },
+        "classification": "HASH_CHANGED_DURING_REGENERATION"
+      },
+      {
+        "artifact": "reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_report.json",
+        "before": {
+          "exists": true,
+          "sha256": "7D70B37DDEB8583A9C97BA25313AD7F95A3798FE13858F9F42C931705D234408",
+          "size_bytes": 3986
+        },
+        "after": {
+          "exists": true,
+          "sha256": "8C10691E7924344A1DF53281942F4C797B21BB810465A2316CCBB30399E9F4CE",
+          "size_bytes": 3986
+        },
+        "classification": "HASH_CHANGED_DURING_REGENERATION"
+      },
+      {
+        "artifact": "reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_manifest.json",
+        "before": {
+          "exists": true,
+          "sha256": "A2CF154A5F85EEA0670DB78CCBAEA6012108BCCADF10FF854835FBB7015B8E3E",
+          "size_bytes": 6547
+        },
+        "after": {
+          "exists": true,
+          "sha256": "3EBB971F8A6984B15EAAF7C7A6971E87E4162EA116148A4B9520DFEF4DA97445",
+          "size_bytes": 6547
+        },
+        "classification": "HASH_CHANGED_DURING_REGENERATION"
+      },
+      {
+        "artifact": "reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_report.json",
+        "before": {
+          "exists": true,
+          "sha256": "AFC2087AD5E74D6D8BF280F80A5E4240691B30F8F71D6E66D58E175B1291AE58",
+          "size_bytes": 4247
+        },
+        "after": {
+          "exists": true,
+          "sha256": "CF96FA8EBF6066DF236FBDB7FAFCE0E73956C78D95C72699B2416891D11981A1",
+          "size_bytes": 4247
+        },
+        "classification": "HASH_CHANGED_DURING_REGENERATION"
+      },
+      {
+        "artifact": "reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_manifest.json",
+        "before": {
+          "exists": true,
+          "sha256": "AC2FE010F54DCC14004E73B965FCE5B28D9FB6EEC30332615F7DD94A365E05B3",
+          "size_bytes": 5179
+        },
+        "after": {
+          "exists": true,
+          "sha256": "C66FC29CF46AA641729C0A0EDFA76725AEC132B7264D906E39E7ADE6E782F10C",
+          "size_bytes": 5179
+        },
+        "classification": "HASH_CHANGED_DURING_REGENERATION"
+      },
+      {
+        "artifact": "reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_report.json",
+        "before": {
+          "exists": true,
+          "sha256": "D2E5876B8FCA03895CC835545864169D7387728A4DC2AC009953F432D19F1AB5",
+          "size_bytes": 4168
+        },
+        "after": {
+          "exists": true,
+          "sha256": "2D063B59F8003490F76F23DB0471BCBABF3EAAF309D1D4ECCD441488A9E09D9B",
+          "size_bytes": 4168
+        },
+        "classification": "HASH_CHANGED_DURING_REGENERATION"
+      },
+      {
+        "artifact": "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_manifest.json",
+        "before": {
+          "exists": true,
+          "sha256": "6CA9DDFF927A6792BD370E07493068B392D49A4F773CA8789BDDF29D42D986C3",
+          "size_bytes": 22149
+        },
+        "after": {
+          "exists": true,
+          "sha256": "DC89112CBDB365F2A1892A3AF4C6B921BF45863FC4325BC4664E8975E6591830",
+          "size_bytes": 22147
+        },
+        "classification": "HASH_CHANGED_DURING_REGENERATION"
+      },
+      {
+        "artifact": "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_report.json",
+        "before": {
+          "exists": true,
+          "sha256": "98A932A6906F6D639B15C099CC10B176B02E9B2A439A86E44F4652599780A1D6",
+          "size_bytes": 62775
+        },
+        "after": {
+          "exists": true,
+          "sha256": "040FA8AAE05B76CF403C50B6BBAA8586D9F1FB84611E44DCF78027250B26CCF8",
+          "size_bytes": 62771
+        },
+        "classification": "HASH_CHANGED_DURING_REGENERATION"
+      }
+    ],
+    "missing_artifacts_after": [],
+    "classification": "HASH_DIVERGENCES_RECORDED"
+  },
+  "environment_reproducibility": {
+    "status": "FAIL",
+    "classification": "ENVIRONMENT_REPRODUCIBILITY_BLOCKED",
+    "base_branch": "codex/phase6-global-reproducibility-source-alignment",
+    "suggested_branch": "codex/phase6-clean-clone-environment-reproducibility",
+    "before_git": {
+      "branch": "codex/phase6-clean-clone-environment-reproducibility",
+      "commit": "f68832974e898e87cf9c6f6e68a2e43127d44089",
+      "status_short": [
+        "M docs/SNIPER_memoria_especificacao_controle_fase4R_v3.md",
+        " M reports/audits/global_spec_adherence/next_step_codex_prompt.md",
+        " M reports/audits/global_spec_adherence/next_step_recommendation.md",
+        " M reports/gates/phase5_cross_sectional_operational_fragility_audit_and_bounded_correction/gate_manifest.json",
+        " M reports/gates/phase5_cross_sectional_operational_fragility_audit_and_bounded_correction/gate_report.json",
+        " M reports/gates/phase5_cross_sectional_recent_regime_policy_falsification/gate_manifest.json",
+        " M reports/gates/phase5_cross_sectional_recent_regime_policy_falsification/gate_report.json",
+        " M reports/gates/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate/gate_manifest.json",
+        " M reports/gates/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate/gate_report.json",
+        " M reports/gates/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate/gate_report.md",
+        " M reports/gates/phase5_cross_sectional_sovereign_hardening_recheck/gate_manifest.json",
+        " M reports/gates/phase5_cross_sectional_sovereign_hardening_recheck/gate_report.json",
+        "?? .agents/skills/sniper-gate-result-reviewer/",
+        "?? reports/gates/phase6_global_reproducibility_source_alignment_gate/",
+        "?? services/ml_engine/phase6_clean_clone_environment_reproducibility_gate.py",
+        "?? services/ml_engine/phase6_global_reproducibility_source_alignment_gate.py"
+      ],
+      "working_tree_dirty": true
+    },
+    "after_git": {
+      "branch": "codex/phase6-clean-clone-environment-reproducibility",
+      "commit": "f68832974e898e87cf9c6f6e68a2e43127d44089",
+      "status_short": [
+        "M docs/SNIPER_memoria_especificacao_controle_fase4R_v3.md",
+        " M reports/audits/global_spec_adherence/next_step_codex_prompt.md",
+        " M reports/audits/global_spec_adherence/next_step_recommendation.md",
+        " M reports/gates/phase5_cross_sectional_operational_fragility_audit_and_bounded_correction/gate_manifest.json",
+        " M reports/gates/phase5_cross_sectional_operational_fragility_audit_and_bounded_correction/gate_report.json",
+        " M reports/gates/phase5_cross_sectional_recent_regime_policy_falsification/gate_manifest.json",
+        " M reports/gates/phase5_cross_sectional_recent_regime_policy_falsification/gate_report.json",
+        " M reports/gates/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate/gate_manifest.json",
+        " M reports/gates/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate/gate_report.json",
+        " M reports/gates/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate/gate_report.md",
+        " M reports/gates/phase5_cross_sectional_sovereign_hardening_recheck/gate_manifest.json",
+        " M reports/gates/phase5_cross_sectional_sovereign_hardening_recheck/gate_report.json",
+        "?? .agents/skills/sniper-gate-result-reviewer/",
+        "?? reports/gates/phase6_global_reproducibility_source_alignment_gate/",
+        "?? services/ml_engine/phase6_clean_clone_environment_reproducibility_gate.py",
+        "?? services/ml_engine/phase6_global_reproducibility_source_alignment_gate.py"
+      ],
+      "working_tree_dirty": true
+    },
+    "python_executable": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe",
+    "dependency_status": "FAIL",
+    "pytest_status": "FAIL",
+    "clean_regeneration_status": "FAIL",
+    "current_workspace_dirty_before": true,
+    "current_workspace_dirty_after": true,
+    "governance_invariants": {
+      "official_promoted": false,
+      "A3_reopened": false,
+      "A4_reopened": false,
+      "RiskLabAI_official": false,
+      "cross_sectional_promoted": false,
+      "DSR_zero_masked": false
+    }
+  },
+  "metrics": {
+    "previous_gate_status": "PARTIAL",
+    "previous_gate_decision": "correct",
+    "dsr_honest": 0.0,
+    "n_trials_honest": 5000,
+    "sharpe_oos": 0.8808,
+    "subperiods_positive": 4,
+    "cross_sectional_status": "ALIVE_BUT_NOT_PROMOTABLE",
+    "portfolio_cvar_status": "PASS_ZERO_EXPOSURE"
+  },
+  "summary": [
+    "environment=FAIL",
+    "dependencies=FAIL",
+    "pytest=FAIL",
+    "clean_regeneration=FAIL",
+    "dsr_honest=0.0",
+    "cross_sectional_status=ALIVE_BUT_NOT_PROMOTABLE"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase6_clean_clone_environment_reproducibility_gate",
+      "metric_name": "environment_reproducibility_status",
+      "metric_value": "FAIL",
+      "metric_threshold": "PASS",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase6_clean_clone_environment_reproducibility_gate",
+      "metric_name": "dependency_audit_status",
+      "metric_value": "FAIL",
+      "metric_threshold": "PASS",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase6_clean_clone_environment_reproducibility_gate",
+      "metric_name": "root_requirements_dry_run_passed",
+      "metric_value": false,
+      "metric_threshold": true,
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase6_clean_clone_environment_reproducibility_gate",
+      "metric_name": "pytest_collect_only_exit_zero",
+      "metric_value": false,
+      "metric_threshold": true,
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase6_clean_clone_environment_reproducibility_gate",
+      "metric_name": "bridge_nautilus_exit_zero",
+      "metric_value": true,
+      "metric_threshold": true,
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase6_clean_clone_environment_reproducibility_gate",
+      "metric_name": "current_workspace_regeneration_exit_zero",
+      "metric_value": true,
+      "metric_threshold": true,
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase6_clean_clone_environment_reproducibility_gate",
+      "metric_name": "isolated_worktree_regeneration_status",
+      "metric_value": "FAIL",
+      "metric_threshold": "PASS",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase6_clean_clone_environment_reproducibility_gate",
+      "metric_name": "dsr_honest_preserved",
+      "metric_value": 0.0,
+      "metric_threshold": "> 0.95 for any promotion",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase6_clean_clone_environment_reproducibility_gate",
+      "metric_name": "cross_sectional_status_preserved",
+      "metric_value": "ALIVE_BUT_NOT_PROMOTABLE",
+      "metric_threshold": "must_not_be_promoted",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "Dependency reproducibility is not established in the active Python runtime.",
+    "pytest unit collection/full suite is blocked by dependency/import errors.",
+    "Clean clone/worktree regeneration is not proven.",
+    "dsr_honest remains 0.0 and blocks promotion.",
+    "Cross-sectional remains ALIVE_BUT_NOT_PROMOTABLE."
+  ],
+  "risks": [
+    "Installing partial dependencies outside the pinned environment can mask reproducibility drift.",
+    "Python 3.13 is not proven compatible with the root pinned requirements in this workspace.",
+    "Dirty/untracked gate sources prevent a clean checkout of HEAD from matching the current working tree.",
+    "PASS_ZERO_EXPOSURE CVaR remains technical persistence only, not economic robustness with exposure."
+  ],
+  "risks_residual": [
+    "Installing partial dependencies outside the pinned environment can mask reproducibility drift.",
+    "Python 3.13 is not proven compatible with the root pinned requirements in this workspace.",
+    "Dirty/untracked gate sources prevent a clean checkout of HEAD from matching the current working tree.",
+    "PASS_ZERO_EXPOSURE CVaR remains technical persistence only, not economic robustness with exposure."
+  ],
+  "recommendation": "Do not move to new quantitative work. First run this branch from a committed clean checkout with a Python runtime compatible with the pinned requirements, then re-run collection and regeneration.",
+  "next_recommended_step": "Commit/materialize the Phase 6 gate sources or use a clean worktree containing them, then create a fresh Python 3.11/3.12 environment from requirements.txt and re-run this gate.",
+  "commands": [
+    {
+      "label": "python_version",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe --version",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 0,
+      "duration_seconds": 0.062,
+      "timed_out": false,
+      "stdout_tail": "Python 3.13.13\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "pip_version",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pip --version",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 0,
+      "duration_seconds": 0.459,
+      "timed_out": false,
+      "stdout_tail": "pip 25.3 from C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\pip (python 3.13)\n\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "pip_check",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pip check",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 0,
+      "duration_seconds": 1.345,
+      "timed_out": false,
+      "stdout_tail": "No broken requirements found.\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "pip_dry_run_polars_hmmlearn_pins",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pip install --dry-run polars==0.20.16 hmmlearn==0.3.2",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 0,
+      "duration_seconds": 10.853,
+      "timed_out": false,
+      "stdout_tail": "Defaulting to user installation because normal site-packages is not writeable\nCollecting polars==0.20.16\n  Using cached polars-0.20.16-cp38-abi3-win_amd64.whl.metadata (15 kB)\nCollecting hmmlearn==0.3.2\n  Using cached hmmlearn-0.3.2.tar.gz (78 kB)\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'done'\n  Getting requirements to build wheel: started\n  Getting requirements to build wheel: finished with status 'done'\n  Installing backend dependencies: started\n  Installing backend dependencies: finished with status 'done'\n  Preparing metadata (pyproject.toml): started\n  Preparing metadata (pyproject.toml): finished with status 'done'\nRequirement already satisfied: numpy>=1.10 in c:\\users\\uliss\\appdata\\local\\packages\\pythonsoftwarefoundation.python.3.13_qbz5n2kfra8p0\\localcache\\local-packages\\python313\\site-packages (from hmmlearn==0.3.2) (2.3.2)\nRequirement already satisfied: scikit-learn!=0.22.0,>=0.16 in c:\\users\\uliss\\appdata\\local\\packages\\pythonsoftwarefoundation.python.3.13_qbz5n2kfra8p0\\localcache\\local-packages\\python313\\site-packages (from hmmlearn==0.3.2) (1.7.2)\nRequirement already satisfied: scipy>=0.19 in c:\\users\\uliss\\appdata\\local\\packages\\pythonsoftwarefoundation.python.3.13_qbz5n2kfra8p0\\localcache\\local-packages\\python313\\site-packages (from hmmlearn==0.3.2) (1.16.2)\nRequirement already satisfied: joblib>=1.2.0 in c:\\users\\uliss\\appdata\\local\\packages\\pythonsoftwarefoundation.python.3.13_qbz5n2kfra8p0\\localcache\\local-packages\\python313\\site-packages (from scikit-learn!=0.22.0,>=0.16->hmmlearn==0.3.2) (1.5.2)\nRequirement already satisfied: threadpoolctl>=3.1.0 in c:\\users\\uliss\\appdata\\local\\packages\\pythonsoftwarefoundation.python.3.13_qbz5n2kfra8p0\\localcache\\local-packages\\python313\\site-packages (from scikit-learn!=0.22.0,>=0.16->hmmlearn==0.3.2) (3.6.0)\nWould install hmmlearn-0.3.2 polars-0.20.16\n",
+      "stderr_tail": "\n[notice] A new release of pip is available: 25.3 -> 26.0.1\n[notice] To update, run: C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pip install --upgrade pip\n",
+      "status": "PASS"
+    },
+    {
+      "label": "pip_dry_run_root_requirements",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pip install --dry-run -r requirements.txt",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 1,
+      "duration_seconds": 31.226,
+      "timed_out": false,
+      "stdout_tail": "Defaulting to user installation because normal site-packages is not writeable\nCollecting polars==0.20.16 (from -r requirements.txt (line 8))\n  Using cached polars-0.20.16-cp38-abi3-win_amd64.whl.metadata (15 kB)\nCollecting pandas==2.2.1 (from -r requirements.txt (line 9))\n  Using cached pandas-2.2.1.tar.gz (4.4 MB)\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'error'\n",
+      "stderr_tail": "B)\n      Collecting Cython==3.0.5\n        Using cached Cython-3.0.5-py2.py3-none-any.whl.metadata (3.2 kB)\n      Collecting numpy<=2.0.0.dev0,>1.22.4\n        Using cached numpy-1.26.4.tar.gz (15.8 MB)\n        Installing build dependencies: started\n        Installing build dependencies: finished with status 'done'\n        Getting requirements to build wheel: started\n        Getting requirements to build wheel: finished with status 'done'\n        Installing backend dependencies: started\n        Installing backend dependencies: finished with status 'done'\n        Preparing metadata (pyproject.toml): started\n        Preparing metadata (pyproject.toml): finished with status 'error'\n        error: subprocess-exited-with-error\n      \n        × Preparing metadata (pyproject.toml) did not run successfully.\n        │ exit code: 1\n        ╰─> [21 lines of output]\n            + C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe C:\\Users\\uliss\\AppData\\Local\\Temp\\pip-install-8lmw13vw\\numpy_37ab4053171a4e49a36e6306f76ffc16\\vendored-meson\\meson\\meson.py setup C:\\Users\\uliss\\AppData\\Local\\Temp\\pip-install-8lmw13vw\\numpy_37ab4053171a4e49a36e6306f76ffc16 C:\\Users\\uliss\\AppData\\Local\\Temp\\pip-install-8lmw13vw\\numpy_37ab4053171a4e49a36e6306f76ffc16\\.mesonpy-9zz47utk -Dbuildtype=release -Db_ndebug=if-release -Db_vscrt=md --native-file=C:\\Users\\uliss\\AppData\\Local\\Temp\\pip-install-8lmw13vw\\numpy_37ab4053171a4e49a36e6306f76ffc16\\.mesonpy-9zz47utk\\meson-python-native-file.ini\n            The Meson build system\n            Version: 1.2.99\n            Source dir: C:\\Users\\uliss\\AppData\\Local\\Temp\\pip-install-8lmw13vw\\numpy_37ab4053171a4e49a36e6306f76ffc16\n            Build dir: C:\\Users\\uliss\\AppData\\Local\\Temp\\pip-install-8lmw13vw\\numpy_37ab4053171a4e49a36e6306f76ffc16\\.mesonpy-9zz47utk\n            Build type: native build\n            Project name: NumPy\n            Project version: 1.26.4\n            WARNING: Failed to activate VS environment: Could not find C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\n      \n            ..\\meson.build:1:0: ERROR: Unknown compiler(s): [['icl'], ['cl'], ['cc'], ['gcc'], ['clang'], ['clang-cl'], ['pgcc']]\n            The following exception(s) were encountered:\n            Running `icl \"\"` gave \"[WinError 2] O sistema não pode encontrar o arquivo especificado\"\n            Running `cl /?` gave \"[WinError 2] O sistema não pode encontrar o arquivo especificado\"\n            Running `cc --version` gave \"[WinError 2] O sistema não pode encontrar o arquivo especificado\"\n            Running `gcc --version` gave \"[WinError 2] O sistema não pode encontrar o arquivo especificado\"\n            Running `clang --version` gave \"[WinError 2] O sistema não pode encontrar o arquivo especificado\"\n            Running `clang-cl /?` gave \"[WinError 2] O sistema não pode encontrar o arquivo especificado\"\n            Running `pgcc --version` gave \"[WinError 2] O sistema não pode encontrar o arquivo especificado\"\n      \n            A full log can be found at C:\\Users\\uliss\\AppData\\Local\\Temp\\pip-install-8lmw13vw\\numpy_37ab4053171a4e49a36e6306f76ffc16\\.mesonpy-9zz47utk\\meson-logs\\meson-log.txt\n            [end of output]\n      \n        note: This error originates from a subprocess, and is likely not a problem with pip.\n      error: metadata-generation-failed\n      \n      × Encountered error while generating package metadata.\n      ╰─> numpy\n      \n      note: This is an issue with the package mentioned above, not pip.\n      hint: See above for details.\n      [end of output]\n  \n  note: This error originates from a subprocess, and is likely not a problem with pip.\n\n[notice] A new release of pip is available: 25.3 -> 26.0.1\n[notice] To update, run: C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pip install --upgrade pip\nERROR: Failed to build 'pandas' when installing build dependencies for pandas\n",
+      "status": "FAIL"
+    },
+    {
+      "label": "pytest_unit_collect_only",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit --collect-only -q",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 2,
+      "duration_seconds": 6.772,
+      "timed_out": false,
+      "stdout_tail": "tegrationTest::test_run_vi_clustering_excludes_unlock_audit_columns\ntests/unit/test_unlock_ml_integration.py::UnlockMlIntegrationTest::test_save_phase3_results_removes_stale_sizing_when_current_sizing_is_empty\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_feature_store_uses_eligible_ohlcv_set_and_surfaces_collapsed_threshold_gap\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_hmm_outputs_counts_degraded_inputs_without_marking_hard_missing\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_hmm_outputs_treats_predictive_quality_as_advisory_when_hard_gate_is_off\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_unlock_shadow_mode_reports_coverage_and_quality_summary\ntests/unit/test_unlock_store.py::UnlockStoreTest::test_store_persists_sqlite_exports_parquet_and_closes_connections\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_compute_ups_raw_applies_30d_window_and_bucket_weights\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_compute_ups_raw_regression_includes_day_30_and_excludes_day_31\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_normalize_bucket_label_maps_canonical_buckets\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_percent_rank_average_handles_massive_zero_ties_without_ranking_nan\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_percent_rank_average_respects_ties_and_nan\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_percent_rank_average_single_observation_returns_half\n\n=================================== ERRORS ====================================\n___________ ERROR collecting tests/unit/test_collectors_runtime.py ____________\ntests\\unit\\test_collectors_runtime.py:15: in <module>\n    from services.data_inserter import bootstrap_phase2_inputs\nservices\\data_inserter\\bootstrap_phase2_inputs.py:24: in <module>\n    from collectors.binance import BinanceCollector\nservices\\data_inserter\\collectors\\binance.py:28: in <module>\n    \"timestamp\": pl.Date,\n                 ^^^^^^^\nE   AttributeError: module 'polars' has no attribute 'Date'\n__________ ERROR collecting tests/unit/test_hmm_regime_alignment.py ___________\nImportError while importing test module 'C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\tests\\unit\\test_hmm_regime_alignment.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\nC:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests\\unit\\test_hmm_regime_alignment.py:9: in <module>\n    from services.ml_engine.regime import hmm_filter\nservices\\ml_engine\\regime\\__init__.py:4: in <module>\n    from .hmm_filter import (\nservices\\ml_engine\\regime\\hmm_filter.py:10: in <module>\n    from hmmlearn.hmm import GaussianHMM\nE   ModuleNotFoundError: No module named 'hmmlearn'\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ===========================\nERROR tests/unit/test_collectors_runtime.py - AttributeError: module 'polars'...\nERROR tests/unit/test_hmm_regime_alignment.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!\n166 tests collected, 2 errors in 3.97s\n",
+      "stderr_tail": "",
+      "status": "FAIL"
+    },
+    {
+      "label": "pytest_gate_reports",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit/test_gate_reports.py -q",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 0,
+      "duration_seconds": 2.203,
+      "timed_out": false,
+      "stdout_tail": ".                                                                        [100%]\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n1 passed, 1 warning in 0.75s\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "pytest_nautilus_bridge_existing",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit/test_nautilus_bridge_contract.py tests/unit/test_nautilus_bridge_acceptance.py tests/unit/test_nautilus_bridge_phase4_publisher.py tests/unit/test_nautilus_bridge_consumer.py tests/unit/test_nautilus_bridge_reconciler.py tests/unit/test_nautilus_bridge_phase4_paper_daemon.py tests/unit/test_nautilus_bridge_phase4_paper_once.py -q",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 0,
+      "duration_seconds": 2.352,
+      "timed_out": false,
+      "stdout_tail": ".........................................                                [100%]\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n41 passed, 1 warning in 0.79s\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "pytest_unit_full",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit -q",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 2,
+      "duration_seconds": 4.386,
+      "timed_out": false,
+      "stdout_tail": "\n=================================== ERRORS ====================================\n___________ ERROR collecting tests/unit/test_collectors_runtime.py ____________\ntests\\unit\\test_collectors_runtime.py:15: in <module>\n    from services.data_inserter import bootstrap_phase2_inputs\nservices\\data_inserter\\bootstrap_phase2_inputs.py:24: in <module>\n    from collectors.binance import BinanceCollector\nservices\\data_inserter\\collectors\\binance.py:28: in <module>\n    \"timestamp\": pl.Date,\n                 ^^^^^^^\nE   AttributeError: module 'polars' has no attribute 'Date'\n__________ ERROR collecting tests/unit/test_hmm_regime_alignment.py ___________\nImportError while importing test module 'C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\tests\\unit\\test_hmm_regime_alignment.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\nC:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests\\unit\\test_hmm_regime_alignment.py:9: in <module>\n    from services.ml_engine.regime import hmm_filter\nservices\\ml_engine\\regime\\__init__.py:4: in <module>\n    from .hmm_filter import (\nservices\\ml_engine\\regime\\hmm_filter.py:10: in <module>\n    from hmmlearn.hmm import GaussianHMM\nE   ModuleNotFoundError: No module named 'hmmlearn'\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ===========================\nERROR tests/unit/test_collectors_runtime.py - AttributeError: module 'polars'...\nERROR tests/unit/test_hmm_regime_alignment.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!\n1 warning, 2 errors in 2.28s\n",
+      "stderr_tail": "",
+      "status": "FAIL"
+    },
+    {
+      "label": "phase5_closure_bundle_restore_and_revalidate",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services/ml_engine/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate.py",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 0,
+      "duration_seconds": 22.689,
+      "timed_out": false,
+      "stdout_tail": "e\",\n    \"timestamp_utc\": \"2026-04-26T16:08:40+00:00\",\n    \"branch\": \"codex/phase6-clean-clone-environment-reproducibility\",\n    \"baseline_commit\": \"f68832974e898e87cf9c6f6e68a2e43127d44089\",\n    \"historical_commit\": \"cb692cc4e37ec897d5265d7af0881a0f8986821a\",\n    \"classification_final\": \"SOVEREIGN_BASELINE_RESTORED_AND_VALID\",\n    \"equivalence_classification\": \"EXACT_RESTORE\",\n    \"restored_metrics\": {\n      \"latest_date\": \"2026-03-20\",\n      \"latest_active_count_decision_space\": 2,\n      \"headroom_decision_space\": true,\n      \"recent_live_dates_decision_space\": 8,\n      \"historical_active_events_decision_space\": 3939,\n      \"latest_selected_symbols\": [\n        \"ENA\",\n        \"TAO\"\n      ],\n      \"latest_rows_total\": 9,\n      \"latest_rows_available\": 9,\n      \"latest_rows_selected\": 2,\n      \"latest_rows_position_gt_0\": 2,\n      \"max_position_usdt_latest\": 2755.347917\n    },\n    \"historical_metrics\": {\n      \"latest_date\": \"2026-03-20\",\n      \"latest_active_count_decision_space\": 2,\n      \"headroom_decision_space\": true,\n      \"recent_live_dates_decision_space\": 8,\n      \"historical_active_events_decision_space\": 3939,\n      \"latest_selected_symbols\": [\n        \"ENA\",\n        \"TAO\"\n      ],\n      \"latest_rows_total\": 9,\n      \"latest_rows_available\": 9,\n      \"latest_rows_selected\": 2,\n      \"latest_rows_position_gt_0\": 2,\n      \"max_position_usdt_latest\": 2755.347917\n    },\n    \"regenerated_replay_metrics\": {\n      \"latest_date\": \"2026-03-20\",\n      \"latest_active_count_decision_space\": 2,\n      \"headroom_decision_space\": true,\n      \"recent_live_dates_decision_space\": 8,\n      \"historical_active_events_decision_space\": 3939,\n      \"latest_selected_symbols\": [\n        \"ENA\",\n        \"TAO\"\n      ],\n      \"latest_rows_total\": 9,\n      \"latest_rows_available\": 9,\n      \"latest_rows_selected\": 2,\n      \"latest_rows_position_gt_0\": 2,\n      \"max_position_usdt_latest\": 2755.347917\n    },\n    \"reproducibility\": {\n      \"frame_hash_run1\": \"C10621BC6AD4A11ADD7148ABEC26D7C603C103848913678A587DC3B0F726F668\",\n      \"frame_hash_run2\": \"C10621BC6AD4A11ADD7148ABEC26D7C603C103848913678A587DC3B0F726F668\",\n      \"metrics_run1\": {\n        \"latest_date\": \"2026-03-20\",\n        \"latest_active_count_decision_space\": 2,\n        \"headroom_decision_space\": true,\n        \"recent_live_dates_decision_space\": 8,\n        \"historical_active_events_decision_space\": 3939,\n        \"latest_selected_symbols\": [\n          \"ENA\",\n          \"TAO\"\n        ],\n        \"latest_rows_total\": 9,\n        \"latest_rows_available\": 9,\n        \"latest_rows_selected\": 2,\n        \"latest_rows_position_gt_0\": 2,\n        \"max_position_usdt_latest\": 2755.347917\n      },\n      \"metrics_run2\": {\n        \"latest_date\": \"2026-03-20\",\n        \"latest_active_count_decision_space\": 2,\n        \"headroom_decision_space\": true,\n        \"recent_live_dates_decision_space\": 8,\n        \"historical_active_events_decision_space\": 3939,\n        \"latest_selected_symbols\": [\n          \"ENA\",\n          \"TAO\"\n        ],\n        \"latest_rows_total\": 9,\n        \"latest_rows_available\": 9,\n        \"latest_rows_selected\": 2,\n        \"latest_rows_position_gt_0\": 2,\n        \"max_position_usdt_latest\": 2755.347917\n      },\n      \"pass\": true\n    },\n    \"bundle_completeness\": {\n      \"pass\": true,\n      \"restored_files_present\": 8,\n      \"required_restored_files\": 8,\n      \"missing_restored_files\": []\n    },\n    \"no_fallback\": {\n      \"pass\": true,\n      \"detail\": \"Replay used only the preserved stage_a_predictions bundle and the restored git-history sovereign closure bundle.\",\n      \"current_predictions_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\data\\\\models\\\\research\\\\phase4_cross_sectional_ranking_baseline\\\\stage_a_predictions.parquet\"\n    },\n    \"stale_contamination\": {\n      \"pass\": true,\n      \"detail\": \"Current preserved stage_a_predictions remain semantically aligned with the historical cross_sectional_predictions on decision-space inputs.\"\n    },\n    \"gate_pack_complete\": true\n  }\n}\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "phase5_sovereign_hardening_recheck",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services/ml_engine/phase5_cross_sectional_sovereign_hardening_recheck.py",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 0,
+      "duration_seconds": 23.278,
+      "timed_out": false,
+      "stdout_tail": "{\n  \"status\": \"PARTIAL\",\n  \"decision\": \"correct\",\n  \"classification_final\": \"SOVEREIGN_HARDENING_MIXED\",\n  \"research_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\data\\\\models\\\\research\\\\phase5_cross_sectional_sovereign_hardening_recheck\",\n  \"gate_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_sovereign_hardening_recheck\",\n  \"gate_outputs\": {\n    \"gate_report_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_sovereign_hardening_recheck\\\\gate_report.json\",\n    \"gate_report_markdown\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_sovereign_hardening_recheck\\\\gate_report.md\",\n    \"gate_manifest_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_sovereign_hardening_recheck\\\\gate_manifest.json\",\n    \"gate_metrics_parquet\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_sovereign_hardening_recheck\\\\gate_metrics.parquet\"\n  }\n}\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "phase5_operational_fragility_audit_and_bounded_correction",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services/ml_engine/phase5_cross_sectional_operational_fragility_audit_and_bounded_correction.py",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 0,
+      "duration_seconds": 33.565,
+      "timed_out": false,
+      "stdout_tail": "{\n  \"status\": \"PARTIAL\",\n  \"decision\": \"correct\",\n  \"classification_final\": \"OPERATIONAL_FRAGILITY_PERSISTS\",\n  \"dominant_operational_fragility\": \"REGIME_DEPENDENCE_DOMINANT\",\n  \"research_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\data\\\\models\\\\research\\\\phase5_cross_sectional_operational_fragility\",\n  \"gate_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\",\n  \"gate_outputs\": {\n    \"gate_report_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\\\gate_report.json\",\n    \"gate_report_markdown\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\\\gate_report.md\",\n    \"gate_manifest_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\\\gate_manifest.json\",\n    \"gate_metrics_parquet\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\\\gate_metrics.parquet\"\n  }\n}\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "phase5_recent_regime_policy_falsification",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services/ml_engine/phase5_cross_sectional_recent_regime_policy_falsification.py",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 0,
+      "duration_seconds": 54.777,
+      "timed_out": false,
+      "stdout_tail": "{\n  \"status\": \"PARTIAL\",\n  \"decision\": \"correct\",\n  \"classification_final\": \"ALIVE_BUT_NOT_PROMOTABLE\",\n  \"plausibility\": \"RECENT_REGIME_POLICY_FIX_PLAUSIBLE\",\n  \"research_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\data\\\\models\\\\research\\\\phase5_cross_sectional_recent_regime\",\n  \"gate_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_recent_regime_policy_falsification\",\n  \"gate_outputs\": {\n    \"gate_report_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_recent_regime_policy_falsification\\\\gate_report.json\",\n    \"gate_report_markdown\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_recent_regime_policy_falsification\\\\gate_report.md\",\n    \"gate_manifest_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_recent_regime_policy_falsification\\\\gate_manifest.json\",\n    \"gate_metrics_parquet\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_recent_regime_policy_falsification\\\\gate_metrics.parquet\"\n  }\n}\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "phase4_gate_diagnostic",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services/ml_engine/phase4_gate_diagnostic.py",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 0,
+      "duration_seconds": 13.448,
+      "timed_out": false,
+      "stdout_tail": "{\n  \"written\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\data\\\\models\\\\phase4\\\\phase4_gate_diagnostic.json\",\n  \"hard_blockers\": [\n    \"DSR honesto\",\n    \"DSR invalida\\u00e7\\u00e3o global\",\n    \"Sharpe OOS\",\n    \"Subperiodos\"\n  ],\n  \"ia_official_path_uses_ia\": false,\n  \"phase2_auc_directly_auditable\": false\n}\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "phase6_global_reproducibility_source_alignment_gate",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services\\ml_engine\\phase6_global_reproducibility_source_alignment_gate.py",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 0,
+      "duration_seconds": 156.864,
+      "timed_out": false,
+      "stdout_tail": "{\n  \"gate_slug\": \"phase6_global_reproducibility_source_alignment_gate\",\n  \"status\": \"PARTIAL\",\n  \"decision\": \"correct\",\n  \"outputs\": {\n    \"gate_report_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase6_global_reproducibility_source_alignment_gate\\\\gate_report.json\",\n    \"gate_report_markdown\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase6_global_reproducibility_source_alignment_gate\\\\gate_report.md\",\n    \"gate_manifest_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase6_global_reproducibility_source_alignment_gate\\\\gate_manifest.json\",\n    \"gate_metrics_parquet\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase6_global_reproducibility_source_alignment_gate\\\\gate_metrics.parquet\"\n  },\n  \"source_doc_alignment\": \"PASS\",\n  \"clean_regeneration\": \"PARTIAL\",\n  \"portfolio_cvar\": \"PASS_ZERO_EXPOSURE\",\n  \"dsr_honest\": 0.0\n}\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "isolated_git_status_short",
+      "command": "git status --short",
+      "cwd": "C:\\Users\\uliss\\AppData\\Local\\Temp\\sniper_clean_worktree_parent_h_e2q667\\sniper_clean_worktree",
+      "returncode": 0,
+      "duration_seconds": 0.43,
+      "timed_out": false,
+      "stdout_tail": "",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "isolated_python_version",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe --version",
+      "cwd": "C:\\Users\\uliss\\AppData\\Local\\Temp\\sniper_clean_worktree_parent_h_e2q667\\sniper_clean_worktree",
+      "returncode": 0,
+      "duration_seconds": 0.117,
+      "timed_out": false,
+      "stdout_tail": "Python 3.13.13\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "isolated_pip_check",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pip check",
+      "cwd": "C:\\Users\\uliss\\AppData\\Local\\Temp\\sniper_clean_worktree_parent_h_e2q667\\sniper_clean_worktree",
+      "returncode": 0,
+      "duration_seconds": 1.036,
+      "timed_out": false,
+      "stdout_tail": "No broken requirements found.\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "isolated_pytest_unit_collect_only",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit --collect-only -q",
+      "cwd": "C:\\Users\\uliss\\AppData\\Local\\Temp\\sniper_clean_worktree_parent_h_e2q667\\sniper_clean_worktree",
+      "returncode": 2,
+      "duration_seconds": 6.553,
+      "timed_out": false,
+      "stdout_tail": "ring_excludes_unlock_audit_columns\ntests/unit/test_unlock_ml_integration.py::UnlockMlIntegrationTest::test_save_phase3_results_removes_stale_sizing_when_current_sizing_is_empty\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_feature_store_uses_eligible_ohlcv_set_and_surfaces_collapsed_threshold_gap\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_hmm_outputs_counts_degraded_inputs_without_marking_hard_missing\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_hmm_outputs_treats_predictive_quality_as_advisory_when_hard_gate_is_off\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_unlock_shadow_mode_reports_coverage_and_quality_summary\ntests/unit/test_unlock_store.py::UnlockStoreTest::test_store_persists_sqlite_exports_parquet_and_closes_connections\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_compute_ups_raw_applies_30d_window_and_bucket_weights\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_compute_ups_raw_regression_includes_day_30_and_excludes_day_31\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_normalize_bucket_label_maps_canonical_buckets\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_percent_rank_average_handles_massive_zero_ties_without_ranking_nan\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_percent_rank_average_respects_ties_and_nan\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_percent_rank_average_single_observation_returns_half\n\n=================================== ERRORS ====================================\n___________ ERROR collecting tests/unit/test_collectors_runtime.py ____________\ntests\\unit\\test_collectors_runtime.py:15: in <module>\n    from services.data_inserter import bootstrap_phase2_inputs\nservices\\data_inserter\\bootstrap_phase2_inputs.py:24: in <module>\n    from collectors.binance import BinanceCollector\nservices\\data_inserter\\collectors\\binance.py:28: in <module>\n    \"timestamp\": pl.Date,\n                 ^^^^^^^\nE   AttributeError: module 'polars' has no attribute 'Date'\n__________ ERROR collecting tests/unit/test_hmm_regime_alignment.py ___________\nImportError while importing test module 'C:\\Users\\uliss\\AppData\\Local\\Temp\\sniper_clean_worktree_parent_h_e2q667\\sniper_clean_worktree\\tests\\unit\\test_hmm_regime_alignment.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\nC:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests\\unit\\test_hmm_regime_alignment.py:9: in <module>\n    from services.ml_engine.regime import hmm_filter\nservices\\ml_engine\\regime\\__init__.py:4: in <module>\n    from .hmm_filter import (\nservices\\ml_engine\\regime\\hmm_filter.py:10: in <module>\n    from hmmlearn.hmm import GaussianHMM\nE   ModuleNotFoundError: No module named 'hmmlearn'\n============================== warnings summary ===============================\n..\\..\\..\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ===========================\nERROR tests/unit/test_collectors_runtime.py - AttributeError: module 'polars'...\nERROR tests/unit/test_hmm_regime_alignment.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!\n166 tests collected, 2 errors in 4.58s\n",
+      "stderr_tail": "",
+      "status": "FAIL"
+    },
+    {
+      "label": "isolated_phase6_global_regeneration",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services/ml_engine/phase6_global_reproducibility_source_alignment_gate.py",
+      "cwd": "C:\\Users\\uliss\\AppData\\Local\\Temp\\sniper_clean_worktree_parent_h_e2q667\\sniper_clean_worktree",
+      "returncode": 2,
+      "duration_seconds": 0.14,
+      "timed_out": false,
+      "stdout_tail": "",
+      "stderr_tail": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe: can't open file 'C:\\\\Users\\\\uliss\\\\AppData\\\\Local\\\\Temp\\\\sniper_clean_worktree_parent_h_e2q667\\\\sniper_clean_worktree\\\\services\\\\ml_engine\\\\phase6_global_reproducibility_source_alignment_gate.py': [Errno 2] No such file or directory\n",
+      "status": "FAIL"
+    }
+  ],
+  "governance_boundaries": {
+    "official_promoted": false,
+    "A3_reopened": false,
+    "A4_reopened": false,
+    "RiskLabAI_official": false,
+    "cross_sectional_promoted": false,
+    "DSR_zero_masked": false
+  },
+  "timestamp_utc": "2026-04-26T16:13:24+00:00"
+}

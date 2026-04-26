@@ -1,0 +1,846 @@
+{
+  "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
+  "phase_family": "phase6_global_reproducibility_source_alignment_gate",
+  "status": "PARTIAL",
+  "decision": "correct",
+  "baseline_commit": "f68832974e898e87cf9c6f6e68a2e43127d44089",
+  "commit": "f68832974e898e87cf9c6f6e68a2e43127d44089",
+  "base_branch": "codex/openclaw-sniper-handoff",
+  "working_tree_dirty": true,
+  "branch": "codex/phase6-clean-clone-environment-reproducibility",
+  "compare_url": null,
+  "pr_url": null,
+  "official_artifacts_used": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+      "exists": true,
+      "size_bytes": 97451,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_gate_diagnostic.json",
+      "exists": true,
+      "size_bytes": 39749,
+      "mtime_utc": "2026-04-26T16:13:13+00:00",
+      "sha256": "383D4D29B0559B07757ECBDE3DB5F6549D6D26692244790591A9F01A6C6D31EE"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "exists": true,
+      "size_bytes": 21118,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+      "exists": true,
+      "size_bytes": 1234311,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23"
+    }
+  ],
+  "artifacts_official_used": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+      "exists": true,
+      "size_bytes": 97451,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_gate_diagnostic.json",
+      "exists": true,
+      "size_bytes": 39749,
+      "mtime_utc": "2026-04-26T16:13:13+00:00",
+      "sha256": "383D4D29B0559B07757ECBDE3DB5F6549D6D26692244790591A9F01A6C6D31EE"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "exists": true,
+      "size_bytes": 21118,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+      "exists": true,
+      "size_bytes": 1234311,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23"
+    }
+  ],
+  "research_artifacts_generated": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\source_doc_alignment.json",
+      "exists": true,
+      "size_bytes": 2664,
+      "mtime_utc": "2026-04-26T16:13:23+00:00",
+      "sha256": "C7093F0CF20AF4D8C003FF676AAA597D2A3E8870E1E76ADA678A14AD3277ECA6"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\portfolio_cvar_report.json",
+      "exists": true,
+      "size_bytes": 1094,
+      "mtime_utc": "2026-04-26T16:13:23+00:00",
+      "sha256": "E899A4C3807352A15C483C7128DDBCEF5A1F5A96A75930F9887FFE88E5D35E34"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4247,
+      "mtime_utc": "2026-04-26T16:11:08+00:00",
+      "sha256": "CF96FA8EBF6066DF236FBDB7FAFCE0E73956C78D95C72699B2416891D11981A1"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4168,
+      "mtime_utc": "2026-04-26T16:11:32+00:00",
+      "sha256": "2D063B59F8003490F76F23DB0471BCBABF3EAAF309D1D4ECCD441488A9E09D9B"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4181,
+      "mtime_utc": "2026-04-26T16:12:05+00:00",
+      "sha256": "696F0A2501DCDC82F766CD6B3A57C2F405A4BEF407700D2A16306ABAA36B36F7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3986,
+      "mtime_utc": "2026-04-26T16:13:00+00:00",
+      "sha256": "8C10691E7924344A1DF53281942F4C797B21BB810465A2316CCBB30399E9F4CE"
+    }
+  ],
+  "artifacts_research_generated": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\source_doc_alignment.json",
+      "exists": true,
+      "size_bytes": 2664,
+      "mtime_utc": "2026-04-26T16:13:23+00:00",
+      "sha256": "C7093F0CF20AF4D8C003FF676AAA597D2A3E8870E1E76ADA678A14AD3277ECA6"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\portfolio_cvar_report.json",
+      "exists": true,
+      "size_bytes": 1094,
+      "mtime_utc": "2026-04-26T16:13:23+00:00",
+      "sha256": "E899A4C3807352A15C483C7128DDBCEF5A1F5A96A75930F9887FFE88E5D35E34"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4247,
+      "mtime_utc": "2026-04-26T16:11:08+00:00",
+      "sha256": "CF96FA8EBF6066DF236FBDB7FAFCE0E73956C78D95C72699B2416891D11981A1"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4168,
+      "mtime_utc": "2026-04-26T16:11:32+00:00",
+      "sha256": "2D063B59F8003490F76F23DB0471BCBABF3EAAF309D1D4ECCD441488A9E09D9B"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4181,
+      "mtime_utc": "2026-04-26T16:12:05+00:00",
+      "sha256": "696F0A2501DCDC82F766CD6B3A57C2F405A4BEF407700D2A16306ABAA36B36F7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3986,
+      "mtime_utc": "2026-04-26T16:13:00+00:00",
+      "sha256": "8C10691E7924344A1DF53281942F4C797B21BB810465A2316CCBB30399E9F4CE"
+    }
+  ],
+  "artifacts_generated": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\source_doc_alignment.json",
+      "exists": true,
+      "size_bytes": 2664,
+      "mtime_utc": "2026-04-26T16:13:23+00:00",
+      "sha256": "C7093F0CF20AF4D8C003FF676AAA597D2A3E8870E1E76ADA678A14AD3277ECA6"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\portfolio_cvar_report.json",
+      "exists": true,
+      "size_bytes": 1094,
+      "mtime_utc": "2026-04-26T16:13:23+00:00",
+      "sha256": "E899A4C3807352A15C483C7128DDBCEF5A1F5A96A75930F9887FFE88E5D35E34"
+    }
+  ],
+  "metrics": {
+    "phase4_decision_policy": "fixed_small_080_cooldown3",
+    "dsr_honest": 0.0,
+    "n_trials_honest": 5000,
+    "sharpe_oos": 0.8808,
+    "subperiods_positive": 4,
+    "fallback_equity_final": 202701.33,
+    "hard_blockers": [
+      "DSR honesto",
+      "DSR invalidação global",
+      "Sharpe OOS",
+      "Subperiodos"
+    ],
+    "previous_cvar_empirical_status": "STRUCTURAL_CODE_ONLY"
+  },
+  "source_doc_alignment": {
+    "status": "PASS",
+    "decision": "document_current_checkout_as_source_of_truth",
+    "phase4_memory_doc": "docs\\SNIPER_memoria_especificacao_controle_fase4R_v3.md",
+    "correction_note_present": true,
+    "documented_phase4r_modules": [
+      {
+        "module": "phase4_config.py",
+        "documented_in_phase4r_memory": true,
+        "tracked_source_path": "services\\ml_engine\\phase4_config.py",
+        "exists_in_current_checkout": false,
+        "git_tracked": false
+      },
+      {
+        "module": "phase4_data.py",
+        "documented_in_phase4r_memory": true,
+        "tracked_source_path": "services\\ml_engine\\phase4_data.py",
+        "exists_in_current_checkout": false,
+        "git_tracked": false
+      },
+      {
+        "module": "phase4_dsr.py",
+        "documented_in_phase4r_memory": true,
+        "tracked_source_path": "services\\ml_engine\\phase4_dsr.py",
+        "exists_in_current_checkout": false,
+        "git_tracked": false
+      },
+      {
+        "module": "phase4_backtest.py",
+        "documented_in_phase4r_memory": true,
+        "tracked_source_path": "services\\ml_engine\\phase4_backtest.py",
+        "exists_in_current_checkout": false,
+        "git_tracked": false
+      },
+      {
+        "module": "phase4_calibration.py",
+        "documented_in_phase4r_memory": true,
+        "tracked_source_path": "services\\ml_engine\\phase4_calibration.py",
+        "exists_in_current_checkout": false,
+        "git_tracked": false
+      }
+    ],
+    "missing_documented_modules": [
+      "phase4_config.py",
+      "phase4_data.py",
+      "phase4_dsr.py",
+      "phase4_backtest.py",
+      "phase4_calibration.py"
+    ],
+    "current_tracked_phase4_sources": [
+      "services/ml_engine/phase4_cpcv.py",
+      "services/ml_engine/phase4_gate_diagnostic.py",
+      "services/ml_engine/phase4_stage_a_experiment.py"
+    ],
+    "current_expected_sources": [
+      {
+        "module": "phase4_cpcv.py",
+        "path": "services\\ml_engine\\phase4_cpcv.py",
+        "exists": true,
+        "git_tracked": true
+      },
+      {
+        "module": "phase4_gate_diagnostic.py",
+        "path": "services\\ml_engine\\phase4_gate_diagnostic.py",
+        "exists": true,
+        "git_tracked": true
+      },
+      {
+        "module": "phase4_stage_a_experiment.py",
+        "path": "services\\ml_engine\\phase4_stage_a_experiment.py",
+        "exists": true,
+        "git_tracked": true
+      }
+    ],
+    "interpretation": "Section 7 remains historical/reported memory; current tracked source is the operational truth for this branch.",
+    "non_actions": [
+      "No functional Phase 4 refactor was performed.",
+      "No model artifact was promoted to official.",
+      "A3/A4 were not reopened."
+    ]
+  },
+  "clean_regeneration": {
+    "status": "PARTIAL",
+    "classification": "LOCAL_REGENERATION_WITH_HASHES_NOT_CLEAN_CLONE",
+    "commands": [
+      {
+        "label": "restore_sovereign_closure_bundle",
+        "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services/ml_engine/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate.py",
+        "returncode": 0,
+        "duration_seconds": 21.43,
+        "stdout_tail": "e\",\n    \"timestamp_utc\": \"2026-04-26T16:11:08+00:00\",\n    \"branch\": \"codex/phase6-clean-clone-environment-reproducibility\",\n    \"baseline_commit\": \"f68832974e898e87cf9c6f6e68a2e43127d44089\",\n    \"historical_commit\": \"cb692cc4e37ec897d5265d7af0881a0f8986821a\",\n    \"classification_final\": \"SOVEREIGN_BASELINE_RESTORED_AND_VALID\",\n    \"equivalence_classification\": \"EXACT_RESTORE\",\n    \"restored_metrics\": {\n      \"latest_date\": \"2026-03-20\",\n      \"latest_active_count_decision_space\": 2,\n      \"headroom_decision_space\": true,\n      \"recent_live_dates_decision_space\": 8,\n      \"historical_active_events_decision_space\": 3939,\n      \"latest_selected_symbols\": [\n        \"ENA\",\n        \"TAO\"\n      ],\n      \"latest_rows_total\": 9,\n      \"latest_rows_available\": 9,\n      \"latest_rows_selected\": 2,\n      \"latest_rows_position_gt_0\": 2,\n      \"max_position_usdt_latest\": 2755.347917\n    },\n    \"historical_metrics\": {\n      \"latest_date\": \"2026-03-20\",\n      \"latest_active_count_decision_space\": 2,\n      \"headroom_decision_space\": true,\n      \"recent_live_dates_decision_space\": 8,\n      \"historical_active_events_decision_space\": 3939,\n      \"latest_selected_symbols\": [\n        \"ENA\",\n        \"TAO\"\n      ],\n      \"latest_rows_total\": 9,\n      \"latest_rows_available\": 9,\n      \"latest_rows_selected\": 2,\n      \"latest_rows_position_gt_0\": 2,\n      \"max_position_usdt_latest\": 2755.347917\n    },\n    \"regenerated_replay_metrics\": {\n      \"latest_date\": \"2026-03-20\",\n      \"latest_active_count_decision_space\": 2,\n      \"headroom_decision_space\": true,\n      \"recent_live_dates_decision_space\": 8,\n      \"historical_active_events_decision_space\": 3939,\n      \"latest_selected_symbols\": [\n        \"ENA\",\n        \"TAO\"\n      ],\n      \"latest_rows_total\": 9,\n      \"latest_rows_available\": 9,\n      \"latest_rows_selected\": 2,\n      \"latest_rows_position_gt_0\": 2,\n      \"max_position_usdt_latest\": 2755.347917\n    },\n    \"reproducibility\": {\n      \"frame_hash_run1\": \"C10621BC6AD4A11ADD7148ABEC26D7C603C103848913678A587DC3B0F726F668\",\n      \"frame_hash_run2\": \"C10621BC6AD4A11ADD7148ABEC26D7C603C103848913678A587DC3B0F726F668\",\n      \"metrics_run1\": {\n        \"latest_date\": \"2026-03-20\",\n        \"latest_active_count_decision_space\": 2,\n        \"headroom_decision_space\": true,\n        \"recent_live_dates_decision_space\": 8,\n        \"historical_active_events_decision_space\": 3939,\n        \"latest_selected_symbols\": [\n          \"ENA\",\n          \"TAO\"\n        ],\n        \"latest_rows_total\": 9,\n        \"latest_rows_available\": 9,\n        \"latest_rows_selected\": 2,\n        \"latest_rows_position_gt_0\": 2,\n        \"max_position_usdt_latest\": 2755.347917\n      },\n      \"metrics_run2\": {\n        \"latest_date\": \"2026-03-20\",\n        \"latest_active_count_decision_space\": 2,\n        \"headroom_decision_space\": true,\n        \"recent_live_dates_decision_space\": 8,\n        \"historical_active_events_decision_space\": 3939,\n        \"latest_selected_symbols\": [\n          \"ENA\",\n          \"TAO\"\n        ],\n        \"latest_rows_total\": 9,\n        \"latest_rows_available\": 9,\n        \"latest_rows_selected\": 2,\n        \"latest_rows_position_gt_0\": 2,\n        \"max_position_usdt_latest\": 2755.347917\n      },\n      \"pass\": true\n    },\n    \"bundle_completeness\": {\n      \"pass\": true,\n      \"restored_files_present\": 8,\n      \"required_restored_files\": 8,\n      \"missing_restored_files\": []\n    },\n    \"no_fallback\": {\n      \"pass\": true,\n      \"detail\": \"Replay used only the preserved stage_a_predictions bundle and the restored git-history sovereign closure bundle.\",\n      \"current_predictions_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\data\\\\models\\\\research\\\\phase4_cross_sectional_ranking_baseline\\\\stage_a_predictions.parquet\"\n    },\n    \"stale_contamination\": {\n      \"pass\": true,\n      \"detail\": \"Current preserved stage_a_predictions remain semantically aligned with the historical cross_sectional_predictions on decision-space inputs.\"\n    },\n    \"gate_pack_complete\": true\n  }\n}\n",
+        "stderr_tail": "",
+        "status": "PASS"
+      },
+      {
+        "label": "sovereign_hardening_recheck",
+        "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services/ml_engine/phase5_cross_sectional_sovereign_hardening_recheck.py",
+        "returncode": 0,
+        "duration_seconds": 23.884,
+        "stdout_tail": "{\n  \"status\": \"PARTIAL\",\n  \"decision\": \"correct\",\n  \"classification_final\": \"SOVEREIGN_HARDENING_MIXED\",\n  \"research_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\data\\\\models\\\\research\\\\phase5_cross_sectional_sovereign_hardening_recheck\",\n  \"gate_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_sovereign_hardening_recheck\",\n  \"gate_outputs\": {\n    \"gate_report_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_sovereign_hardening_recheck\\\\gate_report.json\",\n    \"gate_report_markdown\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_sovereign_hardening_recheck\\\\gate_report.md\",\n    \"gate_manifest_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_sovereign_hardening_recheck\\\\gate_manifest.json\",\n    \"gate_metrics_parquet\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_sovereign_hardening_recheck\\\\gate_metrics.parquet\"\n  }\n}\n",
+        "stderr_tail": "",
+        "status": "PASS"
+      },
+      {
+        "label": "operational_fragility_audit_and_bounded_correction",
+        "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services/ml_engine/phase5_cross_sectional_operational_fragility_audit_and_bounded_correction.py",
+        "returncode": 0,
+        "duration_seconds": 33.256,
+        "stdout_tail": "{\n  \"status\": \"PARTIAL\",\n  \"decision\": \"correct\",\n  \"classification_final\": \"OPERATIONAL_FRAGILITY_PERSISTS\",\n  \"dominant_operational_fragility\": \"REGIME_DEPENDENCE_DOMINANT\",\n  \"research_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\data\\\\models\\\\research\\\\phase5_cross_sectional_operational_fragility\",\n  \"gate_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\",\n  \"gate_outputs\": {\n    \"gate_report_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\\\gate_report.json\",\n    \"gate_report_markdown\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\\\gate_report.md\",\n    \"gate_manifest_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\\\gate_manifest.json\",\n    \"gate_metrics_parquet\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\\\gate_metrics.parquet\"\n  }\n}\n",
+        "stderr_tail": "",
+        "status": "PASS"
+      },
+      {
+        "label": "recent_regime_policy_falsification",
+        "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services/ml_engine/phase5_cross_sectional_recent_regime_policy_falsification.py",
+        "returncode": 0,
+        "duration_seconds": 54.56,
+        "stdout_tail": "{\n  \"status\": \"PARTIAL\",\n  \"decision\": \"correct\",\n  \"classification_final\": \"ALIVE_BUT_NOT_PROMOTABLE\",\n  \"plausibility\": \"RECENT_REGIME_POLICY_FIX_PLAUSIBLE\",\n  \"research_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\data\\\\models\\\\research\\\\phase5_cross_sectional_recent_regime\",\n  \"gate_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_recent_regime_policy_falsification\",\n  \"gate_outputs\": {\n    \"gate_report_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_recent_regime_policy_falsification\\\\gate_report.json\",\n    \"gate_report_markdown\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_recent_regime_policy_falsification\\\\gate_report.md\",\n    \"gate_manifest_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_recent_regime_policy_falsification\\\\gate_manifest.json\",\n    \"gate_metrics_parquet\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_recent_regime_policy_falsification\\\\gate_metrics.parquet\"\n  }\n}\n",
+        "stderr_tail": "",
+        "status": "PASS"
+      },
+      {
+        "label": "phase4_gate_diagnostic",
+        "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services/ml_engine/phase4_gate_diagnostic.py",
+        "returncode": 0,
+        "duration_seconds": 13.134,
+        "stdout_tail": "{\n  \"written\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\data\\\\models\\\\phase4\\\\phase4_gate_diagnostic.json\",\n  \"hard_blockers\": [\n    \"DSR honesto\",\n    \"DSR invalida\\u00e7\\u00e3o global\",\n    \"Sharpe OOS\",\n    \"Subperiodos\"\n  ],\n  \"ia_official_path_uses_ia\": false,\n  \"phase2_auc_directly_auditable\": false\n}\n",
+        "stderr_tail": "",
+        "status": "PASS"
+      }
+    ],
+    "all_commands_exit_zero": true,
+    "artifact_hashes_before": {
+      "reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_report.json": {
+        "exists": true,
+        "sha256": "CF96FA8EBF6066DF236FBDB7FAFCE0E73956C78D95C72699B2416891D11981A1",
+        "size_bytes": 4247
+      },
+      "reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_report.json": {
+        "exists": true,
+        "sha256": "2D063B59F8003490F76F23DB0471BCBABF3EAAF309D1D4ECCD441488A9E09D9B",
+        "size_bytes": 4168
+      },
+      "reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_report.json": {
+        "exists": true,
+        "sha256": "696F0A2501DCDC82F766CD6B3A57C2F405A4BEF407700D2A16306ABAA36B36F7",
+        "size_bytes": 4181
+      },
+      "reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_report.json": {
+        "exists": true,
+        "sha256": "8C10691E7924344A1DF53281942F4C797B21BB810465A2316CCBB30399E9F4CE",
+        "size_bytes": 3986
+      },
+      "data\\models\\phase4\\phase4_gate_diagnostic.json": {
+        "exists": true,
+        "sha256": "180B2BDC5853AD928E3149E681937C134AD6E807D5B69335F1A50D48AEBBC51C",
+        "size_bytes": 39749
+      }
+    },
+    "artifact_hashes_after": {
+      "reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_report.json": {
+        "exists": true,
+        "sha256": "CF96FA8EBF6066DF236FBDB7FAFCE0E73956C78D95C72699B2416891D11981A1",
+        "size_bytes": 4247
+      },
+      "reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_report.json": {
+        "exists": true,
+        "sha256": "2D063B59F8003490F76F23DB0471BCBABF3EAAF309D1D4ECCD441488A9E09D9B",
+        "size_bytes": 4168
+      },
+      "reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_report.json": {
+        "exists": true,
+        "sha256": "696F0A2501DCDC82F766CD6B3A57C2F405A4BEF407700D2A16306ABAA36B36F7",
+        "size_bytes": 4181
+      },
+      "reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_report.json": {
+        "exists": true,
+        "sha256": "8C10691E7924344A1DF53281942F4C797B21BB810465A2316CCBB30399E9F4CE",
+        "size_bytes": 3986
+      },
+      "data\\models\\phase4\\phase4_gate_diagnostic.json": {
+        "exists": true,
+        "sha256": "383D4D29B0559B07757ECBDE3DB5F6549D6D26692244790591A9F01A6C6D31EE",
+        "size_bytes": 39749
+      }
+    },
+    "gate_statuses_after": {
+      "phase5_cross_sectional_hardening_baseline": {
+        "status": "PASS",
+        "decision": "abandon",
+        "summary": [
+          "classification_final=HARDENING_BASELINE_FAILS",
+          "frozen_latest_active_count_decision_space=0",
+          "frozen_headroom_decision_space=False",
+          "reproducibility_pass=True",
+          "stale_dependency_check_pass=True"
+        ]
+      },
+      "phase5_cross_sectional_latest_headroom_reconciliation_audit": {
+        "status": "PASS",
+        "decision": "advance",
+        "summary": [
+          "dominant_cause=BASELINE_ARTIFACT_MISMATCH_CONFIRMED",
+          "closure_latest_active_count_decision_space=2",
+          "hardening_latest_active_count_decision_space=0",
+          "reproducibility_pass=True"
+        ]
+      },
+      "phase5_cross_sectional_operational_fragility_audit_and_bounded_correction": {
+        "status": "PARTIAL",
+        "decision": "correct",
+        "summary": [
+          "classification_final=OPERATIONAL_FRAGILITY_PERSISTS",
+          "dominant_operational_fragility=REGIME_DEPENDENCE_DOMINANT",
+          "baseline_latest_active_count_decision_space=2",
+          "baseline_headroom_decision_space=True",
+          "best_challenger=challenger_edge_buffer_plus_concentration_cap",
+          "best_challenger_sharpe_operational=-0.2843"
+        ]
+      },
+      "phase5_cross_sectional_recent_regime_policy_falsification": {
+        "status": "PARTIAL",
+        "decision": "correct",
+        "summary": [
+          "classification_final=ALIVE_BUT_NOT_PROMOTABLE",
+          "plausibility=RECENT_REGIME_POLICY_FIX_PLAUSIBLE",
+          "baseline_latest_active_count_decision_space=2",
+          "baseline_headroom_decision_space=True",
+          "best_challenger=challenger_recent_edge_gate_plus_top2",
+          "best_challenger_dsr_honest=0.0"
+        ]
+      },
+      "phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate": {
+        "status": "PASS",
+        "decision": "advance",
+        "summary": [
+          "classification_final=SOVEREIGN_BASELINE_RESTORED_AND_VALID",
+          "equivalence_classification=EXACT_RESTORE",
+          "latest_date=2026-03-20",
+          "latest_active_count_decision_space=2",
+          "headroom_decision_space=True"
+        ]
+      },
+      "phase5_cross_sectional_sovereign_hardening_recheck": {
+        "status": "PARTIAL",
+        "decision": "correct",
+        "summary": [
+          "classification_final=SOVEREIGN_HARDENING_MIXED",
+          "baseline_latest_active_count_decision_space=2",
+          "recheck_latest_active_count_decision_space=2",
+          "recheck_headroom_decision_space=True",
+          "recheck_sharpe_operational=-0.5693"
+        ]
+      },
+      "phase5_stage_a3_activation_calibration_correction": {
+        "status": "PARTIAL",
+        "decision": "correct",
+        "summary": [
+          "Frozen A3-q60 was reproduced exactly at row level, CPCV aggregate and sovereign final path.",
+          "The primary choke is the calibrator fit/mapping; mean CPCV aggregation is a secondary collapse that removes the few surviving >0.50 row-level hits.",
+          "No bounded challenger restored live sovereign activation on the latest date while keeping the frozen contest geometry, Stage 2 and sizing unchanged."
+        ]
+      },
+      "phase5_stage_a3_calibrator_family_final_shootout": {
+        "status": "PASS",
+        "decision": "advance",
+        "summary": [
+          "Frozen A3-q60 was reproduced exactly before the calibrator-family shootout.",
+          "Platt scaling recovers aggregate calibrated mass but still leaves latest/headroom sovereign metrics dead; beta calibration remains dead as well.",
+          "Only the DIAGNOSTIC_ONLY identity proxy revives latest/headroom, so the line closes as A3_STRUCTURAL_CHOKE_CONFIRMED rather than a low-regret calibrated fix."
+        ]
+      },
+      "phase5_stage_a3_choke_audit": {
+        "status": "PASS",
+        "decision": "advance",
+        "summary": [
+          "The sovereign decision-space ruler was audited in code and matched the prior phase5 artifact values.",
+          "The A3 q60 choke is upstream of Stage 2 utility ranking under the sovereign aggregated path.",
+          "Official artifacts remained untouched and all audit outputs stayed in research/gate areas."
+        ]
+      },
+      "phase5_stage_a3_spec_hardening": {
+        "status": "FAIL",
+        "decision": "abandon",
+        "summary": [
+          "Stage A3 screening stayed label-side and q60 was locked ex ante before the final rerun.",
+          "Baseline geometry and sovereign decision-space ruler were preserved for the A3 comparison.",
+          "Official artifacts remained isolated and were hashed before/after the round."
+        ]
+      }
+    },
+    "missing_expected_artifacts_after": [],
+    "objective_divergences": [
+      {
+        "artifact": "data\\models\\phase4\\phase4_gate_diagnostic.json",
+        "before_sha256": "180B2BDC5853AD928E3149E681937C134AD6E807D5B69335F1A50D48AEBBC51C",
+        "after_sha256": "383D4D29B0559B07757ECBDE3DB5F6549D6D26692244790591A9F01A6C6D31EE",
+        "classification": "HASH_CHANGED_DURING_LOCAL_REGENERATION"
+      }
+    ],
+    "limitation": "The gate ran regeneration commands in the current workspace, not in an isolated fresh clone."
+  },
+  "validation": {
+    "status": "PARTIAL",
+    "commands": [
+      {
+        "label": "py_compile_phase6_gate",
+        "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m py_compile services/ml_engine/phase6_global_reproducibility_source_alignment_gate.py",
+        "returncode": 0,
+        "duration_seconds": 0.118,
+        "stdout_tail": "",
+        "stderr_tail": "",
+        "status": "PASS"
+      },
+      {
+        "label": "pytest_gate_reports",
+        "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit/test_gate_reports.py -q",
+        "returncode": 0,
+        "duration_seconds": 2.318,
+        "stdout_tail": ".                                                                        [100%]\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n1 passed, 1 warning in 0.48s\n",
+        "stderr_tail": "",
+        "status": "PASS"
+      },
+      {
+        "label": "pytest_nautilus_bridge_existing",
+        "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit/test_nautilus_bridge_contract.py tests/unit/test_nautilus_bridge_acceptance.py tests/unit/test_nautilus_bridge_phase4_publisher.py tests/unit/test_nautilus_bridge_consumer.py tests/unit/test_nautilus_bridge_reconciler.py tests/unit/test_nautilus_bridge_phase4_paper_daemon.py tests/unit/test_nautilus_bridge_phase4_paper_once.py -q",
+        "returncode": 0,
+        "duration_seconds": 2.231,
+        "stdout_tail": ".........................................                                [100%]\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n41 passed, 1 warning in 0.77s\n",
+        "stderr_tail": "",
+        "status": "PASS"
+      },
+      {
+        "label": "pytest_unit_full_collection",
+        "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit -q",
+        "returncode": 2,
+        "duration_seconds": 4.38,
+        "stdout_tail": "\n=================================== ERRORS ====================================\n___________ ERROR collecting tests/unit/test_collectors_runtime.py ____________\ntests\\unit\\test_collectors_runtime.py:15: in <module>\n    from services.data_inserter import bootstrap_phase2_inputs\nservices\\data_inserter\\bootstrap_phase2_inputs.py:24: in <module>\n    from collectors.binance import BinanceCollector\nservices\\data_inserter\\collectors\\binance.py:28: in <module>\n    \"timestamp\": pl.Date,\n                 ^^^^^^^\nE   AttributeError: module 'polars' has no attribute 'Date'\n__________ ERROR collecting tests/unit/test_hmm_regime_alignment.py ___________\nImportError while importing test module 'C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\tests\\unit\\test_hmm_regime_alignment.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\nC:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests\\unit\\test_hmm_regime_alignment.py:9: in <module>\n    from services.ml_engine.regime import hmm_filter\nservices\\ml_engine\\regime\\__init__.py:4: in <module>\n    from .hmm_filter import (\nservices\\ml_engine\\regime\\hmm_filter.py:10: in <module>\n    from hmmlearn.hmm import GaussianHMM\nE   ModuleNotFoundError: No module named 'hmmlearn'\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ===========================\nERROR tests/unit/test_collectors_runtime.py - AttributeError: module 'polars'...\nERROR tests/unit/test_hmm_regime_alignment.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!\n1 warning, 2 errors in 2.48s\n",
+        "stderr_tail": "",
+        "status": "FAIL"
+      }
+    ],
+    "targeted_validation_exit_zero": true,
+    "full_unit_suite_exit_zero": false
+  },
+  "portfolio_cvar": {
+    "status": "PASS_ZERO_EXPOSURE",
+    "scope": "current_official_phase4_execution_snapshot_only",
+    "snapshot_path": "data\\models\\phase4\\phase4_execution_snapshot.parquet",
+    "snapshot_sha256": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB",
+    "latest_date": "2026-03-20",
+    "rows": 36,
+    "position_column": "position_usdt",
+    "sigma_column": "sigma_ewma",
+    "capital_initial": 200000.0,
+    "positions_usdt": {},
+    "sigmas": {},
+    "gross_exposure_usdt": 0.0,
+    "gross_exposure_pct": 0.0,
+    "stress_report": {
+      "cvar_historical": 0.0,
+      "cvar_stress_rho1": 0.0,
+      "cvar_limit": 0.15,
+      "margin_of_safety": 0.15,
+      "cvar_ok": true,
+      "hidden_risk_factor": 0.0,
+      "sigma_portfolio_stress": 0.0,
+      "n_positions": 0,
+      "total_exposure_pct": 0.0
+    },
+    "interpretation": "The current official snapshot has zero active exposure; CVaR is valid for this snapshot but does not approve model promotion.",
+    "non_promotion_statement": "This artifact is a risk audit for the current snapshot, not paper readiness or capital readiness."
+  },
+  "governance_boundaries": {
+    "official": {
+      "status": "FAST_PATH_REMAINS_OFFICIAL",
+      "artifacts": [
+        "data\\models\\phase4\\phase4_report_v4.json",
+        "data\\models\\phase4\\phase4_gate_diagnostic.json",
+        "data\\models\\phase4\\phase4_execution_snapshot.parquet",
+        "data\\models\\phase4\\phase4_aggregated_predictions.parquet"
+      ]
+    },
+    "research": {
+      "status": "RESEARCH_ONLY",
+      "baseline": "phase5_cross_sectional_sovereign_closure_restored",
+      "cross_sectional_family": "ALIVE_BUT_NOT_PROMOTABLE",
+      "artifacts_root": "data\\models\\research"
+    },
+    "shadow": {
+      "RiskLabAI": "oracle/shadow_only_not_official"
+    },
+    "paper": {
+      "status": "MECHANISM_ONLY_VALIDATION",
+      "promotion": "blocked_until_upstream_official_gates_pass",
+      "no_snapshot_published": true
+    },
+    "sandbox": {
+      "status": "not_promoted"
+    },
+    "invariants": {
+      "A3_reopened": false,
+      "A4_reopened": false,
+      "research_promoted_to_official": false,
+      "alive_but_not_promotable_treated_as_promotable": false
+    }
+  },
+  "summary": [
+    "source_doc_alignment=PASS",
+    "clean_regeneration=PARTIAL",
+    "portfolio_cvar=PASS_ZERO_EXPOSURE",
+    "dsr_honest=0.0",
+    "cross_sectional_status=ALIVE_BUT_NOT_PROMOTABLE"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
+      "metric_name": "source_doc_alignment_status",
+      "metric_value": "PASS",
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
+      "metric_name": "portfolio_cvar_stress_rho1",
+      "metric_value": 0.0,
+      "metric_threshold": 0.15,
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
+      "metric_name": "regeneration_commands_exit_zero",
+      "metric_value": true,
+      "metric_threshold": true,
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
+      "metric_name": "targeted_validation_exit_zero",
+      "metric_value": true,
+      "metric_threshold": true,
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
+      "metric_name": "full_unit_suite_exit_zero",
+      "metric_value": false,
+      "metric_threshold": true,
+      "metric_status": "INCONCLUSIVE"
+    },
+    {
+      "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
+      "metric_name": "clean_clone_proven",
+      "metric_value": false,
+      "metric_threshold": true,
+      "metric_status": "PARTIAL"
+    },
+    {
+      "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
+      "metric_name": "technical_architecture_pdf_text_auditable",
+      "metric_value": false,
+      "metric_threshold": true,
+      "metric_status": "INCONCLUSIVE"
+    },
+    {
+      "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
+      "metric_name": "dsr_honest_preserved",
+      "metric_value": 0.0,
+      "metric_threshold": "> 0.95 for promotion",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
+      "metric_name": "cross_sectional_status",
+      "metric_value": "ALIVE_BUT_NOT_PROMOTABLE",
+      "metric_threshold": "must_not_be_promoted",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
+      "metric_name": "upstream_gate_phase5_cross_sectional_hardening_baseline",
+      "metric_value": "PASS",
+      "metric_threshold": "record_only",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
+      "metric_name": "upstream_gate_phase5_cross_sectional_latest_headroom_reconciliation_audit",
+      "metric_value": "PASS",
+      "metric_threshold": "record_only",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
+      "metric_name": "upstream_gate_phase5_cross_sectional_operational_fragility_audit_and_bounded_correction",
+      "metric_value": "PARTIAL",
+      "metric_threshold": "record_only",
+      "metric_status": "PARTIAL"
+    },
+    {
+      "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
+      "metric_name": "upstream_gate_phase5_cross_sectional_recent_regime_policy_falsification",
+      "metric_value": "PARTIAL",
+      "metric_threshold": "record_only",
+      "metric_status": "PARTIAL"
+    },
+    {
+      "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
+      "metric_name": "upstream_gate_phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate",
+      "metric_value": "PASS",
+      "metric_threshold": "record_only",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
+      "metric_name": "upstream_gate_phase5_cross_sectional_sovereign_hardening_recheck",
+      "metric_value": "PARTIAL",
+      "metric_threshold": "record_only",
+      "metric_status": "PARTIAL"
+    },
+    {
+      "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
+      "metric_name": "upstream_gate_phase5_stage_a3_activation_calibration_correction",
+      "metric_value": "PARTIAL",
+      "metric_threshold": "record_only",
+      "metric_status": "PARTIAL"
+    },
+    {
+      "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
+      "metric_name": "upstream_gate_phase5_stage_a3_calibrator_family_final_shootout",
+      "metric_value": "PASS",
+      "metric_threshold": "record_only",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
+      "metric_name": "upstream_gate_phase5_stage_a3_choke_audit",
+      "metric_value": "PASS",
+      "metric_threshold": "record_only",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
+      "metric_name": "upstream_gate_phase5_stage_a3_spec_hardening",
+      "metric_value": "FAIL",
+      "metric_threshold": "record_only",
+      "metric_status": "FAIL"
+    }
+  ],
+  "blockers": [
+    "DSR honest remains a promotion blocker if it is 0.0.",
+    "Cross-sectional sovereign family remains ALIVE_BUT_NOT_PROMOTABLE.",
+    "Clean clone regeneration was not proven in an isolated clone.",
+    "Technical Architecture PDF remains text/OCR inconclusive.",
+    "Full unit suite did not collect in this environment; see pytest_unit_full_collection stderr/stdout tails."
+  ],
+  "risks": [
+    "Treating this gate as model promotion would violate the audit scope.",
+    "Existing research artifacts are local and may not exist in a clean clone.",
+    "CVaR was computed for the current official snapshot only; zero exposure is not paper readiness.",
+    "RiskLabAI must remain oracle/shadow."
+  ],
+  "risks_residual": [
+    "Treating this gate as model promotion would violate the audit scope.",
+    "Existing research artifacts are local and may not exist in a clean clone.",
+    "CVaR was computed for the current official snapshot only; zero exposure is not paper readiness.",
+    "RiskLabAI must remain oracle/shadow."
+  ],
+  "recommendation": "Keep the family frozen as research-only and run a true clean-clone regeneration gate before any model/paper promotion.",
+  "next_recommended_step": "Run isolated clean-clone regeneration or explicitly accept PARTIAL with documented local-only reproducibility limits.",
+  "commands": [
+    {
+      "label": "restore_sovereign_closure_bundle",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services/ml_engine/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate.py",
+      "returncode": 0,
+      "duration_seconds": 21.43,
+      "stdout_tail": "e\",\n    \"timestamp_utc\": \"2026-04-26T16:11:08+00:00\",\n    \"branch\": \"codex/phase6-clean-clone-environment-reproducibility\",\n    \"baseline_commit\": \"f68832974e898e87cf9c6f6e68a2e43127d44089\",\n    \"historical_commit\": \"cb692cc4e37ec897d5265d7af0881a0f8986821a\",\n    \"classification_final\": \"SOVEREIGN_BASELINE_RESTORED_AND_VALID\",\n    \"equivalence_classification\": \"EXACT_RESTORE\",\n    \"restored_metrics\": {\n      \"latest_date\": \"2026-03-20\",\n      \"latest_active_count_decision_space\": 2,\n      \"headroom_decision_space\": true,\n      \"recent_live_dates_decision_space\": 8,\n      \"historical_active_events_decision_space\": 3939,\n      \"latest_selected_symbols\": [\n        \"ENA\",\n        \"TAO\"\n      ],\n      \"latest_rows_total\": 9,\n      \"latest_rows_available\": 9,\n      \"latest_rows_selected\": 2,\n      \"latest_rows_position_gt_0\": 2,\n      \"max_position_usdt_latest\": 2755.347917\n    },\n    \"historical_metrics\": {\n      \"latest_date\": \"2026-03-20\",\n      \"latest_active_count_decision_space\": 2,\n      \"headroom_decision_space\": true,\n      \"recent_live_dates_decision_space\": 8,\n      \"historical_active_events_decision_space\": 3939,\n      \"latest_selected_symbols\": [\n        \"ENA\",\n        \"TAO\"\n      ],\n      \"latest_rows_total\": 9,\n      \"latest_rows_available\": 9,\n      \"latest_rows_selected\": 2,\n      \"latest_rows_position_gt_0\": 2,\n      \"max_position_usdt_latest\": 2755.347917\n    },\n    \"regenerated_replay_metrics\": {\n      \"latest_date\": \"2026-03-20\",\n      \"latest_active_count_decision_space\": 2,\n      \"headroom_decision_space\": true,\n      \"recent_live_dates_decision_space\": 8,\n      \"historical_active_events_decision_space\": 3939,\n      \"latest_selected_symbols\": [\n        \"ENA\",\n        \"TAO\"\n      ],\n      \"latest_rows_total\": 9,\n      \"latest_rows_available\": 9,\n      \"latest_rows_selected\": 2,\n      \"latest_rows_position_gt_0\": 2,\n      \"max_position_usdt_latest\": 2755.347917\n    },\n    \"reproducibility\": {\n      \"frame_hash_run1\": \"C10621BC6AD4A11ADD7148ABEC26D7C603C103848913678A587DC3B0F726F668\",\n      \"frame_hash_run2\": \"C10621BC6AD4A11ADD7148ABEC26D7C603C103848913678A587DC3B0F726F668\",\n      \"metrics_run1\": {\n        \"latest_date\": \"2026-03-20\",\n        \"latest_active_count_decision_space\": 2,\n        \"headroom_decision_space\": true,\n        \"recent_live_dates_decision_space\": 8,\n        \"historical_active_events_decision_space\": 3939,\n        \"latest_selected_symbols\": [\n          \"ENA\",\n          \"TAO\"\n        ],\n        \"latest_rows_total\": 9,\n        \"latest_rows_available\": 9,\n        \"latest_rows_selected\": 2,\n        \"latest_rows_position_gt_0\": 2,\n        \"max_position_usdt_latest\": 2755.347917\n      },\n      \"metrics_run2\": {\n        \"latest_date\": \"2026-03-20\",\n        \"latest_active_count_decision_space\": 2,\n        \"headroom_decision_space\": true,\n        \"recent_live_dates_decision_space\": 8,\n        \"historical_active_events_decision_space\": 3939,\n        \"latest_selected_symbols\": [\n          \"ENA\",\n          \"TAO\"\n        ],\n        \"latest_rows_total\": 9,\n        \"latest_rows_available\": 9,\n        \"latest_rows_selected\": 2,\n        \"latest_rows_position_gt_0\": 2,\n        \"max_position_usdt_latest\": 2755.347917\n      },\n      \"pass\": true\n    },\n    \"bundle_completeness\": {\n      \"pass\": true,\n      \"restored_files_present\": 8,\n      \"required_restored_files\": 8,\n      \"missing_restored_files\": []\n    },\n    \"no_fallback\": {\n      \"pass\": true,\n      \"detail\": \"Replay used only the preserved stage_a_predictions bundle and the restored git-history sovereign closure bundle.\",\n      \"current_predictions_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\data\\\\models\\\\research\\\\phase4_cross_sectional_ranking_baseline\\\\stage_a_predictions.parquet\"\n    },\n    \"stale_contamination\": {\n      \"pass\": true,\n      \"detail\": \"Current preserved stage_a_predictions remain semantically aligned with the historical cross_sectional_predictions on decision-space inputs.\"\n    },\n    \"gate_pack_complete\": true\n  }\n}\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "sovereign_hardening_recheck",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services/ml_engine/phase5_cross_sectional_sovereign_hardening_recheck.py",
+      "returncode": 0,
+      "duration_seconds": 23.884,
+      "stdout_tail": "{\n  \"status\": \"PARTIAL\",\n  \"decision\": \"correct\",\n  \"classification_final\": \"SOVEREIGN_HARDENING_MIXED\",\n  \"research_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\data\\\\models\\\\research\\\\phase5_cross_sectional_sovereign_hardening_recheck\",\n  \"gate_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_sovereign_hardening_recheck\",\n  \"gate_outputs\": {\n    \"gate_report_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_sovereign_hardening_recheck\\\\gate_report.json\",\n    \"gate_report_markdown\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_sovereign_hardening_recheck\\\\gate_report.md\",\n    \"gate_manifest_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_sovereign_hardening_recheck\\\\gate_manifest.json\",\n    \"gate_metrics_parquet\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_sovereign_hardening_recheck\\\\gate_metrics.parquet\"\n  }\n}\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "operational_fragility_audit_and_bounded_correction",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services/ml_engine/phase5_cross_sectional_operational_fragility_audit_and_bounded_correction.py",
+      "returncode": 0,
+      "duration_seconds": 33.256,
+      "stdout_tail": "{\n  \"status\": \"PARTIAL\",\n  \"decision\": \"correct\",\n  \"classification_final\": \"OPERATIONAL_FRAGILITY_PERSISTS\",\n  \"dominant_operational_fragility\": \"REGIME_DEPENDENCE_DOMINANT\",\n  \"research_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\data\\\\models\\\\research\\\\phase5_cross_sectional_operational_fragility\",\n  \"gate_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\",\n  \"gate_outputs\": {\n    \"gate_report_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\\\gate_report.json\",\n    \"gate_report_markdown\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\\\gate_report.md\",\n    \"gate_manifest_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\\\gate_manifest.json\",\n    \"gate_metrics_parquet\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\\\gate_metrics.parquet\"\n  }\n}\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "recent_regime_policy_falsification",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services/ml_engine/phase5_cross_sectional_recent_regime_policy_falsification.py",
+      "returncode": 0,
+      "duration_seconds": 54.56,
+      "stdout_tail": "{\n  \"status\": \"PARTIAL\",\n  \"decision\": \"correct\",\n  \"classification_final\": \"ALIVE_BUT_NOT_PROMOTABLE\",\n  \"plausibility\": \"RECENT_REGIME_POLICY_FIX_PLAUSIBLE\",\n  \"research_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\data\\\\models\\\\research\\\\phase5_cross_sectional_recent_regime\",\n  \"gate_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_recent_regime_policy_falsification\",\n  \"gate_outputs\": {\n    \"gate_report_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_recent_regime_policy_falsification\\\\gate_report.json\",\n    \"gate_report_markdown\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_recent_regime_policy_falsification\\\\gate_report.md\",\n    \"gate_manifest_json\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_recent_regime_policy_falsification\\\\gate_manifest.json\",\n    \"gate_metrics_parquet\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\reports\\\\gates\\\\phase5_cross_sectional_recent_regime_policy_falsification\\\\gate_metrics.parquet\"\n  }\n}\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "phase4_gate_diagnostic",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe services/ml_engine/phase4_gate_diagnostic.py",
+      "returncode": 0,
+      "duration_seconds": 13.134,
+      "stdout_tail": "{\n  \"written\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper\\\\data\\\\models\\\\phase4\\\\phase4_gate_diagnostic.json\",\n  \"hard_blockers\": [\n    \"DSR honesto\",\n    \"DSR invalida\\u00e7\\u00e3o global\",\n    \"Sharpe OOS\",\n    \"Subperiodos\"\n  ],\n  \"ia_official_path_uses_ia\": false,\n  \"phase2_auc_directly_auditable\": false\n}\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "py_compile_phase6_gate",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m py_compile services/ml_engine/phase6_global_reproducibility_source_alignment_gate.py",
+      "returncode": 0,
+      "duration_seconds": 0.118,
+      "stdout_tail": "",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "pytest_gate_reports",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit/test_gate_reports.py -q",
+      "returncode": 0,
+      "duration_seconds": 2.318,
+      "stdout_tail": ".                                                                        [100%]\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n1 passed, 1 warning in 0.48s\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "pytest_nautilus_bridge_existing",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit/test_nautilus_bridge_contract.py tests/unit/test_nautilus_bridge_acceptance.py tests/unit/test_nautilus_bridge_phase4_publisher.py tests/unit/test_nautilus_bridge_consumer.py tests/unit/test_nautilus_bridge_reconciler.py tests/unit/test_nautilus_bridge_phase4_paper_daemon.py tests/unit/test_nautilus_bridge_phase4_paper_once.py -q",
+      "returncode": 0,
+      "duration_seconds": 2.231,
+      "stdout_tail": ".........................................                                [100%]\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n41 passed, 1 warning in 0.77s\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "pytest_unit_full_collection",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit -q",
+      "returncode": 2,
+      "duration_seconds": 4.38,
+      "stdout_tail": "\n=================================== ERRORS ====================================\n___________ ERROR collecting tests/unit/test_collectors_runtime.py ____________\ntests\\unit\\test_collectors_runtime.py:15: in <module>\n    from services.data_inserter import bootstrap_phase2_inputs\nservices\\data_inserter\\bootstrap_phase2_inputs.py:24: in <module>\n    from collectors.binance import BinanceCollector\nservices\\data_inserter\\collectors\\binance.py:28: in <module>\n    \"timestamp\": pl.Date,\n                 ^^^^^^^\nE   AttributeError: module 'polars' has no attribute 'Date'\n__________ ERROR collecting tests/unit/test_hmm_regime_alignment.py ___________\nImportError while importing test module 'C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\tests\\unit\\test_hmm_regime_alignment.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\nC:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests\\unit\\test_hmm_regime_alignment.py:9: in <module>\n    from services.ml_engine.regime import hmm_filter\nservices\\ml_engine\\regime\\__init__.py:4: in <module>\n    from .hmm_filter import (\nservices\\ml_engine\\regime\\hmm_filter.py:10: in <module>\n    from hmmlearn.hmm import GaussianHMM\nE   ModuleNotFoundError: No module named 'hmmlearn'\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ===========================\nERROR tests/unit/test_collectors_runtime.py - AttributeError: module 'polars'...\nERROR tests/unit/test_hmm_regime_alignment.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!\n1 warning, 2 errors in 2.48s\n",
+      "stderr_tail": "",
+      "status": "FAIL"
+    }
+  ],
+  "timestamp_utc": "2026-04-26T16:13:23+00:00"
+}

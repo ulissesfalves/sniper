@@ -1,8 +1,8 @@
 {
   "gate_slug": "phase5_cross_sectional_recent_regime_policy_falsification",
-  "timestamp_utc": "2026-04-05T17:59:18+00:00",
-  "baseline_commit": "adce4c849849761653d5bb0342d8d47608a3ea8d",
-  "branch": "codex/phase5-cross-sectional-recent-regime-policy-falsification",
+  "timestamp_utc": "2026-04-26T16:13:00+00:00",
+  "baseline_commit": "f68832974e898e87cf9c6f6e68a2e43127d44089",
+  "branch": "codex/phase6-clean-clone-environment-reproducibility",
   "working_tree_dirty_before": true,
   "working_tree_dirty_after": true,
   "source_artifacts": [
@@ -10,22 +10,22 @@
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_sovereign_closure_restored\\restored_bundle_manifest.json",
       "exists": true,
       "size_bytes": 6199,
-      "mtime_utc": "2026-04-05T01:38:40+00:00",
+      "mtime_utc": "2026-04-26T16:10:50+00:00",
       "sha256": "A435853A2E57CC90AF6E50C2938B1F4FD37AE8CACF5DF298DC0543974953F07B"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_sovereign_restore\\sovereign_restore_replay_summary.json",
       "exists": true,
       "size_bytes": 3820,
-      "mtime_utc": "2026-04-05T01:39:29+00:00",
-      "sha256": "5347EDAAC68C07E6EDA2C1CFCC6FF0E77EFEDEF94336B53EC526558AFB787AEE"
+      "mtime_utc": "2026-04-26T16:11:08+00:00",
+      "sha256": "6776553E7906B10117C90DE51FAE6C46DA8A9B8E048834C881B341B43CDED948"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_operational_fragility\\operational_fragility_summary.json",
       "exists": true,
-      "size_bytes": 15599,
-      "mtime_utc": "2026-04-05T16:54:40+00:00",
-      "sha256": "845B98C3EA455D69C29C4D66DDAAB776009AD036E2AB2A66322D7769D040026E"
+      "size_bytes": 15582,
+      "mtime_utc": "2026-04-26T16:12:05+00:00",
+      "sha256": "A1AF83F498706B00B4DFEAF26D6D6425763060EE8299CCFEF6F1700F01AB3601"
     }
   ],
   "generated_artifacts": [
@@ -33,56 +33,56 @@
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_recent_regime\\recent_regime_decomposition.parquet",
       "exists": true,
       "size_bytes": 10834,
-      "mtime_utc": "2026-04-05T17:58:15+00:00",
+      "mtime_utc": "2026-04-26T16:12:33+00:00",
       "sha256": "2634B19D18256425FD3BCE7B7B5AD8A53FA7F66478CB012CD3C7B157BF055FF3"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_recent_regime\\recent_regime_challengers.parquet",
       "exists": true,
       "size_bytes": 23372,
-      "mtime_utc": "2026-04-05T17:59:18+00:00",
+      "mtime_utc": "2026-04-26T16:13:00+00:00",
       "sha256": "1286702421B5C4AA28FA73F59738883D3155801C10D3E14BF751F63D202C5E8F"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_recent_regime\\recent_regime_summary.json",
       "exists": true,
-      "size_bytes": 7747,
-      "mtime_utc": "2026-04-05T17:59:18+00:00",
-      "sha256": "8D844D440E0DE840696AE8219A91C1B732EAEEFE3C3085D99E48F3ADFA98A39C"
+      "size_bytes": 7736,
+      "mtime_utc": "2026-04-26T16:13:00+00:00",
+      "sha256": "226E9B6C6ABEA80E37A82FA5990E10283E4031927279ADE8DFB0F8E7EF57F79D"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_recent_regime\\official_artifacts_integrity.json",
       "exists": true,
       "size_bytes": 146021,
-      "mtime_utc": "2026-04-05T17:59:18+00:00",
-      "sha256": "65731514E4150DD711CC76A5E5CF0861AFF8FF6D3A12F3C40781B6F85FA4AFF8"
+      "mtime_utc": "2026-04-26T16:13:00+00:00",
+      "sha256": "3CD6931B3FD2438A6D4093DFC40513AC799550A9C39A26DBFB8B111F9336A3A4"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_report.json",
       "exists": true,
-      "size_bytes": 3997,
-      "mtime_utc": "2026-04-05T17:59:19+00:00",
-      "sha256": "371DE5A6A708A629F6CE880028F1F4979CA440A01A383729CA00046A6A5C8A30"
+      "size_bytes": 3986,
+      "mtime_utc": "2026-04-26T16:13:00+00:00",
+      "sha256": "8C10691E7924344A1DF53281942F4C797B21BB810465A2316CCBB30399E9F4CE"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_report.md",
       "exists": true,
       "size_bytes": 4082,
-      "mtime_utc": "2026-04-05T17:59:19+00:00",
+      "mtime_utc": "2026-04-26T16:13:00+00:00",
       "sha256": "8F545521CAAF801422103276C3925A3F0E1BFF83936A22CF2DA0FD78373003FD"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_metrics.parquet",
       "exists": true,
       "size_bytes": 3973,
-      "mtime_utc": "2026-04-05T17:59:19+00:00",
+      "mtime_utc": "2026-04-26T16:13:00+00:00",
       "sha256": "BC7CF71B609166433698152A1C4BA46ABC8B86B067DBB4E80854B38641208C5C"
     },
     {
       "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_manifest.json",
       "exists": true,
-      "size_bytes": 4689,
-      "mtime_utc": "2026-04-05T17:55:48+00:00",
+      "size_bytes": 4753,
+      "mtime_utc": "2026-04-26T16:10:33+00:00",
       "note": "self hash omitted inside manifest to avoid self-reference"
     }
   ],

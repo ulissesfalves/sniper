@@ -1,0 +1,305 @@
+{
+  "status": "PARTIAL",
+  "artifact_hashes_before": {
+    "reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_report.json": {
+      "exists": true,
+      "sha256": "AFC2087AD5E74D6D8BF280F80A5E4240691B30F8F71D6E66D58E175B1291AE58",
+      "size_bytes": 4247
+    },
+    "reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_manifest.json": {
+      "exists": true,
+      "sha256": "A2CF154A5F85EEA0670DB78CCBAEA6012108BCCADF10FF854835FBB7015B8E3E",
+      "size_bytes": 6547
+    },
+    "reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_report.json": {
+      "exists": true,
+      "sha256": "D2E5876B8FCA03895CC835545864169D7387728A4DC2AC009953F432D19F1AB5",
+      "size_bytes": 4168
+    },
+    "reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_manifest.json": {
+      "exists": true,
+      "sha256": "AC2FE010F54DCC14004E73B965FCE5B28D9FB6EEC30332615F7DD94A365E05B3",
+      "size_bytes": 5179
+    },
+    "reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_report.json": {
+      "exists": true,
+      "sha256": "4F5C9D6C9C8661BCD8D0CC4E97C220CD3A7F32E5387E4504367C0590CB70D4A4",
+      "size_bytes": 4181
+    },
+    "reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_manifest.json": {
+      "exists": true,
+      "sha256": "03BCB044D8EFA4B858601A4E4F6CC043D541A2F04B3861AB60359F87766ACF34",
+      "size_bytes": 4912
+    },
+    "reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_report.json": {
+      "exists": true,
+      "sha256": "7D70B37DDEB8583A9C97BA25313AD7F95A3798FE13858F9F42C931705D234408",
+      "size_bytes": 3986
+    },
+    "reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_manifest.json": {
+      "exists": true,
+      "sha256": "4751F83B3E32EBA9D142D8D5D0F4BC73BFA1BB80FFF818822704108A4CBAFC41",
+      "size_bytes": 4753
+    },
+    "data\\models\\phase4\\phase4_gate_diagnostic.json": {
+      "exists": true,
+      "sha256": "A8782BF44E2CAAE9051AE7CB9418D343C65765796132DF7B49B487AF02383061",
+      "size_bytes": 39354
+    },
+    "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_report.json": {
+      "exists": true,
+      "sha256": "98A932A6906F6D639B15C099CC10B176B02E9B2A439A86E44F4652599780A1D6",
+      "size_bytes": 62775
+    },
+    "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_manifest.json": {
+      "exists": true,
+      "sha256": "6CA9DDFF927A6792BD370E07493068B392D49A4F773CA8789BDDF29D42D986C3",
+      "size_bytes": 22149
+    },
+    "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_metrics.parquet": {
+      "exists": true,
+      "sha256": "7BE244016130326C23DE02FAD98BC2B0292C455B91A570295B60F2B263A6B781",
+      "size_bytes": 4517
+    },
+    "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\source_doc_alignment.json": {
+      "exists": true,
+      "sha256": "C7093F0CF20AF4D8C003FF676AAA597D2A3E8870E1E76ADA678A14AD3277ECA6",
+      "size_bytes": 2664
+    },
+    "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\portfolio_cvar_report.json": {
+      "exists": true,
+      "sha256": "E899A4C3807352A15C483C7128DDBCEF5A1F5A96A75930F9887FFE88E5D35E34",
+      "size_bytes": 1094
+    }
+  },
+  "artifact_hashes_after": {
+    "reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_report.json": {
+      "exists": true,
+      "sha256": "CF96FA8EBF6066DF236FBDB7FAFCE0E73956C78D95C72699B2416891D11981A1",
+      "size_bytes": 4247
+    },
+    "reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_manifest.json": {
+      "exists": true,
+      "sha256": "3EBB971F8A6984B15EAAF7C7A6971E87E4162EA116148A4B9520DFEF4DA97445",
+      "size_bytes": 6547
+    },
+    "reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_report.json": {
+      "exists": true,
+      "sha256": "2D063B59F8003490F76F23DB0471BCBABF3EAAF309D1D4ECCD441488A9E09D9B",
+      "size_bytes": 4168
+    },
+    "reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_manifest.json": {
+      "exists": true,
+      "sha256": "C66FC29CF46AA641729C0A0EDFA76725AEC132B7264D906E39E7ADE6E782F10C",
+      "size_bytes": 5179
+    },
+    "reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_report.json": {
+      "exists": true,
+      "sha256": "696F0A2501DCDC82F766CD6B3A57C2F405A4BEF407700D2A16306ABAA36B36F7",
+      "size_bytes": 4181
+    },
+    "reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_manifest.json": {
+      "exists": true,
+      "sha256": "82DB56D4988CE849290D8E286E44EE4E78E819A47A4E146E0383F74FB971FEBD",
+      "size_bytes": 4912
+    },
+    "reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_report.json": {
+      "exists": true,
+      "sha256": "8C10691E7924344A1DF53281942F4C797B21BB810465A2316CCBB30399E9F4CE",
+      "size_bytes": 3986
+    },
+    "reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_manifest.json": {
+      "exists": true,
+      "sha256": "89BAB1F68001BF09A4149C0A4D244E9D21F696336254787FE1A073A5EFC29EB1",
+      "size_bytes": 4753
+    },
+    "data\\models\\phase4\\phase4_gate_diagnostic.json": {
+      "exists": true,
+      "sha256": "383D4D29B0559B07757ECBDE3DB5F6549D6D26692244790591A9F01A6C6D31EE",
+      "size_bytes": 39749
+    },
+    "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_report.json": {
+      "exists": true,
+      "sha256": "040FA8AAE05B76CF403C50B6BBAA8586D9F1FB84611E44DCF78027250B26CCF8",
+      "size_bytes": 62771
+    },
+    "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_manifest.json": {
+      "exists": true,
+      "sha256": "DC89112CBDB365F2A1892A3AF4C6B921BF45863FC4325BC4664E8975E6591830",
+      "size_bytes": 22147
+    },
+    "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_metrics.parquet": {
+      "exists": true,
+      "sha256": "7BE244016130326C23DE02FAD98BC2B0292C455B91A570295B60F2B263A6B781",
+      "size_bytes": 4517
+    },
+    "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\source_doc_alignment.json": {
+      "exists": true,
+      "sha256": "C7093F0CF20AF4D8C003FF676AAA597D2A3E8870E1E76ADA678A14AD3277ECA6",
+      "size_bytes": 2664
+    },
+    "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\portfolio_cvar_report.json": {
+      "exists": true,
+      "sha256": "E899A4C3807352A15C483C7128DDBCEF5A1F5A96A75930F9887FFE88E5D35E34",
+      "size_bytes": 1094
+    }
+  },
+  "divergences": [
+    {
+      "artifact": "data\\models\\phase4\\phase4_gate_diagnostic.json",
+      "before": {
+        "exists": true,
+        "sha256": "A8782BF44E2CAAE9051AE7CB9418D343C65765796132DF7B49B487AF02383061",
+        "size_bytes": 39354
+      },
+      "after": {
+        "exists": true,
+        "sha256": "383D4D29B0559B07757ECBDE3DB5F6549D6D26692244790591A9F01A6C6D31EE",
+        "size_bytes": 39749
+      },
+      "classification": "HASH_CHANGED_DURING_REGENERATION"
+    },
+    {
+      "artifact": "reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_manifest.json",
+      "before": {
+        "exists": true,
+        "sha256": "03BCB044D8EFA4B858601A4E4F6CC043D541A2F04B3861AB60359F87766ACF34",
+        "size_bytes": 4912
+      },
+      "after": {
+        "exists": true,
+        "sha256": "82DB56D4988CE849290D8E286E44EE4E78E819A47A4E146E0383F74FB971FEBD",
+        "size_bytes": 4912
+      },
+      "classification": "HASH_CHANGED_DURING_REGENERATION"
+    },
+    {
+      "artifact": "reports\\gates\\phase5_cross_sectional_operational_fragility_audit_and_bounded_correction\\gate_report.json",
+      "before": {
+        "exists": true,
+        "sha256": "4F5C9D6C9C8661BCD8D0CC4E97C220CD3A7F32E5387E4504367C0590CB70D4A4",
+        "size_bytes": 4181
+      },
+      "after": {
+        "exists": true,
+        "sha256": "696F0A2501DCDC82F766CD6B3A57C2F405A4BEF407700D2A16306ABAA36B36F7",
+        "size_bytes": 4181
+      },
+      "classification": "HASH_CHANGED_DURING_REGENERATION"
+    },
+    {
+      "artifact": "reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_manifest.json",
+      "before": {
+        "exists": true,
+        "sha256": "4751F83B3E32EBA9D142D8D5D0F4BC73BFA1BB80FFF818822704108A4CBAFC41",
+        "size_bytes": 4753
+      },
+      "after": {
+        "exists": true,
+        "sha256": "89BAB1F68001BF09A4149C0A4D244E9D21F696336254787FE1A073A5EFC29EB1",
+        "size_bytes": 4753
+      },
+      "classification": "HASH_CHANGED_DURING_REGENERATION"
+    },
+    {
+      "artifact": "reports\\gates\\phase5_cross_sectional_recent_regime_policy_falsification\\gate_report.json",
+      "before": {
+        "exists": true,
+        "sha256": "7D70B37DDEB8583A9C97BA25313AD7F95A3798FE13858F9F42C931705D234408",
+        "size_bytes": 3986
+      },
+      "after": {
+        "exists": true,
+        "sha256": "8C10691E7924344A1DF53281942F4C797B21BB810465A2316CCBB30399E9F4CE",
+        "size_bytes": 3986
+      },
+      "classification": "HASH_CHANGED_DURING_REGENERATION"
+    },
+    {
+      "artifact": "reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_manifest.json",
+      "before": {
+        "exists": true,
+        "sha256": "A2CF154A5F85EEA0670DB78CCBAEA6012108BCCADF10FF854835FBB7015B8E3E",
+        "size_bytes": 6547
+      },
+      "after": {
+        "exists": true,
+        "sha256": "3EBB971F8A6984B15EAAF7C7A6971E87E4162EA116148A4B9520DFEF4DA97445",
+        "size_bytes": 6547
+      },
+      "classification": "HASH_CHANGED_DURING_REGENERATION"
+    },
+    {
+      "artifact": "reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_report.json",
+      "before": {
+        "exists": true,
+        "sha256": "AFC2087AD5E74D6D8BF280F80A5E4240691B30F8F71D6E66D58E175B1291AE58",
+        "size_bytes": 4247
+      },
+      "after": {
+        "exists": true,
+        "sha256": "CF96FA8EBF6066DF236FBDB7FAFCE0E73956C78D95C72699B2416891D11981A1",
+        "size_bytes": 4247
+      },
+      "classification": "HASH_CHANGED_DURING_REGENERATION"
+    },
+    {
+      "artifact": "reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_manifest.json",
+      "before": {
+        "exists": true,
+        "sha256": "AC2FE010F54DCC14004E73B965FCE5B28D9FB6EEC30332615F7DD94A365E05B3",
+        "size_bytes": 5179
+      },
+      "after": {
+        "exists": true,
+        "sha256": "C66FC29CF46AA641729C0A0EDFA76725AEC132B7264D906E39E7ADE6E782F10C",
+        "size_bytes": 5179
+      },
+      "classification": "HASH_CHANGED_DURING_REGENERATION"
+    },
+    {
+      "artifact": "reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_report.json",
+      "before": {
+        "exists": true,
+        "sha256": "D2E5876B8FCA03895CC835545864169D7387728A4DC2AC009953F432D19F1AB5",
+        "size_bytes": 4168
+      },
+      "after": {
+        "exists": true,
+        "sha256": "2D063B59F8003490F76F23DB0471BCBABF3EAAF309D1D4ECCD441488A9E09D9B",
+        "size_bytes": 4168
+      },
+      "classification": "HASH_CHANGED_DURING_REGENERATION"
+    },
+    {
+      "artifact": "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_manifest.json",
+      "before": {
+        "exists": true,
+        "sha256": "6CA9DDFF927A6792BD370E07493068B392D49A4F773CA8789BDDF29D42D986C3",
+        "size_bytes": 22149
+      },
+      "after": {
+        "exists": true,
+        "sha256": "DC89112CBDB365F2A1892A3AF4C6B921BF45863FC4325BC4664E8975E6591830",
+        "size_bytes": 22147
+      },
+      "classification": "HASH_CHANGED_DURING_REGENERATION"
+    },
+    {
+      "artifact": "reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_report.json",
+      "before": {
+        "exists": true,
+        "sha256": "98A932A6906F6D639B15C099CC10B176B02E9B2A439A86E44F4652599780A1D6",
+        "size_bytes": 62775
+      },
+      "after": {
+        "exists": true,
+        "sha256": "040FA8AAE05B76CF403C50B6BBAA8586D9F1FB84611E44DCF78027250B26CCF8",
+        "size_bytes": 62771
+      },
+      "classification": "HASH_CHANGED_DURING_REGENERATION"
+    }
+  ],
+  "missing_artifacts_after": [],
+  "classification": "HASH_DIVERGENCES_RECORDED"
+}

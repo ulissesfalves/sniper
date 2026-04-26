@@ -3,9 +3,9 @@
   "phase_family": "phase5_cross_sectional_operational_fragility_audit_and_bounded_correction",
   "status": "PARTIAL",
   "decision": "correct",
-  "baseline_commit": "1b5dbaefccbd9b1655e5551bcb5279e726c831d8",
+  "baseline_commit": "f68832974e898e87cf9c6f6e68a2e43127d44089",
   "working_tree_dirty": true,
-  "branch": "codex/phase5-cross-sectional-operational-fragility-bounded-correction",
+  "branch": "codex/phase6-clean-clone-environment-reproducibility",
   "official_artifacts_used": [
     "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase3",
     "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\features",

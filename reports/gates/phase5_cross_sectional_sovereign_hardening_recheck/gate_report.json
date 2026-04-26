@@ -3,9 +3,9 @@
   "phase_family": "phase5_cross_sectional_sovereign_hardening_recheck",
   "status": "PARTIAL",
   "decision": "correct",
-  "baseline_commit": "720abd75322e16f730ff43ade100f5c89f7c5f32",
+  "baseline_commit": "f68832974e898e87cf9c6f6e68a2e43127d44089",
   "working_tree_dirty": true,
-  "branch": "codex/phase5-cross-sectional-sovereign-hardening-recheck",
+  "branch": "codex/phase6-clean-clone-environment-reproducibility",
   "official_artifacts_used": [
     "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase3",
     "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\features",

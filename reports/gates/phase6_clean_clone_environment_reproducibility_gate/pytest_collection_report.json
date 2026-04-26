@@ -1,0 +1,120 @@
+{
+  "status": "FAIL",
+  "classification": "PYTEST_COLLECTION_DEPENDENCY_BLOCKED",
+  "collect_only": {
+    "label": "pytest_unit_collect_only",
+    "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit --collect-only -q",
+    "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+    "returncode": 2,
+    "duration_seconds": 6.772,
+    "timed_out": false,
+    "stdout_tail": "tegrationTest::test_run_vi_clustering_excludes_unlock_audit_columns\ntests/unit/test_unlock_ml_integration.py::UnlockMlIntegrationTest::test_save_phase3_results_removes_stale_sizing_when_current_sizing_is_empty\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_feature_store_uses_eligible_ohlcv_set_and_surfaces_collapsed_threshold_gap\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_hmm_outputs_counts_degraded_inputs_without_marking_hard_missing\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_hmm_outputs_treats_predictive_quality_as_advisory_when_hard_gate_is_off\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_unlock_shadow_mode_reports_coverage_and_quality_summary\ntests/unit/test_unlock_store.py::UnlockStoreTest::test_store_persists_sqlite_exports_parquet_and_closes_connections\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_compute_ups_raw_applies_30d_window_and_bucket_weights\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_compute_ups_raw_regression_includes_day_30_and_excludes_day_31\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_normalize_bucket_label_maps_canonical_buckets\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_percent_rank_average_handles_massive_zero_ties_without_ranking_nan\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_percent_rank_average_respects_ties_and_nan\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_percent_rank_average_single_observation_returns_half\n\n=================================== ERRORS ====================================\n___________ ERROR collecting tests/unit/test_collectors_runtime.py ____________\ntests\\unit\\test_collectors_runtime.py:15: in <module>\n    from services.data_inserter import bootstrap_phase2_inputs\nservices\\data_inserter\\bootstrap_phase2_inputs.py:24: in <module>\n    from collectors.binance import BinanceCollector\nservices\\data_inserter\\collectors\\binance.py:28: in <module>\n    \"timestamp\": pl.Date,\n                 ^^^^^^^\nE   AttributeError: module 'polars' has no attribute 'Date'\n__________ ERROR collecting tests/unit/test_hmm_regime_alignment.py ___________\nImportError while importing test module 'C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\tests\\unit\\test_hmm_regime_alignment.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\nC:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests\\unit\\test_hmm_regime_alignment.py:9: in <module>\n    from services.ml_engine.regime import hmm_filter\nservices\\ml_engine\\regime\\__init__.py:4: in <module>\n    from .hmm_filter import (\nservices\\ml_engine\\regime\\hmm_filter.py:10: in <module>\n    from hmmlearn.hmm import GaussianHMM\nE   ModuleNotFoundError: No module named 'hmmlearn'\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ===========================\nERROR tests/unit/test_collectors_runtime.py - AttributeError: module 'polars'...\nERROR tests/unit/test_hmm_regime_alignment.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!\n166 tests collected, 2 errors in 3.97s\n",
+    "stderr_tail": "",
+    "status": "FAIL"
+  },
+  "unit_full": {
+    "label": "pytest_unit_full",
+    "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit -q",
+    "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+    "returncode": 2,
+    "duration_seconds": 4.386,
+    "timed_out": false,
+    "stdout_tail": "\n=================================== ERRORS ====================================\n___________ ERROR collecting tests/unit/test_collectors_runtime.py ____________\ntests\\unit\\test_collectors_runtime.py:15: in <module>\n    from services.data_inserter import bootstrap_phase2_inputs\nservices\\data_inserter\\bootstrap_phase2_inputs.py:24: in <module>\n    from collectors.binance import BinanceCollector\nservices\\data_inserter\\collectors\\binance.py:28: in <module>\n    \"timestamp\": pl.Date,\n                 ^^^^^^^\nE   AttributeError: module 'polars' has no attribute 'Date'\n__________ ERROR collecting tests/unit/test_hmm_regime_alignment.py ___________\nImportError while importing test module 'C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\tests\\unit\\test_hmm_regime_alignment.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\nC:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests\\unit\\test_hmm_regime_alignment.py:9: in <module>\n    from services.ml_engine.regime import hmm_filter\nservices\\ml_engine\\regime\\__init__.py:4: in <module>\n    from .hmm_filter import (\nservices\\ml_engine\\regime\\hmm_filter.py:10: in <module>\n    from hmmlearn.hmm import GaussianHMM\nE   ModuleNotFoundError: No module named 'hmmlearn'\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ===========================\nERROR tests/unit/test_collectors_runtime.py - AttributeError: module 'polars'...\nERROR tests/unit/test_hmm_regime_alignment.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!\n1 warning, 2 errors in 2.28s\n",
+    "stderr_tail": "",
+    "status": "FAIL"
+  },
+  "gate_reports": {
+    "label": "pytest_gate_reports",
+    "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit/test_gate_reports.py -q",
+    "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+    "returncode": 0,
+    "duration_seconds": 2.203,
+    "timed_out": false,
+    "stdout_tail": ".                                                                        [100%]\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n1 passed, 1 warning in 0.75s\n",
+    "stderr_tail": "",
+    "status": "PASS"
+  },
+  "bridge_nautilus": {
+    "label": "pytest_nautilus_bridge_existing",
+    "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit/test_nautilus_bridge_contract.py tests/unit/test_nautilus_bridge_acceptance.py tests/unit/test_nautilus_bridge_phase4_publisher.py tests/unit/test_nautilus_bridge_consumer.py tests/unit/test_nautilus_bridge_reconciler.py tests/unit/test_nautilus_bridge_phase4_paper_daemon.py tests/unit/test_nautilus_bridge_phase4_paper_once.py -q",
+    "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+    "returncode": 0,
+    "duration_seconds": 2.352,
+    "timed_out": false,
+    "stdout_tail": ".........................................                                [100%]\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n41 passed, 1 warning in 0.79s\n",
+    "stderr_tail": "",
+    "status": "PASS"
+  },
+  "collection_findings": [
+    {
+      "blocker": "polars_date_missing",
+      "classification": "DEPENDENCY_OR_API_COMPATIBILITY_BLOCKER",
+      "evidence": "collector schema references pl.Date but runtime polars lacks Date."
+    },
+    {
+      "blocker": "hmmlearn_missing",
+      "classification": "DEPENDENCY_BLOCKER",
+      "evidence": "regime HMM import cannot load hmmlearn."
+    }
+  ],
+  "full_suite_findings": [
+    {
+      "blocker": "polars_date_missing",
+      "classification": "DEPENDENCY_OR_API_COMPATIBILITY_BLOCKER",
+      "evidence": "collector schema references pl.Date but runtime polars lacks Date."
+    },
+    {
+      "blocker": "hmmlearn_missing",
+      "classification": "DEPENDENCY_BLOCKER",
+      "evidence": "regime HMM import cannot load hmmlearn."
+    }
+  ],
+  "bridge_passed": true,
+  "gate_report_test_passed": true,
+  "commands": [
+    {
+      "label": "pytest_unit_collect_only",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit --collect-only -q",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 2,
+      "duration_seconds": 6.772,
+      "timed_out": false,
+      "stdout_tail": "tegrationTest::test_run_vi_clustering_excludes_unlock_audit_columns\ntests/unit/test_unlock_ml_integration.py::UnlockMlIntegrationTest::test_save_phase3_results_removes_stale_sizing_when_current_sizing_is_empty\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_feature_store_uses_eligible_ohlcv_set_and_surfaces_collapsed_threshold_gap\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_hmm_outputs_counts_degraded_inputs_without_marking_hard_missing\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_hmm_outputs_treats_predictive_quality_as_advisory_when_hard_gate_is_off\ntests/unit/test_unlock_phase2_diagnostic.py::UnlockPhase2DiagnosticTest::test_audit_unlock_shadow_mode_reports_coverage_and_quality_summary\ntests/unit/test_unlock_store.py::UnlockStoreTest::test_store_persists_sqlite_exports_parquet_and_closes_connections\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_compute_ups_raw_applies_30d_window_and_bucket_weights\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_compute_ups_raw_regression_includes_day_30_and_excludes_day_31\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_normalize_bucket_label_maps_canonical_buckets\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_percent_rank_average_handles_massive_zero_ties_without_ranking_nan\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_percent_rank_average_respects_ties_and_nan\ntests/unit/test_unlock_utils.py::UnlockUtilsTest::test_percent_rank_average_single_observation_returns_half\n\n=================================== ERRORS ====================================\n___________ ERROR collecting tests/unit/test_collectors_runtime.py ____________\ntests\\unit\\test_collectors_runtime.py:15: in <module>\n    from services.data_inserter import bootstrap_phase2_inputs\nservices\\data_inserter\\bootstrap_phase2_inputs.py:24: in <module>\n    from collectors.binance import BinanceCollector\nservices\\data_inserter\\collectors\\binance.py:28: in <module>\n    \"timestamp\": pl.Date,\n                 ^^^^^^^\nE   AttributeError: module 'polars' has no attribute 'Date'\n__________ ERROR collecting tests/unit/test_hmm_regime_alignment.py ___________\nImportError while importing test module 'C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\tests\\unit\\test_hmm_regime_alignment.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\nC:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests\\unit\\test_hmm_regime_alignment.py:9: in <module>\n    from services.ml_engine.regime import hmm_filter\nservices\\ml_engine\\regime\\__init__.py:4: in <module>\n    from .hmm_filter import (\nservices\\ml_engine\\regime\\hmm_filter.py:10: in <module>\n    from hmmlearn.hmm import GaussianHMM\nE   ModuleNotFoundError: No module named 'hmmlearn'\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ===========================\nERROR tests/unit/test_collectors_runtime.py - AttributeError: module 'polars'...\nERROR tests/unit/test_hmm_regime_alignment.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!\n166 tests collected, 2 errors in 3.97s\n",
+      "stderr_tail": "",
+      "status": "FAIL"
+    },
+    {
+      "label": "pytest_gate_reports",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit/test_gate_reports.py -q",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 0,
+      "duration_seconds": 2.203,
+      "timed_out": false,
+      "stdout_tail": ".                                                                        [100%]\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n1 passed, 1 warning in 0.75s\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "pytest_nautilus_bridge_existing",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit/test_nautilus_bridge_contract.py tests/unit/test_nautilus_bridge_acceptance.py tests/unit/test_nautilus_bridge_phase4_publisher.py tests/unit/test_nautilus_bridge_consumer.py tests/unit/test_nautilus_bridge_reconciler.py tests/unit/test_nautilus_bridge_phase4_paper_daemon.py tests/unit/test_nautilus_bridge_phase4_paper_once.py -q",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 0,
+      "duration_seconds": 2.352,
+      "timed_out": false,
+      "stdout_tail": ".........................................                                [100%]\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n41 passed, 1 warning in 0.79s\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "pytest_unit_full",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pytest tests/unit -q",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 2,
+      "duration_seconds": 4.386,
+      "timed_out": false,
+      "stdout_tail": "\n=================================== ERRORS ====================================\n___________ ERROR collecting tests/unit/test_collectors_runtime.py ____________\ntests\\unit\\test_collectors_runtime.py:15: in <module>\n    from services.data_inserter import bootstrap_phase2_inputs\nservices\\data_inserter\\bootstrap_phase2_inputs.py:24: in <module>\n    from collectors.binance import BinanceCollector\nservices\\data_inserter\\collectors\\binance.py:28: in <module>\n    \"timestamp\": pl.Date,\n                 ^^^^^^^\nE   AttributeError: module 'polars' has no attribute 'Date'\n__________ ERROR collecting tests/unit/test_hmm_regime_alignment.py ___________\nImportError while importing test module 'C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\tests\\unit\\test_hmm_regime_alignment.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\nC:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_3.13.3568.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests\\unit\\test_hmm_regime_alignment.py:9: in <module>\n    from services.ml_engine.regime import hmm_filter\nservices\\ml_engine\\regime\\__init__.py:4: in <module>\n    from .hmm_filter import (\nservices\\ml_engine\\regime\\hmm_filter.py:10: in <module>\n    from hmmlearn.hmm import GaussianHMM\nE   ModuleNotFoundError: No module named 'hmmlearn'\n============================== warnings summary ===============================\n..\\..\\..\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428\n  C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\_pytest\\config\\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode\n  \n    self._warn_or_fail_if_strict(f\"Unknown config option: {key}\\n\")\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ===========================\nERROR tests/unit/test_collectors_runtime.py - AttributeError: module 'polars'...\nERROR tests/unit/test_hmm_regime_alignment.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!\n1 warning, 2 errors in 2.28s\n",
+      "stderr_tail": "",
+      "status": "FAIL"
+    }
+  ]
+}

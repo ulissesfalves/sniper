@@ -1,0 +1,66 @@
+{
+  "status": "FAIL",
+  "classification": "ENVIRONMENT_REPRODUCIBILITY_BLOCKED",
+  "base_branch": "codex/phase6-global-reproducibility-source-alignment",
+  "suggested_branch": "codex/phase6-clean-clone-environment-reproducibility",
+  "before_git": {
+    "branch": "codex/phase6-clean-clone-environment-reproducibility",
+    "commit": "f68832974e898e87cf9c6f6e68a2e43127d44089",
+    "status_short": [
+      "M docs/SNIPER_memoria_especificacao_controle_fase4R_v3.md",
+      " M reports/audits/global_spec_adherence/next_step_codex_prompt.md",
+      " M reports/audits/global_spec_adherence/next_step_recommendation.md",
+      " M reports/gates/phase5_cross_sectional_operational_fragility_audit_and_bounded_correction/gate_manifest.json",
+      " M reports/gates/phase5_cross_sectional_operational_fragility_audit_and_bounded_correction/gate_report.json",
+      " M reports/gates/phase5_cross_sectional_recent_regime_policy_falsification/gate_manifest.json",
+      " M reports/gates/phase5_cross_sectional_recent_regime_policy_falsification/gate_report.json",
+      " M reports/gates/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate/gate_manifest.json",
+      " M reports/gates/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate/gate_report.json",
+      " M reports/gates/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate/gate_report.md",
+      " M reports/gates/phase5_cross_sectional_sovereign_hardening_recheck/gate_manifest.json",
+      " M reports/gates/phase5_cross_sectional_sovereign_hardening_recheck/gate_report.json",
+      "?? .agents/skills/sniper-gate-result-reviewer/",
+      "?? reports/gates/phase6_global_reproducibility_source_alignment_gate/",
+      "?? services/ml_engine/phase6_clean_clone_environment_reproducibility_gate.py",
+      "?? services/ml_engine/phase6_global_reproducibility_source_alignment_gate.py"
+    ],
+    "working_tree_dirty": true
+  },
+  "after_git": {
+    "branch": "codex/phase6-clean-clone-environment-reproducibility",
+    "commit": "f68832974e898e87cf9c6f6e68a2e43127d44089",
+    "status_short": [
+      "M docs/SNIPER_memoria_especificacao_controle_fase4R_v3.md",
+      " M reports/audits/global_spec_adherence/next_step_codex_prompt.md",
+      " M reports/audits/global_spec_adherence/next_step_recommendation.md",
+      " M reports/gates/phase5_cross_sectional_operational_fragility_audit_and_bounded_correction/gate_manifest.json",
+      " M reports/gates/phase5_cross_sectional_operational_fragility_audit_and_bounded_correction/gate_report.json",
+      " M reports/gates/phase5_cross_sectional_recent_regime_policy_falsification/gate_manifest.json",
+      " M reports/gates/phase5_cross_sectional_recent_regime_policy_falsification/gate_report.json",
+      " M reports/gates/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate/gate_manifest.json",
+      " M reports/gates/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate/gate_report.json",
+      " M reports/gates/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate/gate_report.md",
+      " M reports/gates/phase5_cross_sectional_sovereign_hardening_recheck/gate_manifest.json",
+      " M reports/gates/phase5_cross_sectional_sovereign_hardening_recheck/gate_report.json",
+      "?? .agents/skills/sniper-gate-result-reviewer/",
+      "?? reports/gates/phase6_global_reproducibility_source_alignment_gate/",
+      "?? services/ml_engine/phase6_clean_clone_environment_reproducibility_gate.py",
+      "?? services/ml_engine/phase6_global_reproducibility_source_alignment_gate.py"
+    ],
+    "working_tree_dirty": true
+  },
+  "python_executable": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe",
+  "dependency_status": "FAIL",
+  "pytest_status": "FAIL",
+  "clean_regeneration_status": "FAIL",
+  "current_workspace_dirty_before": true,
+  "current_workspace_dirty_after": true,
+  "governance_invariants": {
+    "official_promoted": false,
+    "A3_reopened": false,
+    "A4_reopened": false,
+    "RiskLabAI_official": false,
+    "cross_sectional_promoted": false,
+    "DSR_zero_masked": false
+  }
+}

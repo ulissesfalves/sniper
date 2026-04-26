@@ -1,0 +1,233 @@
+{
+  "status": "FAIL",
+  "classification": "DEPENDENCY_REPRODUCIBILITY_NOT_ESTABLISHED",
+  "python_executable": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe",
+  "requirements_file": "requirements.txt",
+  "pyproject_file": "pyproject.toml",
+  "root_pins": {
+    "polars": "0.20.16",
+    "pandas": "2.2.1",
+    "numpy": "1.26.4",
+    "pyarrow": "15.0.2",
+    "fastparquet": "2024.2.0",
+    "scikit-learn": "1.4.2",
+    "lightgbm": "4.3.0",
+    "hmmlearn": "0.3.2",
+    "statsmodels": "0.14.1",
+    "scipy": "1.13.0",
+    "joblib": "1.4.0",
+    "arch": "6.3.0",
+    "python-binance": "1.0.19",
+    "aiohttp": "3.9.5",
+    "tenacity": "8.2.3",
+    "fastapi": "0.110.2",
+    "uvicorn": "0.29.0",
+    "uvloop": "0.19.0",
+    "httptools": "0.6.1",
+    "httpx": "0.27.0",
+    "redis": "5.0.4",
+    "websockets": "12.0",
+    "aiosqlite": "0.20.0",
+    "sqlalchemy": "2.0.29",
+    "alembic": "1.13.1",
+    "python-decouple": "3.8",
+    "cryptography": "42.0.5",
+    "python-multipart": "0.0.9",
+    "pydantic": "2.7.0",
+    "pydantic-settings": "2.2.1",
+    "python-telegram-bot": "21.1.1",
+    "aiosmtplib": "3.0.1",
+    "apscheduler": "3.10.4",
+    "structlog": "24.1.0",
+    "prometheus-client": "0.20.0",
+    "matplotlib": "3.8.4",
+    "seaborn": "0.13.2"
+  },
+  "modules": [
+    {
+      "module": "polars",
+      "requirement_name": "polars",
+      "expected_pin": "0.20.16",
+      "required_attribute": "Date",
+      "importable": false,
+      "version": null,
+      "path": null,
+      "classification": "DEPENDENCY_BLOCKER",
+      "risk": "module_missing_from_runtime"
+    },
+    {
+      "module": "hmmlearn",
+      "requirement_name": "hmmlearn",
+      "expected_pin": "0.3.2",
+      "required_attribute": null,
+      "importable": false,
+      "version": null,
+      "path": null,
+      "classification": "DEPENDENCY_BLOCKER",
+      "risk": "module_missing_from_runtime"
+    },
+    {
+      "module": "pandas",
+      "requirement_name": "pandas",
+      "expected_pin": "2.2.1",
+      "required_attribute": null,
+      "importable": true,
+      "version": "2.3.1",
+      "path": "C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\pandas\\__init__.py",
+      "has_required_attribute": true,
+      "classification": "DEPENDENCY_DRIFT",
+      "risk": "installed_version_differs_from_root_pin"
+    },
+    {
+      "module": "pyarrow",
+      "requirement_name": "pyarrow",
+      "expected_pin": "15.0.2",
+      "required_attribute": null,
+      "importable": true,
+      "version": "23.0.1",
+      "path": "C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\pyarrow\\__init__.py",
+      "has_required_attribute": true,
+      "classification": "DEPENDENCY_DRIFT",
+      "risk": "installed_version_differs_from_root_pin"
+    },
+    {
+      "module": "sklearn",
+      "requirement_name": "scikit-learn",
+      "expected_pin": "1.4.2",
+      "required_attribute": null,
+      "importable": true,
+      "version": "1.7.2",
+      "path": "C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\sklearn\\__init__.py",
+      "has_required_attribute": true,
+      "classification": "DEPENDENCY_DRIFT",
+      "risk": "installed_version_differs_from_root_pin"
+    }
+  ],
+  "pip_check_passed": true,
+  "targeted_polars_hmmlearn_dry_run_passed": true,
+  "root_requirements_dry_run_passed": false,
+  "blockers": [
+    {
+      "module": "polars",
+      "requirement_name": "polars",
+      "expected_pin": "0.20.16",
+      "required_attribute": "Date",
+      "importable": false,
+      "version": null,
+      "path": null,
+      "classification": "DEPENDENCY_BLOCKER",
+      "risk": "module_missing_from_runtime"
+    },
+    {
+      "module": "hmmlearn",
+      "requirement_name": "hmmlearn",
+      "expected_pin": "0.3.2",
+      "required_attribute": null,
+      "importable": false,
+      "version": null,
+      "path": null,
+      "classification": "DEPENDENCY_BLOCKER",
+      "risk": "module_missing_from_runtime"
+    }
+  ],
+  "version_drift": [
+    {
+      "module": "pandas",
+      "requirement_name": "pandas",
+      "expected_pin": "2.2.1",
+      "required_attribute": null,
+      "importable": true,
+      "version": "2.3.1",
+      "path": "C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\pandas\\__init__.py",
+      "has_required_attribute": true,
+      "classification": "DEPENDENCY_DRIFT",
+      "risk": "installed_version_differs_from_root_pin"
+    },
+    {
+      "module": "pyarrow",
+      "requirement_name": "pyarrow",
+      "expected_pin": "15.0.2",
+      "required_attribute": null,
+      "importable": true,
+      "version": "23.0.1",
+      "path": "C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\pyarrow\\__init__.py",
+      "has_required_attribute": true,
+      "classification": "DEPENDENCY_DRIFT",
+      "risk": "installed_version_differs_from_root_pin"
+    },
+    {
+      "module": "sklearn",
+      "requirement_name": "scikit-learn",
+      "expected_pin": "1.4.2",
+      "required_attribute": null,
+      "importable": true,
+      "version": "1.7.2",
+      "path": "C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\sklearn\\__init__.py",
+      "has_required_attribute": true,
+      "classification": "DEPENDENCY_DRIFT",
+      "risk": "installed_version_differs_from_root_pin"
+    }
+  ],
+  "commands": [
+    {
+      "label": "python_version",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe --version",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 0,
+      "duration_seconds": 0.062,
+      "timed_out": false,
+      "stdout_tail": "Python 3.13.13\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "pip_version",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pip --version",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 0,
+      "duration_seconds": 0.459,
+      "timed_out": false,
+      "stdout_tail": "pip 25.3 from C:\\Users\\uliss\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\pip (python 3.13)\n\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "pip_check",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pip check",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 0,
+      "duration_seconds": 1.345,
+      "timed_out": false,
+      "stdout_tail": "No broken requirements found.\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "label": "pip_dry_run_polars_hmmlearn_pins",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pip install --dry-run polars==0.20.16 hmmlearn==0.3.2",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 0,
+      "duration_seconds": 10.853,
+      "timed_out": false,
+      "stdout_tail": "Defaulting to user installation because normal site-packages is not writeable\nCollecting polars==0.20.16\n  Using cached polars-0.20.16-cp38-abi3-win_amd64.whl.metadata (15 kB)\nCollecting hmmlearn==0.3.2\n  Using cached hmmlearn-0.3.2.tar.gz (78 kB)\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'done'\n  Getting requirements to build wheel: started\n  Getting requirements to build wheel: finished with status 'done'\n  Installing backend dependencies: started\n  Installing backend dependencies: finished with status 'done'\n  Preparing metadata (pyproject.toml): started\n  Preparing metadata (pyproject.toml): finished with status 'done'\nRequirement already satisfied: numpy>=1.10 in c:\\users\\uliss\\appdata\\local\\packages\\pythonsoftwarefoundation.python.3.13_qbz5n2kfra8p0\\localcache\\local-packages\\python313\\site-packages (from hmmlearn==0.3.2) (2.3.2)\nRequirement already satisfied: scikit-learn!=0.22.0,>=0.16 in c:\\users\\uliss\\appdata\\local\\packages\\pythonsoftwarefoundation.python.3.13_qbz5n2kfra8p0\\localcache\\local-packages\\python313\\site-packages (from hmmlearn==0.3.2) (1.7.2)\nRequirement already satisfied: scipy>=0.19 in c:\\users\\uliss\\appdata\\local\\packages\\pythonsoftwarefoundation.python.3.13_qbz5n2kfra8p0\\localcache\\local-packages\\python313\\site-packages (from hmmlearn==0.3.2) (1.16.2)\nRequirement already satisfied: joblib>=1.2.0 in c:\\users\\uliss\\appdata\\local\\packages\\pythonsoftwarefoundation.python.3.13_qbz5n2kfra8p0\\localcache\\local-packages\\python313\\site-packages (from scikit-learn!=0.22.0,>=0.16->hmmlearn==0.3.2) (1.5.2)\nRequirement already satisfied: threadpoolctl>=3.1.0 in c:\\users\\uliss\\appdata\\local\\packages\\pythonsoftwarefoundation.python.3.13_qbz5n2kfra8p0\\localcache\\local-packages\\python313\\site-packages (from scikit-learn!=0.22.0,>=0.16->hmmlearn==0.3.2) (3.6.0)\nWould install hmmlearn-0.3.2 polars-0.20.16\n",
+      "stderr_tail": "\n[notice] A new release of pip is available: 25.3 -> 26.0.1\n[notice] To update, run: C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pip install --upgrade pip\n",
+      "status": "PASS"
+    },
+    {
+      "label": "pip_dry_run_root_requirements",
+      "command": "C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pip install --dry-run -r requirements.txt",
+      "cwd": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+      "returncode": 1,
+      "duration_seconds": 31.226,
+      "timed_out": false,
+      "stdout_tail": "Defaulting to user installation because normal site-packages is not writeable\nCollecting polars==0.20.16 (from -r requirements.txt (line 8))\n  Using cached polars-0.20.16-cp38-abi3-win_amd64.whl.metadata (15 kB)\nCollecting pandas==2.2.1 (from -r requirements.txt (line 9))\n  Using cached pandas-2.2.1.tar.gz (4.4 MB)\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'error'\n",
+      "stderr_tail": "B)\n      Collecting Cython==3.0.5\n        Using cached Cython-3.0.5-py2.py3-none-any.whl.metadata (3.2 kB)\n      Collecting numpy<=2.0.0.dev0,>1.22.4\n        Using cached numpy-1.26.4.tar.gz (15.8 MB)\n        Installing build dependencies: started\n        Installing build dependencies: finished with status 'done'\n        Getting requirements to build wheel: started\n        Getting requirements to build wheel: finished with status 'done'\n        Installing backend dependencies: started\n        Installing backend dependencies: finished with status 'done'\n        Preparing metadata (pyproject.toml): started\n        Preparing metadata (pyproject.toml): finished with status 'error'\n        error: subprocess-exited-with-error\n      \n        × Preparing metadata (pyproject.toml) did not run successfully.\n        │ exit code: 1\n        ╰─> [21 lines of output]\n            + C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe C:\\Users\\uliss\\AppData\\Local\\Temp\\pip-install-8lmw13vw\\numpy_37ab4053171a4e49a36e6306f76ffc16\\vendored-meson\\meson\\meson.py setup C:\\Users\\uliss\\AppData\\Local\\Temp\\pip-install-8lmw13vw\\numpy_37ab4053171a4e49a36e6306f76ffc16 C:\\Users\\uliss\\AppData\\Local\\Temp\\pip-install-8lmw13vw\\numpy_37ab4053171a4e49a36e6306f76ffc16\\.mesonpy-9zz47utk -Dbuildtype=release -Db_ndebug=if-release -Db_vscrt=md --native-file=C:\\Users\\uliss\\AppData\\Local\\Temp\\pip-install-8lmw13vw\\numpy_37ab4053171a4e49a36e6306f76ffc16\\.mesonpy-9zz47utk\\meson-python-native-file.ini\n            The Meson build system\n            Version: 1.2.99\n            Source dir: C:\\Users\\uliss\\AppData\\Local\\Temp\\pip-install-8lmw13vw\\numpy_37ab4053171a4e49a36e6306f76ffc16\n            Build dir: C:\\Users\\uliss\\AppData\\Local\\Temp\\pip-install-8lmw13vw\\numpy_37ab4053171a4e49a36e6306f76ffc16\\.mesonpy-9zz47utk\n            Build type: native build\n            Project name: NumPy\n            Project version: 1.26.4\n            WARNING: Failed to activate VS environment: Could not find C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe\n      \n            ..\\meson.build:1:0: ERROR: Unknown compiler(s): [['icl'], ['cl'], ['cc'], ['gcc'], ['clang'], ['clang-cl'], ['pgcc']]\n            The following exception(s) were encountered:\n            Running `icl \"\"` gave \"[WinError 2] O sistema não pode encontrar o arquivo especificado\"\n            Running `cl /?` gave \"[WinError 2] O sistema não pode encontrar o arquivo especificado\"\n            Running `cc --version` gave \"[WinError 2] O sistema não pode encontrar o arquivo especificado\"\n            Running `gcc --version` gave \"[WinError 2] O sistema não pode encontrar o arquivo especificado\"\n            Running `clang --version` gave \"[WinError 2] O sistema não pode encontrar o arquivo especificado\"\n            Running `clang-cl /?` gave \"[WinError 2] O sistema não pode encontrar o arquivo especificado\"\n            Running `pgcc --version` gave \"[WinError 2] O sistema não pode encontrar o arquivo especificado\"\n      \n            A full log can be found at C:\\Users\\uliss\\AppData\\Local\\Temp\\pip-install-8lmw13vw\\numpy_37ab4053171a4e49a36e6306f76ffc16\\.mesonpy-9zz47utk\\meson-logs\\meson-log.txt\n            [end of output]\n      \n        note: This error originates from a subprocess, and is likely not a problem with pip.\n      error: metadata-generation-failed\n      \n      × Encountered error while generating package metadata.\n      ╰─> numpy\n      \n      note: This is an issue with the package mentioned above, not pip.\n      hint: See above for details.\n      [end of output]\n  \n  note: This error originates from a subprocess, and is likely not a problem with pip.\n\n[notice] A new release of pip is available: 25.3 -> 26.0.1\n[notice] To update, run: C:\\Users\\uliss\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m pip install --upgrade pip\nERROR: Failed to build 'pandas' when installing build dependencies for pandas\n",
+      "status": "FAIL"
+    }
+  ],
+  "objective_findings": [
+    "Root requirements are not reproducibly installable in this Python runtime.",
+    "polars and/or hmmlearn are missing or incompatible in the active runtime.",
+    "pip check only validates installed distributions; it does not prove that missing pinned requirements are installed."
+  ]
+}
