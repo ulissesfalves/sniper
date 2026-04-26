@@ -1,0 +1,80 @@
+{
+  "gate_slug": "phase5_stage_a3_calibrator_family_final_shootout",
+  "timestamp_utc": "2026-04-04T19:51:08+00:00",
+  "status": "PASS",
+  "decision": "advance",
+  "branch": "codex/phase5-stage1-calibrator-family-final-shootout",
+  "commit": "bc7fc59e41522b22c43759308777d4d356eca85e",
+  "baseline_commit": "bc7fc59e41522b22c43759308777d4d356eca85e",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\stage_a_report.json",
+      "exists": true,
+      "size_bytes": 389203,
+      "mtime_utc": "2026-03-30T01:24:42+00:00",
+      "sha256": "283A2F7ABBF8B690D0FEDC5AF6D468426A156D8A09E0723DDE8A71B561D67814"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\activation_calibration_summary.json",
+      "exists": true,
+      "size_bytes": 12756,
+      "mtime_utc": "2026-04-04T19:13:59+00:00",
+      "sha256": "3EB361F1B61B91865F420129870843C332D51461FA0174EC8D080B1FF14BBA9E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\choke_audit_summary.json",
+      "exists": true,
+      "size_bytes": 10525,
+      "mtime_utc": "2026-03-30T02:31:39+00:00",
+      "sha256": "98E2F0B83772E41BD995AAA86D8239A0809EC24AEE35CF45DCA673F609726BF7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\stage_a3_summary.json",
+      "exists": true,
+      "size_bytes": 6359,
+      "mtime_utc": "2026-03-30T01:27:41+00:00",
+      "sha256": "A06C2387E2F01C88984924E00FCD484EBF6CF6B76F6ED462E1961F1A2BB737BA"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_stage_a3_calibrator_family_final_shootout\\gate_report.json",
+      "exists": true,
+      "size_bytes": 8079,
+      "mtime_utc": "2026-04-04T19:51:08+00:00",
+      "sha256": "B8C092BF22144060E70B7847082AAFB47C93D96B22B84B3CF50661946C6E5BAB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_stage_a3_calibrator_family_final_shootout\\gate_report.md",
+      "exists": true,
+      "size_bytes": 2721,
+      "mtime_utc": "2026-04-04T19:51:08+00:00",
+      "sha256": "C6B5D6669A05E765A8F829EF22417116EC8339C2AFA3DD46A825FD4C63552154"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_stage_a3_calibrator_family_final_shootout\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 3856,
+      "mtime_utc": "2026-04-04T19:51:08+00:00",
+      "sha256": "C6C89C67F31A9F5B273CEC9F2EA54C079A2D25E0D1DA4CC4E96362E4B01B93E2"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_stage_a3_calibrator_family_final_shootout\\gate_manifest.json",
+      "exists": true,
+      "size_bytes": 3740,
+      "mtime_utc": "2026-04-04T19:48:57+00:00",
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    "python -m py_compile services\\ml_engine\\phase5_stage_a3_calibrator_family_final_shootout.py",
+    "python -m py_compile tests\\unit\\test_phase5_stage_a3_calibrator_family_final_shootout.py",
+    "python -m pytest tests\\unit\\test_phase5_stage_a3_calibrator_family_final_shootout.py -q",
+    "python services\\ml_engine\\phase5_stage_a3_calibrator_family_final_shootout.py"
+  ],
+  "notes": [
+    "Target q60, contest geometry, Stage 2, ranking, mu_adj, sizing and sovereign decision-space definitions remained frozen."
+  ]
+}

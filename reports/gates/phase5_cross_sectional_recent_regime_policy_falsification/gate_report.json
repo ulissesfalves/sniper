@@ -1,0 +1,83 @@
+{
+  "gate_slug": "phase5_cross_sectional_recent_regime_policy_falsification",
+  "phase_family": "phase5_cross_sectional_recent_regime_policy_falsification",
+  "status": "PARTIAL",
+  "decision": "correct",
+  "baseline_commit": "adce4c849849761653d5bb0342d8d47608a3ea8d",
+  "working_tree_dirty": true,
+  "branch": "codex/phase5-cross-sectional-recent-regime-policy-falsification",
+  "official_artifacts_used": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase3",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\features",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_gate_diagnostic.json"
+  ],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_recent_regime\\recent_regime_decomposition.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_recent_regime\\recent_regime_challengers.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_recent_regime\\recent_regime_summary.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_recent_regime\\official_artifacts_integrity.json"
+  ],
+  "summary": [
+    "classification_final=ALIVE_BUT_NOT_PROMOTABLE",
+    "plausibility=RECENT_REGIME_POLICY_FIX_PLAUSIBLE",
+    "baseline_latest_active_count_decision_space=2",
+    "baseline_headroom_decision_space=True",
+    "best_challenger=challenger_recent_edge_gate_plus_top2",
+    "best_challenger_dsr_honest=0.0"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_cross_sectional_recent_regime_policy_falsification",
+      "metric_name": "official_artifacts_unchanged",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_cross_sectional_recent_regime_policy_falsification",
+      "metric_name": "research_only_isolation_pass",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_cross_sectional_recent_regime_policy_falsification",
+      "metric_name": "reproducibility_pass",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_cross_sectional_recent_regime_policy_falsification",
+      "metric_name": "sovereign_metric_definitions_unchanged",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_cross_sectional_recent_regime_policy_falsification",
+      "metric_name": "recent_regime_fix_plausibility_classified",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_cross_sectional_recent_regime_policy_falsification",
+      "metric_name": "bounded_recent_challengers_executed",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [],
+  "risks_residual": [
+    "baseline_latest_365d_sharpe=-1.7119",
+    "best_challenger_sharpe_operational=-0.0471",
+    "best_challenger_dsr_honest=0.0"
+  ],
+  "next_recommended_step": "Freeze the family as alive but not promotable unless a later validator explicitly authorizes deeper structural work."
+}

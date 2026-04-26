@@ -1,0 +1,80 @@
+{
+  "gate_slug": "phase5_stage_a3_spec_hardening",
+  "timestamp_utc": "2026-03-30T01:27:42+00:00",
+  "baseline_commit": "d6d9adf7743cdaf0b1922c742f302af88baa7ee3",
+  "branch": "main",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+      "exists": true,
+      "size_bytes": 97451,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "exists": true,
+      "size_bytes": 21118,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+      "exists": true,
+      "size_bytes": 1234311,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+      "exists": true,
+      "size_bytes": 2872831,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "5B3144578BB99D48E2A67B3AB60B2B0AD25787A92B8488AFD1D1D5C08AE8F6C7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_gate_diagnostic.json",
+      "exists": true,
+      "size_bytes": 34779,
+      "mtime_utc": "2026-03-23T16:05:49+00:00",
+      "sha256": "C12412AEA6AE0041B2610794D0368D6E7A7BEAD258E8DAA29CDD2F7B6C8327A5"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_stage_a3_spec_hardening\\gate_report.json",
+      "exists": true,
+      "size_bytes": 6459,
+      "mtime_utc": "2026-03-30T01:27:42+00:00",
+      "sha256": "E8A5DE5556F1B6568BCC13D1F37AF3F0AE8902F21F8C07B12E72800002D6555E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_stage_a3_spec_hardening\\gate_report.md",
+      "exists": true,
+      "size_bytes": 2922,
+      "mtime_utc": "2026-03-30T01:27:42+00:00",
+      "sha256": "E63470ADAFCFD49A33710A0C57229B25120F206D7D6226A2CFB1DC6B0E41FD56"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_stage_a3_spec_hardening\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 4187,
+      "mtime_utc": "2026-03-30T01:27:42+00:00",
+      "sha256": "0C8734888936C80B6F5A0A1C0F3EC2AFABCA0F1A782383B900B815DE441B0EED"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_stage_a3_spec_hardening\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    "python services\\ml_engine\\phase5_stage_a3_spec_hardening.py"
+  ],
+  "notes": [
+    "Round stayed research-only.",
+    "Official artifact hashes were compared before and after execution."
+  ]
+}

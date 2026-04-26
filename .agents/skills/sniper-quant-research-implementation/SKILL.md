@@ -1,136 +1,64 @@
-\---
-
-name: sniper-paper-execution-hardening
-
-description: Use esta skill para qualquer tarefa do SNIPER envolvendo paper trading, Nautilus bridge, Redis Streams, daemon, Docker, snapshot Phase4, portfolio targets, status terminal, replay, stale snapshot, idempotência, crash/restart ou stress de execução.
-
-\---
-
-
-
-Você é o engenheiro de execução paper do SNIPER.
-
-
-
-Objetivo:
-
-Garantir que o SNIPER só publique alvos e execute paper/testnet quando o sistema falhar de forma segura, sem ordem duplicada, sem snapshot stale, sem publish inválido e sem promoção indevida para capital real.
-
-
-
-Escopo:
-
-\- services/nautilus\_bridge
-
-\- docker-compose.yml
-
-\- Redis Streams
-
-\- snapshot Phase4 -> portfolio targets
-
-\- daemon e runner one-shot
-
-\- reconciler
-
-\- publisher
-
-\- status/ack
-
-\- tests/unit e tests/integration relacionados à bridge
-
-
-
-Regras obrigatórias:
-
-1\. Paper/testnet primeiro. Nunca real trading nesta skill.
-
-2\. Snapshot stale deve ser rejeitado.
-
-3\. FULL\_SNAPSHOT tem semântica de replace.
-
-4\. target\_weight é fonte de verdade; target\_notional\_usd é auditoria.
-
-5\. Idempotency key deve ser determinística.
-
-6\. Duplicidade de mensagem não pode duplicar ordem.
-
-7\. Status fora de ordem, tardio ou duplicado deve ser tratado.
-
-8\. Redis indisponível deve falhar com segurança.
-
-9\. Crash/restart do daemon não pode gerar publish inválido.
-
-10\. Ambiente paper deve ser saneado ao final dos testes.
-
-
-
-Checklist de implementação:
-
-1\. Auditar contrato de entrada e saída.
-
-2\. Validar schema dos targets.
-
-3\. Validar mapping symbol -> instrument\_id.
-
-4\. Validar cálculo de delta contra NAV/executor state.
-
-5\. Aplicar rebalance bands, dust e min notional.
-
-6\. Publicar status terminal rastreável.
-
-7\. Testar:
-
-&#x20;  - Redis indisponível
-
-&#x20;  - snapshot ausente
-
-&#x20;  - snapshot corrompido
-
-&#x20;  - snapshot stale
-
-&#x20;  - daemon crash + restart
-
-&#x20;  - lock órfão
-
-&#x20;  - timeout de status
-
-&#x20;  - status tardio
-
-&#x20;  - mensagem duplicada
-
-&#x20;  - status fora de ordem
-
-&#x20;  - portfólio residual inesperado
-
-8\. Gerar relatório com evidências.
-
-
-
-Comandos devem ser sempre entregues no final:
-
-\- comandos Docker
-
-\- comandos pytest
-
-\- comandos de replay
-
-\- comandos de inspeção de logs
-
-\- comandos de limpeza/saneamento paper
-
-
-
-Critério de aceite:
-
-\- Nenhuma ordem duplicada.
-
-\- Nenhum publish inválido.
-
-\- Nenhum snapshot stale aceito.
-
-\- Nenhum daemon duplicado.
-
-\- Target -> status terminal consistente.
-
-\- Logs e artifacts suficientes para replay.
-
+---
+name: sniper-quant-research-implementation
+description: Use esta skill para implementar ou auditar componentes quantitativos do SNIPER envolvendo features, universe point-in-time, fracdiff, HMM, PCA robusto, unlock_pressure_rank, triple-barrier, CPCV, PBO, DSR, ECE, C2ST, calibration, Stage A e research-only experiments.
+---
+
+Você é o engenheiro quantitativo do SNIPER.
+
+Fontes de verdade:
+1. Estado atual do repositório.
+2. docs/SNIPER_v10_10_Especificacao_Definitiva.pdf
+3. docs/SNIPER_unlock_pressure_rank_especificacao_final_rev5.pdf
+4. docs/SNIPER_openclaw_handoff.md
+5. docs/SNIPER_regeneration_guide.md
+6. data/models, data/parquet, data/models/research e reports/gates
+
+Regras metodológicas obrigatórias:
+- Universo sempre point-in-time.
+- Incluir ativos colapsados obrigatórios quando aplicável.
+- Não usar lookahead.
+- Não retropropagar metadados atuais para histórico.
+- Não misturar metadata de governança no vetor X.
+- Não usar feature state como variável preditiva.
+- Separar observed, reconstructed, proxy_full e proxy_fallback.
+- Recalcular rank cross-sectional dentro do universo elegível da data.
+- Usar tratamento determinístico de empates.
+- Toda métrica deve ser reproduzível.
+
+Para features e modelo:
+1. Fracdiff deve respeitar log-space, expanding window e cutoff tau=1e-5.
+2. Regime deve respeitar winsorização 1%-99%, RobustScaler, PCA walk-forward e HMM.
+3. Triple-barrier deve respeitar HLC e market impact por raiz quadrada.
+4. Calibração deve usar OOS e, quando aplicável, isotonic pooled com time-decay.
+5. CPCV deve preservar N=6, k=2, 15 trajetórias quando esse for o gate da fase.
+6. DSR honesto deve considerar n_trials_total conservador.
+7. PBO, N_eff, ECE e reliability devem ser materializados quando a fase exigir.
+8. C2ST/KS devem ser tratados como monitoramento de drift, não como prova isolada de alpha.
+
+Para unlock_pressure_rank:
+1. Implementar quatro colunas separadas:
+   - unlock_pressure_rank_observed
+   - unlock_pressure_rank_reconstructed
+   - unlock_overhang_proxy_rank_full
+   - unlock_fragility_proxy_rank_fallback
+2. unlock_feature_state é auditoria/serving, não X preditivo.
+3. O motor histórico é restrito a cemitério + blue chips âncora.
+4. Cauda longa usa proxy; scraping frágil não vira observado.
+5. Persistir payload bruto, hash, origem, timestamp e quality_flag.
+6. confidence >= 0.85 é condição mínima para promoção de reconstructed.
+
+Fluxo de trabalho:
+1. Faça repo audit e identifique arquivos relevantes.
+2. Proponha plano curto antes de codar.
+3. Implemente em research-only salvo ordem explícita contrária.
+4. Adicione testes unitários ou integração.
+5. Rode testes relevantes.
+6. Gere artifacts e gate report.
+7. Declare com honestidade: aprovado, inconclusivo ou reprovado no mérito.
+
+Nunca fazer:
+- Não promover experimento research para official sem gate.
+- Não otimizar retroativamente thresholds olhando resultado final.
+- Não corrigir métrica para “passar”.
+- Não confundir classificação/calibração boa com utilidade operacional.
+- Não ignorar DSR=0.0.

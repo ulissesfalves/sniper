@@ -1,0 +1,173 @@
+{
+  "gate_slug": "phase5_stage_a3_calibrator_family_final_shootout",
+  "phase_family": "phase5_stage_a3_calibrator_family_final_shootout",
+  "status": "PASS",
+  "decision": "advance",
+  "generated_at_utc": "2026-04-04T19:51:08+00:00",
+  "baseline_commit": "bc7fc59e41522b22c43759308777d4d356eca85e",
+  "working_tree_dirty": true,
+  "branch": "codex/phase5-stage1-calibrator-family-final-shootout",
+  "summary": [
+    "Frozen A3-q60 was reproduced exactly before the calibrator-family shootout.",
+    "Platt scaling recovers aggregate calibrated mass but still leaves latest/headroom sovereign metrics dead; beta calibration remains dead as well.",
+    "Only the DIAGNOSTIC_ONLY identity proxy revives latest/headroom, so the line closes as A3_STRUCTURAL_CHOKE_CONFIRMED rather than a low-regret calibrated fix."
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_stage_a3_calibrator_family_final_shootout",
+      "metric_name": "official_artifacts_unchanged",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_stage_a3_calibrator_family_final_shootout",
+      "metric_name": "research_only_isolation_pass",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_stage_a3_calibrator_family_final_shootout",
+      "metric_name": "no_leakage_proof_pass",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_stage_a3_calibrator_family_final_shootout",
+      "metric_name": "sovereign_metric_definitions_unchanged",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_stage_a3_calibrator_family_final_shootout",
+      "metric_name": "bounded_fix_only",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_stage_a3_calibrator_family_final_shootout",
+      "metric_name": "final_a3_decision_reached",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [],
+  "final_a3_conclusion": "A3_STRUCTURAL_CHOKE_CONFIRMED",
+  "comparators": [
+    {
+      "variant": "frozen_a3_q60_current",
+      "description": "exact frozen control reproduced from the current research artifact",
+      "calibrator_family": "frozen_isotonic_cluster_specific_row_level",
+      "diagnostic_only": false,
+      "raw_hits_gt_050_row_level": 13458,
+      "calibrated_hits_gt_050_row_level": 9,
+      "raw_hits_gt_050_cpcv_aggregated": 2123,
+      "calibrated_hits_gt_050_cpcv_aggregated": 0,
+      "latest_active_count_decision_space": 0,
+      "headroom_decision_space": false,
+      "recent_live_dates_decision_space": 0,
+      "historical_active_events_decision_space": 0,
+      "sharpe_operational": 0.0,
+      "dsr_honest": 0.0,
+      "subperiods_positive": 0,
+      "official_artifacts_unchanged": true,
+      "research_only_isolation_pass": true,
+      "no_leakage_proof_pass": true,
+      "max_calibrated_cpcv_aggregated": 0.410778,
+      "live_signal_minimum_pass": false,
+      "promotable_low_regret_candidate": false
+    },
+    {
+      "variant": "challenger_platt_global_after_aggregate",
+      "description": "Platt scaling on the CPCV-aggregated Stage 1 raw score, global-only",
+      "calibrator_family": "platt_global_after_aggregate",
+      "diagnostic_only": false,
+      "raw_hits_gt_050_row_level": 13458,
+      "calibrated_hits_gt_050_row_level": 9,
+      "raw_hits_gt_050_cpcv_aggregated": 2123,
+      "calibrated_hits_gt_050_cpcv_aggregated": 64,
+      "latest_active_count_decision_space": 0,
+      "headroom_decision_space": false,
+      "recent_live_dates_decision_space": 0,
+      "historical_active_events_decision_space": 17,
+      "sharpe_operational": 0.0,
+      "dsr_honest": 0.0,
+      "subperiods_positive": 0,
+      "official_artifacts_unchanged": true,
+      "research_only_isolation_pass": true,
+      "no_leakage_proof_pass": true,
+      "max_calibrated_cpcv_aggregated": 0.622808,
+      "live_signal_minimum_pass": false,
+      "promotable_low_regret_candidate": false
+    },
+    {
+      "variant": "challenger_beta_global_after_aggregate",
+      "description": "Beta calibration on the CPCV-aggregated Stage 1 raw score, global-only",
+      "calibrator_family": "beta_global_after_aggregate",
+      "diagnostic_only": false,
+      "raw_hits_gt_050_row_level": 13458,
+      "calibrated_hits_gt_050_row_level": 9,
+      "raw_hits_gt_050_cpcv_aggregated": 2123,
+      "calibrated_hits_gt_050_cpcv_aggregated": 0,
+      "latest_active_count_decision_space": 0,
+      "headroom_decision_space": false,
+      "recent_live_dates_decision_space": 0,
+      "historical_active_events_decision_space": 0,
+      "sharpe_operational": 0.0,
+      "dsr_honest": 0.0,
+      "subperiods_positive": 0,
+      "official_artifacts_unchanged": true,
+      "research_only_isolation_pass": true,
+      "no_leakage_proof_pass": true,
+      "max_calibrated_cpcv_aggregated": 0.35977,
+      "live_signal_minimum_pass": false,
+      "promotable_low_regret_candidate": false
+    },
+    {
+      "variant": "challenger_identity_no_calibration_after_aggregate",
+      "description": "DIAGNOSTIC_ONLY: use the aggregated raw score as probability proxy with no calibrator",
+      "calibrator_family": "identity_after_aggregate",
+      "diagnostic_only": true,
+      "raw_hits_gt_050_row_level": 13458,
+      "calibrated_hits_gt_050_row_level": 13458,
+      "raw_hits_gt_050_cpcv_aggregated": 2123,
+      "calibrated_hits_gt_050_cpcv_aggregated": 2123,
+      "latest_active_count_decision_space": 1,
+      "headroom_decision_space": true,
+      "recent_live_dates_decision_space": 6,
+      "historical_active_events_decision_space": 803,
+      "sharpe_operational": -0.8715,
+      "dsr_honest": 0.0,
+      "subperiods_positive": 2,
+      "official_artifacts_unchanged": true,
+      "research_only_isolation_pass": true,
+      "no_leakage_proof_pass": true,
+      "max_calibrated_cpcv_aggregated": 0.933159,
+      "live_signal_minimum_pass": true,
+      "promotable_low_regret_candidate": false
+    }
+  ],
+  "official_artifacts_used": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_gate_diagnostic.json"
+  ],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\calibrator_family_shootout.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\calibrator_family_summary.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\calibrator_family_integrity.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\calibrator_family_decision.json"
+  ],
+  "risks_residual": [
+    "Identity revives live sovereign activation only by dropping calibration discipline, so it is diagnostic and not promotable.",
+    "The Platt challenger recovers some historical sovereign events but keeps latest/headroom at zero, which is insufficient to keep the A3 line alive under the frozen contract."
+  ],
+  "next_recommended_step": "Close the A3 line as a structural choke and stop bounded calibrator-family experimentation under the current frozen contract."
+}

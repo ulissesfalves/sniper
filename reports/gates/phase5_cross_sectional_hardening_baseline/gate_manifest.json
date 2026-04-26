@@ -1,0 +1,121 @@
+{
+  "gate_slug": "phase5_cross_sectional_hardening_baseline",
+  "timestamp_utc": "2026-04-04T23:07:58+00:00",
+  "baseline_commit": "bc7fc59e41522b22c43759308777d4d356eca85e",
+  "branch": "codex/phase5-cross-sectional-hardening-baseline",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+      "exists": true,
+      "size_bytes": 97451,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "exists": true,
+      "size_bytes": 21118,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+      "exists": true,
+      "size_bytes": 1234311,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+      "exists": true,
+      "size_bytes": 2872831,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "5B3144578BB99D48E2A67B3AB60B2B0AD25787A92B8488AFD1D1D5C08AE8F6C7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_gate_diagnostic.json",
+      "exists": true,
+      "size_bytes": 34779,
+      "mtime_utc": "2026-03-23T16:05:49+00:00",
+      "sha256": "C12412AEA6AE0041B2610794D0368D6E7A7BEAD258E8DAA29CDD2F7B6C8327A5"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_hardening\\hardening_stress_matrix.parquet",
+      "exists": true,
+      "size_bytes": 18386,
+      "mtime_utc": "2026-04-04T23:07:57+00:00",
+      "sha256": "C655008781E85B05283076112583973F7515186C3A61A3C977B5C09E18A64BA8"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_hardening\\hardening_regime_slices.parquet",
+      "exists": true,
+      "size_bytes": 7090,
+      "mtime_utc": "2026-04-04T23:07:57+00:00",
+      "sha256": "D7AB3A2C68CA0C186BCDEC57BE2389D130897EA7A5B28C432545C775C894B610"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_hardening\\hardening_failure_modes.json",
+      "exists": true,
+      "size_bytes": 1014,
+      "mtime_utc": "2026-04-04T23:07:57+00:00",
+      "sha256": "55FF0447566C88150CB1D84CDB9FC78A8193EEBB878F6030BB39498E6A8FB77E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_hardening\\phase5_cross_sectional_hardening_summary.json",
+      "exists": true,
+      "size_bytes": 6650,
+      "mtime_utc": "2026-04-04T23:07:57+00:00",
+      "sha256": "EB42E1A1382EA9F08D406140ADB526D93FEC6106BAEDE37AED3BB7921F3941FF"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_hardening\\official_artifacts_integrity.json",
+      "exists": true,
+      "size_bytes": 151186,
+      "mtime_utc": "2026-04-04T23:07:57+00:00",
+      "sha256": "411322845F7A556366D36B071BF2A386F6128A0339FB1A81DADC20FE1F5921EF"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_hardening_baseline\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3825,
+      "mtime_utc": "2026-04-04T23:07:58+00:00",
+      "sha256": "C5E732C587ADFED431236D08732178C8DA22A4BA987E08862169DC442A4A41F6"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_hardening_baseline\\gate_report.md",
+      "exists": true,
+      "size_bytes": 4532,
+      "mtime_utc": "2026-04-04T23:07:58+00:00",
+      "sha256": "6AA183881A1211E6CF173D84F0EAD331B6EC728D4C9076CBDA4D07EB7D81B898"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_hardening_baseline\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 3814,
+      "mtime_utc": "2026-04-04T23:07:58+00:00",
+      "sha256": "823A589E8609A7ADEF9F52A57591C2C0895AE1F7A772A4B879A074B43BF73AAA"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_hardening_baseline\\gate_manifest.json",
+      "exists": true,
+      "size_bytes": 5889,
+      "mtime_utc": "2026-04-04T22:13:37+00:00",
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    "python services/ml_engine/phase4_stage_a_experiment.py (clean replay run1)",
+    "python services/ml_engine/phase4_stage_a_experiment.py (clean replay run2)",
+    "python services/ml_engine/phase4_stage_a_experiment.py (feature degrade hmm neutral)",
+    "python services/ml_engine/phase4_stage_a_experiment.py (feature degrade stablecoin neutral)",
+    "python services/ml_engine/phase4_stage_a_experiment.py (universe median-history)"
+  ],
+  "notes": [
+    "classification_final=HARDENING_BASELINE_FAILS",
+    "message/order duplication guard treated as not_applicable_no_message_bus; equivalent guard enforced through replay double-run reproducibility."
+  ]
+}

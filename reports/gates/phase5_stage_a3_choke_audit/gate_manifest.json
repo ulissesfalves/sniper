@@ -1,0 +1,76 @@
+{
+  "gate_slug": "phase5_stage_a3_choke_audit",
+  "timestamp_utc": "2026-03-30T02:31:39+00:00",
+  "baseline_commit": "8ebb4161d7b4fee4e45f40ac65833e17b9d71bd3",
+  "branch": "codex/phase5-stage-a3-choke-audit",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\stage_a_report.json",
+      "exists": true,
+      "size_bytes": 389203,
+      "mtime_utc": "2026-03-30T01:24:42+00:00",
+      "sha256": "283A2F7ABBF8B690D0FEDC5AF6D468426A156D8A09E0723DDE8A71B561D67814"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\stage_a3_summary.json",
+      "exists": true,
+      "size_bytes": 6359,
+      "mtime_utc": "2026-03-30T01:27:41+00:00",
+      "sha256": "A06C2387E2F01C88984924E00FCD484EBF6CF6B76F6ED462E1961F1A2BB737BA"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\stage_a3_comparison.parquet",
+      "exists": true,
+      "size_bytes": 15957,
+      "mtime_utc": "2026-03-30T01:27:41+00:00",
+      "sha256": "5ED0E8D1105E2E3EC33D0F17A74CB390893BC31C32EBD22668634A69BABF951E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_report.json",
+      "exists": true,
+      "size_bytes": 837772,
+      "mtime_utc": "2026-03-29T06:55:53+00:00",
+      "sha256": "D0DAE9346DF71B272568CF1A5E62AB5D15ADDEADBFC326581D32D99D26F0EBFB"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_stage_a3_choke_audit\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3589,
+      "mtime_utc": "2026-03-30T02:31:39+00:00",
+      "sha256": "092D32FBFBB2AE34702D3CD65F4D29A84855727F8FAE2DF3C3E2EB326E7479E9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_stage_a3_choke_audit\\gate_report.md",
+      "exists": true,
+      "size_bytes": 2169,
+      "mtime_utc": "2026-03-30T02:31:39+00:00",
+      "sha256": "FEBA27B0EA41207EA54867084157A540D9166335FBD8C0843EC7ACAD1EA9E9B7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_stage_a3_choke_audit\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 3695,
+      "mtime_utc": "2026-03-30T02:31:39+00:00",
+      "sha256": "4B1561B2F1A7F6356E044AA650CD8FAFA30F84B57B86EFFCC957A4DB0A9EC6AB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_stage_a3_choke_audit\\gate_manifest.json",
+      "exists": true,
+      "size_bytes": 3317,
+      "mtime_utc": "2026-03-30T02:29:43+00:00",
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    "python -m py_compile services\\ml_engine\\phase5_stage_a3_choke_audit.py",
+    "python -m pytest tests\\unit\\test_phase5_stage_a3_choke_audit.py -q",
+    "python services\\ml_engine\\phase5_stage_a3_choke_audit.py"
+  ],
+  "notes": [
+    "No retraining and no official artifact mutation were allowed in this round."
+  ]
+}

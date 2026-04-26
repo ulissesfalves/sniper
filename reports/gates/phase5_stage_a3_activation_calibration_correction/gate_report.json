@@ -1,0 +1,144 @@
+{
+  "gate_slug": "phase5_stage_a3_activation_calibration_correction",
+  "phase_family": "phase5_stage_a3_activation_calibration_correction",
+  "status": "PARTIAL",
+  "decision": "correct",
+  "generated_at_utc": "2026-04-04T19:13:59+00:00",
+  "baseline_commit": "b498a11b87e615e3c1aa37d15519b4703ee30328",
+  "working_tree_dirty": true,
+  "branch": "codex/phase5-stage1-activation-calibration-correction",
+  "official_artifacts_used": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_gate_diagnostic.json"
+  ],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\activation_calibration_reconciliation.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\activation_calibration_fold_vs_aggregate.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\activation_calibration_challengers.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\activation_calibration_summary.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\activation_calibration_integrity.json"
+  ],
+  "summary": [
+    "Frozen A3-q60 was reproduced exactly at row level, CPCV aggregate and sovereign final path.",
+    "The primary choke is the calibrator fit/mapping; mean CPCV aggregation is a secondary collapse that removes the few surviving >0.50 row-level hits.",
+    "No bounded challenger restored live sovereign activation on the latest date while keeping the frozen contest geometry, Stage 2 and sizing unchanged."
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_stage_a3_activation_calibration_correction",
+      "metric_name": "official_artifacts_unchanged",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_stage_a3_activation_calibration_correction",
+      "metric_name": "research_only_isolation_pass",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_stage_a3_activation_calibration_correction",
+      "metric_name": "no_leakage_proof_pass",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_stage_a3_activation_calibration_correction",
+      "metric_name": "sovereign_metric_definitions_unchanged",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_stage_a3_activation_calibration_correction",
+      "metric_name": "counter_reconciliation_complete",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_stage_a3_activation_calibration_correction",
+      "metric_name": "dominant_choke_confirmed",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_stage_a3_activation_calibration_correction",
+      "metric_name": "bounded_fix_only",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [],
+  "risks_residual": [
+    "The best bounded challenger recovered some historical aggregate mass but still left the latest sovereign path structurally dead.",
+    "Any future correction round that changes the 0.50 sovereign threshold, contest geometry, Stage 2 or sizing would exceed the frozen scope of this micro-round."
+  ],
+  "next_recommended_step": "Run a new research-only micro-round focused on the Stage 1 calibrator family if and only if low-regret honest calibration alternatives remain inside the frozen sovereign contract.",
+  "frozen_metrics": {
+    "variant": "frozen_a3_q60",
+    "description": "exact reproduction of the previously failed q60 path",
+    "change_family": "frozen_control",
+    "raw_hits_gt_050_row_level": 13458,
+    "calibrated_hits_gt_050_row_level": 9,
+    "calibrated_hits_gt_050_cpcv_aggregated": 0,
+    "latest_active_count_decision_space": 0,
+    "headroom_decision_space": false,
+    "recent_live_dates_decision_space": 0,
+    "historical_active_events_decision_space": 0,
+    "sharpe_operational": 0.0,
+    "dsr_honest": 0.0,
+    "subperiods_positive": 0,
+    "official_artifacts_unchanged": true,
+    "research_only_isolation_pass": true,
+    "no_leakage_proof_pass": true
+  },
+  "challengers": [
+    {
+      "variant": "challenger_1",
+      "description": "aggregate then cluster-specific isotonic calibration",
+      "change_family": "cpcv_aggregation_before_threshold",
+      "raw_hits_gt_050_row_level": 13458,
+      "calibrated_hits_gt_050_row_level": 9,
+      "calibrated_hits_gt_050_cpcv_aggregated": 16,
+      "latest_active_count_decision_space": 0,
+      "headroom_decision_space": false,
+      "recent_live_dates_decision_space": 0,
+      "historical_active_events_decision_space": 15,
+      "sharpe_operational": 1.7191,
+      "dsr_honest": 0.0,
+      "subperiods_positive": 1,
+      "official_artifacts_unchanged": true,
+      "research_only_isolation_pass": true,
+      "no_leakage_proof_pass": true
+    },
+    {
+      "variant": "challenger_2",
+      "description": "aggregate then global isotonic calibration",
+      "change_family": "calibration_pooling",
+      "raw_hits_gt_050_row_level": 13458,
+      "calibrated_hits_gt_050_row_level": 9,
+      "calibrated_hits_gt_050_cpcv_aggregated": 0,
+      "latest_active_count_decision_space": 0,
+      "headroom_decision_space": false,
+      "recent_live_dates_decision_space": 0,
+      "historical_active_events_decision_space": 0,
+      "sharpe_operational": 0.0,
+      "dsr_honest": 0.0,
+      "subperiods_positive": 0,
+      "official_artifacts_unchanged": true,
+      "research_only_isolation_pass": true,
+      "no_leakage_proof_pass": true
+    }
+  ],
+  "dominant_choke_stage": "calibrator_fit_mapping_primary__cpcv_mean_aggregation_secondary",
+  "dominant_cause": "Primary collapse happens inside the calibrator fit/mapping at row level; mean CPCV aggregation then removes the few surviving >0.50 hits before the sovereign threshold."
+}

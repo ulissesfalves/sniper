@@ -1,0 +1,77 @@
+{
+  "gate_slug": "phase5_cross_sectional_hardening_baseline",
+  "phase_family": "phase5_cross_sectional_hardening_baseline",
+  "status": "PASS",
+  "decision": "abandon",
+  "baseline_commit": "bc7fc59e41522b22c43759308777d4d356eca85e",
+  "working_tree_dirty": true,
+  "branch": "codex/phase5-cross-sectional-hardening-baseline",
+  "official_artifacts_used": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase3",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\features",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_gate_diagnostic.json"
+  ],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_hardening\\hardening_stress_matrix.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_hardening\\hardening_regime_slices.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_hardening\\hardening_failure_modes.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_hardening\\phase5_cross_sectional_hardening_summary.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_hardening\\official_artifacts_integrity.json"
+  ],
+  "summary": [
+    "classification_final=HARDENING_BASELINE_FAILS",
+    "frozen_latest_active_count_decision_space=0",
+    "frozen_headroom_decision_space=False",
+    "reproducibility_pass=True",
+    "stale_dependency_check_pass=True"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_cross_sectional_hardening_baseline",
+      "metric_name": "official_artifacts_unchanged",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_cross_sectional_hardening_baseline",
+      "metric_name": "research_only_isolation_pass",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_cross_sectional_hardening_baseline",
+      "metric_name": "reproducibility_pass",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_cross_sectional_hardening_baseline",
+      "metric_name": "stale_dependency_check_pass",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_cross_sectional_hardening_baseline",
+      "metric_name": "sovereign_metric_definitions_unchanged",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "Frozen winner is already dead on the sovereign latest/headroom ruler."
+  ],
+  "risks_residual": [
+    "Frozen baseline artifact was generated from a dirty worktree.",
+    "Legacy gate report still stores auxiliary headroom proxy text; sovereign metrics were recomputed from decision_selected and position_usdt_stage_a > 0."
+  ],
+  "next_recommended_step": "Do not advance; baseline hardening must be corrected or abandoned based on the frozen-vs-replay evidence."
+}

@@ -1,0 +1,146 @@
+{
+  "gate_slug": "phase5_cross_sectional_latest_headroom_reconciliation_audit",
+  "timestamp_utc": "2026-04-05T00:49:45+00:00",
+  "branch": "codex/phase5-cross-sectional-latest-headroom-reconciliation-audit",
+  "baseline_commit": "45fb61c3867e4d5eedf60b641e2b227cedeb52b6",
+  "historical_closure_commit": "cb692cc4e37ec897d5265d7af0881a0f8986821a",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_report.json",
+      "exists": true,
+      "size_bytes": 837772,
+      "mtime_utc": "2026-03-29T06:55:53+00:00",
+      "sha256": "D0DAE9346DF71B272568CF1A5E62AB5D15ADDEADBFC326581D32D99D26F0EBFB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_manifest.json",
+      "exists": true,
+      "size_bytes": 7102,
+      "mtime_utc": "2026-03-29T06:55:53+00:00",
+      "sha256": "BB2341E59A73D417204BFAB3C3D4EDCB6ECE40F612BC85AFC449ED37DED2ECFF"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_hardening\\phase5_cross_sectional_hardening_summary.json",
+      "exists": true,
+      "size_bytes": 6681,
+      "mtime_utc": "2026-04-04T23:07:58+00:00",
+      "sha256": "DEE112B07806D35532FB8ACC3458A45483AB8C766ECEA2DEBE2D0AE25BD7C9D7"
+    },
+    {
+      "path": "git:cb692cc4e37ec897d5265d7af0881a0f8986821a:reports/gates/phase4_cross_sectional_closure_gate/gate_report.json",
+      "sha256": "A60BA4D99133CC2CBD4C752B41577D2366E09C99A6921B64BAA1D45EE5DBF115"
+    },
+    {
+      "path": "git:cb692cc4e37ec897d5265d7af0881a0f8986821a:data/models/research/phase4_cross_sectional_closure_gate/phase4_cross_sectional_closure_summary.json",
+      "sha256": "C54DCDF54450B5EC8BA0F9E8C5D7CC2377D3D00D50A3D60230068A4F1F23477A"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_latest_reconciliation\\latest_headroom_reconciliation_table.parquet",
+      "exists": true,
+      "size_bytes": 11171,
+      "mtime_utc": "2026-04-05T00:49:44+00:00",
+      "sha256": "0B306C802EBF62C031C2D0D993F63F6156EC2D137EB11FA6AA7098110EAF8270"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_latest_reconciliation\\latest_choke_decomposition.parquet",
+      "exists": true,
+      "size_bytes": 6467,
+      "mtime_utc": "2026-04-05T00:49:43+00:00",
+      "sha256": "AC72BABF39D0A3911E1D42BDBDE639A5AB4ED5F3B5BD7DE27337D374A09B158F"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_latest_reconciliation\\artifact_lineage_comparison.json",
+      "exists": true,
+      "size_bytes": 9495,
+      "mtime_utc": "2026-04-05T00:49:44+00:00",
+      "sha256": "7897570F251C71DC76D276A5F745248CA2D99043E0EC4AADC132D368F577272F"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_latest_reconciliation\\latest_date_audit.json",
+      "exists": true,
+      "size_bytes": 1118,
+      "mtime_utc": "2026-04-05T00:49:44+00:00",
+      "sha256": "FE5F7AF522F5CF2D20EC2760818AB45017561B6858B95662028218D2E1F3BED5"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_latest_reconciliation\\reconciliation_summary.json",
+      "exists": true,
+      "size_bytes": 3116,
+      "mtime_utc": "2026-04-05T00:49:44+00:00",
+      "sha256": "B6A08EB6FC33DF4182AEF7D0DD8B751A2D15183F9D024AAD03373679A25EE186"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_latest_reconciliation\\official_artifacts_integrity.json",
+      "exists": true,
+      "size_bytes": 147424,
+      "mtime_utc": "2026-04-05T00:49:44+00:00",
+      "sha256": "27EC4D692AE813592E114EA82863548221697311569592FD29D69181AD3A9543"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_latest_headroom_reconciliation_audit\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4159,
+      "mtime_utc": "2026-04-05T00:46:57+00:00",
+      "sha256": "1C0BC0FB17F3F303BF0EB8CF54DE53F126CEBED8DEC7303D18A420B223B12746"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_latest_headroom_reconciliation_audit\\gate_report.md",
+      "exists": true,
+      "size_bytes": 3927,
+      "mtime_utc": "2026-04-05T00:46:57+00:00",
+      "sha256": "AD83497A5DCADE5637053FDA4FCAD52FC11F16F49B5C982AB89A809A2499141F"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_latest_headroom_reconciliation_audit\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 3960,
+      "mtime_utc": "2026-04-05T00:46:57+00:00",
+      "sha256": "134B384CBB162B0177F4E214270C5B53DEA607776410C3B0A92D7678E0AC04AD"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_latest_headroom_reconciliation_audit\\gate_manifest.json",
+      "sha256_note": "self hash omitted inside manifest to avoid self-reference"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_latest_headroom_reconciliation_audit\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4159,
+      "mtime_utc": "2026-04-05T00:49:45+00:00",
+      "sha256": "125C7857C62449F4D0245E681D67F0880CB0B0BEB88AD8F88E35CE31FC326260"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_latest_headroom_reconciliation_audit\\gate_report.md",
+      "exists": true,
+      "size_bytes": 3927,
+      "mtime_utc": "2026-04-05T00:49:45+00:00",
+      "sha256": "AD83497A5DCADE5637053FDA4FCAD52FC11F16F49B5C982AB89A809A2499141F"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_latest_headroom_reconciliation_audit\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 3960,
+      "mtime_utc": "2026-04-05T00:49:45+00:00",
+      "sha256": "134B384CBB162B0177F4E214270C5B53DEA607776410C3B0A92D7678E0AC04AD"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_latest_headroom_reconciliation_audit\\gate_manifest.json",
+      "exists": true,
+      "size_bytes": 6988,
+      "mtime_utc": "2026-04-05T00:46:57+00:00",
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    "git branch --show-current",
+    "git rev-parse HEAD",
+    "python services\\ml_engine\\phase5_cross_sectional_latest_headroom_reconciliation_audit.py"
+  ],
+  "notes": [
+    "Historical closure artifacts were loaded directly from git history at the frozen manifest commit.",
+    "The current worktree preserves only the stage_a baseline bundle, not the historical sovereign closure bundle."
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "gate_slug": "phase5_stage_a3_choke_audit",
+  "phase_family": "phase5_stage_a3_choke_audit",
+  "status": "PASS",
+  "decision": "advance",
+  "baseline_commit": "8ebb4161d7b4fee4e45f40ac65833e17b9d71bd3",
+  "working_tree_dirty": true,
+  "branch": "codex/phase5-stage-a3-choke-audit",
+  "official_artifacts_used": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_gate_diagnostic.json"
+  ],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\choke_audit_funnel.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\choke_audit_latest_recent.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\choke_audit_cluster_breakdown.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\choke_audit_mu_adj_diagnostics.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\choke_audit_metric_definition_check.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\choke_audit_summary.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\official_artifacts_integrity_audit.json"
+  ],
+  "summary": [
+    "The sovereign decision-space ruler was audited in code and matched the prior phase5 artifact values.",
+    "The A3 q60 choke is upstream of Stage 2 utility ranking under the sovereign aggregated path.",
+    "Official artifacts remained untouched and all audit outputs stayed in research/gate areas."
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_stage_a3_choke_audit",
+      "metric_name": "official_artifacts_unchanged",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_stage_a3_choke_audit",
+      "metric_name": "research_only_isolation_pass",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_stage_a3_choke_audit",
+      "metric_name": "metric_definition_audit_complete",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_stage_a3_choke_audit",
+      "metric_name": "choke_stage_localized",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [],
+  "risks_residual": [
+    "The prior stage_a_report still carries an auxiliary proxy headroom field that must not be mistaken for the sovereign ruler.",
+    "Any future correction round must preserve the same contest geometry and sovereign decision-space definitions."
+  ],
+  "next_recommended_step": "Run one correction-only research round focused on the Stage 1 calibrated activation choke and CPCV aggregation, leaving Stage 2 and contest geometry frozen."
+}

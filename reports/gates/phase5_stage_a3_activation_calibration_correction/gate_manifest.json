@@ -1,0 +1,80 @@
+{
+  "gate_slug": "phase5_stage_a3_activation_calibration_correction",
+  "timestamp_utc": "2026-04-04T19:13:59+00:00",
+  "status": "PARTIAL",
+  "decision": "correct",
+  "branch": "codex/phase5-stage1-activation-calibration-correction",
+  "commit": "b498a11b87e615e3c1aa37d15519b4703ee30328",
+  "baseline_commit": "b498a11b87e615e3c1aa37d15519b4703ee30328",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\stage_a_report.json",
+      "exists": true,
+      "size_bytes": 389203,
+      "mtime_utc": "2026-03-30T01:24:42+00:00",
+      "sha256": "283A2F7ABBF8B690D0FEDC5AF6D468426A156D8A09E0723DDE8A71B561D67814"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\stage_a3_summary.json",
+      "exists": true,
+      "size_bytes": 6359,
+      "mtime_utc": "2026-03-30T01:27:41+00:00",
+      "sha256": "A06C2387E2F01C88984924E00FCD484EBF6CF6B76F6ED462E1961F1A2BB737BA"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_stage_a3\\stage_a3_comparison.parquet",
+      "exists": true,
+      "size_bytes": 15957,
+      "mtime_utc": "2026-03-30T01:27:41+00:00",
+      "sha256": "5ED0E8D1105E2E3EC33D0F17A74CB390893BC31C32EBD22668634A69BABF951E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_report.json",
+      "exists": true,
+      "size_bytes": 837772,
+      "mtime_utc": "2026-03-29T06:55:53+00:00",
+      "sha256": "D0DAE9346DF71B272568CF1A5E62AB5D15ADDEADBFC326581D32D99D26F0EBFB"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_stage_a3_activation_calibration_correction\\gate_report.json",
+      "exists": true,
+      "size_bytes": 6915,
+      "mtime_utc": "2026-04-04T19:13:59+00:00",
+      "sha256": "AD9BF288CB39876810EB976F4EA47FDD006B2F5F5851F5A265B0D696B671A119"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_stage_a3_activation_calibration_correction\\gate_report.md",
+      "exists": true,
+      "size_bytes": 2736,
+      "mtime_utc": "2026-04-04T19:13:59+00:00",
+      "sha256": "3456118CBD90971AC5FA25CB80F70AA273C84D05CD47643A7EB1DD733953B4EC"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_stage_a3_activation_calibration_correction\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 3897,
+      "mtime_utc": "2026-04-04T19:13:59+00:00",
+      "sha256": "3CEB99A4293A27F4D077BEA9E5AA7CBFB65190E08A40BF3B645886C8B365FD00"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_stage_a3_activation_calibration_correction\\gate_manifest.json",
+      "exists": true,
+      "size_bytes": 3771,
+      "mtime_utc": "2026-04-04T19:10:54+00:00",
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    "python -m py_compile services\\ml_engine\\phase5_stage_a3_activation_calibration_correction.py",
+    "python -m py_compile tests\\unit\\test_phase5_stage_a3_activation_calibration_correction.py",
+    "python -m pytest tests\\unit\\test_phase5_stage_a3_activation_calibration_correction.py -q",
+    "python services\\ml_engine\\phase5_stage_a3_activation_calibration_correction.py"
+  ],
+  "notes": [
+    "Frozen A3-q60, contest geometry, Stage 2 and sovereign decision-space definitions were held constant in this correction round."
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "gate_slug": "phase5_cross_sectional_sovereign_hardening_recheck",
+  "timestamp_utc": "2026-04-05T03:27:33+00:00",
+  "baseline_commit": "720abd75322e16f730ff43ade100f5c89f7c5f32",
+  "branch": "codex/phase5-cross-sectional-sovereign-hardening-recheck",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_sovereign_closure_restored\\restored_bundle_manifest.json",
+      "exists": true,
+      "size_bytes": 6199,
+      "mtime_utc": "2026-04-05T01:38:40+00:00",
+      "sha256": "A435853A2E57CC90AF6E50C2938B1F4FD37AE8CACF5DF298DC0543974953F07B"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_sovereign_restore\\sovereign_restore_replay_summary.json",
+      "exists": true,
+      "size_bytes": 3820,
+      "mtime_utc": "2026-04-05T01:39:29+00:00",
+      "sha256": "5347EDAAC68C07E6EDA2C1CFCC6FF0E77EFEDEF94336B53EC526558AFB787AEE"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_hardening\\phase5_cross_sectional_hardening_summary.json",
+      "exists": true,
+      "size_bytes": 6681,
+      "mtime_utc": "2026-04-04T23:07:58+00:00",
+      "sha256": "DEE112B07806D35532FB8ACC3458A45483AB8C766ECEA2DEBE2D0AE25BD7C9D7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_predictions.parquet",
+      "exists": true,
+      "size_bytes": 4365296,
+      "mtime_utc": "2026-03-29T06:55:53+00:00",
+      "sha256": "FC947D4C3C71175BCF5F773665DD1D5BB5F033D0E67E881F0B07B338FDA1B67E"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_sovereign_hardening_recheck\\hardening_recheck_matrix.parquet",
+      "exists": true,
+      "size_bytes": 18365,
+      "mtime_utc": "2026-04-05T03:27:32+00:00",
+      "sha256": "03BB1782643CEE183349B6937F144DD7DFC13D46A87AA1B6B33F5788D09660CD"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_sovereign_hardening_recheck\\hardening_recheck_summary.json",
+      "exists": true,
+      "size_bytes": 10605,
+      "mtime_utc": "2026-04-05T03:27:33+00:00",
+      "sha256": "6A96C951D776823752390592E78D9584C8C3E9460BA2150572449D80AA15A0AC"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_sovereign_hardening_recheck\\hardening_recheck_lineage_comparison.json",
+      "exists": true,
+      "size_bytes": 3945,
+      "mtime_utc": "2026-04-05T03:27:33+00:00",
+      "sha256": "91AC5E93AB615925EAA67EBAB18CA80B45BA8D54A2BFA0CC7CB5597C2D4A9969"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_sovereign_hardening_recheck\\official_artifacts_integrity.json",
+      "exists": true,
+      "size_bytes": 146021,
+      "mtime_utc": "2026-04-05T03:27:33+00:00",
+      "sha256": "5E7B5B96D0814C5B80573E48CA6BDFCA695F64873C8EF8082A25B63C706B312A"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4172,
+      "mtime_utc": "2026-04-05T03:27:33+00:00",
+      "sha256": "9F774621A2BA323F0C2AFD62E02BDC4024938060073385C6515806EC9299909A"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_report.md",
+      "exists": true,
+      "size_bytes": 4231,
+      "mtime_utc": "2026-04-05T03:27:33+00:00",
+      "sha256": "837171EADD300E2DA2C4D38B6E082B92A6F87C6AD31C7C8BAF13C9463A332E89"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 3912,
+      "mtime_utc": "2026-04-05T03:27:33+00:00",
+      "sha256": "77BBBC6A3E2124E25751877F55222751C5F41FC1731A3C5C3ED16C2454EAEB7C"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\reports\\gates\\phase5_cross_sectional_sovereign_hardening_recheck\\gate_manifest.json",
+      "exists": true,
+      "size_bytes": 5108,
+      "mtime_utc": "2026-04-05T03:26:03+00:00",
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    "python services/ml_engine/phase5_cross_sectional_sovereign_hardening_recheck.py"
+  ],
+  "notes": [
+    "classification_final=SOVEREIGN_HARDENING_MIXED",
+    "baseline_anchor=phase5_cross_sectional_sovereign_closure_restored",
+    "The old hardening failure was recontextualized against the restored sovereign lineage."
+  ]
+}

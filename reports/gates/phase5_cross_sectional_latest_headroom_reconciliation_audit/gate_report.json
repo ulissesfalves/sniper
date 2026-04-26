@@ -1,0 +1,81 @@
+{
+  "gate_slug": "phase5_cross_sectional_latest_headroom_reconciliation_audit",
+  "phase_family": "phase5_cross_sectional_latest_headroom_reconciliation_audit",
+  "status": "PASS",
+  "decision": "advance",
+  "branch": "codex/phase5-cross-sectional-latest-headroom-reconciliation-audit",
+  "baseline_commit": "45fb61c3867e4d5eedf60b641e2b227cedeb52b6",
+  "closure_commit": "cb692cc4e37ec897d5265d7af0881a0f8986821a",
+  "working_tree_dirty": true,
+  "official_artifacts_used": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase3",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\features",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_report_v4.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\phase4\\phase4_aggregated_predictions.parquet"
+  ],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_latest_reconciliation\\latest_headroom_reconciliation_table.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_latest_reconciliation\\latest_choke_decomposition.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_latest_reconciliation\\artifact_lineage_comparison.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_latest_reconciliation\\latest_date_audit.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_latest_reconciliation\\reconciliation_summary.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper\\data\\models\\research\\phase5_cross_sectional_latest_reconciliation\\official_artifacts_integrity.json"
+  ],
+  "summary": [
+    "dominant_cause=BASELINE_ARTIFACT_MISMATCH_CONFIRMED",
+    "closure_latest_active_count_decision_space=2",
+    "hardening_latest_active_count_decision_space=0",
+    "reproducibility_pass=True"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_cross_sectional_latest_headroom_reconciliation_audit",
+      "metric_name": "official_artifacts_unchanged",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_cross_sectional_latest_headroom_reconciliation_audit",
+      "metric_name": "research_only_isolation_pass",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_cross_sectional_latest_headroom_reconciliation_audit",
+      "metric_name": "reproducibility_pass",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_cross_sectional_latest_headroom_reconciliation_audit",
+      "metric_name": "sovereign_metric_definitions_unchanged",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_cross_sectional_latest_headroom_reconciliation_audit",
+      "metric_name": "closure_vs_hardening_reconciled",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_cross_sectional_latest_headroom_reconciliation_audit",
+      "metric_name": "dominant_cause_classified",
+      "metric_value": true,
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [],
+  "risks_residual": [
+    "The historical closure gate artifact set is no longer present in the current worktree.",
+    "The preserved stage_a snapshot proxy spans 21 dates and cannot be read as a single global latest snapshot."
+  ],
+  "next_recommended_step": "Run one bounded correction round that restores the historical closure-gate lineage as the hardening baseline input."
+}
