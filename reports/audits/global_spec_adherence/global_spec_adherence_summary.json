@@ -1,0 +1,64 @@
+{
+  "audit": {
+    "name": "sniper-global-spec-adherence-audit",
+    "date": "2026-04-26",
+    "repo": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
+    "branch": "codex/openclaw-sniper-handoff",
+    "head": "0dbab35425548b37f5806a724c1858a0d5731bcd"
+  },
+  "verdict": "GLOBAL_PARTIAL",
+  "state": "O SNIPER tem implementação substancial e documentação de governança madura, mas ainda não está aderente o suficiente para promoção operational/paper official porque há blockers quantitativos e divergências source-doc-artifact.",
+  "status_counts": {
+    "SATISFATÓRIO": 12,
+    "PARCIAL": 9,
+    "DIVERGENTE": 1,
+    "NÃO_IMPLEMENTADO": 2,
+    "NÃO_APLICÁVEL_OBSOLETO": 1
+  },
+  "top_satisfactory": [
+    "Arquitetura rev5 de unlock_pressure_rank com observado, reconstruído, proxies, feature_state e audit fields fora de X.",
+    "Fracdiff em log-space com tau=1e-5 e seleção expanding implementada.",
+    "Regime filter com winsorização, RobustScaler, PCA e HMM walk-forward.",
+    "Triple-barrier HLC e market impact por raiz quadrada com sigma_intraday.",
+    "Bridge paper/Nautilus com Redis Streams, FULL_SNAPSHOT, idempotência, stale snapshot, daemon e status terminal."
+  ],
+  "top_gaps": [
+    "Artifacts oficiais atuais registram dsr_honest=0.0 com n_trials_honest=5000.",
+    "Diagnóstico official aponta Sharpe OOS 0.3494 e subperíodos insuficientes em caminho bloqueante.",
+    "Família cross-sectional está ALIVE_BUT_NOT_PROMOTABLE e não pode ser promovida.",
+    "Memória Fase 4-R4 documenta módulos phase4_config/data/dsr/backtest/calibration que não existem como source rastreado.",
+    "CVaR existe em código, mas falta artifact empírico official persistido para auditoria direta."
+  ],
+  "must_not_reopen": [
+    "A3 como linha promotable",
+    "A4 sem evidência causal nova forte",
+    "RiskLabAI como official",
+    "Cross-sectional ALIVE_BUT_NOT_PROMOTABLE como promotable",
+    "Baseline antiga divergente do phase5_cross_sectional_sovereign_closure_restored"
+  ],
+  "inconclusive_evidence": [
+    "docs/SNIPER_v10.10_Technical_Architecture_presentation.pdf não teve texto extraível com a ferramenta disponível.",
+    "Artifacts locais em data/models/research/** precisam de regeneração limpa para provar reprodutibilidade.",
+    "Cobertura observada do unlock_pressure_rank precisa de quality report atualizado para deixar shadow."
+  ],
+  "next_step": {
+    "gate_name": "phase6_global_reproducibility_source_alignment_gate",
+    "branch": "codex/phase6-global-reproducibility-source-alignment",
+    "objective": "Alinhar documentação, source rastreado e artifacts; provar regeneração limpa; persistir CVaR empírico; manter bloqueios de promoção enquanto DSR/Sharpe/subperíodos não passarem.",
+    "expected_decision": "PARTIAL até que os blockers quantitativos sejam resolvidos por evidência reproduzível.",
+    "do_not_do": [
+      "Não promover para official",
+      "Não reabrir A3/A4",
+      "Não tratar ALIVE_BUT_NOT_PROMOTABLE como promotable",
+      "Não usar RiskLabAI como official",
+      "Não compensar lacuna de artifact com narrativa"
+    ]
+  },
+  "deliverables": [
+    "reports/audits/global_spec_adherence/global_spec_adherence_report.md",
+    "reports/audits/global_spec_adherence/global_spec_adherence_matrix.csv",
+    "reports/audits/global_spec_adherence/global_spec_adherence_summary.json",
+    "reports/audits/global_spec_adherence/global_implementation_checklist.md",
+    "reports/audits/global_spec_adherence/next_step_recommendation.md"
+  ]
+}
