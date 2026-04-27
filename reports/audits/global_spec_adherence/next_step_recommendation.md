@@ -2,7 +2,7 @@
 
 ## Estado atual
 
-A ultima rodada executada foi `phase6_source_doc_and_regeneration_preflight_gate`.
+A ultima rodada executada foi `phase6_phase4_artifact_rehydration_and_dsr_stop_gate`.
 
 Resultado: `PARTIAL/correct`
 
@@ -10,27 +10,51 @@ Classificacao da revisao: `INCONCLUSIVE_EVIDENCE`
 
 ## O que foi resolvido
 
-- A divergencia Phase 4-R4 entre documentacao e source rastreado foi resolvida por correcao documental versionada.
-- O preflight de regeneracao agora classifica artifact official ausente como `MISSING_OFFICIAL_PHASE4_ARTIFACTS`, sem stacktrace.
-- O ambiente de teste isolado em `.venv` executa os testes relevantes de Phase 5/Phase 6.
+- Os artifacts official `data/models/phase4/**` foram encontrados e registrados com hashes no gate pack.
+- A divergencia source-doc Phase 4-R4 permanece resolvida: `source_doc_alignment=ALIGNED`.
+- O preflight agora separa artifact official ausente de baseline research ausente, sem stacktrace.
+- O ambiente de teste em `.venv` passou na bateria relevante de Phase 5/Phase 6.
+- CVaR foi persistido a partir do snapshot official, com caveat explicito de exposicao zero.
+- `dsr_honest=0.0` foi registrado como blocker de promocao.
 
 ## Blockers remanescentes
 
-- `official_phase4_artifacts_missing`
+- `research_regeneration_baseline_artifacts_missing`
 - `clean_regeneration_not_proven_in_clean_clone_or_equivalent`
 - `cvar_zero_exposure_not_economic_robustness`
+- `dsr_honest_zero_blocks_promotion`
+
+## Artifacts externos necessarios para continuar
+
+Copiar ou fornecer estes arquivos em:
+
+`data/models/research/phase4_cross_sectional_ranking_baseline/`
+
+- `stage_a_predictions.parquet`
+- `stage_a_report.json`
+- `stage_a_manifest.json`
+- `stage_a_snapshot_proxy.parquet`
+
+Comandos de verificacao:
+
+```powershell
+Test-Path data\models\research\phase4_cross_sectional_ranking_baseline\stage_a_predictions.parquet
+Test-Path data\models\research\phase4_cross_sectional_ranking_baseline\stage_a_report.json
+Test-Path data\models\research\phase4_cross_sectional_ranking_baseline\stage_a_manifest.json
+Test-Path data\models\research\phase4_cross_sectional_ranking_baseline\stage_a_snapshot_proxy.parquet
+```
 
 ## Recomendacao objetiva
 
-Parar a missao autonoma ate haver decisao ou insumo do usuario.
+Parar a missao autonoma ate que o baseline research acima exista no clone. O Codex nao deve fabricar `stage_a_manifest.json` nem declarar clean regeneration PASS sem clone limpo ou ambiente equivalente documentado.
 
-Motivo: o proximo avanco material exige artifacts official de Phase 4 (`data/models/phase4/**`) ou uma regeneracao completa em clone/ambiente isolado com dados base disponiveis. Esses artifacts nao existem no clone atual e nao aparecem como versionados em branches acessiveis.
+Mesmo apos fornecer esses artifacts, nao promover nada para official enquanto `dsr_honest=0.0` e o snapshot official continuar com exposicao zero.
 
-## Opcoes seguras para continuidade
+## Proximo gate sugerido se os artifacts forem fornecidos
 
-1. Fornecer pacote auditavel de `data/models/phase4/**` com hashes e origem.
-2. Autorizar clean regeneration completa em workspace isolado com os dados base necessarios.
-3. Autorizar um gate de mudanca de estrategia para continuar sem artifact official Phase 4, mantendo o resultado como research/inconclusive e sem promocao.
+`phase6_research_baseline_rehydration_clean_regeneration_gate`
+
+Objetivo: verificar os artifacts research baseline, registrar hashes, executar clean regeneration em ambiente isolado/equivalente e manter DSR/CVaR como blockers quando aplicavel.
 
 ## O que nao deve ser feito
 
