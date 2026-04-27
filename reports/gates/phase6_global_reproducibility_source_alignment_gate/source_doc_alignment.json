@@ -1,0 +1,86 @@
+{
+  "status": "DIVERGENT",
+  "doc_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\docs\\SNIPER_memoria_especificacao_controle_fase4R_v3.md",
+  "documented_modules": [
+    {
+      "module": "phase4_config.py",
+      "documented_in_phase4r_memory": true,
+      "source_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\services\\ml_engine\\phase4_config.py",
+      "source_exists": false,
+      "source_tracked": false
+    },
+    {
+      "module": "phase4_data.py",
+      "documented_in_phase4r_memory": true,
+      "source_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\services\\ml_engine\\phase4_data.py",
+      "source_exists": false,
+      "source_tracked": false
+    },
+    {
+      "module": "phase4_dsr.py",
+      "documented_in_phase4r_memory": true,
+      "source_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\services\\ml_engine\\phase4_dsr.py",
+      "source_exists": false,
+      "source_tracked": false
+    },
+    {
+      "module": "phase4_backtest.py",
+      "documented_in_phase4r_memory": true,
+      "source_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\services\\ml_engine\\phase4_backtest.py",
+      "source_exists": false,
+      "source_tracked": false
+    },
+    {
+      "module": "phase4_calibration.py",
+      "documented_in_phase4r_memory": true,
+      "source_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\services\\ml_engine\\phase4_calibration.py",
+      "source_exists": false,
+      "source_tracked": false
+    },
+    {
+      "module": "phase4_cpcv.py",
+      "documented_in_phase4r_memory": true,
+      "source_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\services\\ml_engine\\phase4_cpcv.py",
+      "source_exists": true,
+      "source_tracked": true
+    },
+    {
+      "module": "phase4_stage_a_experiment.py",
+      "documented_in_phase4r_memory": true,
+      "source_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\services\\ml_engine\\phase4_stage_a_experiment.py",
+      "source_exists": true,
+      "source_tracked": true
+    }
+  ],
+  "tracked_phase4_source": [
+    {
+      "module": "phase4_cpcv.py",
+      "source_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\services\\ml_engine\\phase4_cpcv.py",
+      "source_exists": true,
+      "source_tracked": true,
+      "documented_in_phase4r_memory": true
+    },
+    {
+      "module": "phase4_gate_diagnostic.py",
+      "source_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\services\\ml_engine\\phase4_gate_diagnostic.py",
+      "source_exists": true,
+      "source_tracked": true,
+      "documented_in_phase4r_memory": false
+    },
+    {
+      "module": "phase4_stage_a_experiment.py",
+      "source_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\services\\ml_engine\\phase4_stage_a_experiment.py",
+      "source_exists": true,
+      "source_tracked": true,
+      "documented_in_phase4r_memory": true
+    }
+  ],
+  "missing_documented_modules": [
+    "phase4_config.py",
+    "phase4_data.py",
+    "phase4_dsr.py",
+    "phase4_backtest.py",
+    "phase4_calibration.py"
+  ],
+  "decision": "Keep Phase 4-R4 source-doc mismatch as blocker until modules are restored or documentation is corrected by an explicit gate."
+}

@@ -1,0 +1,27 @@
+{
+  "mode": "preflight_only_not_clean_clone",
+  "clean_clone_or_equivalent": false,
+  "command": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\.venv\\Scripts\\python.exe services/ml_engine/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate.py",
+  "command_executed": false,
+  "returncode": null,
+  "stdout_tail": "",
+  "stderr_tail": "",
+  "preflight": {
+    "model_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models",
+    "model_path_exists": true,
+    "phase4_dir": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4",
+    "phase4_dir_exists": false,
+    "phase4_report": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_report_v4.json",
+    "phase4_report_exists": false,
+    "phase4_snapshot": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+    "phase4_snapshot_exists": false,
+    "missing_required_artifacts": [
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4",
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_report_v4.json",
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_execution_snapshot.parquet"
+    ],
+    "classification": "MISSING_OFFICIAL_PHASE4_ARTIFACTS"
+  },
+  "classification": "INCONCLUSIVE",
+  "blocker": "MISSING_OFFICIAL_PHASE4_ARTIFACTS"
+}

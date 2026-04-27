@@ -22,6 +22,23 @@ class _DummyRebuilt:
     report: dict
 
 
+def test_git_show_bytes_enables_windows_longpaths(monkeypatch) -> None:
+    calls = []
+
+    class _Result:
+        stdout = b"{}"
+
+    def fake_run(args, **kwargs):
+        calls.append((args, kwargs))
+        return _Result()
+
+    monkeypatch.setattr(audit.subprocess, "run", fake_run)
+
+    assert audit._git_show_bytes("abc123", "very/long/path.json") == b"{}"
+    assert calls[0][0] == ["git", "-c", "core.longpaths=true", "show", "abc123:very/long/path.json"]
+    assert calls[0][1]["check"] is True
+
+
 def test_manual_decision_space_metrics_match_latest_and_recent_window() -> None:
     frame = pd.DataFrame(
         {
