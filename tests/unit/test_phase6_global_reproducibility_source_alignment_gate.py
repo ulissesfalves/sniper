@@ -134,6 +134,35 @@ def test_run_regeneration_probe_preflights_missing_research_baseline_without_sub
     assert report["preflight"]["missing_regeneration_baseline_artifacts"]
 
 
+def test_phase4_preflight_passes_with_research_baseline_artifacts(tmp_path: Path) -> None:
+    model_path = tmp_path / "models"
+    phase4_dir = model_path / "phase4"
+    baseline_dir = model_path / "research" / "phase4_cross_sectional_ranking_baseline"
+    phase4_dir.mkdir(parents=True)
+    baseline_dir.mkdir(parents=True)
+    for name in (
+        "phase4_report_v4.json",
+        "phase4_execution_snapshot.parquet",
+        "phase4_aggregated_predictions.parquet",
+        "phase4_oos_predictions.parquet",
+        "phase4_gate_diagnostic.json",
+    ):
+        (phase4_dir / name).write_bytes(b"artifact")
+    for name in (
+        "stage_a_predictions.parquet",
+        "stage_a_report.json",
+        "stage_a_manifest.json",
+        "stage_a_snapshot_proxy.parquet",
+    ):
+        (baseline_dir / name).write_bytes(b"artifact")
+
+    preflight = phase6._phase4_preflight(model_path=model_path)
+
+    assert preflight["classification"] == "PASS"
+    assert preflight["missing_required_artifacts"] == []
+    assert preflight["missing_regeneration_baseline_artifacts"] == []
+
+
 def test_phase6_script_is_tracked_or_new_source_path_under_repo() -> None:
     path = phase6.THIS_FILE
     assert path.exists()

@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -46,6 +48,9 @@ REGENERATION_BASELINE_STAGE_A_PREDICTIONS = REGENERATION_BASELINE_DIR / "stage_a
 REGENERATION_BASELINE_STAGE_A_REPORT = REGENERATION_BASELINE_DIR / "stage_a_report.json"
 REGENERATION_BASELINE_STAGE_A_MANIFEST = REGENERATION_BASELINE_DIR / "stage_a_manifest.json"
 REGENERATION_BASELINE_STAGE_A_SNAPSHOT = REGENERATION_BASELINE_DIR / "stage_a_snapshot_proxy.parquet"
+CLEAN_REGENERATION_WORKSPACE_ID = hashlib.sha1(GATE_SLUG.encode("utf-8")).hexdigest()[:12]
+CLEAN_REGENERATION_WORKSPACE = MODEL_PATH / "research" / "p6cw" / CLEAN_REGENERATION_WORKSPACE_ID
+CLEAN_REGENERATION_REPO = CLEAN_REGENERATION_WORKSPACE / "r"
 GATE_DIR = REPO_ROOT / "reports" / "gates" / GATE_SLUG
 PHASE4_R4_CORRECTION_MARKER = "PHASE6_SOURCE_DOC_ALIGNMENT_CURRENT_SOURCE"
 
@@ -121,6 +126,10 @@ def _contains(path: Path, token: str) -> bool:
     if not path.exists():
         return False
     return token in path.read_text(encoding="utf-8", errors="ignore")
+
+
+def _assert_within(path: Path, parent: Path) -> None:
+    path.resolve().relative_to(parent.resolve())
 
 
 def _coerce_float(value: Any) -> float | None:
@@ -343,6 +352,56 @@ def _phase4_preflight(model_path: Path = MODEL_PATH) -> dict[str, Any]:
     }
 
 
+def _copy_regeneration_inputs(*, clone_repo: Path, model_path: Path = MODEL_PATH) -> list[dict[str, Any]]:
+    copies: list[dict[str, Any]] = []
+    input_groups = (
+        (
+            tuple(model_path / "phase4" / path.name for path in REQUIRED_PHASE4_ARTIFACTS),
+            clone_repo / "data" / "models" / "phase4",
+        ),
+        (
+            tuple(model_path / "research" / "phase4_cross_sectional_ranking_baseline" / path.name for path in REQUIRED_REGENERATION_BASELINE_ARTIFACTS),
+            clone_repo / "data" / "models" / "research" / "phase4_cross_sectional_ranking_baseline",
+        ),
+    )
+    for paths, destination_dir in input_groups:
+        destination_dir.mkdir(parents=True, exist_ok=True)
+        for source in paths:
+            destination = destination_dir / source.name
+            shutil.copy2(source, destination)
+            copies.append(
+                {
+                    "source": artifact_record(source),
+                    "destination": str(destination),
+                }
+            )
+    return copies
+
+
+def _load_phase5_clean_gate_summary(clone_repo: Path) -> dict[str, Any]:
+    report_path = clone_repo / "reports" / "gates" / "phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate" / "gate_report.json"
+    manifest_path = clone_repo / "reports" / "gates" / "phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate" / "gate_manifest.json"
+    if not report_path.exists():
+        return {
+            "report_path": report_path,
+            "report_exists": False,
+            "manifest_path": manifest_path,
+            "manifest_exists": manifest_path.exists(),
+        }
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    return {
+        "report_path": report_path,
+        "report_exists": True,
+        "manifest_path": manifest_path,
+        "manifest_exists": manifest_path.exists(),
+        "status": report.get("status"),
+        "decision": report.get("decision"),
+        "summary": report.get("summary", []),
+        "blockers": report.get("blockers", []),
+        "next_recommended_step": report.get("next_recommended_step"),
+    }
+
+
 def run_regeneration_probe(*, repo_root: Path = REPO_ROOT, model_path: Path = MODEL_PATH) -> dict[str, Any]:
     command = [sys.executable, REGENERATION_COMMAND]
     preflight = _phase4_preflight(model_path)
@@ -359,26 +418,170 @@ def run_regeneration_probe(*, repo_root: Path = REPO_ROOT, model_path: Path = MO
             "classification": "INCONCLUSIVE",
             "blocker": preflight["classification"],
         }
-    completed = subprocess.run(
-        command,
-        cwd=repo_root,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        check=False,
-    )
-    return {
-        "mode": "local_regeneration_probe_not_clean_clone",
-        "clean_clone_or_equivalent": False,
-        "command": " ".join(command),
-        "command_executed": True,
-        "returncode": completed.returncode,
-        "stdout_tail": completed.stdout[-4000:],
-        "stderr_tail": completed.stderr[-4000:],
-        "preflight": preflight,
-        "classification": "PASS" if completed.returncode == 0 else "INCONCLUSIVE",
-        "blocker": None if completed.returncode == 0 else "local regeneration probe failed",
-    }
+    workspace_id = hashlib.sha1(GATE_SLUG.encode("utf-8")).hexdigest()[:12]
+    workspace_root = model_path / "research" / "p6cw" / workspace_id
+    clone_repo = workspace_root / "r"
+    safe_parent = model_path / "research" / "p6cw"
+    try:
+        _assert_within(workspace_root, safe_parent)
+        if workspace_root.exists():
+            shutil.rmtree(workspace_root)
+        workspace_root.mkdir(parents=True, exist_ok=True)
+
+        source_head = _git_output("rev-parse", "HEAD", cwd=repo_root)
+        clone_command = [
+            "git",
+            "-c",
+            "core.longpaths=true",
+            "clone",
+            "--no-hardlinks",
+            "--quiet",
+            "--no-checkout",
+            str(repo_root),
+            str(clone_repo),
+        ]
+        clone_completed = subprocess.run(
+            clone_command,
+            cwd=repo_root,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        if clone_completed.returncode != 0:
+            return {
+                "mode": "isolated_clean_clone_setup_failed",
+                "clean_clone_or_equivalent": False,
+                "workspace_root": workspace_root,
+                "clean_clone_path": clone_repo,
+                "command": " ".join(command),
+                "setup_commands": [" ".join(clone_command)],
+                "command_executed": False,
+                "returncode": None,
+                "stdout_tail": clone_completed.stdout[-4000:],
+                "stderr_tail": clone_completed.stderr[-4000:],
+                "preflight": preflight,
+                "classification": "INCONCLUSIVE",
+                "blocker": "clean clone setup failed",
+            }
+
+        checkout_command = ["git", "-c", "core.longpaths=true", "checkout", "--quiet", source_head]
+        checkout_completed = subprocess.run(
+            checkout_command,
+            cwd=clone_repo,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        if checkout_completed.returncode != 0:
+            return {
+                "mode": "isolated_clean_clone_setup_failed",
+                "clean_clone_or_equivalent": False,
+                "workspace_root": workspace_root,
+                "clean_clone_path": clone_repo,
+                "command": " ".join(command),
+                "setup_commands": [" ".join(clone_command), " ".join(checkout_command)],
+                "command_executed": False,
+                "returncode": None,
+                "stdout_tail": checkout_completed.stdout[-4000:],
+                "stderr_tail": checkout_completed.stderr[-4000:],
+                "preflight": preflight,
+                "classification": "INCONCLUSIVE",
+                "blocker": "clean clone checkout failed",
+            }
+
+        fetch_history_command = [
+            "git",
+            "-c",
+            "core.longpaths=true",
+            "fetch",
+            "--quiet",
+            "origin",
+            "+refs/heads/*:refs/remotes/origin/*",
+            "+refs/remotes/*:refs/remotes/source/*",
+        ]
+        fetch_history_completed = subprocess.run(
+            fetch_history_command,
+            cwd=clone_repo,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        if fetch_history_completed.returncode != 0:
+            return {
+                "mode": "isolated_clean_clone_setup_failed",
+                "clean_clone_or_equivalent": False,
+                "workspace_root": workspace_root,
+                "clean_clone_path": clone_repo,
+                "command": " ".join(command),
+                "setup_commands": [" ".join(clone_command), " ".join(checkout_command), " ".join(fetch_history_command)],
+                "command_executed": False,
+                "returncode": None,
+                "stdout_tail": fetch_history_completed.stdout[-4000:],
+                "stderr_tail": fetch_history_completed.stderr[-4000:],
+                "preflight": preflight,
+                "classification": "INCONCLUSIVE",
+                "blocker": "clean clone history fetch failed",
+            }
+
+        copied_inputs = _copy_regeneration_inputs(clone_repo=clone_repo, model_path=model_path)
+        clean_source_status_before = _git_output("status", "--short", "--untracked-files=all", cwd=clone_repo)
+        clone_head = _git_output("rev-parse", "HEAD", cwd=clone_repo)
+        completed = subprocess.run(
+            command,
+            cwd=clone_repo,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        clean_source_status_after = _git_output("status", "--short", "--untracked-files=all", cwd=clone_repo)
+        phase5_gate_summary = _load_phase5_clean_gate_summary(clone_repo)
+        clean_clone_or_equivalent = bool(
+            completed.returncode == 0
+            and clone_head == source_head
+            and clean_source_status_before == ""
+            and phase5_gate_summary.get("report_exists")
+        )
+        return {
+            "mode": "isolated_clean_clone_with_copied_base_artifacts",
+            "clean_clone_or_equivalent": clean_clone_or_equivalent,
+            "workspace_root": workspace_root,
+            "clean_clone_path": clone_repo,
+            "source_head": source_head,
+            "clone_head": clone_head,
+            "clean_source_status_before_regeneration": clean_source_status_before,
+            "clean_source_status_after_regeneration": clean_source_status_after,
+            "copied_input_artifacts": copied_inputs,
+            "command": " ".join(command),
+            "setup_commands": [" ".join(clone_command), " ".join(checkout_command), " ".join(fetch_history_command)],
+            "command_executed": True,
+            "returncode": completed.returncode,
+            "stdout_tail": completed.stdout[-4000:],
+            "stderr_tail": completed.stderr[-4000:],
+            "preflight": preflight,
+            "phase5_clean_gate_summary": phase5_gate_summary,
+            "classification": "PASS" if clean_clone_or_equivalent else "INCONCLUSIVE",
+            "blocker": None if clean_clone_or_equivalent else "clean clone regeneration failed",
+        }
+    except Exception as exc:
+        return {
+            "mode": "isolated_clean_clone_exception",
+            "clean_clone_or_equivalent": False,
+            "workspace_root": workspace_root,
+            "clean_clone_path": clone_repo,
+            "command": " ".join(command),
+            "setup_commands": [],
+            "command_executed": False,
+            "returncode": None,
+            "stdout_tail": "",
+            "stderr_tail": f"{type(exc).__name__}: {exc}",
+            "preflight": preflight,
+            "classification": "INCONCLUSIVE",
+            "blocker": "clean clone exception",
+        }
 
 
 def classify_gate(
@@ -536,8 +739,10 @@ def run_phase6_global_reproducibility_source_alignment_gate() -> dict[str, Any]:
             f"missing_documented_modules={source_alignment['missing_documented_modules']}",
             f"cvar_technical_status={cvar_report['technical_persistence_status']}",
             f"cvar_economic_status={cvar_report['economic_robustness_status']}",
+            f"regeneration_mode={regeneration_report.get('mode')}",
             f"regeneration_returncode={regeneration_report['returncode']}",
             f"regeneration_blocker={regeneration_report.get('blocker')}",
+            f"phase5_clean_gate_status={regeneration_report.get('phase5_clean_gate_summary', {}).get('status')}",
             "missing_regeneration_baseline_artifacts="
             f"{regeneration_report.get('preflight', {}).get('missing_regeneration_baseline_artifacts', [])}",
         ],
@@ -567,6 +772,7 @@ def run_phase6_global_reproducibility_source_alignment_gate() -> dict[str, Any]:
         ".\\.venv\\Scripts\\python.exe -m pytest tests/unit/test_phase6_global_reproducibility_source_alignment_gate.py tests/unit/test_gate_reports.py tests/unit/test_hmm_regime_alignment.py -q",
         gate_command,
     ]
+    commands_executed.extend(regeneration_report.get("setup_commands") or [])
     if regeneration_report.get("command_executed"):
         commands_executed.append(str(regeneration_report.get("command")))
     gate_manifest = {
@@ -600,7 +806,7 @@ def run_phase6_global_reproducibility_source_alignment_gate() -> dict[str, Any]:
             "No official promotion, A3/A4 reopening, merge, force push, credential use, or real-capital operation.",
             "Clean regeneration remains inconclusive unless the required research baseline artifacts exist and an isolated clone/equivalent proof is documented.",
             "DSR honest is read from phase4_report_v4.json and blocks any promotion when equal to 0.0.",
-            "The Phase5 restore command is skipped when preflight reports missing regeneration baseline artifacts.",
+            "Phase5 restore is executed only inside the isolated clean clone when preflight passes.",
         ],
     }
     section_bodies = {
@@ -610,7 +816,7 @@ def run_phase6_global_reproducibility_source_alignment_gate() -> dict[str, Any]:
                 f"- Source-doc alignment: `{source_alignment['status']}`.",
                 f"- Phase4 artifact integrity: `{phase4_integrity_report['artifact_integrity_status']}`.",
                 f"- DSR honest: `{phase4_integrity_report['dsr_honest']}`; promotion status `{phase4_integrity_report['promotion_status']}`.",
-                f"- Clean regeneration proof: `{regeneration_report['clean_clone_or_equivalent']}`; local probe rc `{regeneration_report['returncode']}`.",
+                f"- Clean regeneration proof: `{regeneration_report['clean_clone_or_equivalent']}`; mode `{regeneration_report.get('mode')}`; rc `{regeneration_report['returncode']}`.",
                 f"- CVaR persisted as `{cvar_report['technical_persistence_status']}` with economic status `{cvar_report['economic_robustness_status']}`.",
             ]
         ),
@@ -651,6 +857,8 @@ def run_phase6_global_reproducibility_source_alignment_gate() -> dict[str, Any]:
                 f"- DSR honest/pass: `{phase4_integrity_report['dsr_honest']}` / `{phase4_integrity_report['dsr_passed']}`.",
                 f"- Environment packages available: `{environment_report['all_required_probe_packages_available']}`.",
                 f"- Regeneration blocker: `{regeneration_report.get('blocker')}`.",
+                f"- Clean source status before regeneration: `{regeneration_report.get('clean_source_status_before_regeneration')}`.",
+                f"- Phase5 clean gate summary: `{regeneration_report.get('phase5_clean_gate_summary')}`.",
                 "- Missing regeneration baseline artifacts: "
                 f"`{regeneration_report.get('preflight', {}).get('missing_regeneration_baseline_artifacts', [])}`.",
                 f"- CVaR stress report: `{cvar_report['stress_report']}`.",
