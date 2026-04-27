@@ -755,9 +755,14 @@ def run_phase6_global_reproducibility_source_alignment_gate() -> dict[str, Any]:
             "DSR=0.0 remains a promotion blocker; this gate does not alter thresholds.",
         ],
         "next_recommended_step": (
-            "Provide the research regeneration baseline artifacts under "
-            "data/models/research/phase4_cross_sectional_ranking_baseline/ to prove clean regeneration. "
-            "Even after that, stop promotion/readiness escalation while DSR honest remains 0.0 and CVaR has zero exposure."
+            "Stop promotion/readiness escalation while DSR honest remains 0.0 and CVaR has zero exposure. "
+            "Clean regeneration is now proven when clean_clone_or_equivalent=true; the next safe work is either "
+            "a research-only quantitative alternative gate or human review/freeze, not official promotion."
+            if regeneration_report.get("clean_clone_or_equivalent")
+            else "Provide the research regeneration baseline artifacts under "
+            "data/models/research/phase4_cross_sectional_ranking_baseline/ and prove clean regeneration in an "
+            "isolated clone/equivalent. Even after that, stop promotion/readiness escalation while DSR honest "
+            "remains 0.0 and CVaR has zero exposure."
         ),
     }
     gate_command = (
@@ -804,7 +809,7 @@ def run_phase6_global_reproducibility_source_alignment_gate() -> dict[str, Any]:
         "commands_executed": commands_executed,
         "notes": [
             "No official promotion, A3/A4 reopening, merge, force push, credential use, or real-capital operation.",
-            "Clean regeneration remains inconclusive unless the required research baseline artifacts exist and an isolated clone/equivalent proof is documented.",
+            "Clean regeneration PASS requires required research baseline artifacts plus an isolated clone/equivalent proof.",
             "DSR honest is read from phase4_report_v4.json and blocks any promotion when equal to 0.0.",
             "Phase5 restore is executed only inside the isolated clean clone when preflight passes.",
         ],

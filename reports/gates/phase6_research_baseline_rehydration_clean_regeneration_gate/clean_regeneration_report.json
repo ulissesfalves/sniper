@@ -1,0 +1,155 @@
+{
+  "mode": "isolated_clean_clone_with_copied_base_artifacts",
+  "clean_clone_or_equivalent": true,
+  "workspace_root": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\p6cw\\9e7679baeca9",
+  "clean_clone_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\p6cw\\9e7679baeca9\\r",
+  "source_head": "e86f0dbfa07e4ac36d590fee46eb9a8c98bdc765",
+  "clone_head": "e86f0dbfa07e4ac36d590fee46eb9a8c98bdc765",
+  "clean_source_status_before_regeneration": "",
+  "clean_source_status_after_regeneration": "M reports/gates/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate/gate_manifest.json\n M reports/gates/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate/gate_report.json\n M reports/gates/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate/gate_report.md",
+  "copied_input_artifacts": [
+    {
+      "source": {
+        "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_report_v4.json",
+        "exists": true,
+        "size_bytes": 97451,
+        "mtime_utc": "2026-03-24T00:38:40+00:00",
+        "sha256": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9"
+      },
+      "destination": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\p6cw\\9e7679baeca9\\r\\data\\models\\phase4\\phase4_report_v4.json"
+    },
+    {
+      "source": {
+        "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+        "exists": true,
+        "size_bytes": 21118,
+        "mtime_utc": "2026-03-24T00:38:40+00:00",
+        "sha256": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB"
+      },
+      "destination": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\p6cw\\9e7679baeca9\\r\\data\\models\\phase4\\phase4_execution_snapshot.parquet"
+    },
+    {
+      "source": {
+        "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+        "exists": true,
+        "size_bytes": 1234311,
+        "mtime_utc": "2026-03-24T00:38:40+00:00",
+        "sha256": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23"
+      },
+      "destination": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\p6cw\\9e7679baeca9\\r\\data\\models\\phase4\\phase4_aggregated_predictions.parquet"
+    },
+    {
+      "source": {
+        "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+        "exists": true,
+        "size_bytes": 2872831,
+        "mtime_utc": "2026-03-24T00:38:40+00:00",
+        "sha256": "5B3144578BB99D48E2A67B3AB60B2B0AD25787A92B8488AFD1D1D5C08AE8F6C7"
+      },
+      "destination": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\p6cw\\9e7679baeca9\\r\\data\\models\\phase4\\phase4_oos_predictions.parquet"
+    },
+    {
+      "source": {
+        "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_gate_diagnostic.json",
+        "exists": true,
+        "size_bytes": 40472,
+        "mtime_utc": "2026-04-26T21:48:31+00:00",
+        "sha256": "EBFC08CDDE6F9AB3F2A6BF7F23F3A4701B2FDB2796E61776E7E842BA21E10954"
+      },
+      "destination": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\p6cw\\9e7679baeca9\\r\\data\\models\\phase4\\phase4_gate_diagnostic.json"
+    },
+    {
+      "source": {
+        "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_predictions.parquet",
+        "exists": true,
+        "size_bytes": 4365296,
+        "mtime_utc": "2026-03-29T06:55:53+00:00",
+        "sha256": "FC947D4C3C71175BCF5F773665DD1D5BB5F033D0E67E881F0B07B338FDA1B67E"
+      },
+      "destination": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\p6cw\\9e7679baeca9\\r\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_predictions.parquet"
+    },
+    {
+      "source": {
+        "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_report.json",
+        "exists": true,
+        "size_bytes": 837772,
+        "mtime_utc": "2026-03-29T06:55:53+00:00",
+        "sha256": "D0DAE9346DF71B272568CF1A5E62AB5D15ADDEADBFC326581D32D99D26F0EBFB"
+      },
+      "destination": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\p6cw\\9e7679baeca9\\r\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_report.json"
+    },
+    {
+      "source": {
+        "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_manifest.json",
+        "exists": true,
+        "size_bytes": 7102,
+        "mtime_utc": "2026-03-29T06:55:53+00:00",
+        "sha256": "BB2341E59A73D417204BFAB3C3D4EDCB6ECE40F612BC85AFC449ED37DED2ECFF"
+      },
+      "destination": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\p6cw\\9e7679baeca9\\r\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_manifest.json"
+    },
+    {
+      "source": {
+        "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_snapshot_proxy.parquet",
+        "exists": true,
+        "size_bytes": 31939,
+        "mtime_utc": "2026-03-29T06:55:53+00:00",
+        "sha256": "FE1E050820ABE77C7DF35318F13301F2A7443AE45B75B2D322CAC0AF233032B7"
+      },
+      "destination": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\p6cw\\9e7679baeca9\\r\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_snapshot_proxy.parquet"
+    }
+  ],
+  "command": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\.venv\\Scripts\\python.exe services/ml_engine/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate.py",
+  "setup_commands": [
+    "git -c core.longpaths=true clone --no-hardlinks --quiet --no-checkout C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\p6cw\\9e7679baeca9\\r",
+    "git -c core.longpaths=true checkout --quiet e86f0dbfa07e4ac36d590fee46eb9a8c98bdc765",
+    "git -c core.longpaths=true fetch --quiet origin +refs/heads/*:refs/remotes/origin/* +refs/remotes/*:refs/remotes/source/*"
+  ],
+  "command_executed": true,
+  "returncode": 0,
+  "stdout_tail": "estamp_utc\": \"2026-04-27T00:57:20+00:00\",\n    \"branch\": \"\",\n    \"baseline_commit\": \"e86f0dbfa07e4ac36d590fee46eb9a8c98bdc765\",\n    \"historical_commit\": \"cb692cc4e37ec897d5265d7af0881a0f8986821a\",\n    \"classification_final\": \"SOVEREIGN_BASELINE_RESTORED_AND_VALID\",\n    \"equivalence_classification\": \"EXACT_RESTORE\",\n    \"restored_metrics\": {\n      \"latest_date\": \"2026-03-20\",\n      \"latest_active_count_decision_space\": 2,\n      \"headroom_decision_space\": true,\n      \"recent_live_dates_decision_space\": 8,\n      \"historical_active_events_decision_space\": 3939,\n      \"latest_selected_symbols\": [\n        \"ENA\",\n        \"TAO\"\n      ],\n      \"latest_rows_total\": 9,\n      \"latest_rows_available\": 9,\n      \"latest_rows_selected\": 2,\n      \"latest_rows_position_gt_0\": 2,\n      \"max_position_usdt_latest\": 2755.347917\n    },\n    \"historical_metrics\": {\n      \"latest_date\": \"2026-03-20\",\n      \"latest_active_count_decision_space\": 2,\n      \"headroom_decision_space\": true,\n      \"recent_live_dates_decision_space\": 8,\n      \"historical_active_events_decision_space\": 3939,\n      \"latest_selected_symbols\": [\n        \"ENA\",\n        \"TAO\"\n      ],\n      \"latest_rows_total\": 9,\n      \"latest_rows_available\": 9,\n      \"latest_rows_selected\": 2,\n      \"latest_rows_position_gt_0\": 2,\n      \"max_position_usdt_latest\": 2755.347917\n    },\n    \"regenerated_replay_metrics\": {\n      \"latest_date\": \"2026-03-20\",\n      \"latest_active_count_decision_space\": 2,\n      \"headroom_decision_space\": true,\n      \"recent_live_dates_decision_space\": 8,\n      \"historical_active_events_decision_space\": 3939,\n      \"latest_selected_symbols\": [\n        \"ENA\",\n        \"TAO\"\n      ],\n      \"latest_rows_total\": 9,\n      \"latest_rows_available\": 9,\n      \"latest_rows_selected\": 2,\n      \"latest_rows_position_gt_0\": 2,\n      \"max_position_usdt_latest\": 2755.347917\n    },\n    \"reproducibility\": {\n      \"frame_hash_run1\": \"C10621BC6AD4A11ADD7148ABEC26D7C603C103848913678A587DC3B0F726F668\",\n      \"frame_hash_run2\": \"C10621BC6AD4A11ADD7148ABEC26D7C603C103848913678A587DC3B0F726F668\",\n      \"metrics_run1\": {\n        \"latest_date\": \"2026-03-20\",\n        \"latest_active_count_decision_space\": 2,\n        \"headroom_decision_space\": true,\n        \"recent_live_dates_decision_space\": 8,\n        \"historical_active_events_decision_space\": 3939,\n        \"latest_selected_symbols\": [\n          \"ENA\",\n          \"TAO\"\n        ],\n        \"latest_rows_total\": 9,\n        \"latest_rows_available\": 9,\n        \"latest_rows_selected\": 2,\n        \"latest_rows_position_gt_0\": 2,\n        \"max_position_usdt_latest\": 2755.347917\n      },\n      \"metrics_run2\": {\n        \"latest_date\": \"2026-03-20\",\n        \"latest_active_count_decision_space\": 2,\n        \"headroom_decision_space\": true,\n        \"recent_live_dates_decision_space\": 8,\n        \"historical_active_events_decision_space\": 3939,\n        \"latest_selected_symbols\": [\n          \"ENA\",\n          \"TAO\"\n        ],\n        \"latest_rows_total\": 9,\n        \"latest_rows_available\": 9,\n        \"latest_rows_selected\": 2,\n        \"latest_rows_position_gt_0\": 2,\n        \"max_position_usdt_latest\": 2755.347917\n      },\n      \"pass\": true\n    },\n    \"bundle_completeness\": {\n      \"pass\": true,\n      \"restored_files_present\": 8,\n      \"required_restored_files\": 8,\n      \"missing_restored_files\": []\n    },\n    \"no_fallback\": {\n      \"pass\": true,\n      \"detail\": \"Replay used only the preserved stage_a_predictions bundle and the restored git-history sovereign closure bundle.\",\n      \"current_predictions_path\": \"C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper_codex_autonomous\\\\data\\\\models\\\\research\\\\p6cw\\\\9e7679baeca9\\\\r\\\\data\\\\models\\\\research\\\\phase4_cross_sectional_ranking_baseline\\\\stage_a_predictions.parquet\"\n    },\n    \"stale_contamination\": {\n      \"pass\": true,\n      \"detail\": \"Current preserved stage_a_predictions remain semantically aligned with the historical cross_sectional_predictions on decision-space inputs.\"\n    },\n    \"gate_pack_complete\": true\n  }\n}\n",
+  "stderr_tail": "",
+  "preflight": {
+    "model_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models",
+    "model_path_exists": true,
+    "phase4_dir": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4",
+    "phase4_dir_exists": true,
+    "required_phase4_artifacts": [
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_report_v4.json",
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_gate_diagnostic.json"
+    ],
+    "missing_required_artifacts": [],
+    "research_baseline_dir": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline",
+    "research_baseline_dir_exists": true,
+    "required_regeneration_baseline_artifacts": [
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_predictions.parquet",
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_report.json",
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_manifest.json",
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_snapshot_proxy.parquet"
+    ],
+    "missing_regeneration_baseline_artifacts": [],
+    "classification": "PASS"
+  },
+  "phase5_clean_gate_summary": {
+    "report_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\p6cw\\9e7679baeca9\\r\\reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_report.json",
+    "report_exists": true,
+    "manifest_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\p6cw\\9e7679baeca9\\r\\reports\\gates\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\\gate_manifest.json",
+    "manifest_exists": true,
+    "status": "PASS",
+    "decision": "advance",
+    "summary": [
+      "classification_final=SOVEREIGN_BASELINE_RESTORED_AND_VALID",
+      "equivalence_classification=EXACT_RESTORE",
+      "latest_date=2026-03-20",
+      "latest_active_count_decision_space=2",
+      "headroom_decision_space=True"
+    ],
+    "blockers": [],
+    "next_recommended_step": "Use the restored sovereign closure bundle as the phase5 research baseline."
+  },
+  "classification": "PASS",
+  "blocker": null
+}
