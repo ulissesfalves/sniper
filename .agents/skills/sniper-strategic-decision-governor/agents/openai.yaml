@@ -1,0 +1,7 @@
+policy:
+  allow_implicit_invocation: false
+
+interface:
+  display_name: "SNIPER Strategic Decision Governor"
+  short_description: "Escolhe a próxima decisão estratégica mais segura para avançar o SNIPER sem violar especificação."
+  default_prompt: "$sniper-strategic-decision-governor\n\nAvalie o estado atual do SNIPER e escolha a próxima decisão mais recomendada."
