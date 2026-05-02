@@ -88,9 +88,12 @@ FASE E - Autonomous decision:
 - Stop if the next step requires an external resource or specification change.
 - Stop if there is no materially new hypothesis.
 
-The latest research-only thesis attacked Stage A nonzero exposure and was
-abandoned. This does not force human decision. The next research-only thesis
-must be materially different and should attack at least one active blocker:
+The Stage A nonzero-exposure thesis was abandoned. The research sandbox CVaR
+evaluator then measured nonzero sandbox exposure with max CVaR95 loss fraction
+`0.01072844`, but stayed `PARTIAL/correct` because alpha merit, DSR and official
+zero exposure remain blockers. This does not force human decision. The next
+research-only thesis must be materially different and should attack at least one
+active blocker:
 
 - `dsr_honest=0.0`;
 - official CVaR zero exposure;
@@ -99,6 +102,8 @@ must be materially different and should attack at least one active blocker:
 
 Do not reuse `stage_a_eligible` as an ex-ante decision rule; it is treated as a
 realized diagnostic field.
+
+Current recommended next gate: `phase5_research_dsr_zero_diagnostic_gate`.
 
 ## Forbidden Interpretations
 

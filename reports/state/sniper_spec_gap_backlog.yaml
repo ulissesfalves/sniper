@@ -7,6 +7,7 @@ gaps:
     evidence:
       - "reports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/phase4_artifact_integrity_report.json"
       - "reports/gates/phase5_research_only_stage_a_nonzero_exposure_falsification_gate/gate_report.json"
+      - "reports/gates/phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate/gate_report.json"
       - "dsr_honest=0.0"
       - "dsr_passed=false"
       - "safe Stage A top1 median combo Sharpe=-0.727203"
@@ -21,7 +22,7 @@ gaps:
       - "PROMOTE_OFFICIAL"
       - "RELAX_DSR_THRESHOLD"
       - "DECLARE_READINESS"
-    suggested_gate: "autonomous_select_next_research_only_hypothesis_from_backlog"
+    suggested_gate: "phase5_research_dsr_zero_diagnostic_gate"
     stop_condition_if_unresolved: "No promotion or readiness claim is allowed while honest DSR remains 0.0."
 
   - id: GAP-CVAR-001
@@ -31,9 +32,12 @@ gaps:
     status: open
     evidence:
       - "reports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/portfolio_cvar_report.json"
+      - "reports/gates/phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate/gate_report.json"
       - "positions={}"
       - "total_exposure_pct=0.0"
       - "economic_robustness_status=NOT_PROVEN_ZERO_EXPOSURE"
+      - "research_sandbox_active_combo_days=10576"
+      - "research_sandbox_max_cvar_95_loss_fraction=0.01072844"
     source_files:
       - "data/models/phase4/phase4_execution_snapshot.parquet"
     allowed_actions:
@@ -43,8 +47,32 @@ gaps:
     forbidden_actions:
       - "TREAT_ZERO_EXPOSURE_CVAR_AS_ECONOMIC_ROBUSTNESS"
       - "DECLARE_PAPER_READINESS"
-    suggested_gate: "research_sandbox_nonzero_exposure_cvar_evaluation_gate"
+    suggested_gate: "phase5_research_dsr_zero_diagnostic_gate"
     stop_condition_if_unresolved: "Paper readiness is forbidden unless nonzero exposure or approved stress evidence exists."
+
+  - id: GAP-CVAR-002
+    title: Research sandbox nonzero-exposure CVaR evaluator is available
+    type: research_diagnostic
+    severity: medium
+    status: resolved
+    evidence:
+      - "reports/gates/phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate/gate_report.json"
+      - "research_active_combo_days=10576"
+      - "research_max_cvar_95_loss_fraction=0.01072844"
+      - "official_snapshot_exposure_fraction=0.0"
+    source_files:
+      - "services/ml_engine/phase5_research_sandbox_nonzero_exposure_cvar_evaluation.py"
+      - "tests/unit/test_phase5_research_sandbox_nonzero_exposure_cvar_evaluation.py"
+    allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
+      - "START_RESEARCH_ONLY_THESIS"
+      - "RUN_GLOBAL_REAUDIT"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "TREAT_RESEARCH_CVAR_AS_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+    suggested_gate: "phase5_research_dsr_zero_diagnostic_gate"
+    stop_condition_if_unresolved: "This resolved research diagnostic does not remove official CVaR or DSR blockers."
 
   - id: GAP-XSEC-001
     title: Cross-sectional family is alive but not promotable

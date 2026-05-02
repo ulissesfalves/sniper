@@ -13,18 +13,19 @@
     "observed_before_local_gate_commits": false
   },
   "latest_gate": {
-    "gate_slug": "phase5_research_only_stage_a_nonzero_exposure_falsification_gate",
-    "status": "FAIL",
-    "decision": "abandon"
+    "gate_slug": "phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate",
+    "status": "PARTIAL",
+    "decision": "correct"
   },
-  "latest_decision": "CONTINUE_AUTONOMOUS_RESEARCH_ONLY_AFTER_FAILED_THESIS_WITH_BUDGET",
+  "latest_decision": "CONTINUE_AUTONOMOUS_AFTER_RESEARCH_SANDBOX_CVAR_PARTIAL",
   "resolved_blockers": [
     "source_doc_alignment_restored",
     "phase4_official_artifacts_found_and_hashed",
     "research_baseline_artifacts_found_and_hashed",
     "clean_regeneration_proven",
     "operating_memory_bootstrapped",
-    "stage_a_realized_eligibility_leakage_risk_identified"
+    "stage_a_realized_eligibility_leakage_risk_identified",
+    "research_sandbox_nonzero_exposure_cvar_evaluator_available"
   ],
   "open_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -77,7 +78,18 @@
     "technical_status": "PASS_ZERO_EXPOSURE",
     "economic_status": "NOT_PROVEN_ZERO_EXPOSURE",
     "total_exposure_pct": 0.0,
-    "promotion_allowed": false
+    "promotion_allowed": false,
+    "research_sandbox_status": {
+      "gate_slug": "phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate",
+      "status": "PARTIAL",
+      "decision": "correct",
+      "exposure_status": "NONZERO_EXPOSURE_MEASURED_RESEARCH_ONLY",
+      "active_combo_days": 10576,
+      "max_cvar_95_loss_fraction": 0.01072844,
+      "median_cvar_95_loss_fraction": 0.00313685,
+      "promotion_allowed": false,
+      "caveat": "Research sandbox CVaR passed measurement bounds, but alpha merit, DSR, and official zero exposure remain blockers."
+    }
   },
   "dsr_status": {
     "dsr_honest": 0.0,
@@ -93,17 +105,17 @@
   "paper_readiness_allowed": false,
   "required_external_artifacts": [],
   "latest_research_thesis": {
-    "gate_slug": "phase5_research_only_stage_a_nonzero_exposure_falsification_gate",
-    "hypothesis": "Stage A research baseline can produce nonzero sandbox exposure and enough ex-ante-safe merit to justify further research.",
-    "status": "FAIL",
-    "decision": "abandon",
-    "classification": "ONLY_REALIZED_ELIGIBILITY_LOOKS_GOOD_SAFE_POLICY_FAILS",
-    "safe_selected_events": 10576,
-    "safe_selected_dates": 2112,
-    "safe_median_combo_sharpe": -0.727203,
-    "unsafe_median_combo_sharpe": 14.525046
+    "gate_slug": "phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate",
+    "hypothesis": "A research/sandbox CVaR evaluator can measure empirical CVaR on nonzero ex-ante exposure without promoting official or treating zero-exposure official CVaR as economic robustness.",
+    "status": "PARTIAL",
+    "decision": "correct",
+    "classification": "NONZERO_EXPOSURE_RESEARCH_CVAR_PASS_BUT_ALPHA_DSR_BLOCKERS_REMAIN",
+    "active_combo_days": 10576,
+    "max_cvar_95_loss_fraction": 0.01072844,
+    "median_cvar_95_loss_fraction": 0.00313685,
+    "median_combo_sharpe": -0.727203
   },
   "next_recommended_mode": "CONTINUE_AUTONOMOUS",
-  "next_recommended_gate": "autonomous_select_next_research_only_hypothesis_from_backlog",
-  "updated_at_utc": "2026-05-02T12:36:22Z"
+  "next_recommended_gate": "phase5_research_dsr_zero_diagnostic_gate",
+  "updated_at_utc": "2026-05-02T12:44:40Z"
 }

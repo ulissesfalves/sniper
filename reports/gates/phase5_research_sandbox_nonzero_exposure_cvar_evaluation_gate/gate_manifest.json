@@ -1,0 +1,89 @@
+{
+  "gate_slug": "phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate",
+  "timestamp_utc": "2026-05-02T12:44:13+00:00",
+  "baseline_commit": "bfb170d8512f3610227c75f518c4117e44445f66",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_predictions.parquet",
+      "exists": true,
+      "size_bytes": 4365296,
+      "mtime_utc": "2026-03-29T06:55:53+00:00",
+      "sha256": "FC947D4C3C71175BCF5F773665DD1D5BB5F033D0E67E881F0B07B338FDA1B67E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "exists": true,
+      "size_bytes": 21118,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_report_v4.json",
+      "exists": true,
+      "size_bytes": 97451,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate\\research_sandbox_nonzero_exposure_cvar_summary.json",
+      "exists": true,
+      "size_bytes": 8811,
+      "mtime_utc": "2026-05-02T12:44:13+00:00",
+      "sha256": "919B62BBE541AD8F9D5D676FA7868FD20DFC23ABB86ADCFBCF0F9599D6A39F32"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate\\research_sandbox_nonzero_exposure_daily_returns.parquet",
+      "exists": true,
+      "size_bytes": 79330,
+      "mtime_utc": "2026-05-02T12:44:13+00:00",
+      "sha256": "6D8809D77796D7F9A03B4F2FBEC11E903BE8936212A6F1720957FF0D798930DE"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate\\research_sandbox_nonzero_exposure_cvar_combo_metrics.parquet",
+      "exists": true,
+      "size_bytes": 9564,
+      "mtime_utc": "2026-05-02T12:44:13+00:00",
+      "sha256": "A46A44C70279D644ACDFB6FF89119BCD2C66680C6FD86A74479C65A7AFC27996"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4192,
+      "mtime_utc": "2026-05-02T12:44:13+00:00",
+      "sha256": "58DBC8A3814E01E5A4E949324E28B7B7D290BF3F00555B5D0AA8A27EA5CFAB46"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 2021,
+      "mtime_utc": "2026-05-02T12:44:13+00:00",
+      "sha256": "8AE4AB28880115ADB7DF7EBBBBD993643CF77612ABEEC4EDB16815C9446BA838"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 4057,
+      "mtime_utc": "2026-05-02T12:44:13+00:00",
+      "sha256": "C99B582D32BBE5D8B4F11B113C1918028EFA697932F58B8D7E917CE1C3D20405"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    ".\\.venv\\Scripts\\python.exe services\\ml_engine\\phase5_research_sandbox_nonzero_exposure_cvar_evaluation.py"
+  ],
+  "notes": [
+    "Research/sandbox CVaR evaluation gate.",
+    "No official artifacts were promoted.",
+    "Selection uses rank_score_stage_a only; realized stage_a_eligible is not used as a policy input.",
+    "Official zero-exposure CVaR remains a blocker and is not treated as economic robustness."
+  ]
+}
