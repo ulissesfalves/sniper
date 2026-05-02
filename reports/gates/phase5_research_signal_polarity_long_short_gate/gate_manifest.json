@@ -1,0 +1,102 @@
+{
+  "gate_slug": "phase5_research_signal_polarity_long_short_gate",
+  "timestamp_utc": "2026-05-02T14:40:00+00:00",
+  "baseline_commit": "637f50a7e23b320082d8e08e720bc1ee63e8731c",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_predictions.parquet",
+      "exists": true,
+      "size_bytes": 4365296,
+      "mtime_utc": "2026-03-29T06:55:53+00:00",
+      "sha256": "FC947D4C3C71175BCF5F773665DD1D5BB5F033D0E67E881F0B07B338FDA1B67E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_alternative_exante_family_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4689,
+      "mtime_utc": "2026-05-02T14:30:01+00:00",
+      "sha256": "06C4AC0238586A069522B73B154E13005657D923373700D5164956064A27C6F4"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_long_short_gate\\signal_polarity_positions.parquet",
+      "exists": true,
+      "size_bytes": 3042795,
+      "mtime_utc": "2026-05-02T14:40:00+00:00",
+      "sha256": "464E5EEBB2345F88D95F47F552F3022280E7BF3BCC23313F5500497F5E046A62"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_long_short_gate\\signal_polarity_daily_returns.parquet",
+      "exists": true,
+      "size_bytes": 321313,
+      "mtime_utc": "2026-05-02T14:40:00+00:00",
+      "sha256": "85066BAF33912EC64C5BDD4A62FDC21D4DB31585261376966B021240C9F251E6"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_long_short_gate\\signal_polarity_trade_log.parquet",
+      "exists": true,
+      "size_bytes": 75904,
+      "mtime_utc": "2026-05-02T14:40:00+00:00",
+      "sha256": "8027FABDFA610EE6FCACB32A7A618379BD87BFB3F1AC47A2C2849AE06AC1D294"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_long_short_gate\\signal_polarity_metrics.parquet",
+      "exists": true,
+      "size_bytes": 19117,
+      "mtime_utc": "2026-05-02T14:40:00+00:00",
+      "sha256": "77A5632D19CD75BABFAC01126DD6234C91AF9861FA282A9241D59A52FB99A3A9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_long_short_gate\\signal_polarity_snapshot_proxy.parquet",
+      "exists": true,
+      "size_bytes": 9328,
+      "mtime_utc": "2026-05-02T14:40:00+00:00",
+      "sha256": "4433067CEE07D750EB9576CC8F0C14D1E02324A883EB7B17E9E666FBACDE27D2"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_long_short_gate\\portfolio_cvar_research_report.json",
+      "exists": true,
+      "size_bytes": 7387,
+      "mtime_utc": "2026-05-02T14:40:00+00:00",
+      "sha256": "1287EFC2506EE70C6C01C7F590913D6662A3CF311F59B7B08D2830DD72FE56FC"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_long_short_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3944,
+      "mtime_utc": "2026-05-02T14:40:00+00:00",
+      "sha256": "90C6FCFE655FD249342BCBA089ABC42454B15500BACCD8253F41E2BDF5E418B0"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_long_short_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 1551,
+      "mtime_utc": "2026-05-02T14:40:00+00:00",
+      "sha256": "64E0BD20257C618F88DDF4926E98C484F26E2B87FE8E28969BE3A4AF5CFF6BA5"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_long_short_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 3979,
+      "mtime_utc": "2026-05-02T14:40:00+00:00",
+      "sha256": "7E41201B94A1FE5E8776CC512946BF12C1E29593D08F6E695B4B5AB4AE375735"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_long_short_gate\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    ".\\.venv\\Scripts\\python.exe services\\ml_engine\\phase5_research_signal_polarity_long_short.py"
+  ],
+  "notes": [
+    "Research-only signal polarity gate with sandbox short exposure.",
+    "No real orders, no credentials, no official promotion.",
+    "pnl_real is used only as realized outcome for backtest scoring."
+  ]
+}
