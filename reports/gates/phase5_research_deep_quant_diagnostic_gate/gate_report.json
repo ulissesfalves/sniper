@@ -1,0 +1,88 @@
+{
+  "gate_slug": "phase5_research_deep_quant_diagnostic_gate",
+  "phase_family": "phase5_research_deep_quant_diagnostic",
+  "status": "PASS",
+  "decision": "advance",
+  "baseline_commit": "e8965429d64335ac41dae14243ff35322944be26",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_report_v4.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_gate_diagnostic.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_research_baseline_rehydration_clean_regeneration_gate\\phase4_artifact_integrity_report.json"
+  ],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_deep_quant_diagnostic_gate\\deep_quant_diagnostic_report.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_deep_quant_diagnostic_gate\\deep_quant_combo_metrics.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_deep_quant_diagnostic_gate\\deep_quant_subperiod_metrics.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_deep_quant_diagnostic_gate\\deep_quant_policy_sensitivity.parquet"
+  ],
+  "summary": [
+    "classification=DEEP_QUANT_DSR_AND_STABILITY_DIAGNOSTIC_COMPLETE",
+    "dsr_honest=0.0",
+    "sharpe_is=0.8808",
+    "sr_needed=4.47",
+    "sharpe_gap_to_sr_needed=3.5892",
+    "median_research_sharpe=-0.727203",
+    "min_research_sharpe=-4.321026",
+    "negative_subperiod_count=32",
+    "positive_and_stable_policy_count=0",
+    "diagnostic only; no official promotion attempted"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_research_deep_quant_diagnostic_gate",
+      "metric_name": "diagnostic_complete",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_deep_quant_diagnostic_gate",
+      "metric_name": "dsr_honest",
+      "metric_value": 0.0,
+      "metric_threshold": ">= 0.95 for promotion",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_deep_quant_diagnostic_gate",
+      "metric_name": "sharpe_gap_to_sr_needed",
+      "metric_value": 3.5892,
+      "metric_threshold": "<= 0.0",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_deep_quant_diagnostic_gate",
+      "metric_name": "median_research_sharpe",
+      "metric_value": -0.727203,
+      "metric_threshold": "> 0.0 diagnostic only",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_deep_quant_diagnostic_gate",
+      "metric_name": "negative_subperiod_count",
+      "metric_value": 32,
+      "metric_threshold": "== 0 for stable candidate",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_deep_quant_diagnostic_gate",
+      "metric_name": "positive_and_stable_policy_count",
+      "metric_value": 0,
+      "metric_threshold": "> 0",
+      "metric_status": "FAIL"
+    }
+  ],
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "sharpe_gap_to_required_honest_dsr",
+    "subperiod_and_combo_instability",
+    "no_stable_positive_prior_policy"
+  ],
+  "risks_residual": [
+    "The diagnostic explains constraints but is not an operational signal.",
+    "A new ex-ante research family is required to attack the Sharpe gap.",
+    "Official CVaR and promotion blockers remain unchanged."
+  ],
+  "next_recommended_step": "Continue with an alternative research-only family using ex-ante p_bma/sigma/hmm/uncertainty signals, not Stage A realized eligibility and not rank_score repetitions."
+}
