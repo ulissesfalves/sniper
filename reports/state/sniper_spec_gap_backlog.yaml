@@ -18,7 +18,8 @@ gaps:
       - "sharpe_gap_to_sr_needed=3.5892"
       - "threshold family best median combo Sharpe=0.331124"
       - "threshold family stability correction failed; best correction median Sharpe=0.195832"
-      - "current hypothesis space frozen pending human strategic decision"
+      - "current hypothesis space frozen under previous 5-gate policy"
+      - "AUTONOMOUS FULL PHASE EXECUTION POLICY now authorizes broader future missions"
     source_files:
       - "data/models/phase4/phase4_report_v4.json"
       - "data/models/phase4/phase4_gate_diagnostic.json"
@@ -30,7 +31,7 @@ gaps:
       - "PROMOTE_OFFICIAL"
       - "RELAX_DSR_THRESHOLD"
       - "DECLARE_READINESS"
-    suggested_gate: "none_until_new_human_approved_research_thesis"
+    suggested_gate: "autonomous_full_phase_family_selection_gate"
     stop_condition_if_unresolved: "No promotion or readiness claim is allowed while honest DSR remains 0.0."
 
   - id: GAP-DSR-002
@@ -56,7 +57,7 @@ gaps:
       - "PROMOTE_OFFICIAL"
       - "RELAX_DSR_THRESHOLD"
       - "TREAT_DIAGNOSTIC_AS_SIGNAL"
-    suggested_gate: "phase5_research_rank_score_threshold_sizing_falsification_gate"
+    suggested_gate: "autonomous_full_phase_family_selection_gate"
     stop_condition_if_unresolved: "The diagnostic is resolved, but the DSR blocker remains open until a materially better ex-ante alpha path exists."
 
   - id: GAP-CVAR-001
@@ -81,7 +82,7 @@ gaps:
     forbidden_actions:
       - "TREAT_ZERO_EXPOSURE_CVAR_AS_ECONOMIC_ROBUSTNESS"
       - "DECLARE_PAPER_READINESS"
-    suggested_gate: "phase5_research_rank_score_threshold_sizing_falsification_gate"
+    suggested_gate: "autonomous_full_phase_family_selection_gate"
     stop_condition_if_unresolved: "Paper readiness is forbidden unless nonzero exposure or approved stress evidence exists."
 
   - id: GAP-CVAR-002
@@ -105,7 +106,7 @@ gaps:
       - "PROMOTE_OFFICIAL"
       - "TREAT_RESEARCH_CVAR_AS_OFFICIAL"
       - "DECLARE_PAPER_READINESS"
-    suggested_gate: "phase5_research_dsr_zero_diagnostic_gate"
+    suggested_gate: "autonomous_full_phase_family_selection_gate"
     stop_condition_if_unresolved: "This resolved research diagnostic does not remove official CVaR or DSR blockers."
 
   - id: GAP-XSEC-001
@@ -130,7 +131,7 @@ gaps:
     forbidden_actions:
       - "PROMOTE_OFFICIAL"
       - "TREAT_RESEARCH_AS_OFFICIAL"
-    suggested_gate: "none_until_new_human_approved_research_thesis"
+    suggested_gate: "autonomous_full_phase_family_selection_gate"
     stop_condition_if_unresolved: "Do not promote cross-sectional while this status remains."
 
   - id: GAP-PAPER-001
@@ -237,17 +238,20 @@ gaps:
     title: Current autonomous research hypothesis space frozen
     type: governance_state
     severity: high
-    status: resolved
+    status: historical_resolved
     evidence:
       - "reports/gates/phase5_research_hypothesis_space_freeze_gate/gate_report.json"
       - "surviving_promotable_candidates=0"
       - "official_promotion_allowed=false"
       - "paper_readiness_allowed=false"
-      - "can_continue_autonomously=false"
+      - "freeze was produced under previous 5-gate policy"
+      - "future freeze requires at least 2 materially different families, DSR diagnostic, CVaR research when applicable, family comparison and decision ledger update"
     source_files:
       - "services/ml_engine/phase5_research_hypothesis_space_freeze_gate.py"
       - "reports/state/sniper_current_state.json"
     allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
+      - "START_RESEARCH_ONLY_THESIS"
       - "RUN_GLOBAL_REAUDIT"
       - "STOP_FOR_HUMAN_DECISION"
       - "FREEZE_LINE"
@@ -256,18 +260,23 @@ gaps:
       - "DECLARE_PAPER_READINESS"
       - "REPEAT_FALSIFIED_THRESHOLD_FAMILY"
       - "USE_STAGE_A_ELIGIBLE_AS_EX_ANTE_POLICY"
-    suggested_gate: "none_until_new_human_approved_research_thesis"
-    stop_condition_if_unresolved: "The current autonomous mission must stop until a materially new research direction is supplied or approved."
+    suggested_gate: "autonomous_full_phase_family_selection_gate"
+    stop_condition_if_unresolved: "Do not freeze future missions until the full phase freeze requirements are met."
 
   - id: GAP-AUTO-001
-    title: Autonomous phased research exploration policy
+    title: Autonomous full phase research execution policy
     type: governance_state
     severity: high
     status: resolved
     evidence:
+      - ".agents/skills/sniper-autonomous-implementation-manager/SKILL.md"
       - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
       - "reports/state/sniper_current_state.json"
       - "reports/state/sniper_autonomous_runbook.md"
+      - "max_research_only_gates_per_mission=15"
+      - "max_hypothesis_families_per_mission=3"
+      - "max_gates_per_family=3"
+      - "max_partial_corrections_per_gate=2"
     source_files:
       - "AGENTS.md"
       - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
@@ -283,5 +292,37 @@ gaps:
       - "A4_REOPEN"
       - "THRESHOLD_RELAXATION"
       - "REAL_TRADING"
-    suggested_gate: "autonomous_select_next_research_only_hypothesis_from_backlog"
-    stop_condition_if_unresolved: "Do not run autonomous research phases without budget and governance limits."
+    suggested_gate: "autonomous_full_phase_family_selection_gate"
+    stop_condition_if_unresolved: "Do not run autonomous research phases without full phase budget and governance limits."
+
+  - id: GAP-FULLPHASE-001
+    title: Full phase autonomous execution policy adopted
+    type: governance_state
+    severity: high
+    status: resolved
+    evidence:
+      - "AGENTS.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+      - "reports/state/sniper_autonomous_runbook.md"
+      - "fail_abandon_does_not_end_mission_when_materially_different_hypothesis_exists"
+      - "freeze_requires_two_materially_different_families_and_family_comparison"
+    source_files:
+      - "AGENTS.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+      - "reports/state/sniper_decision_ledger.md"
+    allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
+      - "START_RESEARCH_ONLY_THESIS"
+      - "RUN_GLOBAL_REAUDIT"
+      - "FREEZE_LINE"
+    forbidden_actions:
+      - "OFFICIAL_PROMOTION"
+      - "PAPER_READINESS"
+      - "A3_REOPEN"
+      - "A4_REOPEN"
+      - "THRESHOLD_RELAXATION"
+      - "REAL_TRADING"
+    suggested_gate: "autonomous_full_phase_family_selection_gate"
+    stop_condition_if_unresolved: "A mission must continue within budget while defensible research-only hypotheses remain inside the repo."

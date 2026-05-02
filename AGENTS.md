@@ -74,8 +74,10 @@ metrics, blockers, risks and objective recommendation.
 
 Allowed without a new user decision:
 
+- execute autonomous full phase research missions inside this repository;
 - create gates;
 - choose the next open gap from `reports/state/sniper_spec_gap_backlog.yaml`;
+- choose up to 3 materially different research-only hypothesis families per mission;
 - create a new falsifiable research-only hypothesis;
 - implement in sandbox/research only;
 - falsify and abandon a research-only hypothesis;
@@ -107,21 +109,33 @@ Must stop before:
 
 Default budget per autonomous mission:
 
-- up to 5 research-only gates;
-- up to 2 consecutive failures in the same hypothesis type;
-- up to 1 correction attempt per `PARTIAL/correct` gate;
-- stop when the next step requires external resources or specification changes.
+- up to 15 research-only gates;
+- up to 3 materially different hypothesis families;
+- up to 3 gates per hypothesis family;
+- up to 2 correction attempts per `PARTIAL/correct` gate;
+- up to 1 intermediate global audit when needed;
+- up to 1 draft PR update at the end of the mission.
 
 A failed research-only hypothesis consumes budget but does not automatically
 require a human decision. Record `FAIL/abandon`, update `reports/state/**`, mark
 the hypothesis falsified, then choose the next defensible backlog hypothesis.
 
+Freeze is allowed only after at least 2 materially different families were
+tested, explicit DSR diagnostics exist, research CVaR with nonzero exposure was
+evaluated when research exposure exists, family comparison/falsification was
+recorded, and `reports/state/sniper_decision_ledger.md` was updated.
+
 ## Stop Conditions
 
-Stop if the next step needs human strategy, external/private artifacts,
-credentials, real capital, a specification change, official promotion while
-`dsr_honest=0.0`, paper readiness while CVaR is zero exposure, budget exhaustion,
-no materially new hypothesis, or any governance violation.
+Stop if the next step needs external/private artifacts, credentials or paid API,
+operation outside the repo, real capital, merge, a specification change,
+official promotion, paper readiness, A3/A4 reopening, budget exhaustion, no
+materially new hypothesis, changes too large for reasonable review, or any
+governance violation.
+
+Do not use human strategy as a stop condition while there is an open gap,
+defensible research-only hypothesis, internal correction, unfinished
+quantitative diagnostic, or possible sandbox/research module inside the repo.
 
 ## State Update Obligation
 

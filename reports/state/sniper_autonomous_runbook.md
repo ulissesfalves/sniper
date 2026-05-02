@@ -10,25 +10,26 @@
 6. Read `reports/state/sniper_artifact_registry.json`.
 7. Choose only a mode listed in `allowed_next_modes`.
 8. Confirm the intended action is not listed in `forbidden_next_modes`.
-9. Execute one scoped gate.
+9. Execute the next scoped gate in the current full-phase mission.
 10. Generate the complete gate pack.
 11. Run relevant tests and validations.
 12. Update `reports/state/**`.
 13. Commit one coherent gate.
 14. Push the current branch only when useful for the existing draft PR.
-15. Stop on any stop condition.
+15. Continue through materially different research-only hypotheses until budget
+    exhaustion or a real stop condition.
 
 ## Current Recommended Mode
 
-`STOP_FOR_HUMAN_DECISION`
+`CONTINUE_AUTONOMOUS`
 
 Allowed mission modes:
 
 - `START_RESEARCH_ONLY_THESIS`
 - `CONTINUE_AUTONOMOUS`
 - `RUN_GLOBAL_REAUDIT`
-- `FREEZE_LINE` only after budget exhaustion or no materially new hypothesis.
-- `STOP_FOR_HUMAN_DECISION` after a freeze gate.
+- `FREEZE_LINE` only after full freeze requirements are satisfied.
+- `STOP_FOR_HUMAN_DECISION` only for external/governance cases.
 
 Forbidden modes:
 
@@ -75,19 +76,51 @@ FASE D - Validation and gate:
 FASE E - Autonomous decision:
 
 - PASS research-only: register as candidate, never promote;
-- PARTIAL/correct: attempt one internal correction;
+- PARTIAL/correct: attempt up to 2 internal corrections when defensible;
 - FAIL/abandon: mark falsified and choose the next materially new hypothesis;
 - INCONCLUSIVE external artifact: stop and request artifact;
 - INCONCLUSIVE internal environment: repair environment;
 - external blocker: stop.
 
-## Exploration Budget
+## Full Phase Budget
 
-- Up to 5 research-only gates per mission.
-- Up to 2 consecutive failures in the same hypothesis type.
-- Up to 1 correction attempt per `PARTIAL/correct` gate.
-- Stop if the next step requires an external resource or specification change.
-- Stop if there is no materially new hypothesis.
+- Up to 15 research-only gates per mission.
+- Up to 3 materially different hypothesis families.
+- Up to 3 gates per family.
+- Up to 2 correction attempts per `PARTIAL/correct` gate.
+- Up to 1 intermediate global audit when needed.
+- Up to 1 draft PR update at the end of the mission.
+
+FAIL/abandon for one hypothesis does not end the mission while a materially
+different defensible research-only hypothesis remains inside the repo.
+
+Freeze is allowed only after:
+
+- at least 2 materially different families were tested;
+- explicit DSR diagnostics exist;
+- research CVaR with nonzero exposure was evaluated when research exposure is
+  available;
+- family comparison/falsification was recorded;
+- `reports/state/sniper_decision_ledger.md` was updated.
+
+## Functional Phase Order
+
+1. Deep quantitative diagnostics:
+   decompose SR, SR_needed, skew/kurtosis, n_trials, subperiods, drawdown,
+   turnover and sensitivity.
+2. Ex-ante research exposure generation:
+   create research/sandbox snapshot proxy, positions, target weights, trade log
+   and metrics using only ex-ante features.
+3. Research CVaR with nonzero exposure:
+   compute CVaR and rho=1 stress on the research portfolio.
+4. Alternative signal/sizing family:
+   test a materially different family such as volatility-targeted rank
+   portfolio, risk-budgeted top-k, drawdown-aware activation, regime-filtered
+   portfolio, CVaR-constrained sizing, defensive ensemble or uncertainty-based
+   abstention.
+5. Falsification and selection:
+   compare families, select a survivor or freeze only when freeze requirements
+   are satisfied.
 
 The Stage A nonzero-exposure thesis was abandoned. The research sandbox CVaR
 evaluator then measured nonzero sandbox exposure with max CVaR95 loss fraction
@@ -101,8 +134,9 @@ The one allowed stability correction then failed/abandoned the threshold-family
 line: best correction `score_0_60` improved min Sharpe to `-2.553324`, but
 reduced median Sharpe to `0.195832` and did not clear DSR.
 The hypothesis-space freeze gate then passed/froze the current autonomous line
-with zero promotable candidates. The next research-only thesis must be supplied
-or approved as materially new before another autonomous implementation mission:
+with zero promotable candidates under the previous 5-gate budget. Under the full
+phase policy, a future mission may continue autonomously if it selects a
+materially different family inside the repo:
 
 - `dsr_honest=0.0`;
 - official CVaR zero exposure;
@@ -112,8 +146,7 @@ or approved as materially new before another autonomous implementation mission:
 Do not reuse `stage_a_eligible` as an ex-ante decision rule; it is treated as a
 realized diagnostic field.
 
-Current recommended next gate: none. Recommended next action is human strategic
-decision or updating the existing draft PR with the new evidence.
+Current recommended next gate: `autonomous_full_phase_family_selection_gate`.
 
 ## Forbidden Interpretations
 
@@ -127,7 +160,7 @@ decision or updating the existing draft PR with the new evidence.
 
 Stop if the next step requires:
 
-- human product/strategy decision;
+- human product/strategy decision only when no internal research/sandbox path remains;
 - exploration budget exhaustion;
 - no materially new hypothesis;
 - external artifact or private data not present;
@@ -137,3 +170,7 @@ Stop if the next step requires:
 - promotion while DSR remains 0.0;
 - paper readiness while CVaR remains zero exposure;
 - A3/A4 reopening without strong new evidence.
+
+Do not stop for human decision while there is an open gap, defensible
+research-only hypothesis, internal correction, unfinished quantitative
+diagnostic, or possible sandbox/research module inside the repo.

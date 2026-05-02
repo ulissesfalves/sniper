@@ -8,7 +8,9 @@ Codex may act without an additional user prompt when the action remains inside
 the current repository and preserves governance:
 
 - create a branch with the `codex/` prefix when needed;
+- execute autonomous full phase research missions inside this repository;
 - choose the next open gap from the backlog;
+- choose a materially different research-only hypothesis family;
 - create a new falsifiable research-only hypothesis;
 - create or update a gate pack;
 - implement research-only or sandbox corrections;
@@ -19,7 +21,8 @@ the current repository and preserves governance:
 - choose the next materially different hypothesis;
 - commit one coherent gate at a time;
 - push the active working branch;
-- update the existing draft PR branch when review-ready;
+- update the existing draft PR branch when review-ready, at most once at the end
+  of a mission unless explicitly requested otherwise;
 - abandon a failed research hypothesis;
 - update `reports/state/**`.
 
@@ -45,7 +48,8 @@ Codex must stop before:
 ## Research-Only Failure Policy
 
 A failed research-only hypothesis does not automatically require a human
-decision. Codex must:
+decision when there is still a materially different defensible hypothesis inside
+the repo. Codex must:
 
 - emit `FAIL/abandon`;
 - update `reports/state/sniper_decision_ledger.md`;
@@ -53,6 +57,8 @@ decision. Codex must:
 - mark the hypothesis falsified;
 - feed the result into the next hypothesis selection;
 - consume exploration budget.
+- continue until the full phase budget is exhausted or a real stop condition is
+  reached.
 
 Codex must not repeat the same thesis with another name, use realized variables
 as ex-ante rules, treat diagnostics as operational signals, or use a failed
@@ -62,10 +68,25 @@ research gate as promotion evidence.
 
 Default budget per autonomous mission:
 
-- up to 5 research-only gates;
-- up to 2 consecutive failures in the same hypothesis type;
-- up to 1 correction attempt per `PARTIAL/correct` gate;
-- stop if the next step requires an external resource or specification change.
+- up to 15 research-only gates;
+- up to 3 materially different hypothesis families;
+- up to 3 gates per family before abandoning that family;
+- up to 2 correction attempts per `PARTIAL/correct` gate;
+- up to 1 intermediate global audit when needed;
+- up to 1 draft PR update at the end of the mission.
+
+Freeze is permitted only after:
+
+- at least 2 materially different families were tested;
+- explicit DSR diagnostics exist;
+- research CVaR with nonzero exposure was evaluated when research exposure is
+  available;
+- comparison/falsification across families was recorded;
+- `reports/state/sniper_decision_ledger.md` was updated.
+
+Human decision is required only for external resources, specification changes,
+official promotion, paper readiness, credentials or paid APIs, operation outside
+the repo, merge, or real capital.
 
 ## Modes
 
@@ -74,7 +95,9 @@ Allowed modes:
 - `START_RESEARCH_ONLY_THESIS`
 - `CONTINUE_AUTONOMOUS`
 - `RUN_GLOBAL_REAUDIT`
-- `FREEZE_LINE` only after budget exhaustion or no materially new hypothesis.
+- `FREEZE_LINE` only after the full freeze requirements are satisfied.
+- `STOP_FOR_HUMAN_DECISION` only for the explicit external/governance cases
+  listed above.
 
 Forbidden modes:
 

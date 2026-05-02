@@ -1,5 +1,5 @@
 {
-  "program_status": "AUTONOMOUS_PHASED_RESEARCH_LINE_FROZEN_PENDING_HUMAN_STRATEGIC_DECISION",
+  "program_status": "AUTONOMOUS_FULL_PHASE_EXECUTION_POLICY_AUTHORIZED",
   "active_branch": "codex/autonomous-sniper-implementation",
   "latest_pr": {
     "number": 1,
@@ -17,7 +17,7 @@
     "status": "PASS",
     "decision": "freeze"
   },
-  "latest_decision": "FREEZE_CURRENT_RESEARCH_HYPOTHESIS_SPACE",
+  "latest_decision": "AUTONOMOUS_FULL_PHASE_EXECUTION_POLICY_ADOPTED",
   "resolved_blockers": [
     "source_doc_alignment_restored",
     "phase4_official_artifacts_found_and_hashed",
@@ -29,7 +29,8 @@
     "dsr_zero_root_cause_diagnostic_complete",
     "rank_score_threshold_family_weak_positive_candidate_found",
     "rank_score_threshold_family_correction_attempted_and_abandoned",
-    "current_research_hypothesis_space_frozen"
+    "current_research_hypothesis_space_frozen",
+    "autonomous_full_phase_execution_policy_authorized"
   ],
   "open_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -39,8 +40,7 @@
     "safe_stage_a_top1_policy_negative_median_sharpe",
     "sharpe_gap_to_required_honest_dsr",
     "threshold_family_cross_combo_instability",
-    "no_promotable_ex_ante_alpha_candidate",
-    "no_materially_new_defensible_hypothesis_in_current_backlog"
+    "no_promotable_ex_ante_alpha_candidate"
   ],
   "promotion_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -48,6 +48,8 @@
     "cross_sectional_alive_but_not_promotable"
   ],
   "allowed_next_modes": [
+    "START_RESEARCH_ONLY_THESIS",
+    "CONTINUE_AUTONOMOUS",
     "RUN_GLOBAL_REAUDIT",
     "FREEZE_LINE",
     "STOP_FOR_HUMAN_DECISION"
@@ -68,15 +70,25 @@
   ],
   "autonomous_exploration_policy": {
     "research_only_failure_requires_human_decision": false,
-    "max_research_only_gates_per_mission": 5,
-    "max_consecutive_failures_same_hypothesis_type": 2,
-    "max_partial_corrections_per_gate": 1,
+    "max_research_only_gates_per_mission": 15,
+    "max_hypothesis_families_per_mission": 3,
+    "max_gates_per_family": 3,
+    "max_partial_corrections_per_gate": 2,
+    "max_intermediate_global_audits_per_mission": 1,
+    "max_pr_draft_updates_at_mission_end": 1,
     "continue_after_fail_abandon_when_materially_new_hypothesis_exists": true,
-    "freeze_only_after_budget_exhaustion_or_no_materially_new_hypothesis": true,
-    "stop_for_external_resource_or_spec_change": true
-    ,
-    "current_mission_research_gate_budget_used": 5,
-    "current_mission_research_gate_budget_limit": 5
+    "freeze_only_after_full_phase_requirements": true,
+    "stop_for_external_resource_or_spec_change": true,
+    "human_decision_only_for_external_or_governance_cases": true,
+    "freeze_requirements": [
+      "at_least_2_materially_different_families_tested",
+      "explicit_dsr_diagnostic",
+      "research_cvar_nonzero_exposure_if_research_exposure_available",
+      "family_comparison_or_falsification_recorded",
+      "decision_ledger_updated"
+    ],
+    "previous_mission_research_gate_budget_used": 5,
+    "previous_mission_research_gate_budget_limit": 5
   },
   "last_clean_regeneration_status": {
     "status": "PASS",
@@ -137,10 +149,11 @@
       "dsr_zero_root_cause_diagnostic"
     ],
     "surviving_promotable_candidates": 0,
-    "can_continue_autonomously": false,
+    "can_continue_autonomously_under_previous_policy": false,
+    "superseded_by_full_phase_policy_for_future_missions": true,
     "requires_external_artifact": false
   },
-  "next_recommended_mode": "STOP_FOR_HUMAN_DECISION",
-  "next_recommended_gate": null,
-  "updated_at_utc": "2026-05-02T13:20:00Z"
+  "next_recommended_mode": "CONTINUE_AUTONOMOUS",
+  "next_recommended_gate": "autonomous_full_phase_family_selection_gate",
+  "updated_at_utc": "2026-05-02T14:11:27Z"
 }

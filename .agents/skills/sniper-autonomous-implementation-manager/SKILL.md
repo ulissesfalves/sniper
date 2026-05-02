@@ -85,18 +85,34 @@ Esta seção adiciona obrigações de memória operacional, sem alterar a semân
 
 Política de continuidade autônoma research-only:
 
-Falha de uma tese research-only NÃO é, por si só, motivo para decisão humana.
-Quando uma tese research-only falhar:
+Falha de uma hipótese research-only NÃO é, por si só, motivo para encerrar a missão ou pedir decisão humana.
+Quando uma hipótese research-only falhar:
 - registrar `FAIL/abandon`;
-- atualizar reports/state/sniper_spec_gap_backlog.yaml;
 - atualizar reports/state/sniper_decision_ledger.md;
+- atualizar reports/state/sniper_spec_gap_backlog.yaml;
 - marcar a hipótese como falsificada;
-- escolher automaticamente a próxima hipótese defensável do backlog;
-- continuar a missão, salvo se houver stop condition externa, orçamentária ou de governança.
+- escolher automaticamente a próxima hipótese materialmente diferente;
+- continuar até esgotar o orçamento autônomo ou bater stop condition real.
 
-Não parar apenas porque uma tese falhou. Não pedir ao usuário para escolher a próxima tese se ainda existirem gaps abertos no backlog, dados/artifacts disponíveis no repo e orçamento autônomo restante.
+Não parar apenas porque uma hipótese falhou. Não pedir ao usuário para escolher a próxima hipótese se ainda houver gap aberto no backlog, hipótese research-only defensável, correção interna possível, diagnóstico quantitativo ainda não feito ou possibilidade de módulo funcional sandbox/research dentro do repo.
 
-Fases autônomas obrigatórias:
+AUTONOMOUS FULL PHASE EXECUTION POLICY
+
+Orçamento autônomo por missão:
+- até 15 gates research-only por missão;
+- até 3 famílias de hipótese diferentes;
+- até 3 gates por família antes de abandonar a família;
+- até 2 correções por gate PARTIAL;
+- até 1 auditoria global intermediária, se necessário;
+- até 1 PR draft update no final da missão.
+
+Uma hipótese individual `FAIL/abandon` não encerra a missão. Encerrar somente se:
+- o orçamento for esgotado;
+- uma stop condition externa, operacional, de governança ou de segurança for atingida;
+- não existir hipótese materialmente nova no backlog;
+- a próxima hipótese exigir mudar especificação, promover official, declarar paper readiness, reabrir A3/A4, usar credencial/API paga, operar fora do repo ou operar capital real.
+
+Fases operacionais obrigatórias:
 
 FASE A — Estado e memória
 - Ler AGENTS.md.
@@ -104,11 +120,14 @@ FASE A — Estado e memória
 - Ler reports/state/**.
 - Ler reports/gates/**.
 - Identificar blockers abertos.
+- Identificar famílias já testadas, gates consumidos e correções já usadas.
 - Atualizar estado se necessário.
 
 FASE B — Seleção autônoma de hipótese
 - Escolher o blocker de maior valor esperado.
+- Escolher a família de hipótese, respeitando limite de até 3 famílias.
 - Criar hipótese research-only falsificável.
+- Declarar por que a hipótese é materialmente diferente das hipóteses falsificadas.
 - Declarar por que a hipótese não reabre A3/A4.
 - Declarar por que não promove official.
 - Declarar critério de abandono.
@@ -130,43 +149,85 @@ FASE D — Validação e gate
 
 FASE E — Decisão autônoma
 - Se PASS research-only: registrar candidata, não promover.
-- Se PARTIAL/correct: tentar corrigir blocker interno uma vez.
+- Se PARTIAL/correct: tentar até 2 correções internas no mesmo gate/família, se forem defensáveis.
 - Se FAIL/abandon: escolher próxima hipótese materialmente nova.
 - Se INCONCLUSIVE por artifact externo: parar e pedir artifact.
 - Se INCONCLUSIVE por ambiente interno: corrigir ambiente.
 - Se blocker externo: parar.
 
-Orçamento autônomo de exploração:
-- máximo de 5 gates research-only por missão;
-- máximo de 2 falhas consecutivas no mesmo tipo de hipótese;
-- máximo de 1 tentativa de correção por gate PARTIAL;
-- parar se não houver hipótese materialmente nova;
-- parar se a próxima hipótese exigir mudar a especificação.
+Fases funcionais completas a perseguir, nesta ordem:
 
-Prioridade de módulos funcionais:
-1. módulo research-only que gere exposição não nula ex-ante;
-2. módulo de avaliação CVaR com exposição não zero em sandbox/research;
-3. módulo de diagnóstico DSR que identifique por que DSR permanece 0.0;
-4. módulo alternativo de ranking/sizing research-only com hipótese nova;
-5. módulo de falsificação de famílias inviáveis;
-6. documentação de freeze apenas se o espaço de hipóteses for esgotado.
+FASE 1 — Diagnóstico quantitativo profundo
+Objetivo:
+Entender por que DSR permanece 0.0 e quais restrições matemáticas impedem promoção.
+Entregável:
+Módulo/runner research de diagnóstico com decomposition de SR, SR_needed, skew/kurtosis, n_trials, subperíodos, drawdown, turnover e sensibilidade.
 
-Decisão humana só é necessária quando:
-- precisa de dados/artifacts fora do repo;
-- precisa de credencial/API paga;
-- precisa operar fora da pasta autorizada;
-- precisa mudar especificação;
-- precisa promover official;
-- precisa fazer merge;
-- precisa usar capital real;
-- precisa aceitar risco estratégico não técnico;
-- a exploração autônoma atingiu o orçamento máximo.
+FASE 2 — Geração de exposição research ex-ante
+Objetivo:
+Criar uma política research-only que gere exposição não nula usando somente features disponíveis ex-ante.
+Entregável:
+Runner research/sandbox com snapshot proxy, positions, target_weight, trade log e métricas.
+
+FASE 3 — CVaR research com exposição não zero
+Objetivo:
+Calcular CVaR/stress rho=1 em portfólio research com exposição não zero.
+Entregável:
+portfolio_cvar_research_report.json e parquet de métricas.
+
+FASE 4 — Família alternativa de sinal/sizing
+Objetivo:
+Testar hipótese materialmente diferente da família Stage A/rank_score já falsificada.
+Possíveis famílias:
+- volatility-targeted rank portfolio;
+- risk-budgeted top-k cross-sectional;
+- drawdown-aware activation;
+- regime-filtered research portfolio;
+- CVaR-constrained sizing;
+- ensemble defensivo entre signals já existentes;
+- abstention policy baseada em incerteza sem usar variável realizada.
+
+FASE 5 — Falsificação e seleção
+Objetivo:
+Comparar as famílias testadas, escolher candidata sobrevivente ou congelar.
+Entregável:
+Gate comparativo com tabela de famílias, PASS/PARTIAL/FAIL, blockers e recomendação.
+
+A missão só deve parar antes de completar as fases se:
+- precisar de artifacts/dados fora do repo;
+- precisar de credencial/API paga;
+- precisar operar fora da pasta autorizada;
+- precisar mudar especificação;
+- precisar promover official;
+- precisar declarar paper readiness;
+- precisar reabrir A3/A4;
+- a mesma classe de hipótese falhar 3 vezes sem ganho material;
+- não existir hipótese materialmente nova no backlog;
+- a quantidade de mudanças ficar grande demais para revisão humana razoável.
+
+Não usar "decisão humana" como stop condition se ainda houver:
+- gap aberto no backlog;
+- hipótese research-only defensável;
+- correção interna possível;
+- diagnóstico quantitativo ainda não feito;
+- possibilidade de módulo funcional sandbox/research.
+
+Se uma linha for congelada, o freeze só pode ocorrer depois de:
+- pelo menos 2 famílias materialmente diferentes testadas;
+- diagnóstico DSR explícito;
+- CVaR research com exposição não zero, se houver exposição research disponível;
+- comparação entre famílias;
+- registro no decision ledger.
 
 Proibições adicionais:
+- freeze após testar apenas variações da mesma família;
 - parar apenas porque uma tese falhou;
 - pedir ao usuário para escolher a próxima tese se ainda existem gaps abertos no backlog;
+- repetir Stage A/rank_score com pequenas variações se já foi falsificado;
 - repetir a mesma tese com outro nome;
 - criar tese que dependa de variável realizada como regra ex-ante;
+- usar stage_a_eligible, pnl_real, avg_sl_train realizado ou qualquer variável realizada como regra operacional ex-ante;
+- tratar diagnóstico como política operacional;
 - tratar diagnóstico como sinal operacional;
 - tratar CVaR zero exposure como robustez econômica;
 - tratar DSR=0.0 como aceitável para promoção.
@@ -227,7 +288,7 @@ Cada ciclo deve seguir esta ordem:
 
 8. Próximo ciclo
    - Se PASS/advance: escolher próximo blocker.
-   - Se PARTIAL/correct: corrigir o blocker remanescente em novo ciclo.
+   - Se PARTIAL/correct: corrigir o blocker remanescente em novo ciclo, respeitando até 2 correções por gate PARTIAL.
    - Se FAIL/abandon em tese research-only: registrar hipótese falsificada e escolher automaticamente a próxima hipótese materialmente nova dentro do orçamento.
    - Se FAIL/abandon fora de research-only ou sem hipótese nova: congelar hipótese e escolher alternativa permitida.
    - Se INCONCLUSIVE por artifact externo: parar e pedir artifact.
@@ -239,8 +300,8 @@ Critérios de parada obrigatórios:
 Pare e entregue relatório final se qualquer condição ocorrer:
 
 1. Todos os gates necessários para a próxima fase forem PASS/advance.
-2. O mesmo blocker falhar em 2 ciclos consecutivos sem avanço material.
-3. Uma decisão de produto/estratégia depender do usuário.
+2. A mesma classe de hipótese falhar 3 vezes sem ganho material.
+3. Uma decisão de produto/estratégia depender do usuário, somente se não houver gap aberto, hipótese research-only defensável, correção interna possível, diagnóstico quantitativo pendente ou módulo funcional sandbox/research viável.
 4. A correção exigir credenciais externas, API paga, dado privado ou acesso que não existe.
 5. Houver risco de ordem real, capital real ou operação fora de paper/testnet.
 6. O repositório entrar em estado inconsistente que não possa ser recuperado com segurança.
@@ -248,8 +309,9 @@ Pare e entregue relatório final se qualquer condição ocorrer:
 8. Você precisar mudar a especificação para passar o gate.
 9. DSR honesto permanecer 0.0 e a única forma de avançar seria promover mesmo assim.
 10. Qualquer violação de governança for detectada.
-11. A exploração autônoma atingir o orçamento máximo.
+11. A exploração autônoma atingir o orçamento máximo da AUTONOMOUS FULL PHASE EXECUTION POLICY.
 12. Não houver hipótese materialmente nova dentro dos gaps abertos.
+13. A linha só puder ser congelada depois de cumprir os requisitos mínimos de freeze: pelo menos 2 famílias materialmente diferentes testadas, diagnóstico DSR explícito, CVaR research com exposição não zero quando houver exposição research disponível, comparação entre famílias e registro no decision ledger.
 
 Limites da missão:
 - Não operar capital real.
@@ -303,3 +365,9 @@ Ao parar, entregue:
 18. Orçamento usado.
 19. Próximo modo recomendado.
 20. Se pode continuar autonomamente ou se precisa de recurso externo.
+21. Resumo de todas as fases funcionais executadas.
+22. Famílias testadas.
+23. Famílias abandonadas.
+24. Candidata sobrevivente, se houver.
+25. Módulos funcionais implementados.
+26. Recomendação final: continuar autonomamente, atualizar PR draft, congelar linha ou pedir recurso externo.
