@@ -20,11 +20,77 @@
 
 ## Current Recommended Mode
 
-`FREEZE_LINE`
+`CONTINUE_AUTONOMOUS`
+
+Allowed mission modes:
+
+- `START_RESEARCH_ONLY_THESIS`
+- `CONTINUE_AUTONOMOUS`
+- `RUN_GLOBAL_REAUDIT`
+- `FREEZE_LINE` only after budget exhaustion or no materially new hypothesis.
+
+Forbidden modes:
+
+- `OFFICIAL_PROMOTION`
+- `PAPER_READINESS`
+- `A3_REOPEN`
+- `A4_REOPEN`
+- `THRESHOLD_RELAXATION`
+- `REAL_TRADING`
+
+## Phased Autonomous Flow
+
+FASE A - State and memory:
+
+- read `AGENTS.md`;
+- read `docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md`;
+- read `reports/state/**`;
+- read relevant `reports/gates/**`;
+- identify open blockers.
+
+FASE B - Hypothesis selection:
+
+- choose the highest expected-value open gap;
+- create a falsifiable research-only hypothesis;
+- declare why it does not reopen A3/A4 or promote official;
+- declare abandon and advance criteria.
+
+FASE C - Research/sandbox implementation:
+
+- implement only in research/sandbox;
+- do not touch official;
+- do not relax thresholds;
+- do not fabricate artifacts;
+- do not use realized information as an ex-ante rule.
+
+FASE D - Validation and gate:
+
+- run tests;
+- generate the full gate pack;
+- classify PASS/PARTIAL/FAIL/INCONCLUSIVE;
+- update `reports/state/**`;
+- commit incrementally.
+
+FASE E - Autonomous decision:
+
+- PASS research-only: register as candidate, never promote;
+- PARTIAL/correct: attempt one internal correction;
+- FAIL/abandon: mark falsified and choose the next materially new hypothesis;
+- INCONCLUSIVE external artifact: stop and request artifact;
+- INCONCLUSIVE internal environment: repair environment;
+- external blocker: stop.
+
+## Exploration Budget
+
+- Up to 5 research-only gates per mission.
+- Up to 2 consecutive failures in the same hypothesis type.
+- Up to 1 correction attempt per `PARTIAL/correct` gate.
+- Stop if the next step requires an external resource or specification change.
+- Stop if there is no materially new hypothesis.
 
 The latest research-only thesis attacked Stage A nonzero exposure and was
-abandoned. A future research-only thesis must be materially different and should
-attack at least one active blocker:
+abandoned. This does not force human decision. The next research-only thesis
+must be materially different and should attack at least one active blocker:
 
 - `dsr_honest=0.0`;
 - official CVaR zero exposure;
@@ -47,6 +113,8 @@ realized diagnostic field.
 Stop if the next step requires:
 
 - human product/strategy decision;
+- exploration budget exhaustion;
+- no materially new hypothesis;
 - external artifact or private data not present;
 - credential, paid API or real capital;
 - merge or ready PR transition;

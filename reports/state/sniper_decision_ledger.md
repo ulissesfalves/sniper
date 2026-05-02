@@ -1,6 +1,6 @@
 # SNIPER Decision Ledger
 
-Updated: 2026-05-02T10:42:42Z
+Updated: 2026-05-02T12:36:22Z
 
 ## Closed Decisions
 
@@ -17,12 +17,15 @@ Updated: 2026-05-02T10:42:42Z
 | CVaR blocker | Active | `PASS_ZERO_EXPOSURE`; economic robustness not proven. |
 | Operating memory | Bootstrapped | `phase6_operating_memory_bootstrap_gate` created persistent memory files. |
 | Stage A nonzero-exposure thesis | Abandoned | `phase5_research_only_stage_a_nonzero_exposure_falsification_gate` failed because safe ex-ante top1 had median combo Sharpe `-0.727203`; high Sharpe required realized `stage_a_eligible` and is diagnostic only. |
+| Autonomous research-only continuation | Authorized | A failed research-only thesis does not require human decision by itself. Continue through materially new backlog hypotheses within the exploration budget and governance limits. |
 
 ## Current Decision
 
-The next safe mode is `FREEZE_LINE` or `STOP_FOR_HUMAN_DECISION`. A new
-research-only thesis should require a materially different hypothesis; do not
-iterate the same Stage A nonzero-exposure blocker.
+The next safe mode is `CONTINUE_AUTONOMOUS` with `START_RESEARCH_ONLY_THESIS`
+inside the repo. A failed research-only thesis consumes exploration budget, but
+does not require human decision by itself. Freeze only after budget exhaustion,
+absence of a materially new hypothesis, external-resource need, specification
+change, or governance risk.
 
 ## Required Review Before Promotion
 

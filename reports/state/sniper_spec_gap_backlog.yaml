@@ -14,13 +14,14 @@ gaps:
       - "data/models/phase4/phase4_report_v4.json"
       - "data/models/phase4/phase4_gate_diagnostic.json"
     allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
       - "START_RESEARCH_ONLY_THESIS"
       - "FREEZE_LINE"
     forbidden_actions:
       - "PROMOTE_OFFICIAL"
       - "RELAX_DSR_THRESHOLD"
       - "DECLARE_READINESS"
-    suggested_gate: "none_without_materially_new_research_hypothesis"
+    suggested_gate: "autonomous_select_next_research_only_hypothesis_from_backlog"
     stop_condition_if_unresolved: "No promotion or readiness claim is allowed while honest DSR remains 0.0."
 
   - id: GAP-CVAR-001
@@ -36,12 +37,13 @@ gaps:
     source_files:
       - "data/models/phase4/phase4_execution_snapshot.parquet"
     allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
       - "START_RESEARCH_ONLY_THESIS"
       - "RUN_GLOBAL_REAUDIT"
     forbidden_actions:
       - "TREAT_ZERO_EXPOSURE_CVAR_AS_ECONOMIC_ROBUSTNESS"
       - "DECLARE_PAPER_READINESS"
-    suggested_gate: "phase5_research_only_stage_a_nonzero_exposure_falsification_gate"
+    suggested_gate: "research_sandbox_nonzero_exposure_cvar_evaluation_gate"
     stop_condition_if_unresolved: "Paper readiness is forbidden unless nonzero exposure or approved stress evidence exists."
 
   - id: GAP-XSEC-001
@@ -57,12 +59,13 @@ gaps:
       - "docs/SNIPER_openclaw_handoff.md"
       - "reports/gates/phase5_cross_sectional_sovereign_hardening_recheck/gate_report.json"
     allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
       - "START_RESEARCH_ONLY_THESIS"
       - "FREEZE_LINE"
     forbidden_actions:
       - "PROMOTE_OFFICIAL"
       - "TREAT_RESEARCH_AS_OFFICIAL"
-    suggested_gate: "none_without_materially_new_research_hypothesis"
+    suggested_gate: "autonomous_select_next_research_only_hypothesis_from_backlog"
     stop_condition_if_unresolved: "Do not promote cross-sectional while this status remains."
 
   - id: GAP-PAPER-001
@@ -77,6 +80,7 @@ gaps:
       - "reports/audits/autonomous_stop_review/draft_pr_summary.md"
       - "reports/gates/phase6_pr_review_global_adherence_gate/gate_report.json"
     allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
       - "RUN_GLOBAL_REAUDIT"
       - "STOP_FOR_HUMAN_DECISION"
     forbidden_actions:
@@ -98,6 +102,7 @@ gaps:
       - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
       - "reports/state/sniper_current_state.json"
     allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
       - "START_RESEARCH_ONLY_THESIS"
       - "RUN_GLOBAL_REAUDIT"
     forbidden_actions:
@@ -121,6 +126,8 @@ gaps:
       - "data/models/research/phase4_cross_sectional_ranking_baseline/stage_a_predictions.parquet"
       - "data/models/research/phase4_cross_sectional_ranking_baseline/stage_a_snapshot_proxy.parquet"
     allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
+      - "START_RESEARCH_ONLY_THESIS"
       - "FREEZE_LINE"
       - "RUN_GLOBAL_REAUDIT"
       - "STOP_FOR_HUMAN_DECISION"
@@ -129,4 +136,31 @@ gaps:
       - "USE_STAGE_A_ELIGIBLE_AS_EX_ANTE_POLICY"
       - "DECLARE_PAPER_READINESS"
     suggested_gate: "none_without_materially_new_research_hypothesis"
-    stop_condition_if_unresolved: "The current Stage A nonzero-exposure thesis is abandoned; do not iterate the same blocker without a materially new hypothesis."
+    stop_condition_if_unresolved: "The current Stage A nonzero-exposure thesis is abandoned; continue only with a materially new hypothesis and consume exploration budget."
+
+  - id: GAP-AUTO-001
+    title: Autonomous phased research exploration policy
+    type: governance_state
+    severity: high
+    status: resolved
+    evidence:
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+      - "reports/state/sniper_autonomous_runbook.md"
+    source_files:
+      - "AGENTS.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+    allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
+      - "START_RESEARCH_ONLY_THESIS"
+      - "RUN_GLOBAL_REAUDIT"
+    forbidden_actions:
+      - "OFFICIAL_PROMOTION"
+      - "PAPER_READINESS"
+      - "A3_REOPEN"
+      - "A4_REOPEN"
+      - "THRESHOLD_RELAXATION"
+      - "REAL_TRADING"
+    suggested_gate: "autonomous_select_next_research_only_hypothesis_from_backlog"
+    stop_condition_if_unresolved: "Do not run autonomous research phases without budget and governance limits."

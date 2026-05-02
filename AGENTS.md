@@ -75,11 +75,17 @@ metrics, blockers, risks and objective recommendation.
 Allowed without a new user decision:
 
 - create gates;
+- choose the next open gap from `reports/state/sniper_spec_gap_backlog.yaml`;
+- create a new falsifiable research-only hypothesis;
+- implement in sandbox/research only;
+- falsify and abandon a research-only hypothesis;
+- choose the next materially different hypothesis;
 - implement research/sandbox corrections;
 - repair test environment inside the repo;
 - run tests;
 - generate gate packs;
 - commit per gate;
+- update the existing draft PR branch;
 - update `reports/state/**`;
 - push the working branch when a clean gate commit is useful.
 
@@ -94,14 +100,28 @@ Must stop before:
 - threshold relaxation;
 - A3/A4 reopening;
 - artifact fabrication;
+- external resources not already available in the repo;
 - removing DSR/CVaR blockers by narrative.
+
+## Research Exploration Budget
+
+Default budget per autonomous mission:
+
+- up to 5 research-only gates;
+- up to 2 consecutive failures in the same hypothesis type;
+- up to 1 correction attempt per `PARTIAL/correct` gate;
+- stop when the next step requires external resources or specification changes.
+
+A failed research-only hypothesis consumes budget but does not automatically
+require a human decision. Record `FAIL/abandon`, update `reports/state/**`, mark
+the hypothesis falsified, then choose the next defensible backlog hypothesis.
 
 ## Stop Conditions
 
 Stop if the next step needs human strategy, external/private artifacts,
 credentials, real capital, a specification change, official promotion while
-`dsr_honest=0.0`, paper readiness while CVaR is zero exposure, or any governance
-violation.
+`dsr_honest=0.0`, paper readiness while CVaR is zero exposure, budget exhaustion,
+no materially new hypothesis, or any governance violation.
 
 ## State Update Obligation
 

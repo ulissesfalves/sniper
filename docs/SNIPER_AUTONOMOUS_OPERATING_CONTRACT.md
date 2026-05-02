@@ -8,14 +8,18 @@ Codex may act without an additional user prompt when the action remains inside
 the current repository and preserves governance:
 
 - create a branch with the `codex/` prefix when needed;
+- choose the next open gap from the backlog;
+- create a new falsifiable research-only hypothesis;
 - create or update a gate pack;
 - implement research-only or sandbox corrections;
 - repair the local test environment;
 - execute tests and validation commands;
 - generate reproducible gate evidence;
+- falsify and abandon a failed research-only hypothesis;
+- choose the next materially different hypothesis;
 - commit one coherent gate at a time;
 - push the active working branch;
-- open or update a draft PR when review-ready;
+- update the existing draft PR branch when review-ready;
 - abandon a failed research hypothesis;
 - update `reports/state/**`.
 
@@ -36,6 +40,50 @@ Codex must stop before:
 - removing a quantitative blocker by narrative;
 - treating zero-exposure CVaR as economic robustness;
 - treating `ALIVE_BUT_NOT_PROMOTABLE` as promotable.
+- using an external resource not already available in the repo.
+
+## Research-Only Failure Policy
+
+A failed research-only hypothesis does not automatically require a human
+decision. Codex must:
+
+- emit `FAIL/abandon`;
+- update `reports/state/sniper_decision_ledger.md`;
+- update `reports/state/sniper_spec_gap_backlog.yaml`;
+- mark the hypothesis falsified;
+- feed the result into the next hypothesis selection;
+- consume exploration budget.
+
+Codex must not repeat the same thesis with another name, use realized variables
+as ex-ante rules, treat diagnostics as operational signals, or use a failed
+research gate as promotion evidence.
+
+## Exploration Budget
+
+Default budget per autonomous mission:
+
+- up to 5 research-only gates;
+- up to 2 consecutive failures in the same hypothesis type;
+- up to 1 correction attempt per `PARTIAL/correct` gate;
+- stop if the next step requires an external resource or specification change.
+
+## Modes
+
+Allowed modes:
+
+- `START_RESEARCH_ONLY_THESIS`
+- `CONTINUE_AUTONOMOUS`
+- `RUN_GLOBAL_REAUDIT`
+- `FREEZE_LINE` only after budget exhaustion or no materially new hypothesis.
+
+Forbidden modes:
+
+- `OFFICIAL_PROMOTION`
+- `PAPER_READINESS`
+- `A3_REOPEN`
+- `A4_REOPEN`
+- `THRESHOLD_RELAXATION`
+- `REAL_TRADING`
 
 ## Current Governance Locks
 
