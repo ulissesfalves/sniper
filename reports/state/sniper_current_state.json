@@ -13,11 +13,11 @@
     "observed_before_local_gate_commits": false
   },
   "latest_gate": {
-    "gate_slug": "phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate",
-    "status": "PARTIAL",
-    "decision": "correct"
+    "gate_slug": "phase5_research_dsr_zero_diagnostic_gate",
+    "status": "PASS",
+    "decision": "advance"
   },
-  "latest_decision": "CONTINUE_AUTONOMOUS_AFTER_RESEARCH_SANDBOX_CVAR_PARTIAL",
+  "latest_decision": "CONTINUE_AUTONOMOUS_AFTER_DSR_ZERO_DIAGNOSTIC_PASS",
   "resolved_blockers": [
     "source_doc_alignment_restored",
     "phase4_official_artifacts_found_and_hashed",
@@ -25,14 +25,16 @@
     "clean_regeneration_proven",
     "operating_memory_bootstrapped",
     "stage_a_realized_eligibility_leakage_risk_identified",
-    "research_sandbox_nonzero_exposure_cvar_evaluator_available"
+    "research_sandbox_nonzero_exposure_cvar_evaluator_available",
+    "dsr_zero_root_cause_diagnostic_complete"
   ],
   "open_blockers": [
     "dsr_honest_zero_blocks_promotion",
     "cvar_zero_exposure_not_economic_robustness",
     "cross_sectional_alive_but_not_promotable",
     "paper_readiness_blocked_by_quant_merit",
-    "safe_stage_a_top1_policy_negative_median_sharpe"
+    "safe_stage_a_top1_policy_negative_median_sharpe",
+    "sharpe_gap_to_required_honest_dsr"
   ],
   "promotion_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -94,7 +96,19 @@
   "dsr_status": {
     "dsr_honest": 0.0,
     "dsr_passed": false,
-    "promotion_allowed": false
+    "promotion_allowed": false,
+    "diagnostic": {
+      "gate_slug": "phase5_research_dsr_zero_diagnostic_gate",
+      "status": "PASS",
+      "decision": "advance",
+      "n_trials_honest": 5000,
+      "sharpe_is": 0.8808,
+      "sr_needed": 4.47,
+      "sharpe_gap_to_sr_needed": 3.5892,
+      "best_dsr_honest_observed": 0.6938,
+      "promotion_allowed": false,
+      "caveat": "Diagnostic explains DSR=0.0 but does not improve the policy or authorize promotion."
+    }
   },
   "cross_sectional_status": {
     "state": "ALIVE_BUT_NOT_PROMOTABLE",
@@ -105,17 +119,18 @@
   "paper_readiness_allowed": false,
   "required_external_artifacts": [],
   "latest_research_thesis": {
-    "gate_slug": "phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate",
-    "hypothesis": "A research/sandbox CVaR evaluator can measure empirical CVaR on nonzero ex-ante exposure without promoting official or treating zero-exposure official CVaR as economic robustness.",
-    "status": "PARTIAL",
-    "decision": "correct",
-    "classification": "NONZERO_EXPOSURE_RESEARCH_CVAR_PASS_BUT_ALPHA_DSR_BLOCKERS_REMAIN",
-    "active_combo_days": 10576,
-    "max_cvar_95_loss_fraction": 0.01072844,
-    "median_cvar_95_loss_fraction": 0.00313685,
-    "median_combo_sharpe": -0.727203
+    "gate_slug": "phase5_research_dsr_zero_diagnostic_gate",
+    "hypothesis": "The honest DSR=0.0 blocker can be explained by measured Sharpe being far below the required Sharpe under the fixed honest multiple-testing budget, without relaxing thresholds.",
+    "status": "PASS",
+    "decision": "advance",
+    "classification": "DSR_ZERO_ROOT_CAUSE_DIAGNOSTIC_COMPLETE",
+    "dsr_honest": 0.0,
+    "sharpe_is": 0.8808,
+    "sr_needed": 4.47,
+    "sharpe_gap_to_sr_needed": 3.5892,
+    "best_dsr_honest_observed": 0.6938
   },
   "next_recommended_mode": "CONTINUE_AUTONOMOUS",
-  "next_recommended_gate": "phase5_research_dsr_zero_diagnostic_gate",
-  "updated_at_utc": "2026-05-02T12:44:40Z"
+  "next_recommended_gate": "phase5_research_rank_score_threshold_sizing_falsification_gate",
+  "updated_at_utc": "2026-05-02T12:52:00Z"
 }

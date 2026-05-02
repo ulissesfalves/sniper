@@ -91,9 +91,10 @@ FASE E - Autonomous decision:
 The Stage A nonzero-exposure thesis was abandoned. The research sandbox CVaR
 evaluator then measured nonzero sandbox exposure with max CVaR95 loss fraction
 `0.01072844`, but stayed `PARTIAL/correct` because alpha merit, DSR and official
-zero exposure remain blockers. This does not force human decision. The next
-research-only thesis must be materially different and should attack at least one
-active blocker:
+zero exposure remain blockers. The DSR diagnostic then passed as root-cause
+diagnostic only: `dsr_honest=0.0`, `sr_needed=4.47`, and Sharpe gap `3.5892`.
+This does not force human decision. The next research-only thesis must be
+materially different and should attack at least one active blocker:
 
 - `dsr_honest=0.0`;
 - official CVaR zero exposure;
@@ -103,7 +104,7 @@ active blocker:
 Do not reuse `stage_a_eligible` as an ex-ante decision rule; it is treated as a
 realized diagnostic field.
 
-Current recommended next gate: `phase5_research_dsr_zero_diagnostic_gate`.
+Current recommended next gate: `phase5_research_rank_score_threshold_sizing_falsification_gate`.
 
 ## Forbidden Interpretations
 

@@ -1,0 +1,85 @@
+{
+  "gate_slug": "phase5_research_dsr_zero_diagnostic_gate",
+  "phase_family": "phase5_research_dsr_zero_diagnostic",
+  "status": "PASS",
+  "decision": "advance",
+  "baseline_commit": "6e4971074c6576cb469c2717f652d891f3bc513e",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_report_v4.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_gate_diagnostic.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_research_baseline_rehydration_clean_regeneration_gate\\phase4_artifact_integrity_report.json"
+  ],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_dsr_zero_diagnostic_gate\\dsr_zero_diagnostic_report.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_dsr_zero_diagnostic_gate\\dsr_candidate_scan.parquet"
+  ],
+  "summary": [
+    "classification=DSR_ZERO_ROOT_CAUSE_DIAGNOSTIC_COMPLETE",
+    "dsr_honest=0.0",
+    "dsr_passed=False",
+    "n_trials_honest=5000",
+    "sharpe_is=0.8808",
+    "sr_needed=4.47",
+    "sharpe_gap_to_sr_needed=3.5892",
+    "best_dsr_honest_observed=0.6938 at fallback.rolling_stability.best_window",
+    "diagnostic does not relax thresholds or promote official"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_research_dsr_zero_diagnostic_gate",
+      "metric_name": "diagnostic_complete",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_dsr_zero_diagnostic_gate",
+      "metric_name": "dsr_honest",
+      "metric_value": 0.0,
+      "metric_threshold": ">= 0.95 for promotion",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_dsr_zero_diagnostic_gate",
+      "metric_name": "sharpe_is",
+      "metric_value": 0.8808,
+      "metric_threshold": ">= sr_needed 4.47",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_dsr_zero_diagnostic_gate",
+      "metric_name": "sharpe_gap_to_sr_needed",
+      "metric_value": 3.5892,
+      "metric_threshold": "<= 0.0",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_dsr_zero_diagnostic_gate",
+      "metric_name": "best_dsr_honest_observed",
+      "metric_value": 0.6938,
+      "metric_threshold": ">= 0.95",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_dsr_zero_diagnostic_gate",
+      "metric_name": "n_trials_honest",
+      "metric_value": 5000,
+      "metric_threshold": "== 5000 fixed honest budget",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "sharpe_gap_to_required_honest_dsr",
+    "official_cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable"
+  ],
+  "risks_residual": [
+    "This diagnostic explains DSR=0.0 but does not improve the trading policy.",
+    "Higher diagnostic windows are not accepted as full official evidence.",
+    "Future research needs materially better ex-ante alpha, not threshold relaxation."
+  ],
+  "next_recommended_step": "Continue autonomously only with a materially new ex-ante ranking/sizing hypothesis that can improve alpha without using realized eligibility. Do not promote official."
+}
