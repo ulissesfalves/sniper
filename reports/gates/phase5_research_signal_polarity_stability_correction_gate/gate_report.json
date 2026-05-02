@@ -1,0 +1,78 @@
+{
+  "gate_slug": "phase5_research_signal_polarity_stability_correction_gate",
+  "phase_family": "phase5_research_signal_polarity_stability_correction",
+  "status": "PASS",
+  "decision": "advance",
+  "baseline_commit": "637f50a7e23b320082d8e08e720bc1ee63e8731c",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_stability_correction_gate\\signal_polarity_stability_positions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_stability_correction_gate\\signal_polarity_stability_daily_returns.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_stability_correction_gate\\signal_polarity_stability_trade_log.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_stability_correction_gate\\signal_polarity_stability_metrics.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_stability_correction_gate\\signal_polarity_stability_snapshot_proxy.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_stability_correction_gate\\portfolio_cvar_research_report.json"
+  ],
+  "summary": [
+    "classification=STABLE_SIGNAL_POLARITY_RESEARCH_CANDIDATE_BELOW_DSR_PROMOTION_BAR",
+    "best_correction_policy=short_high_p_bma_k3_p60_h70",
+    "best_correction_median_combo_sharpe=1.361592",
+    "best_correction_min_combo_sharpe=0.261111",
+    "best_correction_median_active_days=471.0",
+    "best_correction_max_cvar_95_loss_fraction=0.00344841",
+    "stable positive research candidate survives as sandbox-only",
+    "DSR and official CVaR blockers remain",
+    "no official promotion attempted"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_research_signal_polarity_stability_correction_gate",
+      "metric_name": "best_correction_policy",
+      "metric_value": "short_high_p_bma_k3_p60_h70",
+      "metric_threshold": "predeclared correction only",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_signal_polarity_stability_correction_gate",
+      "metric_name": "best_correction_median_combo_sharpe",
+      "metric_value": 1.361592,
+      "metric_threshold": "> 0 research candidate; >= 4.47 promotion blocked unless DSR passes",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_signal_polarity_stability_correction_gate",
+      "metric_name": "best_correction_min_combo_sharpe",
+      "metric_value": 0.261111,
+      "metric_threshold": "> 0.0",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_signal_polarity_stability_correction_gate",
+      "metric_name": "best_correction_median_active_days",
+      "metric_value": 471.0,
+      "metric_threshold": ">= 120",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_signal_polarity_stability_correction_gate",
+      "metric_name": "best_correction_max_cvar_95_loss_fraction",
+      "metric_value": 0.00344841,
+      "metric_threshold": "<= 0.15",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "candidate_sharpe_below_required_honest_dsr",
+    "short_exposure_research_only_not_official",
+    "official_cvar_zero_exposure_not_economic_robustness"
+  ],
+  "risks_residual": [
+    "The surviving candidate is sandbox/research-only and uses short exposure.",
+    "Median Sharpe is positive but still far below sr_needed for honest DSR clearance.",
+    "Promotion would require explicit future gate and official execution support."
+  ],
+  "next_recommended_step": "Run family comparison/falsification. Preserve this as a surviving research-only candidate, not official promotion evidence."
+}
