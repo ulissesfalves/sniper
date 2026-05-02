@@ -20,7 +20,7 @@
 
 ## Current Recommended Mode
 
-`CONTINUE_AUTONOMOUS`
+`STOP_FOR_HUMAN_DECISION`
 
 Allowed mission modes:
 
@@ -28,6 +28,7 @@ Allowed mission modes:
 - `CONTINUE_AUTONOMOUS`
 - `RUN_GLOBAL_REAUDIT`
 - `FREEZE_LINE` only after budget exhaustion or no materially new hypothesis.
+- `STOP_FOR_HUMAN_DECISION` after a freeze gate.
 
 Forbidden modes:
 
@@ -99,8 +100,9 @@ fraction `0.01070472`, but min combo Sharpe stayed `-3.357339`.
 The one allowed stability correction then failed/abandoned the threshold-family
 line: best correction `score_0_60` improved min Sharpe to `-2.553324`, but
 reduced median Sharpe to `0.195832` and did not clear DSR.
-This does not force human decision. The next research-only thesis must be
-materially different and should attack at least one active blocker:
+The hypothesis-space freeze gate then passed/froze the current autonomous line
+with zero promotable candidates. The next research-only thesis must be supplied
+or approved as materially new before another autonomous implementation mission:
 
 - `dsr_honest=0.0`;
 - official CVaR zero exposure;
@@ -110,7 +112,8 @@ materially different and should attack at least one active blocker:
 Do not reuse `stage_a_eligible` as an ex-ante decision rule; it is treated as a
 realized diagnostic field.
 
-Current recommended next gate: `phase5_research_hypothesis_space_freeze_gate`.
+Current recommended next gate: none. Recommended next action is human strategic
+decision or updating the existing draft PR with the new evidence.
 
 ## Forbidden Interpretations
 

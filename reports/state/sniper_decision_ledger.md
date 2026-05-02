@@ -1,6 +1,6 @@
 # SNIPER Decision Ledger
 
-Updated: 2026-05-02T13:12:00Z
+Updated: 2026-05-02T13:20:00Z
 
 ## Closed Decisions
 
@@ -22,15 +22,16 @@ Updated: 2026-05-02T13:12:00Z
 | DSR zero root cause diagnostic | Complete | `phase5_research_dsr_zero_diagnostic_gate` confirmed `dsr_honest=0.0`, `sharpe_is=0.8808`, `sr_needed=4.47`, gap `3.5892`, and best observed diagnostic DSR `0.6938`; no threshold relaxation or promotion is allowed. |
 | Rank-score threshold family | Partial research-only | `phase5_research_rank_score_threshold_sizing_falsification_gate` found weak median alpha for `top1_score_ge_0_50` (`0.331124`) with sandbox CVaR within limit, but min combo Sharpe `-3.357339` and DSR blockers prevent promotion. |
 | Rank-score threshold stability correction | Abandoned | `phase5_research_rank_score_stability_correction_gate` consumed the single PARTIAL correction. Best correction `score_0_60` improved min Sharpe to `-2.553324` but reduced median Sharpe to `0.195832`; instability and DSR gap remain. |
+| Current research hypothesis space | Frozen | `phase5_research_hypothesis_space_freeze_gate` considered five gates, found zero promotable candidates, and froze the current autonomous line. Surviving modules are CVaR evaluation and DSR diagnostics only. |
 
 ## Current Decision
 
 The next safe mode is `CONTINUE_AUTONOMOUS` with a materially different
-freeze/closure gate. The recommended next gate is
-`phase5_research_hypothesis_space_freeze_gate`, because the Stage A, sandbox
-CVaR, DSR diagnostic, threshold-family and stability-correction gates did not
-produce a promotable ex-ante alpha candidate. Freeze only this exhausted
-research line; do not promote, merge, or declare paper readiness.
+stop for human strategic decision or update the existing draft PR with the new
+evidence. The current autonomous line is frozen because Stage A, sandbox CVaR,
+DSR diagnostic, threshold-family and stability-correction gates did not produce
+a promotable ex-ante alpha candidate. Do not promote, merge, or declare paper
+readiness.
 
 ## Required Review Before Promotion
 
