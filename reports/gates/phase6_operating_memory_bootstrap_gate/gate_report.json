@@ -1,0 +1,98 @@
+{
+  "gate_slug": "phase6_operating_memory_bootstrap_gate",
+  "phase_family": "phase6_governance_memory",
+  "status": "PASS",
+  "decision": "advance",
+  "branch": "codex/autonomous-sniper-implementation",
+  "commit_before_gate": "68087363d6d5a4d2343c62a8b27d9636b0f74b36",
+  "pr_url": "https://github.com/ulissesfalves/sniper/pull/1",
+  "scope": [
+    "bootstrap persistent operating memory",
+    "preserve official/research/sandbox governance",
+    "set next allowed mode to START_RESEARCH_ONLY_THESIS"
+  ],
+  "out_of_scope": [
+    "official promotion",
+    "paper readiness",
+    "A3/A4 reopening",
+    "threshold relaxation",
+    "model feature implementation"
+  ],
+  "created_or_updated": [
+    "AGENTS.md",
+    "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md",
+    "reports/state/sniper_current_state.json",
+    "reports/state/sniper_spec_gap_backlog.yaml",
+    "reports/state/sniper_decision_ledger.md",
+    "reports/state/sniper_artifact_registry.json",
+    "reports/state/sniper_autonomous_runbook.md"
+  ],
+  "official_artifacts_used": [
+    "data/models/phase4/phase4_report_v4.json",
+    "data/models/phase4/phase4_execution_snapshot.parquet",
+    "data/models/phase4/phase4_aggregated_predictions.parquet",
+    "data/models/phase4/phase4_oos_predictions.parquet",
+    "data/models/phase4/phase4_gate_diagnostic.json"
+  ],
+  "research_artifacts_used": [
+    "data/models/research/phase4_cross_sectional_ranking_baseline/stage_a_predictions.parquet",
+    "data/models/research/phase4_cross_sectional_ranking_baseline/stage_a_report.json",
+    "data/models/research/phase4_cross_sectional_ranking_baseline/stage_a_manifest.json",
+    "data/models/research/phase4_cross_sectional_ranking_baseline/stage_a_snapshot_proxy.parquet"
+  ],
+  "metrics": [
+    {
+      "metric_name": "mandatory_memory_files_present",
+      "metric_value": "7/7",
+      "metric_threshold": "7/7",
+      "metric_status": "PASS"
+    },
+    {
+      "metric_name": "state_json_valid",
+      "metric_value": true,
+      "metric_threshold": true,
+      "metric_status": "PASS"
+    },
+    {
+      "metric_name": "artifact_registry_json_valid",
+      "metric_value": true,
+      "metric_threshold": true,
+      "metric_status": "PASS"
+    },
+    {
+      "metric_name": "spec_gap_backlog_yaml_structural_check",
+      "metric_value": "required gap keys present",
+      "metric_threshold": "required gap keys present",
+      "metric_status": "PASS"
+    },
+    {
+      "metric_name": "official_promotion_allowed",
+      "metric_value": false,
+      "metric_threshold": false,
+      "metric_status": "PASS"
+    },
+    {
+      "metric_name": "paper_readiness_allowed",
+      "metric_value": false,
+      "metric_threshold": false,
+      "metric_status": "PASS"
+    },
+    {
+      "metric_name": "next_recommended_mode",
+      "metric_value": "START_RESEARCH_ONLY_THESIS",
+      "metric_threshold": "allowed mode",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable"
+  ],
+  "risks": [
+    "Operating memory could be misread as readiness evidence; it is governance state only.",
+    "Next research thesis must not promote official artifacts or relax thresholds."
+  ],
+  "recommendation": "Advance to a scoped research-only thesis gate. Do not promote official, declare paper readiness, merge, force push or reopen A3/A4.",
+  "timestamp_utc": "2026-05-02T10:42:42Z"
+}

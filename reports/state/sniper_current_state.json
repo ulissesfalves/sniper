@@ -1,0 +1,80 @@
+{
+  "program_status": "PHASE6_DRAFT_PR_REPRODUCIBILITY_GOVERNANCE_COMPLETE_QUANT_BLOCKED",
+  "active_branch": "codex/autonomous-sniper-implementation",
+  "latest_pr": {
+    "number": 1,
+    "url": "https://github.com/ulissesfalves/sniper/pull/1",
+    "state": "open",
+    "draft": true,
+    "merged": false,
+    "base": "codex/openclaw-sniper-handoff",
+    "head": "codex/autonomous-sniper-implementation",
+    "head_sha": "68087363d6d5a4d2343c62a8b27d9636b0f74b36"
+  },
+  "latest_gate": {
+    "gate_slug": "phase6_operating_memory_bootstrap_gate",
+    "status": "PASS",
+    "decision": "advance"
+  },
+  "latest_decision": "OPERATING_MEMORY_BOOTSTRAPPED_START_RESEARCH_ONLY_THESIS_NEXT",
+  "resolved_blockers": [
+    "source_doc_alignment_restored",
+    "phase4_official_artifacts_found_and_hashed",
+    "research_baseline_artifacts_found_and_hashed",
+    "clean_regeneration_proven",
+    "operating_memory_bootstrapped"
+  ],
+  "open_blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable",
+    "paper_readiness_blocked_by_quant_merit"
+  ],
+  "promotion_blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable"
+  ],
+  "allowed_next_modes": [
+    "START_RESEARCH_ONLY_THESIS",
+    "RUN_GLOBAL_REAUDIT",
+    "FREEZE_LINE",
+    "STOP_FOR_HUMAN_DECISION"
+  ],
+  "forbidden_next_modes": [
+    "PROMOTE_OFFICIAL",
+    "DECLARE_PAPER_READINESS",
+    "MERGE_PR",
+    "REOPEN_A3_A4",
+    "TREAT_RESEARCH_AS_OFFICIAL",
+    "TREAT_ZERO_EXPOSURE_CVAR_AS_ECONOMIC_ROBUSTNESS"
+  ],
+  "last_clean_regeneration_status": {
+    "status": "PASS",
+    "gate_slug": "phase6_research_baseline_rehydration_clean_regeneration_gate",
+    "clean_clone_or_equivalent": true,
+    "phase5_clean_gate_status": "PASS"
+  },
+  "cvar_status": {
+    "technical_status": "PASS_ZERO_EXPOSURE",
+    "economic_status": "NOT_PROVEN_ZERO_EXPOSURE",
+    "total_exposure_pct": 0.0,
+    "promotion_allowed": false
+  },
+  "dsr_status": {
+    "dsr_honest": 0.0,
+    "dsr_passed": false,
+    "promotion_allowed": false
+  },
+  "cross_sectional_status": {
+    "state": "ALIVE_BUT_NOT_PROMOTABLE",
+    "official_allowed": false,
+    "research_only_allowed": true
+  },
+  "official_promotion_allowed": false,
+  "paper_readiness_allowed": false,
+  "required_external_artifacts": [],
+  "next_recommended_mode": "START_RESEARCH_ONLY_THESIS",
+  "next_recommended_gate": "phase5_research_only_stage_a_nonzero_exposure_falsification_gate",
+  "updated_at_utc": "2026-05-02T10:42:42Z"
+}
