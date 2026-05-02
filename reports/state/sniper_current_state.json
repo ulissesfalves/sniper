@@ -13,11 +13,11 @@
     "observed_before_local_gate_commits": false
   },
   "latest_gate": {
-    "gate_slug": "phase5_research_rank_score_threshold_sizing_falsification_gate",
-    "status": "PARTIAL",
-    "decision": "correct"
+    "gate_slug": "phase5_research_rank_score_stability_correction_gate",
+    "status": "FAIL",
+    "decision": "abandon"
   },
-  "latest_decision": "CONTINUE_AUTONOMOUS_WITH_ONE_PARTIAL_CORRECTION_FOR_THRESHOLD_FAMILY",
+  "latest_decision": "ABANDON_THRESHOLD_FAMILY_AFTER_ONE_PARTIAL_CORRECTION",
   "resolved_blockers": [
     "source_doc_alignment_restored",
     "phase4_official_artifacts_found_and_hashed",
@@ -27,7 +27,8 @@
     "stage_a_realized_eligibility_leakage_risk_identified",
     "research_sandbox_nonzero_exposure_cvar_evaluator_available",
     "dsr_zero_root_cause_diagnostic_complete",
-    "rank_score_threshold_family_weak_positive_candidate_found"
+    "rank_score_threshold_family_weak_positive_candidate_found",
+    "rank_score_threshold_family_correction_attempted_and_abandoned"
   ],
   "open_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -36,7 +37,8 @@
     "paper_readiness_blocked_by_quant_merit",
     "safe_stage_a_top1_policy_negative_median_sharpe",
     "sharpe_gap_to_required_honest_dsr",
-    "threshold_family_cross_combo_instability"
+    "threshold_family_cross_combo_instability",
+    "no_promotable_ex_ante_alpha_candidate"
   ],
   "promotion_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -121,18 +123,18 @@
   "paper_readiness_allowed": false,
   "required_external_artifacts": [],
   "latest_research_thesis": {
-    "gate_slug": "phase5_research_rank_score_threshold_sizing_falsification_gate",
-    "hypothesis": "A predeclared research-only rank-score threshold family can improve ex-ante alpha relative to unfiltered safe top1 while staying non-promotional and leakage-safe.",
-    "status": "PARTIAL",
-    "decision": "correct",
-    "classification": "WEAK_POSITIVE_MEDIAN_ALPHA_UNSTABLE_NOT_PROMOTABLE",
-    "best_policy": "top1_score_ge_0_50",
-    "best_median_combo_sharpe": 0.331124,
-    "best_min_combo_sharpe": -3.357339,
-    "best_median_active_days": 177.0,
-    "best_max_cvar_95_loss_fraction": 0.01070472
+    "gate_slug": "phase5_research_rank_score_stability_correction_gate",
+    "hypothesis": "A predeclared ex-ante stability correction can repair the weak threshold-family candidate without using realized eligibility or choosing combos by realized performance.",
+    "status": "FAIL",
+    "decision": "abandon",
+    "classification": "STABILITY_CORRECTION_DID_NOT_CLEAR_NEGATIVE_COMBO_OR_DSR_GAP",
+    "best_correction_policy": "score_0_60",
+    "best_correction_median_combo_sharpe": 0.195832,
+    "best_correction_min_combo_sharpe": -2.553324,
+    "min_combo_sharpe_improvement_vs_baseline": 0.804015,
+    "best_correction_max_cvar_95_loss_fraction": 0.00883824
   },
   "next_recommended_mode": "CONTINUE_AUTONOMOUS",
-  "next_recommended_gate": "phase5_research_rank_score_stability_correction_gate",
-  "updated_at_utc": "2026-05-02T13:02:00Z"
+  "next_recommended_gate": "phase5_research_hypothesis_space_freeze_gate",
+  "updated_at_utc": "2026-05-02T13:12:00Z"
 }

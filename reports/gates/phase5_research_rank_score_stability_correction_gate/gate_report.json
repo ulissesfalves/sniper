@@ -1,0 +1,82 @@
+{
+  "gate_slug": "phase5_research_rank_score_stability_correction_gate",
+  "phase_family": "phase5_research_rank_score_stability_correction",
+  "status": "FAIL",
+  "decision": "abandon",
+  "baseline_commit": "03707ff4d32456125698dcf577384e174afbe15a",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_stability_correction_gate\\rank_score_stability_correction_summary.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_stability_correction_gate\\rank_score_stability_correction_combo_metrics.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_stability_correction_gate\\rank_score_stability_correction_policy_metrics.parquet"
+  ],
+  "summary": [
+    "classification=STABILITY_CORRECTION_DID_NOT_CLEAR_NEGATIVE_COMBO_OR_DSR_GAP",
+    "best_correction_policy=score_0_60",
+    "best_correction_median_combo_sharpe=0.195832",
+    "best_correction_min_combo_sharpe=-2.553324",
+    "min_combo_sharpe_improvement_vs_baseline=0.804015",
+    "best_correction_median_active_days=129.0",
+    "best_correction_max_cvar_95_loss_fraction=0.00883824",
+    "one allowed PARTIAL correction consumed for threshold-family line",
+    "no official promotion attempted"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_research_rank_score_stability_correction_gate",
+      "metric_name": "best_correction_policy",
+      "metric_value": "score_0_60",
+      "metric_threshold": "predeclared correction family only",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_rank_score_stability_correction_gate",
+      "metric_name": "baseline_median_combo_sharpe",
+      "metric_value": 0.331124,
+      "metric_threshold": "reference",
+      "metric_status": "INCONCLUSIVE"
+    },
+    {
+      "gate_slug": "phase5_research_rank_score_stability_correction_gate",
+      "metric_name": "best_correction_median_combo_sharpe",
+      "metric_value": 0.195832,
+      "metric_threshold": ">= 0.331124 and eventually >= 4.47",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_rank_score_stability_correction_gate",
+      "metric_name": "baseline_min_combo_sharpe",
+      "metric_value": -3.357339,
+      "metric_threshold": "reference",
+      "metric_status": "INCONCLUSIVE"
+    },
+    {
+      "gate_slug": "phase5_research_rank_score_stability_correction_gate",
+      "metric_name": "best_correction_min_combo_sharpe",
+      "metric_value": -2.553324,
+      "metric_threshold": "> 0.0 for stability correction success",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_rank_score_stability_correction_gate",
+      "metric_name": "min_combo_sharpe_improvement_vs_baseline",
+      "metric_value": 0.804015,
+      "metric_threshold": ">= 0.5",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "threshold_family_stability_correction_failed",
+    "best_correction_min_combo_sharpe_negative",
+    "best_correction_below_required_dsr_sharpe",
+    "dsr_honest_zero_blocks_promotion"
+  ],
+  "risks_residual": [
+    "Predeclared stability guards did not clear negative cross-combo Sharpe.",
+    "The threshold-family line should not be repeated under another name.",
+    "Any further work needs a materially different hypothesis family."
+  ],
+  "next_recommended_step": "Abandon the rank-score threshold-family line. Continue only if a materially different research-only hypothesis remains within budget; otherwise freeze."
+}
