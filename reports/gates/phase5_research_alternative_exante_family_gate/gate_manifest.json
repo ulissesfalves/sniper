@@ -1,0 +1,103 @@
+{
+  "gate_slug": "phase5_research_alternative_exante_family_gate",
+  "timestamp_utc": "2026-05-02T14:30:01+00:00",
+  "baseline_commit": "25bae6e303ae6dda297fff7830915c8a1355b405",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_predictions.parquet",
+      "exists": true,
+      "size_bytes": 4365296,
+      "mtime_utc": "2026-03-29T06:55:53+00:00",
+      "sha256": "FC947D4C3C71175BCF5F773665DD1D5BB5F033D0E67E881F0B07B338FDA1B67E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_deep_quant_diagnostic_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4006,
+      "mtime_utc": "2026-05-02T14:29:34+00:00",
+      "sha256": "EE5D6A2587A718B5F269FCE4B7217A615541C9CB3A0ED821EBA451361EF350C3"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_alternative_exante_family_gate\\alternative_exante_family_positions.parquet",
+      "exists": true,
+      "size_bytes": 1238554,
+      "mtime_utc": "2026-05-02T14:30:01+00:00",
+      "sha256": "D3137040ED38DABC11E6AB262CA25728C56AACBA9FCE2D9617F53933CD1220A8"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_alternative_exante_family_gate\\alternative_exante_family_daily_returns.parquet",
+      "exists": true,
+      "size_bytes": 239986,
+      "mtime_utc": "2026-05-02T14:30:01+00:00",
+      "sha256": "9B172FBD3107ED987393B374380C0C4160EBE98A68C7C31700BC6B05DEC1D46D"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_alternative_exante_family_gate\\alternative_exante_family_trade_log.parquet",
+      "exists": true,
+      "size_bytes": 111436,
+      "mtime_utc": "2026-05-02T14:30:01+00:00",
+      "sha256": "B24E471E78ECD23BDEAA156A5FCE7A7B56DED35152BE0A3B4EAF6A601C1C374D"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_alternative_exante_family_gate\\alternative_exante_family_metrics.parquet",
+      "exists": true,
+      "size_bytes": 23965,
+      "mtime_utc": "2026-05-02T14:30:01+00:00",
+      "sha256": "10F04A6D928482EFDA60D01F78667EEED27F0C0216F983BF0A5AC201730D180C"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_alternative_exante_family_gate\\alternative_exante_family_snapshot_proxy.parquet",
+      "exists": true,
+      "size_bytes": 9723,
+      "mtime_utc": "2026-05-02T14:30:01+00:00",
+      "sha256": "0BA6A2A227BB35BB0650786B5C951C2E100845ECCCC66888AFF61E60A253A1DB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_alternative_exante_family_gate\\portfolio_cvar_research_report.json",
+      "exists": true,
+      "size_bytes": 8548,
+      "mtime_utc": "2026-05-02T14:30:01+00:00",
+      "sha256": "B3BB8931C8DB3057BD1BFF47163A92276A7725AF941922C462E9ED8806D1AE22"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_alternative_exante_family_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4689,
+      "mtime_utc": "2026-05-02T14:30:01+00:00",
+      "sha256": "06C4AC0238586A069522B73B154E13005657D923373700D5164956064A27C6F4"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_alternative_exante_family_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 1654,
+      "mtime_utc": "2026-05-02T14:30:01+00:00",
+      "sha256": "BC775D9A33B0A2C2FA673939781E04A592800586F4C248A6E3FF1A404463194E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_alternative_exante_family_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 4167,
+      "mtime_utc": "2026-05-02T14:30:01+00:00",
+      "sha256": "877E3111BDCD55F81E8A2A2A19B7515D71826602CEA25488A7F61217169F9F48"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_alternative_exante_family_gate\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    ".\\.venv\\Scripts\\python.exe services\\ml_engine\\phase5_research_alternative_exante_family.py"
+  ],
+  "notes": [
+    "Research-only alternative ex-ante family gate.",
+    "Does not use stage_a_eligible, avg_sl_train, pnl_real, or realized labels as selection rules.",
+    "pnl_real is used only to score realized backtest outcomes.",
+    "No official artifacts were promoted."
+  ]
+}
