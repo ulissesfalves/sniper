@@ -10,7 +10,9 @@ Classificacao: `DRAFT_PR_REVIEW_READY`
 
 Resultado final da missao: `PARTIAL/correct`
 
-Recomendacao: abrir PR draft para revisao humana. Nao abrir PR ready e nao promover nada para official.
+Atualizacao full-phase: `PASS/advance` como evidencia research-only, sem promocao.
+
+Recomendacao: manter PR draft para revisao humana. Nao abrir PR ready e nao promover nada para official.
 
 ## Resumo executivo
 
@@ -19,6 +21,31 @@ A missao autonoma avancou a governanca Phase 6 ate remover os blockers de source
 O ultimo gate, `phase6_research_baseline_rehydration_clean_regeneration_gate`, provou clean regeneration em clone limpo/equivalente usando artifacts base copiados para o clone isolado. O restore Phase5 dentro do clone limpo retornou `PASS/advance`.
 
 A missao deve parar antes de qualquer promocao porque `dsr_honest=0.0` permanece falso para promocao e o CVaR official continua com exposicao zero.
+
+## Atualizacao da missao full-phase research-only
+
+A missao autonoma full-phase adicionou uma linha research/sandbox nova depois
+da reprodutibilidade Phase6:
+
+- `phase5_research_deep_quant_diagnostic_gate`: `PASS/advance` como
+  diagnostico; confirmou `dsr_honest=0.0`, `sr_needed=4.47`, gap `3.5892`,
+  mediana research Sharpe `-0.727203` e nenhum prior policy estavel positivo.
+- `phase5_research_alternative_exante_family_gate`: `FAIL/abandon`; a familia
+  long-only p_bma/sigma/hmm nao produziu alpha mediano positivo.
+- `phase5_research_signal_polarity_long_short_gate`: `PARTIAL/correct`;
+  encontrou `short_high_p_bma_k3` com mediana Sharpe `1.768215`, mas min Sharpe
+  `-0.501947`.
+- `phase5_research_signal_polarity_stability_correction_gate`: `PASS/advance`
+  como candidato research-only; `short_high_p_bma_k3_p60_h70` teve mediana
+  Sharpe `1.361592`, min Sharpe `0.261111`, mediana de dias ativos `471.0` e
+  CVaR95 max `0.00344841`.
+- `phase5_research_full_phase_family_comparison_gate`: `PASS/advance`; comparou
+  familias, abandonou Stage A/rank-score/long-only p_bma-sigma-hmm e preservou
+  o candidato de polaridade como sandbox-only.
+
+Esse candidato usa exposicao short em sandbox/research, nao existe promocao
+official, nao ha paper readiness, e DSR/CVaR official continuam bloqueando
+qualquer leitura operacional.
 
 ## Commits da branch
 
@@ -40,6 +67,11 @@ Commits acima de `codex/openclaw-sniper-handoff`:
 | `phase6_source_doc_and_regeneration_preflight_gate` | `PARTIAL` | `correct` | Source-doc passou para `ALIGNED`; Phase4 official ainda ausente naquele momento. |
 | `phase6_phase4_artifact_rehydration_and_dsr_stop_gate` | `PARTIAL` | `correct` | Artifacts official Phase4 foram encontrados e hasheados; baseline research ainda ausente naquele momento. |
 | `phase6_research_baseline_rehydration_clean_regeneration_gate` | `PARTIAL` | `correct` | Baseline research foi encontrado e hasheado; clean regeneration passou em clone limpo; blockers restantes sao DSR e CVaR zero exposure. |
+| `phase5_research_deep_quant_diagnostic_gate` | `PASS` | `advance` | Diagnostico DSR/SR/subperiodos completo; sem promocao. |
+| `phase5_research_alternative_exante_family_gate` | `FAIL` | `abandon` | Familia long-only p_bma/sigma/hmm abandonada. |
+| `phase5_research_signal_polarity_long_short_gate` | `PARTIAL` | `correct` | Familia de polaridade achou alpha mediano positivo, mas exigiu correcao. |
+| `phase5_research_signal_polarity_stability_correction_gate` | `PASS` | `advance` | Candidato research-only estavel sobrevivente; nao promotable. |
+| `phase5_research_full_phase_family_comparison_gate` | `PASS` | `advance` | Selecionou sobrevivente research-only e preservou blockers official. |
 
 ## Evidencias do ultimo gate
 
@@ -95,11 +127,17 @@ Artifacts research baseline usados e hasheados:
   - `dsr_honest=0.0`
   - `dsr_passed=false`
   - check `DSR honesto > 0.95 [10]` falso
+  - candidato research-only sobrevivente ainda abaixo de `sr_needed=4.47`
 
 - `cvar_zero_exposure_not_economic_robustness`
   - snapshot official carregado, mas com `n_positions=0`
   - `total_exposure_pct=0.0`
   - CVaR e apenas persistencia tecnica: `PASS_ZERO_EXPOSURE`
+  - CVaR research com exposicao short nao prova CVaR economico official
+
+- `short_exposure_research_only_not_official`
+  - o candidato `short_high_p_bma_k3_p60_h70` e sandbox/research apenas
+  - nao ha gate de promocao, nem readiness operacional
 
 ## Testes executados
 
@@ -108,6 +146,14 @@ Artifacts research baseline usados e hasheados:
 ```
 
 Resultado: `26 passed`.
+
+Testes full-phase adicionais:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest tests/unit/test_phase5_research_deep_quant_diagnostic.py tests/unit/test_phase5_research_alternative_exante_family.py tests/unit/test_phase5_research_signal_polarity_long_short.py tests/unit/test_phase5_research_full_phase_family_comparison.py -q
+```
+
+Resultado observado: `11 passed`.
 
 ## Risco residual
 

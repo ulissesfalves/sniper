@@ -26,6 +26,19 @@
 - [ ] Verificar `reports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/gate_report.json`.
 - [ ] Confirmar que todos possuem `gate_report.json`, `gate_report.md`, `gate_manifest.json` e `gate_metrics.parquet`.
 
+## Gates research-only full-phase
+
+- [ ] Verificar `reports/gates/phase5_research_deep_quant_diagnostic_gate/gate_report.json`.
+- [ ] Verificar `reports/gates/phase5_research_alternative_exante_family_gate/gate_report.json`.
+- [ ] Verificar `reports/gates/phase5_research_signal_polarity_long_short_gate/gate_report.json`.
+- [ ] Verificar `reports/gates/phase5_research_signal_polarity_stability_correction_gate/gate_report.json`.
+- [ ] Verificar `reports/gates/phase5_research_full_phase_family_comparison_gate/gate_report.json`.
+- [ ] Confirmar que a familia long-only p_bma/sigma/hmm foi abandonada.
+- [ ] Confirmar que `short_high_p_bma_k3_p60_h70` e research/sandbox apenas.
+- [ ] Confirmar mediana Sharpe `1.361592`, min Sharpe `0.261111`, dias ativos medianos `471.0` e CVaR95 max `0.00344841`.
+- [ ] Confirmar que exposicao short nao foi tratada como official.
+- [ ] Confirmar que o candidato continua abaixo de `sr_needed=4.47`.
+
 ## Clean regeneration
 
 - [ ] Confirmar que `phase6_research_baseline_rehydration_clean_regeneration_gate` tem `clean_clone_or_equivalent=true`.
@@ -60,6 +73,8 @@
 - [ ] Confirmar `cvar_technical_status=PASS_ZERO_EXPOSURE`.
 - [ ] Confirmar `cvar_economic_status=NOT_PROVEN_ZERO_EXPOSURE`.
 - [ ] Confirmar que CVaR zero exposure nao foi tratado como robustez economica.
+- [ ] Confirmar que o novo CVaR research com exposicao short nao foi tratado como CVaR economico official.
+- [ ] Confirmar que o candidato research-only nao foi usado para declarar paper readiness.
 
 ## Testes
 
@@ -71,9 +86,18 @@
 
 - [ ] Esperado: `26 passed`.
 
+- [ ] Rodar ou revisar resultado full-phase:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest tests/unit/test_phase5_research_deep_quant_diagnostic.py tests/unit/test_phase5_research_alternative_exante_family.py tests/unit/test_phase5_research_signal_polarity_long_short.py tests/unit/test_phase5_research_full_phase_family_comparison.py -q
+```
+
+- [ ] Esperado observado: `11 passed`.
+
 ## Decisao humana
 
 - [ ] Aprovar PR draft como evidencia de reprodutibilidade/governanca Phase6.
 - [ ] Nao aprovar promocao official.
 - [ ] Decidir se a linha cross-sectional deve ser congelada como research-only.
-- [ ] Decidir se vale abrir uma nova tese research-only para atacar DSR/CVaR, sem usar esta missao como promocao.
+- [ ] Revisar o candidato sandbox `short_high_p_bma_k3_p60_h70` como research-only.
+- [ ] Decidir se uma futura tese deve validar suporte short sandbox/official ou continuar buscando alternativa long-only, sem usar esta missao como promocao.

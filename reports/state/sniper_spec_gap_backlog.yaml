@@ -12,12 +12,18 @@ gaps:
       - "reports/gates/phase5_research_rank_score_threshold_sizing_falsification_gate/gate_report.json"
       - "reports/gates/phase5_research_rank_score_stability_correction_gate/gate_report.json"
       - "reports/gates/phase5_research_hypothesis_space_freeze_gate/gate_report.json"
+      - "reports/gates/phase5_research_deep_quant_diagnostic_gate/gate_report.json"
+      - "reports/gates/phase5_research_signal_polarity_stability_correction_gate/gate_report.json"
+      - "reports/gates/phase5_research_full_phase_family_comparison_gate/gate_report.json"
       - "dsr_honest=0.0"
       - "dsr_passed=false"
       - "safe Stage A top1 median combo Sharpe=-0.727203"
       - "sharpe_gap_to_sr_needed=3.5892"
       - "threshold family best median combo Sharpe=0.331124"
       - "threshold family stability correction failed; best correction median Sharpe=0.195832"
+      - "signal polarity survivor median combo Sharpe=1.361592"
+      - "signal polarity survivor min combo Sharpe=0.261111"
+      - "signal polarity survivor remains below sr_needed=4.47 and is research-only"
       - "current hypothesis space frozen under previous 5-gate policy"
       - "AUTONOMOUS FULL PHASE EXECUTION POLICY now authorizes broader future missions"
     source_files:
@@ -68,11 +74,13 @@ gaps:
     evidence:
       - "reports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/portfolio_cvar_report.json"
       - "reports/gates/phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate/gate_report.json"
+      - "reports/gates/phase5_research_signal_polarity_stability_correction_gate/gate_report.json"
       - "positions={}"
       - "total_exposure_pct=0.0"
       - "economic_robustness_status=NOT_PROVEN_ZERO_EXPOSURE"
       - "research_sandbox_active_combo_days=10576"
       - "research_sandbox_max_cvar_95_loss_fraction=0.01072844"
+      - "signal_polarity_research_max_cvar_95_loss_fraction=0.00344841"
     source_files:
       - "data/models/phase4/phase4_execution_snapshot.parquet"
     allowed_actions:
@@ -120,6 +128,9 @@ gaps:
       - "reports/gates/phase5_research_rank_score_threshold_sizing_falsification_gate/gate_report.json"
       - "reports/gates/phase5_research_rank_score_stability_correction_gate/gate_report.json"
       - "reports/gates/phase5_research_hypothesis_space_freeze_gate/gate_report.json"
+      - "reports/gates/phase5_research_alternative_exante_family_gate/gate_report.json"
+      - "reports/gates/phase5_research_signal_polarity_stability_correction_gate/gate_report.json"
+      - "reports/gates/phase5_research_full_phase_family_comparison_gate/gate_report.json"
       - "ALIVE_BUT_NOT_PROMOTABLE"
     source_files:
       - "docs/SNIPER_openclaw_handoff.md"
@@ -326,3 +337,63 @@ gaps:
       - "REAL_TRADING"
     suggested_gate: "autonomous_full_phase_family_selection_gate"
     stop_condition_if_unresolved: "A mission must continue within budget while defensible research-only hypotheses remain inside the repo."
+
+  - id: GAP-ALTEXANTE-001
+    title: Alternative p_bma/sigma/hmm long-only ex-ante family failed
+    type: research_hypothesis
+    severity: high
+    status: abandoned
+    evidence:
+      - "reports/gates/phase5_research_alternative_exante_family_gate/gate_report.json"
+      - "classification=ALTERNATIVE_EXANTE_FAMILIES_NO_POSITIVE_SAFE_MEDIAN_ALPHA"
+      - "families_tested=regime_filtered_defensive_ensemble,risk_budgeted_topk,uncertainty_abstention,volatility_targeted_topk"
+      - "best_policy=ensemble_top3"
+      - "best_median_combo_sharpe=-0.632456"
+      - "best_min_combo_sharpe=-2.11257"
+    source_files:
+      - "services/ml_engine/phase5_research_alternative_exante_family.py"
+      - "tests/unit/test_phase5_research_alternative_exante_family.py"
+    allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
+      - "RUN_GLOBAL_REAUDIT"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "REPEAT_SAME_LONG_ONLY_P_BMA_SIGMA_HMM_FAMILY"
+      - "DECLARE_PAPER_READINESS"
+    suggested_gate: "none_repeat_forbidden_without_materially_new_family"
+    stop_condition_if_unresolved: "Do not repeat this long-only p_bma/sigma/hmm family under another name; continue only with materially different thesis."
+
+  - id: GAP-POLARITY-001
+    title: Signal-polarity short-high research candidate survived but is not promotable
+    type: research_hypothesis
+    severity: high
+    status: candidate_research_only
+    evidence:
+      - "reports/gates/phase5_research_signal_polarity_long_short_gate/gate_report.json"
+      - "reports/gates/phase5_research_signal_polarity_stability_correction_gate/gate_report.json"
+      - "reports/gates/phase5_research_full_phase_family_comparison_gate/gate_report.json"
+      - "best_correction_policy=short_high_p_bma_k3_p60_h70"
+      - "best_correction_median_combo_sharpe=1.361592"
+      - "best_correction_min_combo_sharpe=0.261111"
+      - "best_correction_median_active_days=471.0"
+      - "best_correction_max_cvar_95_loss_fraction=0.00344841"
+      - "short_exposure_is_research_sandbox_only=true"
+      - "dsr_honest=0.0"
+      - "sr_needed=4.47"
+    source_files:
+      - "services/ml_engine/phase5_research_signal_polarity_long_short.py"
+      - "services/ml_engine/phase5_research_signal_polarity_stability_correction.py"
+      - "services/ml_engine/phase5_research_full_phase_family_comparison.py"
+      - "tests/unit/test_phase5_research_signal_polarity_long_short.py"
+      - "tests/unit/test_phase5_research_full_phase_family_comparison.py"
+    allowed_actions:
+      - "RUN_GLOBAL_REAUDIT"
+      - "CONTINUE_AUTONOMOUS"
+      - "START_RESEARCH_ONLY_THESIS"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "TREAT_SHORT_SANDBOX_AS_OFFICIAL"
+      - "RELAX_DSR_THRESHOLD"
+    suggested_gate: "phase5_research_signal_polarity_candidate_global_review_gate"
+    stop_condition_if_unresolved: "The candidate can be reviewed as research-only, but cannot be promoted while DSR remains 0.0 and official CVaR remains zero exposure."

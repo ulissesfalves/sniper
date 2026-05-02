@@ -1,6 +1,6 @@
 # SNIPER Decision Ledger
 
-Updated: 2026-05-02T14:11:27Z
+Updated: 2026-05-02T14:42:38Z
 
 ## Closed Decisions
 
@@ -24,17 +24,20 @@ Updated: 2026-05-02T14:11:27Z
 | Rank-score threshold stability correction | Abandoned | `phase5_research_rank_score_stability_correction_gate` consumed the single PARTIAL correction. Best correction `score_0_60` improved min Sharpe to `-2.553324` but reduced median Sharpe to `0.195832`; instability and DSR gap remain. |
 | Current research hypothesis space | Frozen | `phase5_research_hypothesis_space_freeze_gate` considered five gates, found zero promotable candidates, and froze the current autonomous line. Surviving modules are CVaR evaluation and DSR diagnostics only. |
 | Autonomous full phase execution policy | Authorized | Future autonomous missions may run up to 15 research-only gates, 3 materially different hypothesis families, 3 gates per family, 2 corrections per PARTIAL gate, 1 intermediate global audit and 1 final PR draft update. FAIL/abandon does not stop the mission while materially different defensible hypotheses remain. |
+| Deep quantitative diagnostic | Complete | `phase5_research_deep_quant_diagnostic_gate` passed as diagnostic only: `dsr_honest=0.0`, `sharpe_is=0.8808`, `sr_needed=4.47`, gap `3.5892`, median research Sharpe `-0.727203`, and `positive_and_stable_policy_count=0`. |
+| Alternative p_bma/sigma/hmm family | Abandoned | `phase5_research_alternative_exante_family_gate` failed/abandoned after testing volatility-targeted, risk-budgeted, defensive ensemble and uncertainty-abstention long-only research policies; best policy `ensemble_top3` had median combo Sharpe `-0.632456`. |
+| Signal-polarity research family | Partial then corrected | `phase5_research_signal_polarity_long_short_gate` found positive median alpha for `short_high_p_bma_k3` (`1.768215`) but required correction because min combo Sharpe was `-0.501947`. |
+| Signal-polarity stability correction | Research-only survivor | `phase5_research_signal_polarity_stability_correction_gate` passed/advanced as sandbox research only: `short_high_p_bma_k3_p60_h70` had median combo Sharpe `1.361592`, min combo Sharpe `0.261111`, median active days `471.0`, and max CVaR95 `0.00344841`. It is not official and still below the DSR promotion bar. |
+| Full phase family comparison | Research-only survivor selected | `phase5_research_full_phase_family_comparison_gate` compared six families/gates, abandoned Stage A/rank-score/alternative long-only lines, and preserved `short_high_p_bma_k3_p60_h70` as the only surviving research candidate. No official promotion, paper readiness, A3/A4 reopening or threshold relaxation occurred. |
 
 ## Current Decision
 
-The next safe mode is `CONTINUE_AUTONOMOUS` under the
-`AUTONOMOUS FULL PHASE EXECUTION POLICY`, constrained to research/sandbox work
-inside the repo. The previous freeze remains historical evidence for the
-Stage A/rank_score line, but future freeze decisions require at least 2
-materially different families, explicit DSR diagnostics, research CVaR with
-nonzero exposure when applicable, family comparison/falsification, and this
-ledger updated. Do not promote, merge, declare paper readiness, reopen A3/A4 or
-relax thresholds.
+The current mission produced a reviewable research-only survivor:
+`short_high_p_bma_k3_p60_h70`. The next safe mode is `RUN_GLOBAL_REAUDIT` or
+draft PR update/review, not promotion. The survivor is sandbox-only, uses short
+exposure, remains below `sr_needed=4.47`, and cannot clear
+`dsr_honest=0.0`. Do not promote, merge, declare paper readiness, reopen A3/A4
+or relax thresholds.
 
 ## Required Review Before Promotion
 

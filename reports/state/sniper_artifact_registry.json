@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-05-02T13:20:00Z",
+  "updated_at_utc": "2026-05-02T14:42:38Z",
   "official_artifacts": [
     {
       "path": "data/models/phase4/phase4_report_v4.json",
@@ -70,7 +70,12 @@
     "reports/gates/phase5_research_dsr_zero_diagnostic_gate",
     "reports/gates/phase5_research_rank_score_threshold_sizing_falsification_gate",
     "reports/gates/phase5_research_rank_score_stability_correction_gate",
-    "reports/gates/phase5_research_hypothesis_space_freeze_gate"
+    "reports/gates/phase5_research_hypothesis_space_freeze_gate",
+    "reports/gates/phase5_research_deep_quant_diagnostic_gate",
+    "reports/gates/phase5_research_alternative_exante_family_gate",
+    "reports/gates/phase5_research_signal_polarity_long_short_gate",
+    "reports/gates/phase5_research_signal_polarity_stability_correction_gate",
+    "reports/gates/phase5_research_full_phase_family_comparison_gate"
   ],
   "missing_artifacts": [],
   "ignored_or_heavy_artifacts": [
@@ -88,6 +93,11 @@
     "phase5_research_dsr_zero_diagnostic_gate explained DSR=0.0 as a 3.5892 Sharpe gap to sr_needed under n_trials_honest=5000; diagnostic only, no promotion.",
     "phase5_research_rank_score_threshold_sizing_falsification_gate found weak positive median alpha for top1_score_ge_0_50, but min combo Sharpe remained negative and no promotion is allowed.",
     "phase5_research_rank_score_stability_correction_gate consumed the one allowed correction for the threshold-family line and abandoned it because negative min combo Sharpe and DSR gap remained.",
-    "phase5_research_hypothesis_space_freeze_gate froze the current autonomous research hypothesis space with zero promotable candidates and two surviving diagnostic/evaluation modules."
+    "phase5_research_hypothesis_space_freeze_gate froze the current autonomous research hypothesis space with zero promotable candidates and two surviving diagnostic/evaluation modules under the previous budget.",
+    "phase5_research_deep_quant_diagnostic_gate decomposed DSR, SR_needed, subperiods, drawdown, turnover proxy and policy sensitivity; diagnostic only.",
+    "phase5_research_alternative_exante_family_gate abandoned the p_bma/sigma/hmm long-only family because best median combo Sharpe was -0.632456.",
+    "phase5_research_signal_polarity_long_short_gate found a positive research-only short-high signal polarity candidate but required stability correction.",
+    "phase5_research_signal_polarity_stability_correction_gate passed as a stable research-only survivor: short_high_p_bma_k3_p60_h70, median Sharpe 1.361592, min Sharpe 0.261111, max CVaR95 0.00344841.",
+    "phase5_research_full_phase_family_comparison_gate selected the signal-polarity survivor as research-only and explicitly blocked official promotion."
   ]
 }

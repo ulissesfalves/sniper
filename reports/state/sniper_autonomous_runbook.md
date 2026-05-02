@@ -146,7 +146,28 @@ materially different family inside the repo:
 Do not reuse `stage_a_eligible` as an ex-ante decision rule; it is treated as a
 realized diagnostic field.
 
-Current recommended next gate: `autonomous_full_phase_family_selection_gate`.
+Current mission update:
+
+- `phase5_research_deep_quant_diagnostic_gate` completed deeper DSR/SR,
+  subperiod, drawdown, turnover and sensitivity diagnostics.
+- `phase5_research_alternative_exante_family_gate` abandoned the long-only
+  p_bma/sigma/hmm family because no tested policy produced positive median
+  safe alpha.
+- `phase5_research_signal_polarity_long_short_gate` found a positive
+  research-only signal-polarity candidate but required correction.
+- `phase5_research_signal_polarity_stability_correction_gate` produced the
+  surviving sandbox candidate `short_high_p_bma_k3_p60_h70` with median combo
+  Sharpe `1.361592`, min combo Sharpe `0.261111`, median active days `471.0`,
+  and max CVaR95 loss fraction `0.00344841`.
+- `phase5_research_full_phase_family_comparison_gate` selected that candidate
+  as research-only and non-promotable.
+
+Current recommended next gate:
+`phase5_research_signal_polarity_candidate_global_review_gate`.
+
+Recommended next mode: `RUN_GLOBAL_REAUDIT` or draft PR update/review. Do not
+promote the survivor: it uses short sandbox exposure and remains below
+`sr_needed=4.47` while `dsr_honest=0.0`.
 
 ## Forbidden Interpretations
 
