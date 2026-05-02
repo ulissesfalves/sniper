@@ -64,7 +64,8 @@
     "reports/gates/phase6_phase4_artifact_rehydration_and_dsr_stop_gate",
     "reports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate",
     "reports/gates/phase6_pr_review_global_adherence_gate",
-    "reports/gates/phase6_operating_memory_bootstrap_gate"
+    "reports/gates/phase6_operating_memory_bootstrap_gate",
+    "reports/gates/phase5_research_only_stage_a_nonzero_exposure_falsification_gate"
   ],
   "missing_artifacts": [],
   "ignored_or_heavy_artifacts": [
@@ -76,6 +77,7 @@
   "notes": [
     "Artifacts under data/models are external/ignored base inputs and are not promotion evidence.",
     "Official Phase4 snapshot has zero exposure; CVaR is not economic robustness.",
-    "Research baseline artifacts remain research-only."
+    "Research baseline artifacts remain research-only.",
+    "phase5_research_only_stage_a_nonzero_exposure_falsification_gate abandoned the Stage A nonzero-exposure thesis because safe ex-ante top1 had negative median combo Sharpe and the strong result required realized eligibility."
   ]
 }

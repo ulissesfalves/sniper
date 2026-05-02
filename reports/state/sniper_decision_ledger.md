@@ -16,13 +16,13 @@ Updated: 2026-05-02T10:42:42Z
 | DSR blocker | Active | `dsr_honest=0.0`, `dsr_passed=false`; no promotion allowed. |
 | CVaR blocker | Active | `PASS_ZERO_EXPOSURE`; economic robustness not proven. |
 | Operating memory | Bootstrapped | `phase6_operating_memory_bootstrap_gate` created persistent memory files. |
+| Stage A nonzero-exposure thesis | Abandoned | `phase5_research_only_stage_a_nonzero_exposure_falsification_gate` failed because safe ex-ante top1 had median combo Sharpe `-0.727203`; high Sharpe required realized `stage_a_eligible` and is diagnostic only. |
 
 ## Current Decision
 
-The next safe mode is `START_RESEARCH_ONLY_THESIS`, scoped to research/sandbox
-evidence against DSR, zero exposure or cross-sectional promotability. This does
-not permit official promotion, paper readiness, A3/A4 reopening or threshold
-relaxation.
+The next safe mode is `FREEZE_LINE` or `STOP_FOR_HUMAN_DECISION`. A new
+research-only thesis should require a materially different hypothesis; do not
+iterate the same Stage A nonzero-exposure blocker.
 
 ## Required Review Before Promotion
 

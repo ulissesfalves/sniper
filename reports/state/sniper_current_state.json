@@ -1,5 +1,5 @@
 {
-  "program_status": "PHASE6_DRAFT_PR_REPRODUCIBILITY_GOVERNANCE_COMPLETE_QUANT_BLOCKED",
+  "program_status": "RESEARCH_ONLY_STAGE_A_NONZERO_EXPOSURE_THESIS_FAILED_FREEZE_RECOMMENDED",
   "active_branch": "codex/autonomous-sniper-implementation",
   "latest_pr": {
     "number": 1,
@@ -9,26 +9,29 @@
     "merged": false,
     "base": "codex/openclaw-sniper-handoff",
     "head": "codex/autonomous-sniper-implementation",
-    "head_sha": "68087363d6d5a4d2343c62a8b27d9636b0f74b36"
+    "observed_head_sha": "68087363d6d5a4d2343c62a8b27d9636b0f74b36",
+    "observed_before_local_gate_commits": true
   },
   "latest_gate": {
-    "gate_slug": "phase6_operating_memory_bootstrap_gate",
-    "status": "PASS",
-    "decision": "advance"
+    "gate_slug": "phase5_research_only_stage_a_nonzero_exposure_falsification_gate",
+    "status": "FAIL",
+    "decision": "abandon"
   },
-  "latest_decision": "OPERATING_MEMORY_BOOTSTRAPPED_START_RESEARCH_ONLY_THESIS_NEXT",
+  "latest_decision": "FREEZE_LINE_RECOMMENDED_AFTER_STAGE_A_NONZERO_EXPOSURE_THESIS_FAIL",
   "resolved_blockers": [
     "source_doc_alignment_restored",
     "phase4_official_artifacts_found_and_hashed",
     "research_baseline_artifacts_found_and_hashed",
     "clean_regeneration_proven",
-    "operating_memory_bootstrapped"
+    "operating_memory_bootstrapped",
+    "stage_a_realized_eligibility_leakage_risk_identified"
   ],
   "open_blockers": [
     "dsr_honest_zero_blocks_promotion",
     "cvar_zero_exposure_not_economic_robustness",
     "cross_sectional_alive_but_not_promotable",
-    "paper_readiness_blocked_by_quant_merit"
+    "paper_readiness_blocked_by_quant_merit",
+    "safe_stage_a_top1_policy_negative_median_sharpe"
   ],
   "promotion_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -36,7 +39,6 @@
     "cross_sectional_alive_but_not_promotable"
   ],
   "allowed_next_modes": [
-    "START_RESEARCH_ONLY_THESIS",
     "RUN_GLOBAL_REAUDIT",
     "FREEZE_LINE",
     "STOP_FOR_HUMAN_DECISION"
@@ -74,7 +76,18 @@
   "official_promotion_allowed": false,
   "paper_readiness_allowed": false,
   "required_external_artifacts": [],
-  "next_recommended_mode": "START_RESEARCH_ONLY_THESIS",
-  "next_recommended_gate": "phase5_research_only_stage_a_nonzero_exposure_falsification_gate",
+  "latest_research_thesis": {
+    "gate_slug": "phase5_research_only_stage_a_nonzero_exposure_falsification_gate",
+    "hypothesis": "Stage A research baseline can produce nonzero sandbox exposure and enough ex-ante-safe merit to justify further research.",
+    "status": "FAIL",
+    "decision": "abandon",
+    "classification": "ONLY_REALIZED_ELIGIBILITY_LOOKS_GOOD_SAFE_POLICY_FAILS",
+    "safe_selected_events": 10576,
+    "safe_selected_dates": 2112,
+    "safe_median_combo_sharpe": -0.727203,
+    "unsafe_median_combo_sharpe": 14.525046
+  },
+  "next_recommended_mode": "FREEZE_LINE",
+  "next_recommended_gate": "none_without_materially_new_research_hypothesis_or_human_decision",
   "updated_at_utc": "2026-05-02T10:42:42Z"
 }

@@ -1,0 +1,88 @@
+{
+  "gate_slug": "phase5_research_only_stage_a_nonzero_exposure_falsification_gate",
+  "timestamp_utc": "2026-05-02T10:51:22+00:00",
+  "baseline_commit": "bd0719c722326c808a05a66aaa7c43ae1edcefb8",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_predictions.parquet",
+      "exists": true,
+      "size_bytes": 4365296,
+      "mtime_utc": "2026-03-29T06:55:53+00:00",
+      "sha256": "FC947D4C3C71175BCF5F773665DD1D5BB5F033D0E67E881F0B07B338FDA1B67E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_snapshot_proxy.parquet",
+      "exists": true,
+      "size_bytes": 31939,
+      "mtime_utc": "2026-03-29T06:55:53+00:00",
+      "sha256": "FE1E050820ABE77C7DF35318F13301F2A7443AE45B75B2D322CAC0AF233032B7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "exists": true,
+      "size_bytes": 21118,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_report_v4.json",
+      "exists": true,
+      "size_bytes": 97451,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_only_stage_a_nonzero_exposure_falsification_gate\\stage_a_nonzero_exposure_summary.json",
+      "exists": true,
+      "size_bytes": 9389,
+      "mtime_utc": "2026-05-02T10:51:22+00:00",
+      "sha256": "6AB1F288647AEA5058CB0249696424E23B94FC8540BE7F40A47611CC2C1C4684"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_only_stage_a_nonzero_exposure_falsification_gate\\stage_a_nonzero_exposure_combo_metrics.parquet",
+      "exists": true,
+      "size_bytes": 6312,
+      "mtime_utc": "2026-05-02T10:51:22+00:00",
+      "sha256": "25B2DE97C834FE59FEEDB3562A8CC2EF7DD0BC4BB0B4F5DDA54C64A1C035524E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_only_stage_a_nonzero_exposure_falsification_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3994,
+      "mtime_utc": "2026-05-02T10:51:22+00:00",
+      "sha256": "A2F445166D75BA898A8ECC90A3EE310C615B9DD2DDDE5F947FD3BF1BBB5C8116"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_only_stage_a_nonzero_exposure_falsification_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 1930,
+      "mtime_utc": "2026-05-02T10:51:22+00:00",
+      "sha256": "2906087154BB9A1F784A6FD982EC22A6FF6FDA09DC818F13E9AEEE0D07F645A5"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_only_stage_a_nonzero_exposure_falsification_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 4184,
+      "mtime_utc": "2026-05-02T10:51:22+00:00",
+      "sha256": "2E694FD4C04A87C053A821614B67B5BD82FA37F77EDB93DB909CC780EBCE8B64"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_only_stage_a_nonzero_exposure_falsification_gate\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    ".\\.venv\\Scripts\\python.exe services\\ml_engine\\phase5_research_only_stage_a_nonzero_exposure_falsification.py"
+  ],
+  "notes": [
+    "Research-only falsification gate.",
+    "No official artifacts were promoted.",
+    "stage_a_eligible is treated as realized diagnostic metadata, not as an ex-ante policy input."
+  ]
+}

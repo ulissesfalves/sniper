@@ -6,8 +6,10 @@ gaps:
     status: open
     evidence:
       - "reports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/phase4_artifact_integrity_report.json"
+      - "reports/gates/phase5_research_only_stage_a_nonzero_exposure_falsification_gate/gate_report.json"
       - "dsr_honest=0.0"
       - "dsr_passed=false"
+      - "safe Stage A top1 median combo Sharpe=-0.727203"
     source_files:
       - "data/models/phase4/phase4_report_v4.json"
       - "data/models/phase4/phase4_gate_diagnostic.json"
@@ -18,7 +20,7 @@ gaps:
       - "PROMOTE_OFFICIAL"
       - "RELAX_DSR_THRESHOLD"
       - "DECLARE_READINESS"
-    suggested_gate: "phase5_research_only_stage_a_nonzero_exposure_falsification_gate"
+    suggested_gate: "none_without_materially_new_research_hypothesis"
     stop_condition_if_unresolved: "No promotion or readiness claim is allowed while honest DSR remains 0.0."
 
   - id: GAP-CVAR-001
@@ -49,6 +51,7 @@ gaps:
     status: open
     evidence:
       - "reports/audits/global_spec_adherence/global_spec_adherence_summary.json"
+      - "reports/gates/phase5_research_only_stage_a_nonzero_exposure_falsification_gate/gate_report.json"
       - "ALIVE_BUT_NOT_PROMOTABLE"
     source_files:
       - "docs/SNIPER_openclaw_handoff.md"
@@ -59,7 +62,7 @@ gaps:
     forbidden_actions:
       - "PROMOTE_OFFICIAL"
       - "TREAT_RESEARCH_AS_OFFICIAL"
-    suggested_gate: "phase5_research_only_stage_a_nonzero_exposure_falsification_gate"
+    suggested_gate: "none_without_materially_new_research_hypothesis"
     stop_condition_if_unresolved: "Do not promote cross-sectional while this status remains."
 
   - id: GAP-PAPER-001
@@ -101,3 +104,29 @@ gaps:
       - "IGNORE_REPORTS_STATE"
     suggested_gate: "phase6_operating_memory_bootstrap_gate"
     stop_condition_if_unresolved: "No autonomous mission should proceed without state files."
+
+  - id: GAP-STAGEA-001
+    title: Stage A nonzero exposure thesis failed under ex-ante-safe policy
+    type: research_hypothesis
+    severity: high
+    status: abandoned
+    evidence:
+      - "reports/gates/phase5_research_only_stage_a_nonzero_exposure_falsification_gate/gate_report.json"
+      - "safe_selected_events=10576"
+      - "safe_selected_dates=2112"
+      - "safe_median_combo_sharpe=-0.727203"
+      - "unsafe_median_combo_sharpe=14.525046 diagnostic only"
+    source_files:
+      - "services/ml_engine/phase5_research_only_stage_a_nonzero_exposure_falsification.py"
+      - "data/models/research/phase4_cross_sectional_ranking_baseline/stage_a_predictions.parquet"
+      - "data/models/research/phase4_cross_sectional_ranking_baseline/stage_a_snapshot_proxy.parquet"
+    allowed_actions:
+      - "FREEZE_LINE"
+      - "RUN_GLOBAL_REAUDIT"
+      - "STOP_FOR_HUMAN_DECISION"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "USE_STAGE_A_ELIGIBLE_AS_EX_ANTE_POLICY"
+      - "DECLARE_PAPER_READINESS"
+    suggested_gate: "none_without_materially_new_research_hypothesis"
+    stop_condition_if_unresolved: "The current Stage A nonzero-exposure thesis is abandoned; do not iterate the same blocker without a materially new hypothesis."

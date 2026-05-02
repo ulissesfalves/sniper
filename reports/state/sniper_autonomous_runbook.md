@@ -20,14 +20,19 @@
 
 ## Current Recommended Mode
 
-`START_RESEARCH_ONLY_THESIS`
+`FREEZE_LINE`
 
-The first research-only thesis should attack at least one active blocker:
+The latest research-only thesis attacked Stage A nonzero exposure and was
+abandoned. A future research-only thesis must be materially different and should
+attack at least one active blocker:
 
 - `dsr_honest=0.0`;
 - official CVaR zero exposure;
 - cross-sectional `ALIVE_BUT_NOT_PROMOTABLE`;
 - absence of robust recent operational signal.
+
+Do not reuse `stage_a_eligible` as an ex-ante decision rule; it is treated as a
+realized diagnostic field.
 
 ## Forbidden Interpretations
 
