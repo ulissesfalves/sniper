@@ -83,6 +83,94 @@ Ao final da missão:
 
 Esta seção adiciona obrigações de memória operacional, sem alterar a semântica dos stop conditions existentes.
 
+Política de continuidade autônoma research-only:
+
+Falha de uma tese research-only NÃO é, por si só, motivo para decisão humana.
+Quando uma tese research-only falhar:
+- registrar `FAIL/abandon`;
+- atualizar reports/state/sniper_spec_gap_backlog.yaml;
+- atualizar reports/state/sniper_decision_ledger.md;
+- marcar a hipótese como falsificada;
+- escolher automaticamente a próxima hipótese defensável do backlog;
+- continuar a missão, salvo se houver stop condition externa, orçamentária ou de governança.
+
+Não parar apenas porque uma tese falhou. Não pedir ao usuário para escolher a próxima tese se ainda existirem gaps abertos no backlog, dados/artifacts disponíveis no repo e orçamento autônomo restante.
+
+Fases autônomas obrigatórias:
+
+FASE A — Estado e memória
+- Ler AGENTS.md.
+- Ler docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md.
+- Ler reports/state/**.
+- Ler reports/gates/**.
+- Identificar blockers abertos.
+- Atualizar estado se necessário.
+
+FASE B — Seleção autônoma de hipótese
+- Escolher o blocker de maior valor esperado.
+- Criar hipótese research-only falsificável.
+- Declarar por que a hipótese não reabre A3/A4.
+- Declarar por que não promove official.
+- Declarar critério de abandono.
+- Declarar critério de avanço.
+
+FASE C — Implementação research/sandbox
+- Implementar somente em research/sandbox.
+- Não tocar official.
+- Não relaxar thresholds.
+- Não fabricar artifacts.
+- Não usar informação realizada como regra ex-ante.
+
+FASE D — Validação e gate
+- Rodar testes.
+- Gerar gate pack completo.
+- Classificar PASS/PARTIAL/FAIL/INCONCLUSIVE.
+- Atualizar reports/state/**.
+- Fazer commit incremental.
+
+FASE E — Decisão autônoma
+- Se PASS research-only: registrar candidata, não promover.
+- Se PARTIAL/correct: tentar corrigir blocker interno uma vez.
+- Se FAIL/abandon: escolher próxima hipótese materialmente nova.
+- Se INCONCLUSIVE por artifact externo: parar e pedir artifact.
+- Se INCONCLUSIVE por ambiente interno: corrigir ambiente.
+- Se blocker externo: parar.
+
+Orçamento autônomo de exploração:
+- máximo de 5 gates research-only por missão;
+- máximo de 2 falhas consecutivas no mesmo tipo de hipótese;
+- máximo de 1 tentativa de correção por gate PARTIAL;
+- parar se não houver hipótese materialmente nova;
+- parar se a próxima hipótese exigir mudar a especificação.
+
+Prioridade de módulos funcionais:
+1. módulo research-only que gere exposição não nula ex-ante;
+2. módulo de avaliação CVaR com exposição não zero em sandbox/research;
+3. módulo de diagnóstico DSR que identifique por que DSR permanece 0.0;
+4. módulo alternativo de ranking/sizing research-only com hipótese nova;
+5. módulo de falsificação de famílias inviáveis;
+6. documentação de freeze apenas se o espaço de hipóteses for esgotado.
+
+Decisão humana só é necessária quando:
+- precisa de dados/artifacts fora do repo;
+- precisa de credencial/API paga;
+- precisa operar fora da pasta autorizada;
+- precisa mudar especificação;
+- precisa promover official;
+- precisa fazer merge;
+- precisa usar capital real;
+- precisa aceitar risco estratégico não técnico;
+- a exploração autônoma atingiu o orçamento máximo.
+
+Proibições adicionais:
+- parar apenas porque uma tese falhou;
+- pedir ao usuário para escolher a próxima tese se ainda existem gaps abertos no backlog;
+- repetir a mesma tese com outro nome;
+- criar tese que dependa de variável realizada como regra ex-ante;
+- tratar diagnóstico como sinal operacional;
+- tratar CVaR zero exposure como robustez econômica;
+- tratar DSR=0.0 como aceitável para promoção.
+
 Missão:
 Executar ciclos autônomos de implementação até atingir um critério de parada.
 
@@ -140,8 +228,11 @@ Cada ciclo deve seguir esta ordem:
 8. Próximo ciclo
    - Se PASS/advance: escolher próximo blocker.
    - Se PARTIAL/correct: corrigir o blocker remanescente em novo ciclo.
-   - Se FAIL/abandon: congelar hipótese e escolher alternativa.
-   - Se INCONCLUSIVE: criar gate de evidência/reprodutibilidade.
+   - Se FAIL/abandon em tese research-only: registrar hipótese falsificada e escolher automaticamente a próxima hipótese materialmente nova dentro do orçamento.
+   - Se FAIL/abandon fora de research-only ou sem hipótese nova: congelar hipótese e escolher alternativa permitida.
+   - Se INCONCLUSIVE por artifact externo: parar e pedir artifact.
+   - Se INCONCLUSIVE por ambiente interno: corrigir ambiente em gate próprio.
+   - Se INCONCLUSIVE por evidência/reprodutibilidade: criar gate de evidência/reprodutibilidade.
    - Se atingir stop condition: parar e reportar.
 
 Critérios de parada obrigatórios:
@@ -157,6 +248,8 @@ Pare e entregue relatório final se qualquer condição ocorrer:
 8. Você precisar mudar a especificação para passar o gate.
 9. DSR honesto permanecer 0.0 e a única forma de avançar seria promover mesmo assim.
 10. Qualquer violação de governança for detectada.
+11. A exploração autônoma atingir o orçamento máximo.
+12. Não houver hipótese materialmente nova dentro dos gaps abertos.
 
 Limites da missão:
 - Não operar capital real.
@@ -203,3 +296,10 @@ Ao parar, entregue:
 11. Próxima recomendação.
 12. Comandos para o usuário reproduzir.
 13. Instrução clara se deve ou não abrir PR.
+14. Gates research-only executados.
+15. Hipóteses testadas.
+16. Hipóteses falsificadas.
+17. Hipóteses candidatas.
+18. Orçamento usado.
+19. Próximo modo recomendado.
+20. Se pode continuar autonomamente ou se precisa de recurso externo.
