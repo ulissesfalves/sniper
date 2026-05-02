@@ -1,0 +1,105 @@
+{
+  "gate_slug": "phase6_pr_review_global_adherence_gate",
+  "created_at_utc": "2026-04-27T15:27:40.227347+00:00",
+  "branch": "codex/autonomous-sniper-implementation",
+  "commit": "a85b543c5b68777b342446a3a5d9d3ff6e292979",
+  "pr_url": "https://github.com/ulissesfalves/sniper/pull/1",
+  "status": "PARTIAL",
+  "decision": "correct",
+  "review_result": "DRAFT_PR_GOVERNANCE_REVIEW_VALIDATED_WITH_BLOCKERS",
+  "artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_pr_review_global_adherence_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 14704,
+      "sha256": "CB49442EE6E3EB78392A65702D767752B8C45005132BDA03637BB331A9DA7654"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_pr_review_global_adherence_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 4405,
+      "sha256": "FF051EDA45336C9573BBC679894147BD1C925226FDDC31CBCE230DDED45A4348"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_pr_review_global_adherence_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 4357,
+      "sha256": "C297ECD2846BD9357AE77B2838E53826257353BB0C60CE5FF49EA58211781CF4"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_pr_review_global_adherence_gate\\gate_manifest.json",
+      "exists": true,
+      "size_bytes": 5654,
+      "sha256": "C959FF13EE7E5F27250A637B56E4D7BE8CF25DDCFF8EF4CEAB631529D59109A1"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_research_baseline_rehydration_clean_regeneration_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 5710,
+      "sha256": "318E453A4CA86B90289A943D4AC4D693CCB8A6690D6FF65E538CF4D332266AEF"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_research_baseline_rehydration_clean_regeneration_gate\\phase4_artifact_integrity_report.json",
+      "exists": true,
+      "size_bytes": 2781,
+      "sha256": "25D81A8096EAD57C1AD6E54D87B0A09B6A911E4ADD62EC042D71552A6ECCE272"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_research_baseline_rehydration_clean_regeneration_gate\\portfolio_cvar_report.json",
+      "exists": true,
+      "size_bytes": 733,
+      "sha256": "AE4442A6D178C7ABF4DC35C622279202C8F8A57DB12FCC44A384FB7F8AECBDF1"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_research_baseline_rehydration_clean_regeneration_gate\\clean_regeneration_report.json",
+      "exists": true,
+      "size_bytes": 14752,
+      "sha256": "5CE2952EA21A7C7EDF001C6235990D29B5B9973D0DFCF431380A0E5216B4CD8A"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\audits\\global_spec_adherence\\global_spec_adherence_summary.json",
+      "exists": true,
+      "size_bytes": 5688,
+      "sha256": "8B70AE6D7912041CD982B432E8B01B8B4160EE3FE48E822AFBEC76229ED8B425"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\audits\\global_spec_adherence\\next_step_recommendation.md",
+      "exists": true,
+      "size_bytes": 6301,
+      "sha256": "795BC6EDF40BB887F1D009F5F85619BFAC502D9DED4A5A0FB81E51FB6255F041"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\audits\\global_spec_adherence\\next_step_codex_prompt.md",
+      "exists": true,
+      "size_bytes": 8789,
+      "sha256": "9589BEE95ABDCF0AD06C0884817796D1B162FDF267019A3F35D58721C721F4E1"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\audits\\autonomous_stop_review\\draft_pr_summary.md",
+      "exists": true,
+      "size_bytes": 5522,
+      "sha256": "2D4A15F3E0EB4117A0921CCF4746E398197DCB188777FF4635DC1B928BF321C8"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\audits\\autonomous_stop_review\\human_review_checklist.md",
+      "exists": true,
+      "size_bytes": 3798,
+      "sha256": "805891497E3BA893FCEFE68FEAC3E436F1FF13A75A852016B635B62ACAFC4786"
+    }
+  ],
+  "commands_to_reproduce": [
+    "git checkout codex/autonomous-sniper-implementation",
+    "git branch --show-current",
+    "git rev-parse HEAD",
+    "git status --short",
+    "git log --oneline codex/openclaw-sniper-handoff..HEAD",
+    "git diff --name-status codex/openclaw-sniper-handoff..HEAD",
+    "Get-Content reports/audits/global_spec_adherence/next_step_recommendation.md",
+    "Get-Content reports/audits/global_spec_adherence/global_spec_adherence_summary.json",
+    "Get-Content reports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/gate_report.json",
+    "Get-Content reports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/phase4_artifact_integrity_report.json",
+    "Get-Content reports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/portfolio_cvar_report.json",
+    "Get-Content reports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/clean_regeneration_report.json",
+    "Get-Content reports/gates/phase6_pr_review_global_adherence_gate/gate_report.json"
+  ]
+}

@@ -1,0 +1,264 @@
+{
+  "gate_slug": "phase6_pr_review_global_adherence_gate",
+  "phase_family": "phase6_pr_review_global_adherence",
+  "status": "PARTIAL",
+  "decision": "correct",
+  "review_result": "DRAFT_PR_GOVERNANCE_REVIEW_VALIDATED_WITH_BLOCKERS",
+  "branch": "codex/autonomous-sniper-implementation",
+  "commit": "a85b543c5b68777b342446a3a5d9d3ff6e292979",
+  "pr_url": "https://github.com/ulissesfalves/sniper/pull/1",
+  "compare_url": "https://github.com/ulissesfalves/sniper/compare/codex/openclaw-sniper-handoff...codex/autonomous-sniper-implementation",
+  "timestamp_utc": "2026-04-27T10:41:29.263438+00:00",
+  "revalidated_at_utc": "2026-04-27T15:27:40.058232+00:00",
+  "pr": {
+    "url": "https://github.com/ulissesfalves/sniper/pull/1",
+    "number": 1,
+    "state": "open",
+    "draft": true,
+    "merged": false,
+    "mergeable": true,
+    "base": "codex/openclaw-sniper-handoff",
+    "head": "codex/autonomous-sniper-implementation",
+    "head_sha": "a85b543c5b68777b342446a3a5d9d3ff6e292979",
+    "changed_files": 55,
+    "commits": 9
+  },
+  "working_tree_dirty": true,
+  "working_tree_status_short": [
+    "M reports/audits/global_spec_adherence/global_implementation_checklist.md",
+    " M reports/audits/global_spec_adherence/global_spec_adherence_matrix.csv",
+    " M reports/audits/global_spec_adherence/global_spec_adherence_report.md",
+    " M reports/audits/global_spec_adherence/global_spec_adherence_summary.json",
+    " M reports/audits/global_spec_adherence/next_step_recommendation.md",
+    "?? reports/audits/global_spec_adherence/next_step_codex_prompt.md",
+    "?? reports/gates/phase6_pr_review_global_adherence_gate/"
+  ],
+  "stabilization_triage": {
+    "discarded_untracked_files": [
+      "reports/audits/autonomous_stop_review/autonomous_stop_review.json",
+      "reports/audits/autonomous_stop_review/autonomous_stop_review.md",
+      "reports/audits/autonomous_stop_review/next_action_prompt.md"
+    ],
+    "reason": "Superseded autonomous stop-review snapshot contradicted later Phase6 clean-regeneration and PR closure evidence.",
+    "classification": "DESCARTAR"
+  },
+  "drift_since_previous_gate_report": [
+    "?? reports/audits/global_spec_adherence/next_step_codex_prompt.md",
+    "?? reports/gates/phase6_pr_review_global_adherence_gate/"
+  ],
+  "changed_files_vs_base": [
+    "A\t.agents/skills/sniper-autonomous-implementation-manager/SKILL.md",
+    "A\t.agents/skills/sniper-autonomous-implementation-manager/agents/openai.yaml",
+    "A\t.agents/skills/sniper-autonomous-stop-reviewer/SKILL.md",
+    "A\t.agents/skills/sniper-autonomous-stop-reviewer/agents/openai.yaml",
+    "A\t.agents/skills/sniper-strategic-decision-governor/SKILL.md",
+    "A\t.agents/skills/sniper-strategic-decision-governor/agents/openai.yaml",
+    "M\tdocs/SNIPER_memoria_especificacao_controle_fase4R_v3.md",
+    "M\tdocs/SNIPER_regeneration_guide.md",
+    "A\treports/audits/autonomous_stop_review/draft_pr_summary.md",
+    "A\treports/audits/autonomous_stop_review/human_review_checklist.md",
+    "M\treports/audits/global_spec_adherence/next_step_recommendation.md",
+    "A\treports/gates/phase6_global_reproducibility_source_alignment_gate/clean_regeneration_report.json",
+    "A\treports/gates/phase6_global_reproducibility_source_alignment_gate/environment_report.json",
+    "A\treports/gates/phase6_global_reproducibility_source_alignment_gate/gate_manifest.json",
+    "A\treports/gates/phase6_global_reproducibility_source_alignment_gate/gate_metrics.parquet",
+    "A\treports/gates/phase6_global_reproducibility_source_alignment_gate/gate_report.json",
+    "A\treports/gates/phase6_global_reproducibility_source_alignment_gate/gate_report.md",
+    "A\treports/gates/phase6_global_reproducibility_source_alignment_gate/gate_result_review.md",
+    "A\treports/gates/phase6_global_reproducibility_source_alignment_gate/portfolio_cvar_report.json",
+    "A\treports/gates/phase6_global_reproducibility_source_alignment_gate/source_doc_alignment.json",
+    "A\treports/gates/phase6_phase4_artifact_rehydration_and_dsr_stop_gate/clean_regeneration_preflight.json",
+    "A\treports/gates/phase6_phase4_artifact_rehydration_and_dsr_stop_gate/clean_regeneration_report.json",
+    "A\treports/gates/phase6_phase4_artifact_rehydration_and_dsr_stop_gate/environment_report.json",
+    "A\treports/gates/phase6_phase4_artifact_rehydration_and_dsr_stop_gate/gate_manifest.json",
+    "A\treports/gates/phase6_phase4_artifact_rehydration_and_dsr_stop_gate/gate_report.json",
+    "A\treports/gates/phase6_phase4_artifact_rehydration_and_dsr_stop_gate/gate_report.md",
+    "A\treports/gates/phase6_phase4_artifact_rehydration_and_dsr_stop_gate/gate_result_review.md",
+    "A\treports/gates/phase6_phase4_artifact_rehydration_and_dsr_stop_gate/phase4_artifact_integrity_report.json",
+    "A\treports/gates/phase6_phase4_artifact_rehydration_and_dsr_stop_gate/portfolio_cvar_report.json",
+    "A\treports/gates/phase6_phase4_artifact_rehydration_and_dsr_stop_gate/source_doc_alignment.json",
+    "A\treports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/clean_regeneration_preflight.json",
+    "A\treports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/clean_regeneration_report.json",
+    "A\treports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/environment_report.json",
+    "A\treports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/gate_manifest.json",
+    "A\treports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/gate_metrics.parquet",
+    "A\treports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/gate_report.json",
+    "A\treports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/gate_report.md",
+    "A\treports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/gate_result_review.md",
+    "A\treports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/phase4_artifact_integrity_report.json",
+    "A\treports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/portfolio_cvar_report.json",
+    "A\treports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/source_doc_alignment.json",
+    "A\treports/gates/phase6_source_doc_and_regeneration_preflight_gate/clean_regeneration_preflight.json",
+    "A\treports/gates/phase6_source_doc_and_regeneration_preflight_gate/clean_regeneration_report.json",
+    "A\treports/gates/phase6_source_doc_and_regeneration_preflight_gate/environment_report.json",
+    "A\treports/gates/phase6_source_doc_and_regeneration_preflight_gate/gate_manifest.json",
+    "A\treports/gates/phase6_source_doc_and_regeneration_preflight_gate/gate_metrics.parquet",
+    "A\treports/gates/phase6_source_doc_and_regeneration_preflight_gate/gate_report.json",
+    "A\treports/gates/phase6_source_doc_and_regeneration_preflight_gate/gate_report.md",
+    "A\treports/gates/phase6_source_doc_and_regeneration_preflight_gate/gate_result_review.md",
+    "A\treports/gates/phase6_source_doc_and_regeneration_preflight_gate/portfolio_cvar_report.json",
+    "A\treports/gates/phase6_source_doc_and_regeneration_preflight_gate/source_doc_alignment.json",
+    "M\tservices/ml_engine/phase5_cross_sectional_latest_headroom_reconciliation_audit.py",
+    "A\tservices/ml_engine/phase6_global_reproducibility_source_alignment_gate.py",
+    "M\ttests/unit/test_phase5_cross_sectional_latest_headroom_reconciliation_audit.py",
+    "A\ttests/unit/test_phase6_global_reproducibility_source_alignment_gate.py"
+  ],
+  "official_artifacts_used": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_report_v4.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_gate_diagnostic.json"
+  ],
+  "research_artifacts_used": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_predictions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_report.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_manifest.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_snapshot_proxy.parquet"
+  ],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_pr_review_global_adherence_gate\\gate_report.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_pr_review_global_adherence_gate\\gate_report.md",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_pr_review_global_adherence_gate\\gate_manifest.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_pr_review_global_adherence_gate\\gate_metrics.parquet"
+  ],
+  "documentation_artifacts_considered": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\docs\\SNIPER_openclaw_handoff.md",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\docs\\SNIPER_regeneration_guide.md",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\audits\\global_spec_adherence\\next_step_recommendation.md",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\audits\\global_spec_adherence\\global_spec_adherence_summary.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\audits\\global_spec_adherence\\global_implementation_checklist.md",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\audits\\global_spec_adherence\\next_step_codex_prompt.md"
+  ],
+  "global_audit_verdict": "GLOBAL_PARTIAL",
+  "confirmations": {
+    "pr_remains_draft_and_unmerged": true,
+    "branch_is_pr_head": true,
+    "base_is_handoff_branch": true,
+    "no_official_promotion": true,
+    "a3_a4_not_reopened": true,
+    "risklabai_oracle_shadow_only": true,
+    "clean_regeneration_proven": true,
+    "phase4_official_artifacts_found_and_hashed": true,
+    "research_baseline_found_and_hashed": true,
+    "dsr_honest_zero_blocks_promotion": true,
+    "cvar_zero_exposure_not_economic_robustness": true,
+    "cross_sectional_alive_but_not_promotable": true
+  },
+  "metrics": [
+    {
+      "metric_name": "pr_is_open",
+      "metric_value": true,
+      "metric_threshold": true,
+      "metric_status": "PASS"
+    },
+    {
+      "metric_name": "pr_is_draft",
+      "metric_value": true,
+      "metric_threshold": true,
+      "metric_status": "PASS"
+    },
+    {
+      "metric_name": "pr_is_not_merged",
+      "metric_value": true,
+      "metric_threshold": true,
+      "metric_status": "PASS"
+    },
+    {
+      "metric_name": "branch_matches_pr_head",
+      "metric_value": true,
+      "metric_threshold": true,
+      "metric_status": "PASS"
+    },
+    {
+      "metric_name": "base_branch_confirmed",
+      "metric_value": "codex/openclaw-sniper-handoff",
+      "metric_threshold": "codex/openclaw-sniper-handoff",
+      "metric_status": "PASS"
+    },
+    {
+      "metric_name": "no_official_promotion",
+      "metric_value": true,
+      "metric_threshold": true,
+      "metric_status": "PASS"
+    },
+    {
+      "metric_name": "a3_a4_not_reopened",
+      "metric_value": true,
+      "metric_threshold": true,
+      "metric_status": "PASS"
+    },
+    {
+      "metric_name": "risklabai_shadow_oracle_only",
+      "metric_value": true,
+      "metric_threshold": true,
+      "metric_status": "PASS"
+    },
+    {
+      "metric_name": "clean_regeneration_proven",
+      "metric_value": true,
+      "metric_threshold": true,
+      "metric_status": "PASS"
+    },
+    {
+      "metric_name": "phase5_clean_gate_status",
+      "metric_value": "PASS",
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "metric_name": "phase4_artifact_integrity",
+      "metric_value": "PASS",
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "metric_name": "research_baseline_missing_artifacts",
+      "metric_value": 0,
+      "metric_threshold": 0,
+      "metric_status": "PASS"
+    },
+    {
+      "metric_name": "dsr_honest",
+      "metric_value": 0.0,
+      "metric_threshold": "> 0.95 for promotion",
+      "metric_status": "FAIL"
+    },
+    {
+      "metric_name": "dsr_passed",
+      "metric_value": false,
+      "metric_threshold": true,
+      "metric_status": "FAIL"
+    },
+    {
+      "metric_name": "cvar_zero_exposure",
+      "metric_value": true,
+      "metric_threshold": false,
+      "metric_status": "INCONCLUSIVE"
+    },
+    {
+      "metric_name": "cvar_economic_robustness",
+      "metric_value": "NOT_PROVEN_ZERO_EXPOSURE",
+      "metric_threshold": "MEASURED_NONZERO_EXPOSURE_OR_APPROVED_STRESS",
+      "metric_status": "INCONCLUSIVE"
+    },
+    {
+      "metric_name": "cross_sectional_promotability",
+      "metric_value": "ALIVE_BUT_NOT_PROMOTABLE",
+      "metric_threshold": "PROMOTABLE for official",
+      "metric_status": "FAIL"
+    }
+  ],
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable"
+  ],
+  "risks": [
+    "PR draft could be misread as readiness instead of governance/reproducibility evidence.",
+    "PASS_ZERO_EXPOSURE could be misread as economic robustness.",
+    "Clean regeneration could be misread as quantitative merit.",
+    "Research baseline could be promoted to official by convenience."
+  ],
+  "recommendation": "Keep PR #1 as draft governance/reproducibility evidence for human review. Do not merge, do not mark ready, do not promote official, do not reopen A3/A4, and do not treat zero-exposure CVaR as economic robustness."
+}

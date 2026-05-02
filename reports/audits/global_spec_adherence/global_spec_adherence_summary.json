@@ -1,57 +1,112 @@
 {
   "audit": {
     "name": "sniper-global-spec-adherence-audit",
-    "date": "2026-04-26",
-    "repo": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper",
-    "branch": "codex/openclaw-sniper-handoff",
-    "head": "0dbab35425548b37f5806a724c1858a0d5731bcd"
+    "date": "2026-04-27",
+    "repo": "C:/Users/uliss/Documentos/Meus_projetos/sniper_codex_autonomous",
+    "branch": "codex/autonomous-sniper-implementation",
+    "head": "a85b543c5b68777b342446a3a5d9d3ff6e292979",
+    "base_branch": "codex/openclaw-sniper-handoff",
+    "pr_url": "https://github.com/ulissesfalves/sniper/pull/1",
+    "pr_state": "open_draft_not_merged"
   },
   "verdict": "GLOBAL_PARTIAL",
-  "state": "O SNIPER tem implementação substancial e documentação de governança madura, mas ainda não está aderente o suficiente para promoção operational/paper official porque há blockers quantitativos e divergências source-doc-artifact.",
+  "state": "The PR branch is suitable for draft human review as Phase 6 governance and reproducibility evidence. It is not suitable for operational readiness, paper readiness, merge-as-ready, or official promotion because honest DSR remains 0.0 and official CVaR has zero exposure.",
   "status_counts": {
-    "SATISFATÓRIO": 12,
-    "PARCIAL": 9,
-    "DIVERGENTE": 1,
-    "NÃO_IMPLEMENTADO": 2,
-    "NÃO_APLICÁVEL_OBSOLETO": 1
+    "SATISFATORIO": 18,
+    "PARCIAL": 10,
+    "DIVERGENTE": 0,
+    "NAO_IMPLEMENTADO": 1,
+    "NAO_APLICAVEL_OBSOLETO": 1
   },
   "top_satisfactory": [
-    "Arquitetura rev5 de unlock_pressure_rank com observado, reconstruído, proxies, feature_state e audit fields fora de X.",
-    "Fracdiff em log-space com tau=1e-5 e seleção expanding implementada.",
-    "Regime filter com winsorização, RobustScaler, PCA e HMM walk-forward.",
-    "Triple-barrier HLC e market impact por raiz quadrada com sigma_intraday.",
-    "Bridge paper/Nautilus com Redis Streams, FULL_SNAPSHOT, idempotência, stale snapshot, daemon e status terminal."
+    "Clean regeneration is proven in an isolated clean clone/equivalent with clean Phase5 restore PASS/advance.",
+    "Official Phase4 artifacts and research baseline artifacts are present and hashed in the latest Phase6 gate pack.",
+    "Source-doc-artifact alignment is ALIGNED for the Phase4-R4 source/documentation mismatch.",
+    "Phase5 sovereign closure restore remains the correct research-only baseline with EXACT_RESTORE evidence.",
+    "Governance boundaries are preserved: PR is draft, no merge, no official promotion, no A3/A4 reopen, RiskLabAI remains oracle/shadow."
   ],
   "top_gaps": [
-    "Artifacts oficiais atuais registram dsr_honest=0.0 com n_trials_honest=5000.",
-    "Diagnóstico official aponta Sharpe OOS 0.3494 e subperíodos insuficientes em caminho bloqueante.",
-    "Família cross-sectional está ALIVE_BUT_NOT_PROMOTABLE e não pode ser promovida.",
-    "Memória Fase 4-R4 documenta módulos phase4_config/data/dsr/backtest/calibration que não existem como source rastreado.",
-    "CVaR existe em código, mas falta artifact empírico official persistido para auditoria direta."
+    "dsr_honest=0.0 and dsr_passed=false block any promotion or readiness claim.",
+    "Official CVaR is PASS_ZERO_EXPOSURE with positions={} and total_exposure_pct=0.0, so economic robustness is not proven.",
+    "Cross-sectional remains ALIVE_BUT_NOT_PROMOTABLE and cannot be treated as official.",
+    "Phase7 paper/testnet readiness cannot start from this evidence because DSR and CVaR blockers remain.",
+    "PR #1 remains draft governance/reproducibility evidence and still requires human review before any branch-level decision."
+  ],
+  "top_risks": [
+    "Confusing reproducibility proof with quantitative merit.",
+    "Treating PASS_ZERO_EXPOSURE as real CVaR robustness.",
+    "Using the PR draft as merge/readiness approval.",
+    "Reopening A3/A4 without strong new evidence.",
+    "Promoting research artifacts to official by convenience."
   ],
   "must_not_reopen": [
-    "A3 como linha promotable",
-    "A4 sem evidência causal nova forte",
-    "RiskLabAI como official",
-    "Cross-sectional ALIVE_BUT_NOT_PROMOTABLE como promotable",
-    "Baseline antiga divergente do phase5_cross_sectional_sovereign_closure_restored"
+    "A3 as a promotable line",
+    "A4 without strong new evidence",
+    "RiskLabAI as official",
+    "Cross-sectional as promotable while ALIVE_BUT_NOT_PROMOTABLE",
+    "Any promotion path while honest DSR remains 0.0"
   ],
-  "inconclusive_evidence": [
-    "docs/SNIPER_v10.10_Technical_Architecture_presentation.pdf não teve texto extraível com a ferramenta disponível.",
-    "Artifacts locais em data/models/research/** precisam de regeneração limpa para provar reprodutibilidade.",
-    "Cobertura observada do unlock_pressure_rank precisa de quality report atualizado para deixar shadow."
+  "gates_considered": [
+    {
+      "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
+      "status": "PARTIAL",
+      "decision": "correct"
+    },
+    {
+      "gate_slug": "phase6_source_doc_and_regeneration_preflight_gate",
+      "status": "PARTIAL",
+      "decision": "correct"
+    },
+    {
+      "gate_slug": "phase6_phase4_artifact_rehydration_and_dsr_stop_gate",
+      "status": "PARTIAL",
+      "decision": "correct"
+    },
+    {
+      "gate_slug": "phase6_research_baseline_rehydration_clean_regeneration_gate",
+      "status": "PARTIAL",
+      "decision": "correct",
+      "source_doc_alignment": "ALIGNED",
+      "phase4_artifact_integrity": "PASS",
+      "clean_clone_or_equivalent": true,
+      "phase5_clean_gate_status": "PASS",
+      "dsr_honest": 0.0,
+      "cvar_technical_status": "PASS_ZERO_EXPOSURE",
+      "cvar_economic_status": "NOT_PROVEN_ZERO_EXPOSURE"
+    }
   ],
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable"
+  ],
+  "resolved_since_previous_global_audit": [
+    "Phase4 official artifact presence and hashes were established.",
+    "Phase4 research baseline artifact presence and hashes were established.",
+    "Source-doc alignment moved from divergent to ALIGNED.",
+    "Clean regeneration moved from inconclusive to proven in clean clone/equivalent.",
+    "CVaR artifact was persisted with explicit zero-exposure caveat."
+  ],
+  "stabilization_triage": {
+    "discarded_scratch_files": [
+      "reports/audits/autonomous_stop_review/autonomous_stop_review.json",
+      "reports/audits/autonomous_stop_review/autonomous_stop_review.md",
+      "reports/audits/autonomous_stop_review/next_action_prompt.md"
+    ],
+    "reason": "Superseded autonomous stop-review snapshot contradicted later Phase6 evidence; do not commit these scratch files."
+  },
   "next_step": {
-    "gate_name": "phase6_global_reproducibility_source_alignment_gate",
-    "branch": "codex/phase6-global-reproducibility-source-alignment",
-    "objective": "Alinhar documentação, source rastreado e artifacts; provar regeneração limpa; persistir CVaR empírico; manter bloqueios de promoção enquanto DSR/Sharpe/subperíodos não passarem.",
-    "expected_decision": "PARTIAL até que os blockers quantitativos sejam resolvidos por evidência reproduzível.",
+    "gate_name": "phase6_pr_review_global_adherence_gate",
+    "branch": "codex/autonomous-sniper-implementation",
+    "objective": "Review PR #1 as a draft governance/reproducibility PR, preserve blockers, and decide whether to keep it open, request documentation-only changes, or freeze the line.",
+    "expected_decision": "DRAFT_REVIEW_OR_FREEZE, not promotion",
+    "expected_result": "PARTIAL/review unless human review accepts it strictly as governance evidence",
     "do_not_do": [
-      "Não promover para official",
-      "Não reabrir A3/A4",
-      "Não tratar ALIVE_BUT_NOT_PROMOTABLE como promotable",
-      "Não usar RiskLabAI como official",
-      "Não compensar lacuna de artifact com narrativa"
+      "Do not merge as ready.",
+      "Do not promote official.",
+      "Do not reopen A3/A4.",
+      "Do not treat PASS_ZERO_EXPOSURE as economic robustness.",
+      "Do not treat ALIVE_BUT_NOT_PROMOTABLE as promotable."
     ]
   },
   "deliverables": [
