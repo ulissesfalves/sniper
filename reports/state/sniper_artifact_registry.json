@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-05-02T12:52:00Z",
+  "updated_at_utc": "2026-05-02T13:02:00Z",
   "official_artifacts": [
     {
       "path": "data/models/phase4/phase4_report_v4.json",
@@ -67,7 +67,8 @@
     "reports/gates/phase6_operating_memory_bootstrap_gate",
     "reports/gates/phase5_research_only_stage_a_nonzero_exposure_falsification_gate",
     "reports/gates/phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate",
-    "reports/gates/phase5_research_dsr_zero_diagnostic_gate"
+    "reports/gates/phase5_research_dsr_zero_diagnostic_gate",
+    "reports/gates/phase5_research_rank_score_threshold_sizing_falsification_gate"
   ],
   "missing_artifacts": [],
   "ignored_or_heavy_artifacts": [
@@ -82,6 +83,7 @@
     "Research baseline artifacts remain research-only.",
     "phase5_research_only_stage_a_nonzero_exposure_falsification_gate abandoned the Stage A nonzero-exposure thesis because safe ex-ante top1 had negative median combo Sharpe and the strong result required realized eligibility.",
     "phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate added a research-only CVaR evaluator with nonzero sandbox exposure, max CVaR95 loss fraction 0.01072844, and no official promotion.",
-    "phase5_research_dsr_zero_diagnostic_gate explained DSR=0.0 as a 3.5892 Sharpe gap to sr_needed under n_trials_honest=5000; diagnostic only, no promotion."
+    "phase5_research_dsr_zero_diagnostic_gate explained DSR=0.0 as a 3.5892 Sharpe gap to sr_needed under n_trials_honest=5000; diagnostic only, no promotion.",
+    "phase5_research_rank_score_threshold_sizing_falsification_gate found weak positive median alpha for top1_score_ge_0_50, but min combo Sharpe remained negative and no promotion is allowed."
   ]
 }

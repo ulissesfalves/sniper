@@ -13,11 +13,11 @@
     "observed_before_local_gate_commits": false
   },
   "latest_gate": {
-    "gate_slug": "phase5_research_dsr_zero_diagnostic_gate",
-    "status": "PASS",
-    "decision": "advance"
+    "gate_slug": "phase5_research_rank_score_threshold_sizing_falsification_gate",
+    "status": "PARTIAL",
+    "decision": "correct"
   },
-  "latest_decision": "CONTINUE_AUTONOMOUS_AFTER_DSR_ZERO_DIAGNOSTIC_PASS",
+  "latest_decision": "CONTINUE_AUTONOMOUS_WITH_ONE_PARTIAL_CORRECTION_FOR_THRESHOLD_FAMILY",
   "resolved_blockers": [
     "source_doc_alignment_restored",
     "phase4_official_artifacts_found_and_hashed",
@@ -26,7 +26,8 @@
     "operating_memory_bootstrapped",
     "stage_a_realized_eligibility_leakage_risk_identified",
     "research_sandbox_nonzero_exposure_cvar_evaluator_available",
-    "dsr_zero_root_cause_diagnostic_complete"
+    "dsr_zero_root_cause_diagnostic_complete",
+    "rank_score_threshold_family_weak_positive_candidate_found"
   ],
   "open_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -34,7 +35,8 @@
     "cross_sectional_alive_but_not_promotable",
     "paper_readiness_blocked_by_quant_merit",
     "safe_stage_a_top1_policy_negative_median_sharpe",
-    "sharpe_gap_to_required_honest_dsr"
+    "sharpe_gap_to_required_honest_dsr",
+    "threshold_family_cross_combo_instability"
   ],
   "promotion_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -119,18 +121,18 @@
   "paper_readiness_allowed": false,
   "required_external_artifacts": [],
   "latest_research_thesis": {
-    "gate_slug": "phase5_research_dsr_zero_diagnostic_gate",
-    "hypothesis": "The honest DSR=0.0 blocker can be explained by measured Sharpe being far below the required Sharpe under the fixed honest multiple-testing budget, without relaxing thresholds.",
-    "status": "PASS",
-    "decision": "advance",
-    "classification": "DSR_ZERO_ROOT_CAUSE_DIAGNOSTIC_COMPLETE",
-    "dsr_honest": 0.0,
-    "sharpe_is": 0.8808,
-    "sr_needed": 4.47,
-    "sharpe_gap_to_sr_needed": 3.5892,
-    "best_dsr_honest_observed": 0.6938
+    "gate_slug": "phase5_research_rank_score_threshold_sizing_falsification_gate",
+    "hypothesis": "A predeclared research-only rank-score threshold family can improve ex-ante alpha relative to unfiltered safe top1 while staying non-promotional and leakage-safe.",
+    "status": "PARTIAL",
+    "decision": "correct",
+    "classification": "WEAK_POSITIVE_MEDIAN_ALPHA_UNSTABLE_NOT_PROMOTABLE",
+    "best_policy": "top1_score_ge_0_50",
+    "best_median_combo_sharpe": 0.331124,
+    "best_min_combo_sharpe": -3.357339,
+    "best_median_active_days": 177.0,
+    "best_max_cvar_95_loss_fraction": 0.01070472
   },
   "next_recommended_mode": "CONTINUE_AUTONOMOUS",
-  "next_recommended_gate": "phase5_research_rank_score_threshold_sizing_falsification_gate",
-  "updated_at_utc": "2026-05-02T12:52:00Z"
+  "next_recommended_gate": "phase5_research_rank_score_stability_correction_gate",
+  "updated_at_utc": "2026-05-02T13:02:00Z"
 }

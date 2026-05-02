@@ -9,10 +9,12 @@ gaps:
       - "reports/gates/phase5_research_only_stage_a_nonzero_exposure_falsification_gate/gate_report.json"
       - "reports/gates/phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate/gate_report.json"
       - "reports/gates/phase5_research_dsr_zero_diagnostic_gate/gate_report.json"
+      - "reports/gates/phase5_research_rank_score_threshold_sizing_falsification_gate/gate_report.json"
       - "dsr_honest=0.0"
       - "dsr_passed=false"
       - "safe Stage A top1 median combo Sharpe=-0.727203"
       - "sharpe_gap_to_sr_needed=3.5892"
+      - "threshold family best median combo Sharpe=0.331124"
     source_files:
       - "data/models/phase4/phase4_report_v4.json"
       - "data/models/phase4/phase4_gate_diagnostic.json"
@@ -24,7 +26,7 @@ gaps:
       - "PROMOTE_OFFICIAL"
       - "RELAX_DSR_THRESHOLD"
       - "DECLARE_READINESS"
-    suggested_gate: "phase5_research_rank_score_threshold_sizing_falsification_gate"
+    suggested_gate: "phase5_research_rank_score_stability_correction_gate"
     stop_condition_if_unresolved: "No promotion or readiness claim is allowed while honest DSR remains 0.0."
 
   - id: GAP-DSR-002
@@ -110,6 +112,7 @@ gaps:
     evidence:
       - "reports/audits/global_spec_adherence/global_spec_adherence_summary.json"
       - "reports/gates/phase5_research_only_stage_a_nonzero_exposure_falsification_gate/gate_report.json"
+      - "reports/gates/phase5_research_rank_score_threshold_sizing_falsification_gate/gate_report.json"
       - "ALIVE_BUT_NOT_PROMOTABLE"
     source_files:
       - "docs/SNIPER_openclaw_handoff.md"
@@ -121,7 +124,7 @@ gaps:
     forbidden_actions:
       - "PROMOTE_OFFICIAL"
       - "TREAT_RESEARCH_AS_OFFICIAL"
-    suggested_gate: "autonomous_select_next_research_only_hypothesis_from_backlog"
+    suggested_gate: "phase5_research_rank_score_stability_correction_gate"
     stop_condition_if_unresolved: "Do not promote cross-sectional while this status remains."
 
   - id: GAP-PAPER-001
@@ -193,6 +196,32 @@ gaps:
       - "DECLARE_PAPER_READINESS"
     suggested_gate: "none_without_materially_new_research_hypothesis"
     stop_condition_if_unresolved: "The current Stage A nonzero-exposure thesis is abandoned; continue only with a materially new hypothesis and consume exploration budget."
+
+  - id: GAP-RANK-001
+    title: Rank-score threshold family produced weak positive median alpha but failed stability
+    type: research_hypothesis
+    severity: high
+    status: partial
+    evidence:
+      - "reports/gates/phase5_research_rank_score_threshold_sizing_falsification_gate/gate_report.json"
+      - "best_policy=top1_score_ge_0_50"
+      - "best_median_combo_sharpe=0.331124"
+      - "best_min_combo_sharpe=-3.357339"
+      - "best_max_cvar_95_loss_fraction=0.01070472"
+    source_files:
+      - "services/ml_engine/phase5_research_rank_score_threshold_sizing_falsification.py"
+      - "tests/unit/test_phase5_research_rank_score_threshold_sizing_falsification.py"
+    allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
+      - "START_RESEARCH_ONLY_THESIS"
+      - "FREEZE_LINE"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "TREAT_WEAK_RESEARCH_AS_OFFICIAL"
+      - "RELAX_DSR_THRESHOLD"
+      - "USE_STAGE_A_ELIGIBLE_AS_EX_ANTE_POLICY"
+    suggested_gate: "phase5_research_rank_score_stability_correction_gate"
+    stop_condition_if_unresolved: "After one stability correction, abandon this family if cross-combo instability remains."
 
   - id: GAP-AUTO-001
     title: Autonomous phased research exploration policy

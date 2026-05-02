@@ -93,6 +93,9 @@ evaluator then measured nonzero sandbox exposure with max CVaR95 loss fraction
 `0.01072844`, but stayed `PARTIAL/correct` because alpha merit, DSR and official
 zero exposure remain blockers. The DSR diagnostic then passed as root-cause
 diagnostic only: `dsr_honest=0.0`, `sr_needed=4.47`, and Sharpe gap `3.5892`.
+The rank-score threshold family found a weak research-only candidate
+`top1_score_ge_0_50` with median combo Sharpe `0.331124` and max CVaR95 loss
+fraction `0.01070472`, but min combo Sharpe stayed `-3.357339`.
 This does not force human decision. The next research-only thesis must be
 materially different and should attack at least one active blocker:
 
@@ -104,7 +107,7 @@ materially different and should attack at least one active blocker:
 Do not reuse `stage_a_eligible` as an ex-ante decision rule; it is treated as a
 realized diagnostic field.
 
-Current recommended next gate: `phase5_research_rank_score_threshold_sizing_falsification_gate`.
+Current recommended next gate: `phase5_research_rank_score_stability_correction_gate`.
 
 ## Forbidden Interpretations
 

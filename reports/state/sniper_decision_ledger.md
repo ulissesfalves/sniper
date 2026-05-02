@@ -1,6 +1,6 @@
 # SNIPER Decision Ledger
 
-Updated: 2026-05-02T12:52:00Z
+Updated: 2026-05-02T13:02:00Z
 
 ## Closed Decisions
 
@@ -20,16 +20,17 @@ Updated: 2026-05-02T12:52:00Z
 | Autonomous research-only continuation | Authorized | A failed research-only thesis does not require human decision by itself. Continue through materially new backlog hypotheses within the exploration budget and governance limits. |
 | Research sandbox nonzero-exposure CVaR evaluator | Partial research diagnostic | `phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate` measured nonzero research exposure with max CVaR95 loss fraction `0.01072844`, but the safe policy still had median combo Sharpe `-0.727203`, official exposure remained zero, and DSR stayed blocked. |
 | DSR zero root cause diagnostic | Complete | `phase5_research_dsr_zero_diagnostic_gate` confirmed `dsr_honest=0.0`, `sharpe_is=0.8808`, `sr_needed=4.47`, gap `3.5892`, and best observed diagnostic DSR `0.6938`; no threshold relaxation or promotion is allowed. |
+| Rank-score threshold family | Partial research-only | `phase5_research_rank_score_threshold_sizing_falsification_gate` found weak median alpha for `top1_score_ge_0_50` (`0.331124`) with sandbox CVaR within limit, but min combo Sharpe `-3.357339` and DSR blockers prevent promotion. |
 
 ## Current Decision
 
 The next safe mode is `CONTINUE_AUTONOMOUS` with a materially different
-research-only ranking/sizing gate. The recommended next gate is
-`phase5_research_rank_score_threshold_sizing_falsification_gate` to test whether
-a predeclared ex-ante rank-score threshold family can improve alpha while
-staying research-only. Freeze only after budget exhaustion, absence of a
-materially new hypothesis, external-resource need, specification change, or
-governance risk.
+research-only correction gate. The recommended next gate is
+`phase5_research_rank_score_stability_correction_gate`, using the one allowed
+PARTIAL correction for the threshold-family line. If instability remains, this
+family should be abandoned or frozen rather than renamed. Freeze only after
+budget exhaustion, absence of a materially new hypothesis, external-resource
+need, specification change, or governance risk.
 
 ## Required Review Before Promotion
 
