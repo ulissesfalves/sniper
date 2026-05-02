@@ -54,6 +54,34 @@ Fontes de verdade:
 8. data/parquet/**
 9. tests/**
 10. docker-compose.yml, pyproject.toml, requirements.txt, requirements-dev.txt, se existirem.
+11. reports/state/**
+
+Memória operacional persistente obrigatória:
+
+Antes de iniciar qualquer ciclo autônomo, ler:
+- AGENTS.md
+- docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md
+- reports/state/sniper_current_state.json
+- reports/state/sniper_spec_gap_backlog.yaml
+- reports/state/sniper_decision_ledger.md
+- reports/state/sniper_artifact_registry.json
+- reports/state/sniper_autonomous_runbook.md
+
+Durante a missão:
+- escolher apenas modos permitidos por reports/state/sniper_current_state.json;
+- priorizar gaps abertos em reports/state/sniper_spec_gap_backlog.yaml;
+- não executar ações em forbidden_next_modes;
+- não promover se official_promotion_allowed=false;
+- não declarar paper readiness se paper_readiness_allowed=false.
+
+Ao final da missão:
+- atualizar reports/state/sniper_current_state.json;
+- atualizar reports/state/sniper_decision_ledger.md;
+- atualizar reports/state/sniper_artifact_registry.json;
+- registrar novo gate e nova decisão;
+- se abrir PR draft, registrar latest_pr.
+
+Esta seção adiciona obrigações de memória operacional, sem alterar a semântica dos stop conditions existentes.
 
 Missão:
 Executar ciclos autônomos de implementação até atingir um critério de parada.
