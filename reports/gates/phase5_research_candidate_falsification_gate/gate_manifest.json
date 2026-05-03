@@ -1,0 +1,80 @@
+{
+  "gate_slug": "phase5_research_candidate_falsification_gate",
+  "timestamp_utc": "2026-05-03T13:33:55+00:00",
+  "baseline_commit": "4d430fdd0751a69d460cb4fdfc834a31c03fcc60",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_predictions.parquet",
+      "exists": true,
+      "size_bytes": 4365296,
+      "mtime_utc": "2026-03-29T06:55:53+00:00",
+      "sha256": "FC947D4C3C71175BCF5F773665DD1D5BB5F033D0E67E881F0B07B338FDA1B67E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_stability_gate\\candidate_stability_report.json",
+      "exists": true,
+      "size_bytes": 37573,
+      "mtime_utc": "2026-05-03T13:32:49+00:00",
+      "sha256": "DC6F9C3FC80A935B66F0AB4DDBC4556E0BB50BCBEAD4A223614B32BB0ACD5BCF"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_stability_gate\\candidate_stability_scenarios.parquet",
+      "exists": true,
+      "size_bytes": 14269,
+      "mtime_utc": "2026-05-03T13:32:49+00:00",
+      "sha256": "4724C6F4C4F5B5387A11337CB87A3F84E6E0FA9E12BE65FBDC817AA16135A5A7"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_falsification_gate\\candidate_falsification_metrics.parquet",
+      "exists": true,
+      "size_bytes": 5894,
+      "mtime_utc": "2026-05-03T13:33:55+00:00",
+      "sha256": "1AE1DB7D7AD0B61D1A068328E08B73B99EE5C029E56B703221D7F324D502BDA1"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_falsification_gate\\candidate_falsification_report.json",
+      "exists": true,
+      "size_bytes": 7746,
+      "mtime_utc": "2026-05-03T13:33:55+00:00",
+      "sha256": "13124BFDBA7B685A28E916157C93B763F1E7E356D67A8F42C7D19164001D5F06"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_falsification_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3013,
+      "mtime_utc": "2026-05-03T13:33:55+00:00",
+      "sha256": "0F7780D5B15B8589AA2616D5CE555F19EA13A7505C220B65AA6B0E426EC1E869"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_falsification_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 997,
+      "mtime_utc": "2026-05-03T13:33:55+00:00",
+      "sha256": "626BDBAC6584C6B211A82B31516288CD67A06FEE84D8D65F1CB28A8536DC4052"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_falsification_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 3890,
+      "mtime_utc": "2026-05-03T13:33:55+00:00",
+      "sha256": "8814C6612370041094A91CBB5F86D32E5C02F0D2AD924B945E9EB38072566356"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_falsification_gate\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    ".\\.venv\\Scripts\\python.exe services\\ml_engine\\phase5_research_candidate_falsification.py"
+  ],
+  "notes": [
+    "Autonomous falsification gate for the research-only candidate.",
+    "FAIL/abandon means the candidate is abandoned, not that official promotion was attempted."
+  ]
+}
