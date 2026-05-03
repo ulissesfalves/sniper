@@ -1,5 +1,5 @@
 {
-  "program_status": "RESEARCH_ONLY_CANDIDATE_FALSIFIED_PROMOTION_BLOCKED",
+  "program_status": "CLOSED_LOOP_READY_POST_CANDIDATE_FALSIFICATION",
   "active_branch": "codex/autonomous-sniper-implementation",
   "latest_pr": {
     "number": 1,
@@ -9,7 +9,7 @@
     "merged": false,
     "base": "codex/openclaw-sniper-handoff",
     "head": "codex/autonomous-sniper-implementation",
-    "observed_head_sha": "b9c50914465aa8b33a3041ce580924164fc51d6a",
+    "observed_head_sha": "b32d176551efc82bda56472bb1a8944d61ee8d22",
     "observed_before_local_gate_commits": false
   },
   "latest_gate": {
@@ -17,7 +17,7 @@
     "status": "PASS",
     "decision": "abandon"
   },
-  "latest_decision": "RUN_GLOBAL_REAUDIT_AFTER_CANDIDATE_FALSIFICATION",
+  "latest_decision": "POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT_REQUIRED",
   "resolved_blockers": [
     "source_doc_alignment_restored",
     "phase4_official_artifacts_found_and_hashed",
@@ -39,7 +39,8 @@
     "signal_polarity_candidate_global_reaudit_completed",
     "signal_polarity_candidate_stability_fragility_identified",
     "signal_polarity_candidate_falsified_and_abandoned",
-    "candidate_decision_gate_completed"
+    "candidate_decision_gate_completed",
+    "closed_loop_autonomous_execution_policy_authorized"
   ],
   "open_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -62,9 +63,13 @@
     "CONTINUE_AUTONOMOUS",
     "RUN_GLOBAL_REAUDIT",
     "RUN_GLOBAL_REAUDIT_CANDIDATE",
+    "POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT",
     "CANDIDATE_STABILITY_GATE",
     "CANDIDATE_FALSIFICATION_GATE",
+    "CANDIDATE_DECISION_GATE",
+    "UPDATE_STATE",
     "UPDATE_DRAFT_PR",
+    "OPEN_RESEARCH_GATE",
     "FREEZE_LINE",
     "STOP_FOR_HUMAN_DECISION"
   ],
@@ -82,7 +87,11 @@
     "TREAT_ZERO_EXPOSURE_CVAR_AS_ECONOMIC_ROBUSTNESS",
     "USE_EXTERNAL_RESOURCE_NOT_IN_REPO",
     "FREEZE_LINE_BEFORE_CANDIDATE_AUDIT_OR_FALSIFICATION",
-    "STOP_FOR_HUMAN_DECISION_WHILE_INTERNAL_GATE_EXISTS"
+    "STOP_FOR_HUMAN_DECISION_WHILE_INTERNAL_GATE_EXISTS",
+    "STOP_AFTER_SAFE_TECHNICAL_RECOMMENDATION",
+    "STOP_AFTER_RUN_GLOBAL_REAUDIT_RECOMMENDATION",
+    "STOP_AFTER_START_RESEARCH_ONLY_THESIS_RECOMMENDATION",
+    "FREEZE_LINE_BEFORE_POST_FALSIFICATION_REAUDIT"
   ],
   "autonomous_exploration_policy": {
     "research_only_failure_requires_human_decision": false,
@@ -114,7 +123,30 @@
       "decision_ledger_updated"
     ],
     "previous_mission_research_gate_budget_used": 5,
-    "previous_mission_research_gate_budget_limit": 5
+    "previous_mission_research_gate_budget_limit": 5,
+    "closed_loop_execution_policy": {
+      "enabled": true,
+      "human_decision_is_last_resort": true,
+      "safe_technical_recommendations_execute_automatically": true,
+      "run_global_reaudit_executes_automatically_when_recommended": true,
+      "start_research_only_thesis_executes_automatically_when_backlog_has_materially_new_hypothesis": true,
+      "falsified_candidate_requires_post_falsification_global_reaudit": true,
+      "freeze_requires_post_falsification_global_reaudit_and_no_material_hypothesis": true,
+      "max_total_gates_per_mission": 25,
+      "max_hypothesis_families_per_mission": 5,
+      "max_gates_per_family": 4,
+      "max_intermediate_global_audits_per_mission": 2,
+      "max_pr_draft_updates_per_mission": 2,
+      "allowed_final_classifications": [
+        "EXTERNAL_RESOURCE_REQUIRED",
+        "SPEC_CHANGE_REQUIRED",
+        "GOVERNANCE_HARD_STOP",
+        "AUTONOMOUS_BUDGET_EXHAUSTED",
+        "FUNCTIONAL_RESEARCH_MODULE_DELIVERED",
+        "FULL_FREEZE_AFTER_REAUDIT",
+        "PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION"
+      ]
+    }
   },
   "last_clean_regeneration_status": {
     "status": "PASS",
@@ -229,7 +261,7 @@
     "requires_external_artifact": false,
     "candidate_review_status": "FALSIFIED_AND_ABANDONED",
     "next_candidate_gate": null,
-    "next_recommended_gate": "post_candidate_falsification_global_reaudit"
+    "next_recommended_gate": "phase5_post_candidate_falsification_global_reaudit_gate"
   },
   "internal_strategic_decision_policy": {
     "human_decision_is_last_resort": true,
@@ -240,13 +272,17 @@
       "START_RESEARCH_ONLY_THESIS",
       "FREEZE_LINE",
       "UPDATE_DRAFT_PR",
+      "POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT",
       "STOP_FOR_EXTERNAL_RESOURCE"
     ],
     "default_when_research_candidate_survives": "RUN_GLOBAL_REAUDIT_CANDIDATE",
-    "default_after_candidate_falsified": "RUN_GLOBAL_REAUDIT",
+    "default_after_candidate_falsified": "POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT",
     "freeze_line_allowed_before_candidate_audit": true
   },
-  "next_recommended_mode": "RUN_GLOBAL_REAUDIT",
-  "next_recommended_gate": "post_candidate_falsification_global_reaudit",
-  "updated_at_utc": "2026-05-03T13:35:04Z"
+  "latest_candidate_status": "RESEARCH_CANDIDATE_FALSIFIED",
+  "human_decision_required": false,
+  "autonomous_can_continue": true,
+  "next_recommended_mode": "POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT",
+  "next_recommended_gate": "phase5_post_candidate_falsification_global_reaudit_gate",
+  "updated_at_utc": "2026-05-03T14:11:28Z"
 }

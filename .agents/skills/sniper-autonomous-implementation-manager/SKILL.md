@@ -208,6 +208,142 @@ STOP CONDITION UPDATE
 Substituir qualquer regra operacional equivalente a "revisar candidata research-only exige decisão humana" por:
 "revisar candidata research-only exige gate autônomo de auditoria/falsificação, salvo se houver recurso externo ou mudança de especificação."
 
+CLOSED_LOOP_AUTONOMOUS_EXECUTION_POLICY
+
+A missão não deve terminar apenas porque produziu uma "próxima recomendação".
+Se a próxima recomendação for uma ação técnica segura dentro do repo, permitida
+pela governança e sem promoção official, executar automaticamente.
+
+Recomendações que devem ser executadas automaticamente:
+- RUN_GLOBAL_REAUDIT;
+- RUN_GLOBAL_REAUDIT_CANDIDATE;
+- START_RESEARCH_ONLY_THESIS;
+- CONTINUE_AUTONOMOUS;
+- CANDIDATE_STABILITY_GATE;
+- CANDIDATE_FALSIFICATION_GATE;
+- CANDIDATE_DECISION_GATE;
+- POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT;
+- UPDATE_STATE;
+- UPDATE_DRAFT_PR;
+- OPEN_RESEARCH_GATE;
+- FREEZE_LINE, somente quando os critérios de freeze estiverem satisfeitos.
+
+Recomendações que exigem parada:
+- REQUEST_EXTERNAL_ARTIFACTS;
+- REQUIRE_CREDENTIAL_OR_API;
+- REQUIRE_SPEC_CHANGE;
+- REQUIRE_OFFICIAL_PROMOTION;
+- REQUIRE_PAPER_READINESS;
+- REQUIRE_MERGE;
+- REQUIRE_REAL_CAPITAL;
+- REQUIRE_OUTSIDE_REPO_ACCESS;
+- REQUIRE_USER_BUSINESS_DECISION.
+
+Decisão humana é último recurso. Não pedir decisão humana quando:
+- há próximo gate seguro a executar;
+- há backlog aberto;
+- há tese research-only possível;
+- há auditoria global possível;
+- há candidata a falsificar;
+- há família a comparar;
+- há relatório de estado a atualizar;
+- há PR draft a atualizar;
+- há freeze governado possível.
+
+Quando uma candidata for falsificada:
+- registrar RESEARCH_CANDIDATE_FALSIFIED;
+- atualizar reports/state/sniper_decision_ledger.md;
+- atualizar reports/state/sniper_spec_gap_backlog.yaml;
+- executar automaticamente POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT;
+- decidir a próxima tese ou freeze governado com base na auditoria;
+- não pedir decisão humana apenas porque a candidata foi falsificada.
+
+Quando recomendar RUN_GLOBAL_REAUDIT:
+- executar a auditoria global automaticamente;
+- atualizar reports/audits/global_spec_adherence/**;
+- atualizar reports/state/**;
+- decidir automaticamente o próximo modo;
+- continuar se o próximo modo for seguro.
+
+Quando recomendar nova tese research-only:
+- criar gate research-only novo;
+- garantir que a hipótese seja materialmente diferente das hipóteses já falsificadas;
+- garantir que a hipótese seja ex-ante;
+- definir critério de falsificação;
+- implementar somente em research/sandbox;
+- não promover official.
+
+Quando recomendar freeze:
+FREEZE_LINE só pode ser executado se:
+- não houver candidata sobrevivente;
+- pelo menos 2 famílias materialmente diferentes tiverem sido testadas;
+- a última candidata tiver sido falsificada;
+- uma auditoria pós-falsificação tiver sido executada;
+- o backlog não tiver hipótese materialmente nova executável dentro do repo;
+- a continuação exigiria recurso externo, mudança de especificação ou violação de governança.
+
+Manter um loop de decisão:
+1. executar gate/missão;
+2. revisar resultado;
+3. atualizar reports/state;
+4. escolher próxima ação por rubrica estratégica;
+5. se a ação for segura, executar;
+6. repetir até hard stop real.
+
+Orçamento da missão em loop fechado:
+- até 25 gates por missão;
+- até 5 famílias de hipótese;
+- até 4 gates por família;
+- até 2 auditorias globais intermediárias;
+- até 2 updates de PR draft;
+- parar se a quantidade de mudanças ficar grande demais para revisão humana razoável.
+
+Rubrica de decisão interna:
+Para cada próxima ação possível, pontuar:
+- aderência à especificação;
+- redução real de blocker;
+- risco de governança;
+- chance de produzir módulo funcional;
+- risco de retrabalho;
+- risco de mascarar DSR/CVaR/promotabilidade;
+- necessidade de recurso externo.
+
+Escolher a maior pontuação entre as ações seguras. Qualquer violação de
+governança zera a opção.
+
+Proibições absolutas:
+- não promover official;
+- não declarar paper readiness;
+- não fazer merge;
+- não reabrir A3/A4;
+- não relaxar thresholds;
+- não fabricar artifacts;
+- não usar variável realizada como regra ex-ante;
+- não tratar CVaR zero exposure como robustez econômica;
+- não tratar DSR=0.0 como aceitável para promoção;
+- não operar capital real;
+- não criar credenciais;
+- não fazer force push.
+
+A missão em loop fechado só pode terminar com uma destas classificações:
+- EXTERNAL_RESOURCE_REQUIRED;
+- SPEC_CHANGE_REQUIRED;
+- GOVERNANCE_HARD_STOP;
+- AUTONOMOUS_BUDGET_EXHAUSTED;
+- FUNCTIONAL_RESEARCH_MODULE_DELIVERED;
+- FULL_FREEZE_AFTER_REAUDIT;
+- PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION.
+
+Não são stops válidos:
+- "próxima recomendação: RUN_GLOBAL_REAUDIT";
+- "próxima recomendação: nova tese research-only";
+- "decisão humana para escolher tese".
+
+Caso atual conhecido:
+A candidata `short_high_p_bma_k3_p60_h70` foi falsificada. A recomendação
+anterior foi RUN_GLOBAL_REAUDIT / post_candidate_falsification_global_reaudit.
+Executar isso automaticamente na próxima missão; não tratar como decisão humana.
+
 AUTONOMOUS FULL PHASE EXECUTION POLICY
 
 Orçamento autônomo por missão:
@@ -426,7 +562,7 @@ Pare e entregue relatório final se qualquer condição ocorrer:
 8. Você precisar mudar a especificação para passar o gate.
 9. DSR honesto permanecer 0.0 e a única forma de avançar seria promover mesmo assim.
 10. Qualquer violação de governança for detectada.
-11. A exploração autônoma atingir o orçamento máximo da AUTONOMOUS FULL PHASE EXECUTION POLICY.
+11. A exploração autônoma atingir o orçamento máximo da CLOSED_LOOP_AUTONOMOUS_EXECUTION_POLICY quando a missão estiver em loop fechado, ou da AUTONOMOUS FULL PHASE EXECUTION POLICY quando a missão não estiver em loop fechado.
 12. Não houver hipótese materialmente nova dentro dos gaps abertos.
 13. A linha só puder ser congelada depois de cumprir os requisitos mínimos de freeze: pelo menos 2 famílias materialmente diferentes testadas, diagnóstico DSR explícito, CVaR research com exposição não zero quando houver exposição research disponível, comparação entre famílias e registro no decision ledger.
 
@@ -493,3 +629,4 @@ Ao parar, entregue:
 29. Por que a candidata ainda não é promotable.
 30. Próximo gate autônomo.
 31. Se pode continuar autonomamente.
+32. Classificação final obrigatória: EXTERNAL_RESOURCE_REQUIRED, SPEC_CHANGE_REQUIRED, GOVERNANCE_HARD_STOP, AUTONOMOUS_BUDGET_EXHAUSTED, FUNCTIONAL_RESEARCH_MODULE_DELIVERED, FULL_FREEZE_AFTER_REAUDIT ou PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION.

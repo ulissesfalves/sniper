@@ -1,6 +1,6 @@
 # SNIPER Decision Ledger
 
-Updated: 2026-05-03T13:35:04Z
+Updated: 2026-05-03T14:11:28Z
 
 ## Closed Decisions
 
@@ -34,17 +34,23 @@ Updated: 2026-05-03T13:35:04Z
 | Candidate stability | Partial/correct | `phase5_research_candidate_stability_gate` ran 49 scenarios and found 29 failures, including temporal thirds, parameter sensitivity, 20 bps cost stress and low-HMM regime fragility. |
 | Candidate falsification | Failed/abandoned | `phase5_research_candidate_falsification_gate` found hard falsifiers: `temporal_subperiod_min_sharpe=-1.160839` and `extra_cost_20bps_min_sharpe=-0.12201`; leakage control passed. |
 | Candidate decision | Falsified | `phase5_research_candidate_decision_gate` classified `short_high_p_bma_k3_p60_h70` as `RESEARCH_CANDIDATE_FALSIFIED` and `PASS/abandon`. It remains research/sandbox only and cannot support promotion, readiness or official short exposure. |
+| Closed-loop autonomous execution | Authorized | `CLOSED_LOOP_AUTONOMOUS_EXECUTION_POLICY` authorizes Codex to execute safe technical next recommendations automatically inside the repo. `RUN_GLOBAL_REAUDIT`, `START_RESEARCH_ONLY_THESIS`, state updates, draft PR updates and governed freeze review are not valid human-decision stops when safe. |
 
 ## Current Decision
 
 The current mission audited and falsified the prior research-only survivor
-`short_high_p_bma_k3_p60_h70`. The next safe mode is `RUN_GLOBAL_REAUDIT`
-against the updated evidence, followed by either a materially new research-only
-thesis or a governed freeze review. The candidate had median Sharpe `1.361592`,
-min Sharpe `0.261111`, median active days `471.0`, and max CVaR95 `0.00344841`,
-but failed temporal and 20 bps cost falsification. Do not promote, merge,
-declare paper readiness, reopen A3/A4, relax thresholds, or treat the abandoned
-short-sandbox candidate as official support.
+`short_high_p_bma_k3_p60_h70`. The next safe mode is
+`POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT`; the next gate is
+`phase5_post_candidate_falsification_global_reaudit_gate`. This must be
+executed automatically in the next autonomous mission because it is safe,
+internal to the repo and governance-allowed. Human decision is not required.
+
+After that reaudit, Codex must decide automatically between a materially new
+research-only thesis, continued autonomous gate work, draft PR update or a
+governed freeze review. Freeze is allowed only after the post-falsification
+reaudit confirms no materially new hypothesis remains executable inside the
+repo. Do not promote, merge, declare paper readiness, reopen A3/A4, relax
+thresholds, or treat the abandoned short-sandbox candidate as official support.
 
 ## Required Review Before Promotion
 

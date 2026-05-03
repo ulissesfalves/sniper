@@ -74,6 +74,13 @@ metrics, blockers, risks and objective recommendation.
 
 Allowed without a new user decision:
 
+- execute closed-loop autonomous missions inside this repository;
+- automatically execute the next technical recommendation when it is safe,
+  internal to the repo and governance-allowed;
+- automatically run `RUN_GLOBAL_REAUDIT` or
+  `POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT` when recommended;
+- automatically start a materially new research-only thesis when the backlog
+  contains an executable ex-ante hypothesis;
 - execute autonomous full phase research missions inside this repository;
 - use internal strategic decision rubrics when the next action is ambiguous;
 - create gates;
@@ -94,8 +101,10 @@ Allowed without a new user decision:
 
 Human decision is last resort. Do not stop for human choice while there is a
 safe internal path such as `RUN_GLOBAL_REAUDIT`, `RUN_GLOBAL_REAUDIT_CANDIDATE`,
+`POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT`,
 `START_RESEARCH_ONLY_THESIS`, `CONTINUE_AUTONOMOUS`, a stability gate, a
-falsification gate, or an internal strategic decision rubric.
+falsification gate, a state update, a draft PR update, a governed freeze review,
+or an internal strategic decision rubric.
 
 When a research-only candidate survives, the next autonomous action is candidate
 audit/falsification before freeze or human decision. The prior survivor was
@@ -111,8 +120,8 @@ audited and falsified:
 - failed temporal and 20 bps cost falsification;
 - not promotable.
 
-Next recommended mode: `RUN_GLOBAL_REAUDIT`.
-Next suggested gate: `post_candidate_falsification_global_reaudit`.
+Next recommended mode: `POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT`.
+Next suggested gate: `phase5_post_candidate_falsification_global_reaudit_gate`.
 Do not revive `short_high_p_bma_k3_p60_h70` without materially new evidence.
 
 Must stop before:
@@ -131,6 +140,15 @@ Must stop before:
 
 ## Research Exploration Budget
 
+Closed-loop autonomous budget per mission:
+
+- up to 25 total gates;
+- up to 5 materially different hypothesis families;
+- up to 4 gates per family;
+- up to 2 intermediate global audits;
+- up to 2 draft PR updates;
+- stop if changes become too large for reasonable human review.
+
 Default budget per autonomous mission:
 
 - up to 15 research-only gates;
@@ -147,7 +165,9 @@ the hypothesis falsified, then choose the next defensible backlog hypothesis.
 Freeze is allowed only after at least 2 materially different families were
 tested, explicit DSR diagnostics exist, research CVaR with nonzero exposure was
 evaluated when research exposure exists, family comparison/falsification was
-recorded, and `reports/state/sniper_decision_ledger.md` was updated.
+recorded, the last candidate was falsified, a post-falsification global reaudit
+was executed, no materially new backlog hypothesis remains executable inside
+the repo, and `reports/state/sniper_decision_ledger.md` was updated.
 
 ## Stop Conditions
 
@@ -160,7 +180,10 @@ governance violation.
 Do not use human strategy as a stop condition while there is an open gap,
 defensible research-only hypothesis, internal correction, unfinished
 quantitative diagnostic, possible sandbox/research module, surviving
-research-only candidate, or candidate audit/falsification gate inside the repo.
+research-only candidate, candidate audit/falsification gate, post-falsification
+global reaudit, state update, draft PR update or governed freeze review inside
+the repo. A technical next recommendation is not a valid stop if it is safe and
+internal to this repo.
 
 ## State Update Obligation
 

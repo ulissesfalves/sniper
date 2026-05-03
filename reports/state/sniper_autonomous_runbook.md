@@ -17,12 +17,15 @@
 13. Commit one coherent gate.
 14. Push the current branch only when useful for the existing draft PR.
 15. Use internal strategic decision rubrics before any human-decision stop.
-16. Continue through materially different research-only hypotheses or candidate
-    audit/falsification gates until budget exhaustion or a real stop condition.
+16. Continue through materially different research-only hypotheses, candidate
+    audit/falsification gates, global reaudits, state updates and draft PR
+    updates until budget exhaustion or a real stop condition.
+17. Do not stop merely because the next recommendation is technical and safe;
+    execute it automatically.
 
 ## Current Recommended Mode
 
-`RUN_GLOBAL_REAUDIT`
+`POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT`
 
 Allowed mission modes:
 
@@ -30,9 +33,13 @@ Allowed mission modes:
 - `CONTINUE_AUTONOMOUS`
 - `RUN_GLOBAL_REAUDIT`
 - `RUN_GLOBAL_REAUDIT_CANDIDATE`
+- `POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT`
 - `CANDIDATE_STABILITY_GATE`
 - `CANDIDATE_FALSIFICATION_GATE`
+- `CANDIDATE_DECISION_GATE`
+- `UPDATE_STATE`
 - `UPDATE_DRAFT_PR`
+- `OPEN_RESEARCH_GATE`
 - `FREEZE_LINE` only after full freeze requirements are satisfied.
 - `STOP_FOR_HUMAN_DECISION` only for external/governance cases.
 
@@ -90,6 +97,40 @@ FASE E - Autonomous decision:
 - INCONCLUSIVE internal environment: repair environment;
 - external blocker: stop.
 
+## Closed-Loop Autonomous Flow
+
+Closed-loop execution is active. A mission must not end only because it produced
+a next recommendation. If the next action is safe, internal to the repo and
+governance-allowed, execute it automatically.
+
+Automatically execute:
+
+- `RUN_GLOBAL_REAUDIT`
+- `RUN_GLOBAL_REAUDIT_CANDIDATE`
+- `POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT`
+- `START_RESEARCH_ONLY_THESIS`
+- `CONTINUE_AUTONOMOUS`
+- `CANDIDATE_STABILITY_GATE`
+- `CANDIDATE_FALSIFICATION_GATE`
+- `CANDIDATE_DECISION_GATE`
+- `UPDATE_STATE`
+- `UPDATE_DRAFT_PR`
+- `OPEN_RESEARCH_GATE`
+- `FREEZE_LINE` only after freeze criteria are satisfied.
+
+Stop only for external artifacts/data, credentials or paid APIs, access outside
+the repo, merge, official promotion, paper readiness, specification change, real
+capital or non-technical business risk acceptance.
+
+Closed-loop budget:
+
+- up to 25 gates per mission;
+- up to 5 materially different hypothesis families;
+- up to 4 gates per family;
+- up to 2 intermediate global audits;
+- up to 2 draft PR updates;
+- stop if changes become too large for reasonable human review.
+
 ## Full Phase Budget
 
 - Up to 15 research-only gates per mission.
@@ -111,6 +152,9 @@ Freeze is allowed only after:
 - family comparison/falsification was recorded;
 - `reports/state/sniper_decision_ledger.md` was updated.
 - any surviving research-only candidate was audited/falsified.
+- the last candidate was falsified;
+- post-falsification global reaudit was executed;
+- no materially new backlog hypothesis remains executable inside the repo.
 
 ## Human Decision Last Resort
 
@@ -125,13 +169,18 @@ Do not stop for human decision while any internal path remains:
 - `RUN_GLOBAL_REAUDIT` or `RUN_GLOBAL_REAUDIT_CANDIDATE`;
 - `START_RESEARCH_ONLY_THESIS` or `CONTINUE_AUTONOMOUS`;
 - candidate stability or falsification gate;
+- candidate decision gate;
+- post-falsification global reaudit;
+- state update or draft PR update;
+- governed freeze review;
 - internal strategic decision rubric.
 
 If the next step is ambiguous, apply a strategic decision rubric equivalent to
 `sniper-strategic-decision-governor` and choose among:
-`RUN_GLOBAL_REAUDIT`, `RUN_GLOBAL_REAUDIT_CANDIDATE`, `CONTINUE_AUTONOMOUS`,
-`START_RESEARCH_ONLY_THESIS`, `FREEZE_LINE`, `UPDATE_DRAFT_PR`, or
-`STOP_FOR_EXTERNAL_RESOURCE`.
+`RUN_GLOBAL_REAUDIT`, `RUN_GLOBAL_REAUDIT_CANDIDATE`,
+`POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT`, `CONTINUE_AUTONOMOUS`,
+`START_RESEARCH_ONLY_THESIS`, `FREEZE_LINE`, `UPDATE_DRAFT_PR`, `UPDATE_STATE`,
+`OPEN_RESEARCH_GATE`, or `STOP_FOR_EXTERNAL_RESOURCE`.
 
 ## Functional Phase Order
 
@@ -205,20 +254,22 @@ Current candidate audit/falsification update:
   `short_high_p_bma_k3_p60_h70` as `RESEARCH_CANDIDATE_FALSIFIED`.
 
 Recommended next gate:
-`post_candidate_falsification_global_reaudit`.
+`phase5_post_candidate_falsification_global_reaudit_gate`.
 
-Recommended next mode: `RUN_GLOBAL_REAUDIT`. Do not promote the abandoned
-candidate: it used short sandbox exposure, remained below `sr_needed=4.47`, and
-failed autonomous falsification while `dsr_honest=0.0`.
+Recommended next mode: `POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT`. Execute
+it automatically in the next mission. Do not promote the abandoned candidate:
+it used short sandbox exposure, remained below `sr_needed=4.47`, and failed
+autonomous falsification while `dsr_honest=0.0`.
 
 Post-falsification protocol:
 
-1. Run a focused global reaudit against the updated Phase5 candidate gates.
+1. Run `phase5_post_candidate_falsification_global_reaudit_gate` against the
+   updated Phase5 candidate gates.
 2. Confirm that no official promotion, paper readiness, A3/A4 reopening or
    threshold relaxation occurred.
-3. Decide between a materially new research-only thesis and a governed freeze
-   review. Do not revive `short_high_p_bma_k3_p60_h70` without materially new
-   evidence.
+3. Decide automatically between a materially new research-only thesis,
+   continued autonomous gate work and a governed freeze review. Do not revive
+   `short_high_p_bma_k3_p60_h70` without materially new evidence.
 4. Update `reports/state/**` and the existing draft PR. Do not open PR ready.
 
 ## Forbidden Interpretations
@@ -238,7 +289,8 @@ Stop if the next step requires:
 - human product/strategy decision only after internal strategic decision and
   only when no internal research/sandbox/candidate audit path remains;
 - exploration budget exhaustion;
-- no materially new hypothesis after candidate falsification;
+- no materially new hypothesis after candidate falsification and
+  post-falsification global reaudit;
 - external artifact or private data not present;
 - credential, paid API or real capital;
 - merge or ready PR transition;
@@ -249,5 +301,6 @@ Stop if the next step requires:
 
 Do not stop for human decision while there is an open gap, defensible
 research-only hypothesis, internal correction, unfinished quantitative
-diagnostic, possible sandbox/research module, or global reaudit gate inside the
-repo. The prior surviving candidate has now been audited and falsified.
+diagnostic, possible sandbox/research module, post-falsification global reaudit,
+state update, draft PR update or governed freeze review inside the repo. The
+prior surviving candidate has now been audited and falsified.

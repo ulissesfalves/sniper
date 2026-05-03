@@ -7,6 +7,13 @@ This contract defines what Codex can do autonomously inside the SNIPER repo.
 Codex may act without an additional user prompt when the action remains inside
 the current repository and preserves governance:
 
+- execute closed-loop autonomous missions inside this repository;
+- automatically execute safe technical next recommendations inside the repo;
+- automatically run `RUN_GLOBAL_REAUDIT` when recommended;
+- automatically run `POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT` after a
+  candidate is falsified;
+- automatically start a materially new research-only thesis when the backlog
+  contains an executable ex-ante hypothesis;
 - create a branch with the `codex/` prefix when needed;
 - execute autonomous full phase research missions inside this repository;
 - use internal strategic decision rubrics when the next action is ambiguous;
@@ -40,8 +47,13 @@ Codex must not stop for human decision while any safe internal path remains:
 - a candidate audit gate;
 - a candidate stability gate;
 - a candidate falsification gate;
+- a candidate decision gate;
+- a post-candidate-falsification global reaudit;
+- a state update or draft PR update;
+- a governed freeze review;
 - `RUN_GLOBAL_REAUDIT`;
 - `RUN_GLOBAL_REAUDIT_CANDIDATE`;
+- `POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT`;
 - `START_RESEARCH_ONLY_THESIS`;
 - `CONTINUE_AUTONOMOUS`;
 - an internal strategic decision rubric equivalent to
@@ -61,13 +73,38 @@ Prior surviving candidate after autonomous audit/falsification:
 - failed temporal and 20 bps cost falsification;
 - not promotable.
 
-The next autonomous mode is `RUN_GLOBAL_REAUDIT`.
-The next suggested gate is `post_candidate_falsification_global_reaudit`.
+The next autonomous mode is `POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT`.
+The next suggested gate is `phase5_post_candidate_falsification_global_reaudit_gate`.
 
 The candidate has already been audited and falsified. Do not revive it without
-materially new evidence. Any next action must be a focused global reaudit,
-materially new research-only thesis, or governed freeze review; no official
-promotion or paper readiness is allowed.
+materially new evidence. The next action is an automatic post-falsification
+global reaudit, followed by either a materially new research-only thesis or a
+governed freeze review; no official promotion or paper readiness is allowed.
+
+## Closed-Loop Autonomous Policy
+
+Codex must not terminate a mission merely because it produced a next
+recommendation. If the recommendation is safe, internal to the repo and
+governance-allowed, Codex must execute it automatically.
+
+Automatically executable recommendations include:
+
+- `RUN_GLOBAL_REAUDIT`
+- `RUN_GLOBAL_REAUDIT_CANDIDATE`
+- `POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT`
+- `START_RESEARCH_ONLY_THESIS`
+- `CONTINUE_AUTONOMOUS`
+- `CANDIDATE_STABILITY_GATE`
+- `CANDIDATE_FALSIFICATION_GATE`
+- `CANDIDATE_DECISION_GATE`
+- `UPDATE_STATE`
+- `UPDATE_DRAFT_PR`
+- `OPEN_RESEARCH_GATE`
+- `FREEZE_LINE` only after all freeze criteria are satisfied.
+
+Stop only for external artifacts/data, credentials or paid APIs, access outside
+the repo, merge, official promotion, paper readiness, specification change, real
+capital or non-technical business risk acceptance.
 
 ## Stop Required
 
@@ -109,6 +146,15 @@ research gate as promotion evidence.
 
 ## Exploration Budget
 
+Closed-loop autonomous budget per mission:
+
+- up to 25 total gates;
+- up to 5 materially different hypothesis families;
+- up to 4 gates per family;
+- up to 2 intermediate global audits;
+- up to 2 draft PR updates;
+- stop when the amount of change is too large for reasonable human review.
+
 Default budget per autonomous mission:
 
 - up to 15 research-only gates;
@@ -127,6 +173,9 @@ Freeze is permitted only after:
 - comparison/falsification across families was recorded;
 - `reports/state/sniper_decision_ledger.md` was updated.
 - any surviving research-only candidate was audited/falsified.
+- the last candidate was falsified;
+- a post-falsification global reaudit was executed;
+- no materially new backlog hypothesis remains executable inside the repo.
 
 Human decision is required only for external resources, specification changes,
 official promotion, paper readiness, credentials or paid APIs, operation outside
@@ -140,9 +189,13 @@ Allowed modes:
 - `CONTINUE_AUTONOMOUS`
 - `RUN_GLOBAL_REAUDIT`
 - `RUN_GLOBAL_REAUDIT_CANDIDATE`
+- `POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT`
 - `CANDIDATE_STABILITY_GATE`
 - `CANDIDATE_FALSIFICATION_GATE`
+- `CANDIDATE_DECISION_GATE`
+- `UPDATE_STATE`
 - `UPDATE_DRAFT_PR`
+- `OPEN_RESEARCH_GATE`
 - `FREEZE_LINE` only after the full freeze requirements are satisfied.
 - `STOP_FOR_HUMAN_DECISION` only for the explicit external/governance cases
   listed above.

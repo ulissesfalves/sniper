@@ -41,7 +41,7 @@ gaps:
       - "PROMOTE_OFFICIAL"
       - "RELAX_DSR_THRESHOLD"
       - "DECLARE_READINESS"
-    suggested_gate: "post_candidate_falsification_global_reaudit"
+    suggested_gate: "phase5_post_candidate_falsification_global_reaudit_gate"
     stop_condition_if_unresolved: "No promotion or readiness claim is allowed while honest DSR remains 0.0."
 
   - id: GAP-DSR-002
@@ -97,7 +97,7 @@ gaps:
     forbidden_actions:
       - "TREAT_ZERO_EXPOSURE_CVAR_AS_ECONOMIC_ROBUSTNESS"
       - "DECLARE_PAPER_READINESS"
-    suggested_gate: "post_candidate_falsification_global_reaudit"
+    suggested_gate: "phase5_post_candidate_falsification_global_reaudit_gate"
     stop_condition_if_unresolved: "Paper readiness is forbidden unless nonzero exposure or approved stress evidence exists."
 
   - id: GAP-CVAR-002
@@ -151,7 +151,7 @@ gaps:
     forbidden_actions:
       - "PROMOTE_OFFICIAL"
       - "TREAT_RESEARCH_AS_OFFICIAL"
-    suggested_gate: "post_candidate_falsification_global_reaudit"
+    suggested_gate: "phase5_post_candidate_falsification_global_reaudit_gate"
     stop_condition_if_unresolved: "Do not promote cross-sectional while this status remains."
 
   - id: GAP-PAPER-001
@@ -348,7 +348,7 @@ gaps:
       - "A4_REOPEN"
       - "THRESHOLD_RELAXATION"
       - "REAL_TRADING"
-    suggested_gate: "post_candidate_falsification_global_reaudit"
+    suggested_gate: "phase5_post_candidate_falsification_global_reaudit_gate"
     stop_condition_if_unresolved: "A mission must continue within budget while defensible research-only hypotheses remain inside the repo; the previous survivor has been abandoned."
 
   - id: GAP-ALTEXANTE-001
@@ -427,7 +427,7 @@ gaps:
       - "DECLARE_PAPER_READINESS"
       - "TREAT_SHORT_SANDBOX_AS_OFFICIAL"
       - "RELAX_DSR_THRESHOLD"
-    suggested_gate: "post_candidate_falsification_global_reaudit"
+    suggested_gate: "phase5_post_candidate_falsification_global_reaudit_gate"
     stop_condition_if_unresolved: "The candidate has been abandoned; do not revive it without materially new evidence. Continue only with global reaudit, a materially new research-only thesis, or freeze after governance review."
 
   - id: GAP-AUTODECISION-001
@@ -455,5 +455,54 @@ gaps:
       - "STOP_FOR_HUMAN_DECISION_WHILE_INTERNAL_GATE_EXISTS"
       - "PROMOTE_OFFICIAL"
       - "DECLARE_PAPER_READINESS"
-    suggested_gate: "post_candidate_falsification_global_reaudit"
+    suggested_gate: "phase5_post_candidate_falsification_global_reaudit_gate"
     stop_condition_if_unresolved: "Do not request human strategy while global reaudit, a materially new research-only thesis, or governed freeze review can be run inside the repo."
+
+  - id: GAP-CLOSEDLOOP-001
+    title: Closed-loop autonomous execution policy is active
+    type: governance_state
+    severity: high
+    status: resolved
+    evidence:
+      - ".agents/skills/sniper-autonomous-implementation-manager/SKILL.md"
+      - "AGENTS.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+      - "CLOSED_LOOP_AUTONOMOUS_EXECUTION_POLICY authorized"
+      - "safe technical recommendations execute automatically"
+      - "RUN_GLOBAL_REAUDIT is not a valid stop when safe and internal"
+      - "START_RESEARCH_ONLY_THESIS is not a valid stop when a materially new backlog hypothesis exists"
+      - "short_high_p_bma_k3_p60_h70 was falsified"
+      - "falsified candidate requires post-falsification global reaudit, not human stop"
+      - "next_recommended_mode=POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT"
+      - "next_recommended_gate=phase5_post_candidate_falsification_global_reaudit_gate"
+      - "human_decision_required=false"
+      - "autonomous_can_continue=true"
+    source_files:
+      - "AGENTS.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+      - "reports/state/sniper_autonomous_runbook.md"
+    allowed_actions:
+      - "POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT"
+      - "RUN_GLOBAL_REAUDIT"
+      - "START_RESEARCH_ONLY_THESIS"
+      - "CONTINUE_AUTONOMOUS"
+      - "UPDATE_STATE"
+      - "UPDATE_DRAFT_PR"
+      - "FREEZE_LINE_AFTER_REAUDIT_IF_NO_MATERIAL_HYPOTHESIS"
+    forbidden_actions:
+      - "STOP_AFTER_SAFE_TECHNICAL_RECOMMENDATION"
+      - "STOP_AFTER_RUN_GLOBAL_REAUDIT_RECOMMENDATION"
+      - "STOP_AFTER_START_RESEARCH_ONLY_THESIS_RECOMMENDATION"
+      - "STOP_FOR_HUMAN_DECISION_WHILE_INTERNAL_GATE_EXISTS"
+      - "FREEZE_LINE_BEFORE_POST_FALSIFICATION_REAUDIT"
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "MERGE_PR"
+      - "A3_REOPEN"
+      - "A4_REOPEN"
+      - "THRESHOLD_RELAXATION"
+      - "REAL_TRADING"
+    suggested_gate: "phase5_post_candidate_falsification_global_reaudit_gate"
+    stop_condition_if_unresolved: "Closed-loop execution must continue through the post-falsification global reaudit unless an external resource, specification change or governance hard stop is required."
