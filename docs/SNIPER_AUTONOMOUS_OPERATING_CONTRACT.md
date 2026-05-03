@@ -9,6 +9,7 @@ the current repository and preserves governance:
 
 - create a branch with the `codex/` prefix when needed;
 - execute autonomous full phase research missions inside this repository;
+- use internal strategic decision rubrics when the next action is ambiguous;
 - choose the next open gap from the backlog;
 - choose a materially different research-only hypothesis family;
 - create a new falsifiable research-only hypothesis;
@@ -25,6 +26,48 @@ the current repository and preserves governance:
   of a mission unless explicitly requested otherwise;
 - abandon a failed research hypothesis;
 - update `reports/state/**`.
+
+## Human Decision Is Last Resort
+
+Codex may stop for human decision only when the next step requires external
+artifacts/data, credentials, paid/private APIs, access outside the authorized
+repo, merge, official promotion, paper readiness, specification change, real
+capital, or explicit product/business risk acceptance that is not technical.
+
+Codex must not stop for human decision while any safe internal path remains:
+
+- a surviving research-only candidate;
+- a candidate audit gate;
+- a candidate stability gate;
+- a candidate falsification gate;
+- `RUN_GLOBAL_REAUDIT`;
+- `RUN_GLOBAL_REAUDIT_CANDIDATE`;
+- `START_RESEARCH_ONLY_THESIS`;
+- `CONTINUE_AUTONOMOUS`;
+- an internal strategic decision rubric equivalent to
+  `sniper-strategic-decision-governor`.
+
+## Surviving Research Candidate Protocol
+
+Current surviving candidate:
+
+- policy: `short_high_p_bma_k3_p60_h70`;
+- scope: research/sandbox only;
+- median Sharpe: `1.361592`;
+- min Sharpe: `0.261111`;
+- median active days: `471.0`;
+- max CVaR95: `0.00344841`;
+- below `sr_needed=4.47`;
+- not promotable.
+
+The next autonomous mode is `RUN_GLOBAL_REAUDIT_CANDIDATE`.
+The next suggested gate is `phase5_research_candidate_global_reaudit_gate`.
+
+The candidate must be audited and/or falsified before `FREEZE_LINE` can be
+chosen. Audit/falsification must confirm ex-ante validity, research/sandbox
+scope, no official promotion, CVaR research, exposure, turnover, drawdown,
+stability, subperiod behavior, friction sensitivity, regime dependency and
+economic interpretability.
 
 ## Stop Required
 
@@ -83,6 +126,7 @@ Freeze is permitted only after:
   available;
 - comparison/falsification across families was recorded;
 - `reports/state/sniper_decision_ledger.md` was updated.
+- any surviving research-only candidate was audited/falsified.
 
 Human decision is required only for external resources, specification changes,
 official promotion, paper readiness, credentials or paid APIs, operation outside
@@ -95,6 +139,10 @@ Allowed modes:
 - `START_RESEARCH_ONLY_THESIS`
 - `CONTINUE_AUTONOMOUS`
 - `RUN_GLOBAL_REAUDIT`
+- `RUN_GLOBAL_REAUDIT_CANDIDATE`
+- `CANDIDATE_STABILITY_GATE`
+- `CANDIDATE_FALSIFICATION_GATE`
+- `UPDATE_DRAFT_PR`
 - `FREEZE_LINE` only after the full freeze requirements are satisfied.
 - `STOP_FOR_HUMAN_DECISION` only for the explicit external/governance cases
   listed above.

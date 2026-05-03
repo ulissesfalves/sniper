@@ -75,6 +75,7 @@ metrics, blockers, risks and objective recommendation.
 Allowed without a new user decision:
 
 - execute autonomous full phase research missions inside this repository;
+- use internal strategic decision rubrics when the next action is ambiguous;
 - create gates;
 - choose the next open gap from `reports/state/sniper_spec_gap_backlog.yaml`;
 - choose up to 3 materially different research-only hypothesis families per mission;
@@ -90,6 +91,27 @@ Allowed without a new user decision:
 - update the existing draft PR branch;
 - update `reports/state/**`;
 - push the working branch when a clean gate commit is useful.
+
+Human decision is last resort. Do not stop for human choice while there is a
+safe internal path such as `RUN_GLOBAL_REAUDIT`, `RUN_GLOBAL_REAUDIT_CANDIDATE`,
+`START_RESEARCH_ONLY_THESIS`, `CONTINUE_AUTONOMOUS`, a stability gate, a
+falsification gate, or an internal strategic decision rubric.
+
+When a research-only candidate survives, the next autonomous action is candidate
+audit/falsification before freeze or human decision. Current survivor:
+
+- policy: `short_high_p_bma_k3_p60_h70`;
+- scope: research/sandbox only;
+- median Sharpe: `1.361592`;
+- min Sharpe: `0.261111`;
+- median active days: `471.0`;
+- max CVaR95: `0.00344841`;
+- still below `sr_needed=4.47`;
+- not promotable.
+
+Next recommended mode: `RUN_GLOBAL_REAUDIT_CANDIDATE`.
+Next suggested gate: `phase5_research_candidate_global_reaudit_gate`.
+`FREEZE_LINE` is forbidden until the survivor is audited/falsified.
 
 Must stop before:
 
@@ -135,7 +157,8 @@ governance violation.
 
 Do not use human strategy as a stop condition while there is an open gap,
 defensible research-only hypothesis, internal correction, unfinished
-quantitative diagnostic, or possible sandbox/research module inside the repo.
+quantitative diagnostic, possible sandbox/research module, surviving
+research-only candidate, or candidate audit/falsification gate inside the repo.
 
 ## State Update Obligation
 

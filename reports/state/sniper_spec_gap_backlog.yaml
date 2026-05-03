@@ -32,12 +32,13 @@ gaps:
     allowed_actions:
       - "CONTINUE_AUTONOMOUS"
       - "START_RESEARCH_ONLY_THESIS"
+      - "RUN_GLOBAL_REAUDIT_CANDIDATE"
       - "FREEZE_LINE"
     forbidden_actions:
       - "PROMOTE_OFFICIAL"
       - "RELAX_DSR_THRESHOLD"
       - "DECLARE_READINESS"
-    suggested_gate: "autonomous_full_phase_family_selection_gate"
+    suggested_gate: "phase5_research_candidate_global_reaudit_gate"
     stop_condition_if_unresolved: "No promotion or readiness claim is allowed while honest DSR remains 0.0."
 
   - id: GAP-DSR-002
@@ -75,6 +76,7 @@ gaps:
       - "reports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/portfolio_cvar_report.json"
       - "reports/gates/phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate/gate_report.json"
       - "reports/gates/phase5_research_signal_polarity_stability_correction_gate/gate_report.json"
+      - "phase5_research_candidate_global_reaudit_gate is the next required candidate audit"
       - "positions={}"
       - "total_exposure_pct=0.0"
       - "economic_robustness_status=NOT_PROVEN_ZERO_EXPOSURE"
@@ -87,10 +89,11 @@ gaps:
       - "CONTINUE_AUTONOMOUS"
       - "START_RESEARCH_ONLY_THESIS"
       - "RUN_GLOBAL_REAUDIT"
+      - "RUN_GLOBAL_REAUDIT_CANDIDATE"
     forbidden_actions:
       - "TREAT_ZERO_EXPOSURE_CVAR_AS_ECONOMIC_ROBUSTNESS"
       - "DECLARE_PAPER_READINESS"
-    suggested_gate: "autonomous_full_phase_family_selection_gate"
+    suggested_gate: "phase5_research_candidate_global_reaudit_gate"
     stop_condition_if_unresolved: "Paper readiness is forbidden unless nonzero exposure or approved stress evidence exists."
 
   - id: GAP-CVAR-002
@@ -138,11 +141,12 @@ gaps:
     allowed_actions:
       - "CONTINUE_AUTONOMOUS"
       - "START_RESEARCH_ONLY_THESIS"
+      - "RUN_GLOBAL_REAUDIT_CANDIDATE"
       - "FREEZE_LINE"
     forbidden_actions:
       - "PROMOTE_OFFICIAL"
       - "TREAT_RESEARCH_AS_OFFICIAL"
-    suggested_gate: "autonomous_full_phase_family_selection_gate"
+    suggested_gate: "phase5_research_candidate_global_reaudit_gate"
     stop_condition_if_unresolved: "Do not promote cross-sectional while this status remains."
 
   - id: GAP-PAPER-001
@@ -318,6 +322,8 @@ gaps:
       - "reports/state/sniper_autonomous_runbook.md"
       - "fail_abandon_does_not_end_mission_when_materially_different_hypothesis_exists"
       - "freeze_requires_two_materially_different_families_and_family_comparison"
+      - "human_decision_is_last_resort"
+      - "surviving_research_candidate_requires_autonomous_audit_or_falsification"
     source_files:
       - "AGENTS.md"
       - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
@@ -327,6 +333,7 @@ gaps:
       - "CONTINUE_AUTONOMOUS"
       - "START_RESEARCH_ONLY_THESIS"
       - "RUN_GLOBAL_REAUDIT"
+      - "RUN_GLOBAL_REAUDIT_CANDIDATE"
       - "FREEZE_LINE"
     forbidden_actions:
       - "OFFICIAL_PROMOTION"
@@ -335,8 +342,8 @@ gaps:
       - "A4_REOPEN"
       - "THRESHOLD_RELAXATION"
       - "REAL_TRADING"
-    suggested_gate: "autonomous_full_phase_family_selection_gate"
-    stop_condition_if_unresolved: "A mission must continue within budget while defensible research-only hypotheses remain inside the repo."
+    suggested_gate: "phase5_research_candidate_global_reaudit_gate"
+    stop_condition_if_unresolved: "A mission must continue within budget while defensible research-only hypotheses or candidate audit/falsification gates remain inside the repo."
 
   - id: GAP-ALTEXANTE-001
     title: Alternative p_bma/sigma/hmm long-only ex-ante family failed
@@ -380,6 +387,8 @@ gaps:
       - "short_exposure_is_research_sandbox_only=true"
       - "dsr_honest=0.0"
       - "sr_needed=4.47"
+      - "human_decision_is_last_resort"
+      - "FREEZE_LINE is forbidden before candidate audit/falsification"
     source_files:
       - "services/ml_engine/phase5_research_signal_polarity_long_short.py"
       - "services/ml_engine/phase5_research_signal_polarity_stability_correction.py"
@@ -387,6 +396,9 @@ gaps:
       - "tests/unit/test_phase5_research_signal_polarity_long_short.py"
       - "tests/unit/test_phase5_research_full_phase_family_comparison.py"
     allowed_actions:
+      - "RUN_GLOBAL_REAUDIT_CANDIDATE"
+      - "CANDIDATE_STABILITY_GATE"
+      - "CANDIDATE_FALSIFICATION_GATE"
       - "RUN_GLOBAL_REAUDIT"
       - "CONTINUE_AUTONOMOUS"
       - "START_RESEARCH_ONLY_THESIS"
@@ -395,5 +407,35 @@ gaps:
       - "DECLARE_PAPER_READINESS"
       - "TREAT_SHORT_SANDBOX_AS_OFFICIAL"
       - "RELAX_DSR_THRESHOLD"
-    suggested_gate: "phase5_research_signal_polarity_candidate_global_review_gate"
-    stop_condition_if_unresolved: "The candidate can be reviewed as research-only, but cannot be promoted while DSR remains 0.0 and official CVaR remains zero exposure."
+    suggested_gate: "phase5_research_candidate_global_reaudit_gate"
+    stop_condition_if_unresolved: "The candidate requires autonomous audit/falsification before freeze or human decision; it cannot be promoted while DSR remains 0.0 and official CVaR remains zero exposure."
+
+  - id: GAP-AUTODECISION-001
+    title: Human decision is last resort after internal strategic decision
+    type: governance_state
+    severity: high
+    status: resolved
+    evidence:
+      - ".agents/skills/sniper-autonomous-implementation-manager/SKILL.md"
+      - "AGENTS.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+      - "candidate_survival_protocol_requires_RUN_GLOBAL_REAUDIT_CANDIDATE"
+      - "FREEZE_LINE forbidden before candidate audit/falsification"
+    source_files:
+      - "AGENTS.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+    allowed_actions:
+      - "RUN_GLOBAL_REAUDIT_CANDIDATE"
+      - "CANDIDATE_STABILITY_GATE"
+      - "CANDIDATE_FALSIFICATION_GATE"
+      - "UPDATE_DRAFT_PR"
+      - "CONTINUE_AUTONOMOUS"
+    forbidden_actions:
+      - "STOP_FOR_HUMAN_DECISION_WHILE_INTERNAL_GATE_EXISTS"
+      - "FREEZE_LINE_BEFORE_CANDIDATE_AUDIT_OR_FALSIFICATION"
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+    suggested_gate: "phase5_research_candidate_global_reaudit_gate"
+    stop_condition_if_unresolved: "Do not request human strategy or freeze while candidate audit/falsification can be run inside the repo."

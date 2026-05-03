@@ -40,6 +40,7 @@ Skills conceituais que devem governar esta missão:
 - sniper-gate-result-reviewer
 - sniper-global-spec-adherence-audit
 - sniper-next-step-prompt-builder
+- sniper-strategic-decision-governor
 
 Você não precisa pedir ao usuário para chamar essas skills manualmente. Use as regras delas como política interna da missão.
 
@@ -96,6 +97,117 @@ Quando uma hipótese research-only falhar:
 
 Não parar apenas porque uma hipótese falhou. Não pedir ao usuário para escolher a próxima hipótese se ainda houver gap aberto no backlog, hipótese research-only defensável, correção interna possível, diagnóstico quantitativo ainda não feito ou possibilidade de módulo funcional sandbox/research dentro do repo.
 
+HUMAN_DECISION_IS_LAST_RESORT
+
+A skill só pode parar para decisão humana quando:
+- precisar de artifacts/dados fora do repo;
+- precisar de credencial, API paga ou acesso externo;
+- precisar operar fora da pasta autorizada;
+- precisar fazer merge;
+- precisar promover official;
+- precisar declarar paper readiness;
+- precisar mudar especificação;
+- precisar operar capital real;
+- precisar aceitar risco de produto/negócio que não seja técnico.
+
+A skill NÃO pode parar para decisão humana quando:
+- há candidata research-only sobrevivente;
+- há próximo gate de auditoria possível;
+- há próximo gate de falsificação possível;
+- há próximo gate de estabilidade possível;
+- há decisão estratégica que pode ser tomada por rubrica;
+- há opção de RUN_GLOBAL_REAUDIT;
+- há opção de START_RESEARCH_ONLY_THESIS;
+- há opção de CONTINUE_AUTONOMOUS.
+
+INTERNAL_STRATEGIC_DECISION_PROTOCOL
+
+Quando a skill encontrar uma situação que marcaria como "decisão humana", executar primeiro uma decisão interna equivalente à sniper-strategic-decision-governor.
+
+A rubrica deve escolher entre:
+- RUN_GLOBAL_REAUDIT;
+- CONTINUE_AUTONOMOUS;
+- START_RESEARCH_ONLY_THESIS;
+- FREEZE_LINE;
+- UPDATE_DRAFT_PR;
+- STOP_FOR_EXTERNAL_RESOURCE.
+
+Tomar a decisão com base em:
+- aderência à especificação;
+- redução real de blocker;
+- risco de governança;
+- evidência reproduzível;
+- chance de produzir módulo funcional;
+- risco de mascarar DSR/CVaR/promotabilidade;
+- existência de candidata research-only sobrevivente.
+
+Se houver candidata research-only sobrevivente, a ação padrão deve ser RUN_GLOBAL_REAUDIT ou gate de falsificação/estabilidade específico, não decisão humana.
+
+CANDIDATE_SURVIVAL_PROTOCOL
+
+Se uma missão encontrar candidata research-only sobrevivente, como `short_high_p_bma_k3_p60_h70`, continuar automaticamente com a sequência:
+
+A) RUN_GLOBAL_REAUDIT_CANDIDATE
+- auditar a candidata contra especificação e governança;
+- confirmar se usa apenas informação ex-ante;
+- confirmar que é research/sandbox;
+- confirmar que não promove official;
+- confirmar métricas, CVaR research, exposição, turnover, drawdown, estabilidade e subperíodos.
+
+B) CANDIDATE_STABILITY_GATE
+- testar estabilidade temporal;
+- testar sensibilidade a parâmetros;
+- testar subperíodos;
+- testar custos/fricção;
+- testar dependência de regime;
+- testar se o sinal é economicamente interpretável.
+
+C) CANDIDATE_FALSIFICATION_GATE
+- tentar falsificar com splits, custos, thresholds e stress;
+- se falhar, abandonar;
+- se sobreviver, classificar como RESEARCH_CANDIDATE_NOT_PROMOTABLE.
+
+D) UPDATE_STATE_AND_PR_DRAFT
+- atualizar reports/state/**;
+- atualizar PR draft;
+- não abrir PR ready;
+- não promover official.
+
+RESEARCH_CANDIDATE_NEXT_ACTION
+
+Se uma candidata research-only tiver Sharpe mediano positivo, min Sharpe positivo, exposição não zero e CVaR research não zero calculado, mas ainda estiver abaixo de sr_needed e ainda não for promotable, a decisão correta NÃO é parar para decisão humana.
+
+A decisão correta é:
+- executar auditoria global focada na candidata;
+- executar gate de estabilidade/falsificação;
+- registrar como candidata research-only;
+- manter bloqueio de promoção.
+
+FREEZE_LINE_RESTRICTION
+
+FREEZE_LINE só pode ser escolhido se:
+- nenhuma candidata research-only sobreviveu;
+- ou a candidata sobrevivente falhou em auditoria/falsificação;
+- ou não há hipótese materialmente nova;
+- ou o orçamento máximo foi atingido;
+- ou continuar exigiria recurso externo/mudança de especificação/promoção.
+
+Se houver candidata sobrevivente, FREEZE_LINE é proibido antes de auditoria/falsificação da candidata.
+
+AUTONOMOUS_REAUDIT_TRIGGER
+
+Após missão full-phase com candidata sobrevivente, executar ou recomendar como próximo gate interno:
+
+phase5_research_candidate_global_reaudit_gate
+
+Objetivo:
+Auditar a candidata research-only sobrevivente contra especificação, governança, ex-ante validity, robustez e blockers remanescentes.
+
+STOP CONDITION UPDATE
+
+Substituir qualquer regra operacional equivalente a "revisar candidata research-only exige decisão humana" por:
+"revisar candidata research-only exige gate autônomo de auditoria/falsificação, salvo se houver recurso externo ou mudança de especificação."
+
 AUTONOMOUS FULL PHASE EXECUTION POLICY
 
 Orçamento autônomo por missão:
@@ -148,7 +260,8 @@ FASE D — Validação e gate
 - Fazer commit incremental.
 
 FASE E — Decisão autônoma
-- Se PASS research-only: registrar candidata, não promover.
+- Se PASS research-only sem candidata funcional: registrar candidata, não promover.
+- Se PASS research-only com candidata sobrevivente: executar CANDIDATE_SURVIVAL_PROTOCOL antes de considerar parada.
 - Se PARTIAL/correct: tentar até 2 correções internas no mesmo gate/família, se forem defensáveis.
 - Se FAIL/abandon: escolher próxima hipótese materialmente nova.
 - Se INCONCLUSIVE por artifact externo: parar e pedir artifact.
@@ -206,6 +319,10 @@ A missão só deve parar antes de completar as fases se:
 - a quantidade de mudanças ficar grande demais para revisão humana razoável.
 
 Não usar "decisão humana" como stop condition se ainda houver:
+- candidata research-only sobrevivente;
+- próximo gate de auditoria, estabilidade ou falsificação possível;
+- decisão estratégica que possa ser tomada por rubrica interna;
+- opção segura de RUN_GLOBAL_REAUDIT, START_RESEARCH_ONLY_THESIS ou CONTINUE_AUTONOMOUS;
 - gap aberto no backlog;
 - hipótese research-only defensável;
 - correção interna possível;
@@ -301,7 +418,7 @@ Pare e entregue relatório final se qualquer condição ocorrer:
 
 1. Todos os gates necessários para a próxima fase forem PASS/advance.
 2. A mesma classe de hipótese falhar 3 vezes sem ganho material.
-3. Uma decisão de produto/estratégia depender do usuário, somente se não houver gap aberto, hipótese research-only defensável, correção interna possível, diagnóstico quantitativo pendente ou módulo funcional sandbox/research viável.
+3. Uma decisão de produto/estratégia depender do usuário, somente depois de executar INTERNAL_STRATEGIC_DECISION_PROTOCOL e confirmar que não há candidata research-only sobrevivente, próximo gate de auditoria/falsificação/estabilidade, opção RUN_GLOBAL_REAUDIT, opção START_RESEARCH_ONLY_THESIS, opção CONTINUE_AUTONOMOUS, gap aberto, hipótese research-only defensável, correção interna possível, diagnóstico quantitativo pendente ou módulo funcional sandbox/research viável.
 4. A correção exigir credenciais externas, API paga, dado privado ou acesso que não existe.
 5. Houver risco de ordem real, capital real ou operação fora de paper/testnet.
 6. O repositório entrar em estado inconsistente que não possa ser recuperado com segurança.
@@ -371,3 +488,8 @@ Ao parar, entregue:
 24. Candidata sobrevivente, se houver.
 25. Módulos funcionais implementados.
 26. Recomendação final: continuar autonomamente, atualizar PR draft, congelar linha ou pedir recurso externo.
+27. Se houver candidata sobrevivente: gate de auditoria executado ou próximo gate autônomo executável.
+28. Se a candidata foi falsificada ou permanece viva.
+29. Por que a candidata ainda não é promotable.
+30. Próximo gate autônomo.
+31. Se pode continuar autonomamente.

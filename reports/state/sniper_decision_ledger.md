@@ -1,6 +1,6 @@
 # SNIPER Decision Ledger
 
-Updated: 2026-05-02T14:42:38Z
+Updated: 2026-05-03T13:16:23Z
 
 ## Closed Decisions
 
@@ -29,15 +29,21 @@ Updated: 2026-05-02T14:42:38Z
 | Signal-polarity research family | Partial then corrected | `phase5_research_signal_polarity_long_short_gate` found positive median alpha for `short_high_p_bma_k3` (`1.768215`) but required correction because min combo Sharpe was `-0.501947`. |
 | Signal-polarity stability correction | Research-only survivor | `phase5_research_signal_polarity_stability_correction_gate` passed/advanced as sandbox research only: `short_high_p_bma_k3_p60_h70` had median combo Sharpe `1.361592`, min combo Sharpe `0.261111`, median active days `471.0`, and max CVaR95 `0.00344841`. It is not official and still below the DSR promotion bar. |
 | Full phase family comparison | Research-only survivor selected | `phase5_research_full_phase_family_comparison_gate` compared six families/gates, abandoned Stage A/rank-score/alternative long-only lines, and preserved `short_high_p_bma_k3_p60_h70` as the only surviving research candidate. No official promotion, paper readiness, A3/A4 reopening or threshold relaxation occurred. |
+| Human decision last resort | Active governance policy | Codex must use internal strategic decision rubrics before stopping for human decision. Human decision is allowed only for external artifacts/data, credentials/API/access, operation outside repo, merge, official promotion, paper readiness, specification change, real capital, or non-technical product/business risk acceptance. |
+| Candidate audit before freeze | Active governance policy | Because `short_high_p_bma_k3_p60_h70` survived as research-only, `FREEZE_LINE` is forbidden before autonomous audit/falsification. Next mode is `RUN_GLOBAL_REAUDIT_CANDIDATE`; next gate is `phase5_research_candidate_global_reaudit_gate`. |
 
 ## Current Decision
 
 The current mission produced a reviewable research-only survivor:
-`short_high_p_bma_k3_p60_h70`. The next safe mode is `RUN_GLOBAL_REAUDIT` or
-draft PR update/review, not promotion. The survivor is sandbox-only, uses short
-exposure, remains below `sr_needed=4.47`, and cannot clear
-`dsr_honest=0.0`. Do not promote, merge, declare paper readiness, reopen A3/A4
-or relax thresholds.
+`short_high_p_bma_k3_p60_h70`. The next safe mode is
+`RUN_GLOBAL_REAUDIT_CANDIDATE`; the next gate is
+`phase5_research_candidate_global_reaudit_gate`. The survivor is sandbox-only,
+uses short exposure, has median Sharpe `1.361592`, min Sharpe `0.261111`,
+median active days `471.0`, max CVaR95 `0.00344841`, remains below
+`sr_needed=4.47`, and cannot clear `dsr_honest=0.0`. Do not promote, merge,
+declare paper readiness, reopen A3/A4, relax thresholds, freeze before
+candidate audit/falsification, or stop for human decision while this internal
+gate can run.
 
 ## Required Review Before Promotion
 

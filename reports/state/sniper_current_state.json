@@ -17,7 +17,7 @@
     "status": "PASS",
     "decision": "advance"
   },
-  "latest_decision": "RESEARCH_ONLY_SIGNAL_POLARITY_SURVIVOR_IDENTIFIED",
+  "latest_decision": "RUN_GLOBAL_REAUDIT_CANDIDATE_REQUIRED",
   "resolved_blockers": [
     "source_doc_alignment_restored",
     "phase4_official_artifacts_found_and_hashed",
@@ -58,6 +58,10 @@
     "START_RESEARCH_ONLY_THESIS",
     "CONTINUE_AUTONOMOUS",
     "RUN_GLOBAL_REAUDIT",
+    "RUN_GLOBAL_REAUDIT_CANDIDATE",
+    "CANDIDATE_STABILITY_GATE",
+    "CANDIDATE_FALSIFICATION_GATE",
+    "UPDATE_DRAFT_PR",
     "FREEZE_LINE",
     "STOP_FOR_HUMAN_DECISION"
   ],
@@ -73,7 +77,9 @@
     "DECLARE_PAPER_READINESS",
     "TREAT_RESEARCH_AS_OFFICIAL",
     "TREAT_ZERO_EXPOSURE_CVAR_AS_ECONOMIC_ROBUSTNESS",
-    "USE_EXTERNAL_RESOURCE_NOT_IN_REPO"
+    "USE_EXTERNAL_RESOURCE_NOT_IN_REPO",
+    "FREEZE_LINE_BEFORE_CANDIDATE_AUDIT_OR_FALSIFICATION",
+    "STOP_FOR_HUMAN_DECISION_WHILE_INTERNAL_GATE_EXISTS"
   ],
   "autonomous_exploration_policy": {
     "research_only_failure_requires_human_decision": false,
@@ -94,6 +100,10 @@
     "freeze_only_after_full_phase_requirements": true,
     "stop_for_external_resource_or_spec_change": true,
     "human_decision_only_for_external_or_governance_cases": true,
+    "human_decision_is_last_resort": true,
+    "internal_strategic_decision_required_before_human_stop": true,
+    "surviving_candidate_requires_autonomous_audit_or_falsification": true,
+    "freeze_line_forbidden_before_candidate_audit_or_falsification": true,
     "freeze_requirements": [
       "at_least_2_materially_different_families_tested",
       "explicit_dsr_diagnostic",
@@ -198,9 +208,25 @@
     ],
     "surviving_promotable_candidates": 0,
     "can_continue_autonomously_under_current_policy": true,
-    "requires_external_artifact": false
+    "requires_external_artifact": false,
+    "candidate_review_status": "PENDING_AUTONOMOUS_GLOBAL_REAUDIT",
+    "next_candidate_gate": "phase5_research_candidate_global_reaudit_gate"
   },
-  "next_recommended_mode": "RUN_GLOBAL_REAUDIT",
-  "next_recommended_gate": "phase5_research_signal_polarity_candidate_global_review_gate",
-  "updated_at_utc": "2026-05-02T14:42:38Z"
+  "internal_strategic_decision_policy": {
+    "human_decision_is_last_resort": true,
+    "decision_rubric_modes": [
+      "RUN_GLOBAL_REAUDIT",
+      "RUN_GLOBAL_REAUDIT_CANDIDATE",
+      "CONTINUE_AUTONOMOUS",
+      "START_RESEARCH_ONLY_THESIS",
+      "FREEZE_LINE",
+      "UPDATE_DRAFT_PR",
+      "STOP_FOR_EXTERNAL_RESOURCE"
+    ],
+    "default_when_research_candidate_survives": "RUN_GLOBAL_REAUDIT_CANDIDATE",
+    "freeze_line_allowed_before_candidate_audit": false
+  },
+  "next_recommended_mode": "RUN_GLOBAL_REAUDIT_CANDIDATE",
+  "next_recommended_gate": "phase5_research_candidate_global_reaudit_gate",
+  "updated_at_utc": "2026-05-03T13:16:23Z"
 }

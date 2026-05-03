@@ -16,18 +16,23 @@
 12. Update `reports/state/**`.
 13. Commit one coherent gate.
 14. Push the current branch only when useful for the existing draft PR.
-15. Continue through materially different research-only hypotheses until budget
-    exhaustion or a real stop condition.
+15. Use internal strategic decision rubrics before any human-decision stop.
+16. Continue through materially different research-only hypotheses or candidate
+    audit/falsification gates until budget exhaustion or a real stop condition.
 
 ## Current Recommended Mode
 
-`CONTINUE_AUTONOMOUS`
+`RUN_GLOBAL_REAUDIT_CANDIDATE`
 
 Allowed mission modes:
 
 - `START_RESEARCH_ONLY_THESIS`
 - `CONTINUE_AUTONOMOUS`
 - `RUN_GLOBAL_REAUDIT`
+- `RUN_GLOBAL_REAUDIT_CANDIDATE`
+- `CANDIDATE_STABILITY_GATE`
+- `CANDIDATE_FALSIFICATION_GATE`
+- `UPDATE_DRAFT_PR`
 - `FREEZE_LINE` only after full freeze requirements are satisfied.
 - `STOP_FOR_HUMAN_DECISION` only for external/governance cases.
 
@@ -75,7 +80,10 @@ FASE D - Validation and gate:
 
 FASE E - Autonomous decision:
 
-- PASS research-only: register as candidate, never promote;
+- PASS research-only without a functional survivor: register as candidate,
+  never promote;
+- PASS research-only with a surviving candidate: run autonomous candidate
+  audit/falsification before considering freeze or human decision;
 - PARTIAL/correct: attempt up to 2 internal corrections when defensible;
 - FAIL/abandon: mark falsified and choose the next materially new hypothesis;
 - INCONCLUSIVE external artifact: stop and request artifact;
@@ -102,6 +110,28 @@ Freeze is allowed only after:
   available;
 - family comparison/falsification was recorded;
 - `reports/state/sniper_decision_ledger.md` was updated.
+- any surviving research-only candidate was audited/falsified.
+
+## Human Decision Last Resort
+
+Human decision is allowed only for external artifacts/data, credentials, paid or
+private API/access, operation outside the authorized repo, merge, official
+promotion, paper readiness, specification change, real capital, or explicit
+non-technical product/business risk acceptance.
+
+Do not stop for human decision while any internal path remains:
+
+- surviving research-only candidate;
+- `RUN_GLOBAL_REAUDIT` or `RUN_GLOBAL_REAUDIT_CANDIDATE`;
+- `START_RESEARCH_ONLY_THESIS` or `CONTINUE_AUTONOMOUS`;
+- candidate stability or falsification gate;
+- internal strategic decision rubric.
+
+If the next step is ambiguous, apply a strategic decision rubric equivalent to
+`sniper-strategic-decision-governor` and choose among:
+`RUN_GLOBAL_REAUDIT`, `RUN_GLOBAL_REAUDIT_CANDIDATE`, `CONTINUE_AUTONOMOUS`,
+`START_RESEARCH_ONLY_THESIS`, `FREEZE_LINE`, `UPDATE_DRAFT_PR`, or
+`STOP_FOR_EXTERNAL_RESOURCE`.
 
 ## Functional Phase Order
 
@@ -163,11 +193,22 @@ Current mission update:
   as research-only and non-promotable.
 
 Current recommended next gate:
-`phase5_research_signal_polarity_candidate_global_review_gate`.
+`phase5_research_candidate_global_reaudit_gate`.
 
-Recommended next mode: `RUN_GLOBAL_REAUDIT` or draft PR update/review. Do not
-promote the survivor: it uses short sandbox exposure and remains below
-`sr_needed=4.47` while `dsr_honest=0.0`.
+Recommended next mode: `RUN_GLOBAL_REAUDIT_CANDIDATE`. Do not promote the
+survivor: it uses short sandbox exposure and remains below `sr_needed=4.47`
+while `dsr_honest=0.0`.
+
+Candidate survival protocol:
+
+1. Run `phase5_research_candidate_global_reaudit_gate`.
+2. Confirm ex-ante validity, research/sandbox scope, no official promotion,
+   exposure, CVaR research, turnover, drawdown, stability and subperiods.
+3. If needed, run candidate stability/falsification gates for parameters,
+   costs, friction, splits, thresholds, stress and regime dependency.
+4. If the candidate survives, keep it
+   `RESEARCH_CANDIDATE_NOT_PROMOTABLE`.
+5. Update `reports/state/**` and the existing draft PR. Do not open PR ready.
 
 ## Forbidden Interpretations
 
@@ -176,14 +217,17 @@ promote the survivor: it uses short sandbox exposure and remains below
 - Research baseline is not official.
 - PR #1 is not merge/readiness approval.
 - Cross-sectional remains not promotable.
+- `short_high_p_bma_k3_p60_h70` is not official and does not clear DSR.
 
 ## Stop Conditions
 
 Stop if the next step requires:
 
-- human product/strategy decision only when no internal research/sandbox path remains;
+- human product/strategy decision only after internal strategic decision and
+  only when no internal research/sandbox/candidate audit path remains;
 - exploration budget exhaustion;
-- no materially new hypothesis;
+- no materially new hypothesis and no surviving candidate audit/falsification
+  gate;
 - external artifact or private data not present;
 - credential, paid API or real capital;
 - merge or ready PR transition;
@@ -194,4 +238,6 @@ Stop if the next step requires:
 
 Do not stop for human decision while there is an open gap, defensible
 research-only hypothesis, internal correction, unfinished quantitative
-diagnostic, or possible sandbox/research module inside the repo.
+diagnostic, possible sandbox/research module, surviving research candidate, or
+candidate audit/falsification gate inside the repo. `FREEZE_LINE` is prohibited
+before auditing/falsifying the surviving candidate.
