@@ -25,7 +25,7 @@
 
 ## Current Recommended Mode
 
-`POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT`
+`FULL_FREEZE_AFTER_REAUDIT`
 
 Allowed mission modes:
 
@@ -254,23 +254,46 @@ Current candidate audit/falsification update:
   `short_high_p_bma_k3_p60_h70` as `RESEARCH_CANDIDATE_FALSIFIED`.
 
 Recommended next gate:
-`phase5_post_candidate_falsification_global_reaudit_gate`.
+`none_until_materially_new_hypothesis_or_external_resource`.
 
-Recommended next mode: `POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT`. Execute
-it automatically in the next mission. Do not promote the abandoned candidate:
-it used short sandbox exposure, remained below `sr_needed=4.47`, and failed
+Recommended next mode: `UPDATE_DRAFT_PR` / human review of the existing draft
+PR as governance/research evidence. Do not promote the abandoned candidates:
+they used sandbox/research exposure, remained below `sr_needed=4.47`, and failed
 autonomous falsification while `dsr_honest=0.0`.
 
 Post-falsification protocol:
 
-1. Run `phase5_post_candidate_falsification_global_reaudit_gate` against the
-   updated Phase5 candidate gates.
-2. Confirm that no official promotion, paper readiness, A3/A4 reopening or
-   threshold relaxation occurred.
-3. Decide automatically between a materially new research-only thesis,
-   continued autonomous gate work and a governed freeze review. Do not revive
-   `short_high_p_bma_k3_p60_h70` without materially new evidence.
-4. Update `reports/state/**` and the existing draft PR. Do not open PR ready.
+1. `phase5_post_candidate_falsification_global_reaudit_gate` was executed and
+   passed.
+2. `phase5_research_cluster_conditioned_polarity_gate` tested a materially new
+   in-repo family and found `cluster_2_long_high_short_low_p60_h70_k3`.
+3. `phase5_research_cluster_conditioned_polarity_falsification_gate` falsified
+   that candidate with 13 hard falsifiers.
+4. `phase5_research_cluster_conditioned_polarity_decision_gate` recorded the
+   candidate as falsified.
+5. `phase5_post_candidate_falsification_governed_freeze_gate` passed with
+   `FULL_FREEZE_AFTER_REAUDIT`.
+6. Update `reports/state/**` and the existing draft PR. Do not open PR ready.
+
+## Current Closed-Loop Result
+
+Final classification: `FULL_FREEZE_AFTER_REAUDIT`.
+
+Gates added in the closed-loop mission:
+
+- `phase5_post_candidate_falsification_global_reaudit_gate`: `PASS/advance`;
+- `phase5_research_cluster_conditioned_polarity_gate`: `PASS/advance`;
+- `phase5_research_cluster_conditioned_polarity_falsification_gate`:
+  `FAIL/abandon`;
+- `phase5_research_cluster_conditioned_polarity_decision_gate`:
+  `PASS/abandon`;
+- `phase5_post_candidate_falsification_governed_freeze_gate`: `PASS/freeze`.
+
+The current autonomous loop must stop because no safe material in-repo
+hypothesis remains after post-falsification reaudit and governed freeze. This is
+not promotion, not paper readiness and not merge approval. Future autonomous
+continuation requires materially new evidence, an external artifact/resource, or
+a new spec-safe research direction.
 
 ## Forbidden Interpretations
 
@@ -289,8 +312,8 @@ Stop if the next step requires:
 - human product/strategy decision only after internal strategic decision and
   only when no internal research/sandbox/candidate audit path remains;
 - exploration budget exhaustion;
-- no materially new hypothesis after candidate falsification and
-  post-falsification global reaudit;
+- no materially new hypothesis after candidate falsification,
+  post-falsification global reaudit and governed freeze;
 - external artifact or private data not present;
 - credential, paid API or real capital;
 - merge or ready PR transition;
@@ -303,4 +326,5 @@ Do not stop for human decision while there is an open gap, defensible
 research-only hypothesis, internal correction, unfinished quantitative
 diagnostic, possible sandbox/research module, post-falsification global reaudit,
 state update, draft PR update or governed freeze review inside the repo. The
-prior surviving candidate has now been audited and falsified.
+prior surviving candidate and the cluster-conditioned candidate have now been
+audited/falsified, and the current line is frozen after reaudit.

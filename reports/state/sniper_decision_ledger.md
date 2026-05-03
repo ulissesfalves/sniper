@@ -1,6 +1,6 @@
 # SNIPER Decision Ledger
 
-Updated: 2026-05-03T14:11:28Z
+Updated: 2026-05-03T18:00:12Z
 
 ## Closed Decisions
 
@@ -35,22 +35,29 @@ Updated: 2026-05-03T14:11:28Z
 | Candidate falsification | Failed/abandoned | `phase5_research_candidate_falsification_gate` found hard falsifiers: `temporal_subperiod_min_sharpe=-1.160839` and `extra_cost_20bps_min_sharpe=-0.12201`; leakage control passed. |
 | Candidate decision | Falsified | `phase5_research_candidate_decision_gate` classified `short_high_p_bma_k3_p60_h70` as `RESEARCH_CANDIDATE_FALSIFIED` and `PASS/abandon`. It remains research/sandbox only and cannot support promotion, readiness or official short exposure. |
 | Closed-loop autonomous execution | Authorized | `CLOSED_LOOP_AUTONOMOUS_EXECUTION_POLICY` authorizes Codex to execute safe technical next recommendations automatically inside the repo. `RUN_GLOBAL_REAUDIT`, `START_RESEARCH_ONLY_THESIS`, state updates, draft PR updates and governed freeze review are not valid human-decision stops when safe. |
+| Post-candidate falsification global reaudit | Passed | `phase5_post_candidate_falsification_global_reaudit_gate` confirmed `short_high_p_bma_k3_p60_h70` was falsified and selected `cluster_conditioned_polarity` as a safe material in-repo research thesis. |
+| Cluster-conditioned polarity family | Candidate found | `phase5_research_cluster_conditioned_polarity_gate` tested 24 policies and found `cluster_2_long_high_short_low_p60_h70_k3` with median Sharpe `1.183459`, min Sharpe `0.078586`, median active days `425.0`, and max CVaR95 `0.00151815`; research/sandbox only. |
+| Cluster-conditioned polarity falsification | Failed/abandoned | `phase5_research_cluster_conditioned_polarity_falsification_gate` found 13 hard falsifiers, including temporal thirds, 5/10/20 bps cost stresses, parameter variants and universe stress. |
+| Cluster-conditioned polarity decision | Falsified | `phase5_research_cluster_conditioned_polarity_decision_gate` classified `cluster_2_long_high_short_low_p60_h70_k3` as `CLUSTER_CONDITIONED_RESEARCH_CANDIDATE_FALSIFIED`; no promotion or readiness. |
+| Closed-loop governed freeze | Frozen | `phase5_post_candidate_falsification_governed_freeze_gate` passed with classification `FULL_FREEZE_AFTER_REAUDIT` after 5 material families, DSR diagnostic, research CVaR, family comparison and no surviving research candidate. |
 
 ## Current Decision
 
-The current mission audited and falsified the prior research-only survivor
-`short_high_p_bma_k3_p60_h70`. The next safe mode is
-`POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT`; the next gate is
-`phase5_post_candidate_falsification_global_reaudit_gate`. This must be
-executed automatically in the next autonomous mission because it is safe,
-internal to the repo and governance-allowed. Human decision is not required.
+The current mission executed the post-falsification global reaudit, tested the
+materially new `cluster_conditioned_polarity` family, falsified its candidate
+`cluster_2_long_high_short_low_p60_h70_k3`, and completed a governed freeze.
 
-After that reaudit, Codex must decide automatically between a materially new
-research-only thesis, continued autonomous gate work, draft PR update or a
-governed freeze review. Freeze is allowed only after the post-falsification
-reaudit confirms no materially new hypothesis remains executable inside the
-repo. Do not promote, merge, declare paper readiness, reopen A3/A4, relax
-thresholds, or treat the abandoned short-sandbox candidate as official support.
+The final classification is `FULL_FREEZE_AFTER_REAUDIT`. There is no surviving
+research-only candidate and no safe material in-repo hypothesis remains in the
+current backlog without using forbidden realized variables, changing the
+specification, relaxing thresholds, promoting official, declaring paper
+readiness, or reopening A3/A4.
+
+Human decision is not required to choose another internal gate because the
+current safe internal search space is frozen. The next action is draft PR update
+and human review as governance/research evidence only. Do not promote, merge,
+declare paper readiness, reopen A3/A4, relax thresholds, or treat any frozen
+research family as official support.
 
 ## Required Review Before Promotion
 

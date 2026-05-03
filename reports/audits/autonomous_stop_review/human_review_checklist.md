@@ -56,6 +56,22 @@
 - [ ] Confirmar classificacao final `RESEARCH_CANDIDATE_FALSIFIED`.
 - [ ] Confirmar que `short_high_p_bma_k3_p60_h70` foi abandonada e nao deve ser promovida.
 
+## Gates closed-loop post-falsification
+
+- [ ] Verificar `reports/gates/phase5_post_candidate_falsification_global_reaudit_gate/gate_report.json`.
+- [ ] Verificar `reports/gates/phase5_research_cluster_conditioned_polarity_gate/gate_report.json`.
+- [ ] Verificar `reports/gates/phase5_research_cluster_conditioned_polarity_falsification_gate/gate_report.json`.
+- [ ] Verificar `reports/gates/phase5_research_cluster_conditioned_polarity_decision_gate/gate_report.json`.
+- [ ] Verificar `reports/gates/phase5_post_candidate_falsification_governed_freeze_gate/gate_report.json`.
+- [ ] Confirmar que `phase5_post_candidate_falsification_global_reaudit_gate` foi `PASS/advance`.
+- [ ] Confirmar que `cluster_conditioned_polarity` foi a tese materialmente nova selecionada automaticamente.
+- [ ] Confirmar que `cluster_2_long_high_short_low_p60_h70_k3` teve mediana Sharpe `1.183459`, min Sharpe `0.078586`, dias ativos medianos `425.0` e CVaR95 max `0.00151815`.
+- [ ] Confirmar que essa candidata foi falsificada por 13 hard falsifiers.
+- [ ] Confirmar principais falsificadores: `temporal_subperiod_min_sharpe=-1.633204` e `extra_cost_20bps_min_sharpe=-0.493149`.
+- [ ] Confirmar classificacao final `FULL_FREEZE_AFTER_REAUDIT`.
+- [ ] Confirmar `remaining_safe_material_hypothesis_count=0`.
+- [ ] Confirmar que nenhuma dessas evidencias promove official ou declara paper readiness.
+
 ## Clean regeneration
 
 - [ ] Confirmar que `phase6_research_baseline_rehydration_clean_regeneration_gate` tem `clean_clone_or_equivalent=true`.
@@ -119,10 +135,20 @@
 
 - [ ] Esperado observado: `6 passed`.
 
+- [ ] Rodar ou revisar resultado closed-loop:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest tests/unit/test_phase5_post_candidate_falsification_global_reaudit.py tests/unit/test_phase5_research_cluster_conditioned_polarity.py tests/unit/test_phase5_post_candidate_falsification_governed_freeze.py tests/unit/test_gate_reports.py -q
+```
+
+- [ ] Esperado observado: `12 passed`.
+
 ## Decisao humana
 
 - [ ] Aprovar PR draft como evidencia de reprodutibilidade/governanca Phase6.
 - [ ] Nao aprovar promocao official.
 - [ ] Decidir se a linha cross-sectional deve ser congelada como research-only.
 - [ ] Revisar o abandono do candidato sandbox `short_high_p_bma_k3_p60_h70`.
-- [ ] Decidir se a proxima rodada deve ser auditoria global pos-falsificacao, nova tese research-only materialmente diferente, ou freeze governado; nao usar esta missao como promocao.
+- [ ] Revisar a classificacao `FULL_FREEZE_AFTER_REAUDIT`.
+- [ ] Nao pedir promocao official, paper readiness, merge ou reabertura A3/A4 a partir deste PR.
+- [ ] Proxima rodada autonoma so deve ocorrer com evidencia materialmente nova, artifact externo ou nova direcao research segura.

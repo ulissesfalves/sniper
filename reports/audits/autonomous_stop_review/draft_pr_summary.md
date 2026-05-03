@@ -8,7 +8,7 @@ Base recomendada: `codex/openclaw-sniper-handoff`
 
 Classificacao: `DRAFT_PR_REVIEW_READY`
 
-Resultado final da missao: `PARTIAL/correct`
+Resultado final da missao: `FULL_FREEZE_AFTER_REAUDIT`
 
 Atualizacao full-phase: `PASS/advance` como evidencia research-only, sem promocao.
 
@@ -75,6 +75,34 @@ resistiu a falsificacao temporal/custos. Ela nao deve ser promovida, nao deve
 ser tratada como suporte official de short exposure e nao sustenta paper
 readiness.
 
+## Atualizacao closed-loop autonomy
+
+A rodada `CLOSED_LOOP_AUTONOMOUS_EXECUTION` executou automaticamente a
+recomendacao segura pos-falsificacao e nao parou para decisao humana enquanto
+havia gate interno possivel:
+
+- `phase5_post_candidate_falsification_global_reaudit_gate`: `PASS/advance`;
+  confirmou a falsificacao de `short_high_p_bma_k3_p60_h70` e selecionou
+  `cluster_conditioned_polarity` como tese research/sandbox materialmente nova.
+- `phase5_research_cluster_conditioned_polarity_gate`: `PASS/advance`; testou
+  24 politicas e encontrou `cluster_2_long_high_short_low_p60_h70_k3` com
+  mediana Sharpe `1.183459`, min Sharpe `0.078586`, mediana de dias ativos
+  `425.0` e CVaR95 max `0.00151815`.
+- `phase5_research_cluster_conditioned_polarity_falsification_gate`:
+  `FAIL/abandon`; encontrou 13 hard falsifiers, incluindo thirds temporais,
+  custos de 5/10/20 bps, sensibilidade parametrica e stress de universo.
+- `phase5_research_cluster_conditioned_polarity_decision_gate`: `PASS/abandon`;
+  classificou a candidata como
+  `CLUSTER_CONDITIONED_RESEARCH_CANDIDATE_FALSIFIED`.
+- `phase5_post_candidate_falsification_governed_freeze_gate`: `PASS/freeze`;
+  classificacao final `FULL_FREEZE_AFTER_REAUDIT` depois de 5 familias
+  materiais testadas e zero candidata sobrevivente.
+
+Conclusao closed-loop: a branch tem novo modulo research/sandbox de avaliacao
+cluster-conditioned e evidencia de falsificacao, mas a linha atual esta
+congelada. O PR continua sendo apenas evidencia de governanca/reprodutibilidade
+e pesquisa, nao readiness operacional.
+
 ## Commits da branch
 
 Commits acima de `codex/openclaw-sniper-handoff`:
@@ -108,6 +136,11 @@ Commits acima de `codex/openclaw-sniper-handoff`:
 | `phase5_research_candidate_stability_gate` | `PARTIAL` | `correct` | Encontrou fragilidade temporal, parametrica e de custo. |
 | `phase5_research_candidate_falsification_gate` | `FAIL` | `abandon` | Falsificou a candidata por thirds temporais e custo extra de 20 bps. |
 | `phase5_research_candidate_decision_gate` | `PASS` | `abandon` | Registrou `RESEARCH_CANDIDATE_FALSIFIED`. |
+| `phase5_post_candidate_falsification_global_reaudit_gate` | `PASS` | `advance` | Reauditou a linha pos-falsificacao e escolheu tese cluster-conditioned. |
+| `phase5_research_cluster_conditioned_polarity_gate` | `PASS` | `advance` | Encontrou candidata research/sandbox cluster-conditioned. |
+| `phase5_research_cluster_conditioned_polarity_falsification_gate` | `FAIL` | `abandon` | Falsificou a candidata por temporal/custos/parametros/universo. |
+| `phase5_research_cluster_conditioned_polarity_decision_gate` | `PASS` | `abandon` | Registrou candidata cluster-conditioned falsificada. |
+| `phase5_post_candidate_falsification_governed_freeze_gate` | `PASS` | `freeze` | Congelou a linha atual como `FULL_FREEZE_AFTER_REAUDIT`. |
 
 ## Evidencias do ultimo gate
 
@@ -179,9 +212,16 @@ Artifacts research baseline usados e hasheados:
   - nao ha gate de promocao, nem readiness operacional
 
 - `no_surviving_research_candidate_after_falsification`
-  - nenhum candidato promotable sobreviveu a falsificacao
-  - proximo passo recomendado: auditoria global pos-falsificacao ou nova tese
-    research-only materialmente diferente
+  - nenhum candidato promotable ou research-only robusto sobreviveu a
+    falsificacao
+  - `short_high_p_bma_k3_p60_h70` foi falsificada
+  - `cluster_2_long_high_short_low_p60_h70_k3` foi falsificada
+
+- `no_materially_new_safe_in_repo_hypothesis_remaining`
+  - `phase5_post_candidate_falsification_governed_freeze_gate` registrou
+    `remaining_safe_material_hypothesis_count=0`
+  - futuras rodadas exigem evidencia materialmente nova, artifact externo ou
+    nova direcao research segura
 
 ## Testes executados
 
@@ -206,6 +246,14 @@ Testes de candidate reaudit/falsification:
 ```
 
 Resultado observado: `6 passed`.
+
+Testes closed-loop adicionais:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest tests/unit/test_phase5_post_candidate_falsification_global_reaudit.py tests/unit/test_phase5_research_cluster_conditioned_polarity.py tests/unit/test_phase5_post_candidate_falsification_governed_freeze.py tests/unit/test_gate_reports.py -q
+```
+
+Resultado observado: `12 passed`.
 
 ## Risco residual
 

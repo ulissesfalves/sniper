@@ -506,3 +506,75 @@ gaps:
       - "REAL_TRADING"
     suggested_gate: "phase5_post_candidate_falsification_global_reaudit_gate"
     stop_condition_if_unresolved: "Closed-loop execution must continue through the post-falsification global reaudit unless an external resource, specification change or governance hard stop is required."
+
+  - id: GAP-CLUSTER-001
+    title: Cluster-conditioned polarity candidate was falsified
+    type: research_hypothesis
+    severity: high
+    status: abandoned
+    evidence:
+      - "reports/gates/phase5_post_candidate_falsification_global_reaudit_gate/gate_report.json"
+      - "reports/gates/phase5_research_cluster_conditioned_polarity_gate/gate_report.json"
+      - "reports/gates/phase5_research_cluster_conditioned_polarity_falsification_gate/gate_report.json"
+      - "reports/gates/phase5_research_cluster_conditioned_polarity_decision_gate/gate_report.json"
+      - "best_policy=cluster_2_long_high_short_low_p60_h70_k3"
+      - "best_median_combo_sharpe=1.183459"
+      - "best_min_combo_sharpe=0.078586"
+      - "best_median_active_days=425.0"
+      - "best_max_cvar_95_loss_fraction=0.00151815"
+      - "hard_falsifier_count=13"
+      - "temporal_subperiod_min_sharpe=-1.633204"
+      - "extra_cost_20bps_min_sharpe=-0.493149"
+      - "classification=CLUSTER_CONDITIONED_RESEARCH_CANDIDATE_FALSIFIED"
+    source_files:
+      - "services/ml_engine/phase5_research_cluster_conditioned_polarity.py"
+      - "services/ml_engine/phase5_research_cluster_conditioned_polarity_falsification.py"
+      - "services/ml_engine/phase5_research_cluster_conditioned_polarity_decision.py"
+      - "tests/unit/test_phase5_research_cluster_conditioned_polarity.py"
+    allowed_actions:
+      - "UPDATE_DRAFT_PR"
+      - "RUN_GLOBAL_REAUDIT"
+      - "FREEZE_LINE_AFTER_REAUDIT_IF_NO_MATERIAL_HYPOTHESIS"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "REPEAT_CLUSTER_CONDITIONED_POLARITY_WITH_SMALL_VARIATION"
+      - "TREAT_RESEARCH_CVAR_AS_OFFICIAL"
+      - "RELAX_DSR_THRESHOLD"
+    suggested_gate: "phase5_post_candidate_falsification_governed_freeze_gate"
+    stop_condition_if_unresolved: "The cluster-conditioned candidate is abandoned; do not revive it without materially new evidence."
+
+  - id: GAP-FREEZE-002
+    title: Closed-loop research hypothesis space frozen after post-falsification reaudit
+    type: governance_state
+    severity: critical
+    status: resolved
+    evidence:
+      - "reports/gates/phase5_post_candidate_falsification_governed_freeze_gate/gate_report.json"
+      - "classification=FULL_FREEZE_AFTER_REAUDIT"
+      - "tested_family_count=5"
+      - "tested_families=stage_a_safe_top1,rank_score_threshold,alternative_exante_p_bma_sigma_hmm,signal_polarity_short_high,cluster_conditioned_polarity"
+      - "remaining_safe_material_hypothesis_count=0"
+      - "dsr_honest=0.0"
+      - "official_promotion_allowed=false"
+      - "paper_readiness_allowed=false"
+    source_files:
+      - "services/ml_engine/phase5_post_candidate_falsification_governed_freeze.py"
+      - "reports/state/sniper_current_state.json"
+      - "reports/state/sniper_decision_ledger.md"
+    allowed_actions:
+      - "UPDATE_STATE"
+      - "UPDATE_DRAFT_PR"
+      - "RUN_GLOBAL_REAUDIT"
+      - "STOP_FOR_EXTERNAL_RESOURCE"
+    forbidden_actions:
+      - "START_RESEARCH_ONLY_THESIS_WITHOUT_MATERIAL_NEW_EVIDENCE"
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "MERGE_PR"
+      - "A3_REOPEN"
+      - "A4_REOPEN"
+      - "THRESHOLD_RELAXATION"
+      - "REAL_TRADING"
+    suggested_gate: "none_until_materially_new_hypothesis_or_external_resource"
+    stop_condition_if_unresolved: "Current autonomous loop stops as FULL_FREEZE_AFTER_REAUDIT; future progress needs materially new evidence, external data/artifact, or a new spec-safe research direction."

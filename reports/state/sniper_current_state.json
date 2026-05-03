@@ -1,5 +1,5 @@
 {
-  "program_status": "CLOSED_LOOP_READY_POST_CANDIDATE_FALSIFICATION",
+  "program_status": "FULL_FREEZE_AFTER_REAUDIT_PROMOTION_BLOCKED",
   "active_branch": "codex/autonomous-sniper-implementation",
   "latest_pr": {
     "number": 1,
@@ -13,11 +13,11 @@
     "observed_before_local_gate_commits": false
   },
   "latest_gate": {
-    "gate_slug": "phase5_research_candidate_decision_gate",
+    "gate_slug": "phase5_post_candidate_falsification_governed_freeze_gate",
     "status": "PASS",
-    "decision": "abandon"
+    "decision": "freeze"
   },
-  "latest_decision": "POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT_REQUIRED",
+  "latest_decision": "FULL_FREEZE_AFTER_REAUDIT",
   "resolved_blockers": [
     "source_doc_alignment_restored",
     "phase4_official_artifacts_found_and_hashed",
@@ -40,7 +40,11 @@
     "signal_polarity_candidate_stability_fragility_identified",
     "signal_polarity_candidate_falsified_and_abandoned",
     "candidate_decision_gate_completed",
-    "closed_loop_autonomous_execution_policy_authorized"
+    "closed_loop_autonomous_execution_policy_authorized",
+    "post_candidate_falsification_global_reaudit_completed",
+    "cluster_conditioned_polarity_family_tested",
+    "cluster_conditioned_polarity_candidate_falsified_and_abandoned",
+    "closed_loop_governed_freeze_completed"
   ],
   "open_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -51,7 +55,8 @@
     "sharpe_gap_to_required_honest_dsr",
     "threshold_family_cross_combo_instability",
     "no_surviving_research_candidate_after_falsification",
-    "no_promotable_official_alpha_candidate"
+    "no_promotable_official_alpha_candidate",
+    "no_materially_new_safe_in_repo_hypothesis_remaining"
   ],
   "promotion_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -101,12 +106,14 @@
     "max_partial_corrections_per_gate": 2,
     "max_intermediate_global_audits_per_mission": 1,
     "max_pr_draft_updates_at_mission_end": 1,
-    "current_mission_research_gate_budget_used": 4,
-    "current_mission_research_gate_budget_limit": 15,
+    "current_mission_research_gate_budget_used": 5,
+    "current_mission_research_gate_budget_limit": 25,
     "current_mission_hypothesis_families_tested": [
-      "signal_polarity_candidate_reaudit_and_falsification"
+      "post_candidate_falsification_global_reaudit",
+      "cluster_conditioned_polarity",
+      "governed_freeze_after_reaudit"
     ],
-    "current_mission_partial_corrections_used": 1,
+    "current_mission_partial_corrections_used": 0,
     "continue_after_fail_abandon_when_materially_new_hypothesis_exists": true,
     "freeze_only_after_full_phase_requirements": true,
     "stop_for_external_resource_or_spec_change": true,
@@ -145,7 +152,10 @@
         "FUNCTIONAL_RESEARCH_MODULE_DELIVERED",
         "FULL_FREEZE_AFTER_REAUDIT",
         "PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION"
-      ]
+      ],
+      "current_mission_gates_used": 5,
+      "current_mission_final_classification": "FULL_FREEZE_AFTER_REAUDIT",
+      "safe_internal_next_action_available": false
     }
   },
   "last_clean_regeneration_status": {
@@ -187,6 +197,30 @@
       "short_exposure_research_only": true,
       "promotion_allowed": false,
       "caveat": "The candidate passed global reaudit but was falsified by temporal subperiod and 20 bps cost stress. It is abandoned as a robust research candidate and remains non-promotable."
+    },
+    "research_cluster_conditioned_status": {
+      "gate_slug": "phase5_research_cluster_conditioned_polarity_decision_gate",
+      "status": "PASS",
+      "decision": "abandon",
+      "policy": "cluster_2_long_high_short_low_p60_h70_k3",
+      "median_combo_sharpe": 1.183459,
+      "min_combo_sharpe": 0.078586,
+      "median_active_days": 425.0,
+      "max_cvar_95_loss_fraction": 0.00151815,
+      "candidate_review_classification": "CLUSTER_CONDITIONED_RESEARCH_CANDIDATE_FALSIFIED",
+      "hard_falsifier_count": 13,
+      "hard_falsifiers": [
+        "temporal_third_1",
+        "temporal_third_2",
+        "temporal_third_3",
+        "extra_cost_5bps",
+        "extra_cost_10bps",
+        "extra_cost_20bps",
+        "parameter_sensitivity",
+        "universe_stress"
+      ],
+      "promotion_allowed": false,
+      "caveat": "Cluster-conditioned candidate generated nonzero research exposure but failed temporal, cost and universe falsification. It is abandoned and non-promotable."
     }
   },
   "dsr_status": {
@@ -206,17 +240,14 @@
       "caveat": "Diagnostic explains DSR=0.0 but does not improve the policy or authorize promotion."
     },
     "latest_research_candidate": {
-      "gate_slug": "phase5_research_candidate_decision_gate",
-      "policy": "short_high_p_bma_k3_p60_h70",
-      "median_combo_sharpe": 1.361592,
-      "min_combo_sharpe": 0.261111,
+      "gate_slug": "phase5_research_cluster_conditioned_polarity_decision_gate",
+      "policy": "cluster_2_long_high_short_low_p60_h70_k3",
+      "median_combo_sharpe": 1.183459,
+      "min_combo_sharpe": 0.078586,
       "sr_needed": 4.47,
-      "sharpe_gap_to_sr_needed": 3.108408,
-      "candidate_review_classification": "RESEARCH_CANDIDATE_FALSIFIED",
-      "hard_falsifiers": [
-        "temporal_subperiod_min_sharpe",
-        "extra_cost_20bps_min_sharpe"
-      ],
+      "sharpe_gap_to_sr_needed": 3.286541,
+      "candidate_review_classification": "CLUSTER_CONDITIONED_RESEARCH_CANDIDATE_FALSIFIED",
+      "hard_falsifier_count": 13,
       "promotion_allowed": false
     }
   },
@@ -229,15 +260,16 @@
   "paper_readiness_allowed": false,
   "required_external_artifacts": [],
   "latest_research_thesis": {
-    "gate_slug": "phase5_research_candidate_decision_gate",
-    "hypothesis": "The short_high_p_bma_k3_p60_h70 research-only survivor can withstand autonomous reaudit, stability testing and falsification without promotion.",
+    "gate_slug": "phase5_post_candidate_falsification_governed_freeze_gate",
+    "hypothesis": "After post-falsification reaudit, cluster-conditioned polarity was tested as a materially new in-repo research/sandbox thesis and then abandoned after falsification.",
     "status": "PASS",
-    "decision": "abandon",
-    "classification": "RESEARCH_CANDIDATE_FALSIFIED",
+    "decision": "freeze",
+    "classification": "FULL_FREEZE_AFTER_REAUDIT",
     "surviving_modules": [
       "research_sandbox_nonzero_exposure_cvar_evaluator",
       "dsr_zero_root_cause_diagnostic",
-      "deep_quant_diagnostic"
+      "deep_quant_diagnostic",
+      "cluster_conditioned_polarity_research_runner"
     ],
     "surviving_research_only_candidates": [],
     "abandoned_research_only_candidates": [
@@ -254,14 +286,25 @@
           "extra_cost_20bps_min_sharpe"
         ],
         "promotion_allowed": false
+      },
+      {
+        "policy": "cluster_2_long_high_short_low_p60_h70_k3",
+        "median_combo_sharpe": 1.183459,
+        "min_combo_sharpe": 0.078586,
+        "median_active_days": 425.0,
+        "max_cvar_95_loss_fraction": 0.00151815,
+        "decision_gate": "phase5_research_cluster_conditioned_polarity_decision_gate",
+        "classification": "CLUSTER_CONDITIONED_RESEARCH_CANDIDATE_FALSIFIED",
+        "hard_falsifier_count": 13,
+        "promotion_allowed": false
       }
     ],
     "surviving_promotable_candidates": 0,
-    "can_continue_autonomously_under_current_policy": true,
+    "can_continue_autonomously_under_current_policy": false,
     "requires_external_artifact": false,
-    "candidate_review_status": "FALSIFIED_AND_ABANDONED",
+    "candidate_review_status": "ALL_CANDIDATES_FALSIFIED_AND_ABANDONED",
     "next_candidate_gate": null,
-    "next_recommended_gate": "phase5_post_candidate_falsification_global_reaudit_gate"
+    "next_recommended_gate": null
   },
   "internal_strategic_decision_policy": {
     "human_decision_is_last_resort": true,
@@ -279,10 +322,10 @@
     "default_after_candidate_falsified": "POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT",
     "freeze_line_allowed_before_candidate_audit": true
   },
-  "latest_candidate_status": "RESEARCH_CANDIDATE_FALSIFIED",
+  "latest_candidate_status": "NO_SURVIVING_RESEARCH_CANDIDATE_AFTER_FALSIFICATION",
   "human_decision_required": false,
-  "autonomous_can_continue": true,
-  "next_recommended_mode": "POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT",
-  "next_recommended_gate": "phase5_post_candidate_falsification_global_reaudit_gate",
-  "updated_at_utc": "2026-05-03T14:11:28Z"
+  "autonomous_can_continue": false,
+  "next_recommended_mode": "FULL_FREEZE_AFTER_REAUDIT",
+  "next_recommended_gate": null,
+  "updated_at_utc": "2026-05-03T18:00:12Z"
 }
