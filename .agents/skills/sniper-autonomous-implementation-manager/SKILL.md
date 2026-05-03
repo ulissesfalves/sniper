@@ -226,6 +226,7 @@ Recomendações que devem ser executadas automaticamente:
 - UPDATE_STATE;
 - UPDATE_DRAFT_PR;
 - OPEN_RESEARCH_GATE;
+- AUTONOMOUS_RESEARCH_AGENDA_EXPANSION;
 - FREEZE_LINE, somente quando os critérios de freeze estiverem satisfeitos.
 
 Recomendações que exigem parada:
@@ -331,18 +332,85 @@ A missão em loop fechado só pode terminar com uma destas classificações:
 - GOVERNANCE_HARD_STOP;
 - AUTONOMOUS_BUDGET_EXHAUSTED;
 - FUNCTIONAL_RESEARCH_MODULE_DELIVERED;
-- FULL_FREEZE_AFTER_REAUDIT;
+- FULL_FREEZE_AFTER_REAUDIT, somente se o usuário pedir parada explícita antes da expansão de agenda;
+- FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED;
 - PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION.
 
 Não são stops válidos:
 - "próxima recomendação: RUN_GLOBAL_REAUDIT";
 - "próxima recomendação: nova tese research-only";
+- "próxima recomendação: AUTONOMOUS_RESEARCH_AGENDA_EXPANSION";
+- "backlog esgotado antes de executar agenda synthesizer";
 - "decisão humana para escolher tese".
 
 Caso atual conhecido:
 A candidata `short_high_p_bma_k3_p60_h70` foi falsificada. A recomendação
 anterior foi RUN_GLOBAL_REAUDIT / post_candidate_falsification_global_reaudit.
 Executar isso automaticamente na próxima missão; não tratar como decisão humana.
+
+RESEARCH_AGENDA_EXPANSION_BEFORE_FREEZE
+
+FULL_FREEZE_AFTER_REAUDIT não pode ser emitido como classificação final se ainda
+não foi executada uma expansão de agenda research-only após a última falsificação.
+
+Quando o backlog atual estiver esgotado, executar internamente a lógica da
+`sniper-autonomous-research-agenda-synthesizer` antes de parar. A expansão deve
+usar especificação, código, gates, falsificações, blockers e módulos existentes
+para buscar hipóteses materialmente novas.
+
+A expansão de agenda deve gerar:
+- reports/state/sniper_research_agenda.yaml;
+- reports/state/sniper_hypothesis_inventory.md;
+- reports/state/sniper_next_autonomous_mission.md.
+
+Se a agenda gerar pelo menos uma hipótese HIGH ou MEDIUM priority executável
+dentro do repo:
+- selecionar a hipótese de maior valor esperado;
+- abrir novo gate research-only;
+- implementar somente em research/sandbox;
+- validar;
+- falsificar ou preservar;
+- continuar em loop fechado.
+
+Se a agenda não gerar hipótese materialmente nova:
+- registrar FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED;
+- atualizar reports/state/sniper_decision_ledger.md;
+- atualizar reports/state/sniper_current_state.json;
+- atualizar o PR draft existente, quando houver entrega revisável;
+- parar.
+
+Não pedir decisão humana apenas porque o backlog anterior acabou. A missão só
+pode parar por ausência de hipótese quando:
+- o backlog atual está vazio;
+- a agenda synthesizer foi executada;
+- nenhuma hipótese HIGH/MEDIUM executável foi gerada;
+- as hipóteses LOW foram registradas como baixa prioridade ou dependentes de
+  recurso externo;
+- o freeze foi documentado.
+
+Se uma hipótese nova exigir recurso externo, classificar como
+REQUEST_EXTERNAL_ARTIFACTS ou EXTERNAL_RESOURCE_REQUIRED e não implementar.
+
+Se uma hipótese nova exigir mudança de especificação, classificar como
+SPEC_CHANGE_REQUIRED e não implementar.
+
+Se uma hipótese nova for compatível apenas com research/sandbox, pode
+implementar desde que:
+- não promova official;
+- não declare paper readiness;
+- não relaxe thresholds;
+- não use variável realizada.
+
+Saída final:
+- FULL_FREEZE_AFTER_REAUDIT só é permitido antes da expansão de agenda se o
+  usuário explicitamente pedir parada.
+- Caso contrário, usar FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED quando a
+  agenda também esgotar.
+
+Caso atual conhecido:
+A missão atual concluiu FULL_FREEZE_AFTER_REAUDIT após falsificar
+cluster_conditioned_polarity. Na próxima missão, a primeira ação deve ser
+AUTONOMOUS_RESEARCH_AGENDA_EXPANSION e não parada para decisão humana.
 
 AUTONOMOUS FULL PHASE EXECUTION POLICY
 
@@ -563,8 +631,8 @@ Pare e entregue relatório final se qualquer condição ocorrer:
 9. DSR honesto permanecer 0.0 e a única forma de avançar seria promover mesmo assim.
 10. Qualquer violação de governança for detectada.
 11. A exploração autônoma atingir o orçamento máximo da CLOSED_LOOP_AUTONOMOUS_EXECUTION_POLICY quando a missão estiver em loop fechado, ou da AUTONOMOUS FULL PHASE EXECUTION POLICY quando a missão não estiver em loop fechado.
-12. Não houver hipótese materialmente nova dentro dos gaps abertos.
-13. A linha só puder ser congelada depois de cumprir os requisitos mínimos de freeze: pelo menos 2 famílias materialmente diferentes testadas, diagnóstico DSR explícito, CVaR research com exposição não zero quando houver exposição research disponível, comparação entre famílias e registro no decision ledger.
+12. Não houver hipótese materialmente nova dentro dos gaps abertos depois de executar RESEARCH_AGENDA_EXPANSION_BEFORE_FREEZE.
+13. A linha só puder ser congelada depois de cumprir os requisitos mínimos de freeze: pelo menos 2 famílias materialmente diferentes testadas, diagnóstico DSR explícito, CVaR research com exposição não zero quando houver exposição research disponível, comparação entre famílias, expansão de agenda research-only após a última falsificação e registro no decision ledger.
 
 Limites da missão:
 - Não operar capital real.
@@ -629,4 +697,5 @@ Ao parar, entregue:
 29. Por que a candidata ainda não é promotable.
 30. Próximo gate autônomo.
 31. Se pode continuar autonomamente.
-32. Classificação final obrigatória: EXTERNAL_RESOURCE_REQUIRED, SPEC_CHANGE_REQUIRED, GOVERNANCE_HARD_STOP, AUTONOMOUS_BUDGET_EXHAUSTED, FUNCTIONAL_RESEARCH_MODULE_DELIVERED, FULL_FREEZE_AFTER_REAUDIT ou PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION.
+32. Classificação final obrigatória: EXTERNAL_RESOURCE_REQUIRED, SPEC_CHANGE_REQUIRED, GOVERNANCE_HARD_STOP, AUTONOMOUS_BUDGET_EXHAUSTED, FUNCTIONAL_RESEARCH_MODULE_DELIVERED, FULL_FREEZE_AFTER_REAUDIT somente se o usuário pedir parada explícita antes da expansão de agenda, FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED ou PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION.
+33. Se houve expansão de agenda, informar hipóteses HIGH/MEDIUM geradas, hipóteses LOW registradas e o próximo gate research-only executado ou a justificativa de agenda esgotada.

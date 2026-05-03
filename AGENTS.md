@@ -21,6 +21,9 @@ autonomous mission.
 
 - `sniper-autonomous-implementation-manager`: long controlled implementation
   missions through gates.
+- `sniper-autonomous-research-agenda-synthesizer`: generate a new
+  research-only agenda when the current backlog is exhausted before final
+  freeze.
 - `sniper-operating-memory-maintainer`: create, update and validate persistent
   operating memory.
 - `sniper-strategic-decision-governor`: choose the next strategic action.
@@ -79,6 +82,8 @@ Allowed without a new user decision:
   internal to the repo and governance-allowed;
 - automatically run `RUN_GLOBAL_REAUDIT` or
   `POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT` when recommended;
+- automatically run `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION` before accepting a
+  final freeze after reaudit;
 - automatically start a materially new research-only thesis when the backlog
   contains an executable ex-ante hypothesis;
 - execute autonomous full phase research missions inside this repository;
@@ -104,7 +109,8 @@ safe internal path such as `RUN_GLOBAL_REAUDIT`, `RUN_GLOBAL_REAUDIT_CANDIDATE`,
 `POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT`,
 `START_RESEARCH_ONLY_THESIS`, `CONTINUE_AUTONOMOUS`, a stability gate, a
 falsification gate, a state update, a draft PR update, a governed freeze review,
-or an internal strategic decision rubric.
+an autonomous research agenda expansion, or an internal strategic decision
+rubric.
 
 When a research-only candidate survives, the next autonomous action is candidate
 audit/falsification before freeze or human decision. The prior survivor was
@@ -120,9 +126,14 @@ audited and falsified:
 - failed temporal and 20 bps cost falsification;
 - not promotable.
 
-Next recommended mode: `POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT`.
-Next suggested gate: `phase5_post_candidate_falsification_global_reaudit_gate`.
-Do not revive `short_high_p_bma_k3_p60_h70` without materially new evidence.
+The subsequent cluster-conditioned candidate
+`cluster_2_long_high_short_low_p60_h70_k3` was also falsified, and the current
+mission reached `FULL_FREEZE_AFTER_REAUDIT`.
+
+Next safe action: `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`.
+Next logical skill: `sniper-autonomous-research-agenda-synthesizer`.
+Next mode: `GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`.
+Do not accept final permanent freeze until the agenda expansion has been run.
 
 Must stop before:
 
@@ -166,24 +177,26 @@ Freeze is allowed only after at least 2 materially different families were
 tested, explicit DSR diagnostics exist, research CVaR with nonzero exposure was
 evaluated when research exposure exists, family comparison/falsification was
 recorded, the last candidate was falsified, a post-falsification global reaudit
-was executed, no materially new backlog hypothesis remains executable inside
-the repo, and `reports/state/sniper_decision_ledger.md` was updated.
+was executed, `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION` was executed after the
+latest falsification, no HIGH/MEDIUM priority agenda hypothesis remains
+executable inside the repo, and `reports/state/sniper_decision_ledger.md` was
+updated.
 
 ## Stop Conditions
 
 Stop if the next step needs external/private artifacts, credentials or paid API,
 operation outside the repo, real capital, merge, a specification change,
 official promotion, paper readiness, A3/A4 reopening, budget exhaustion, no
-materially new hypothesis, changes too large for reasonable review, or any
-governance violation.
+materially new hypothesis after research agenda expansion, changes too large
+for reasonable review, or any governance violation.
 
 Do not use human strategy as a stop condition while there is an open gap,
 defensible research-only hypothesis, internal correction, unfinished
 quantitative diagnostic, possible sandbox/research module, surviving
 research-only candidate, candidate audit/falsification gate, post-falsification
-global reaudit, state update, draft PR update or governed freeze review inside
-the repo. A technical next recommendation is not a valid stop if it is safe and
-internal to this repo.
+global reaudit, autonomous research agenda expansion, state update, draft PR
+update or governed freeze review inside the repo. A technical next
+recommendation is not a valid stop if it is safe and internal to this repo.
 
 ## State Update Obligation
 

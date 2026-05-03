@@ -12,6 +12,8 @@ the current repository and preserves governance:
 - automatically run `RUN_GLOBAL_REAUDIT` when recommended;
 - automatically run `POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT` after a
   candidate is falsified;
+- automatically run `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION` before accepting a
+  final freeze after reaudit;
 - automatically start a materially new research-only thesis when the backlog
   contains an executable ex-ante hypothesis;
 - create a branch with the `codex/` prefix when needed;
@@ -49,6 +51,7 @@ Codex must not stop for human decision while any safe internal path remains:
 - a candidate falsification gate;
 - a candidate decision gate;
 - a post-candidate-falsification global reaudit;
+- an autonomous research agenda expansion;
 - a state update or draft PR update;
 - a governed freeze review;
 - `RUN_GLOBAL_REAUDIT`;
@@ -100,6 +103,8 @@ Automatically executable recommendations include:
 - `UPDATE_STATE`
 - `UPDATE_DRAFT_PR`
 - `OPEN_RESEARCH_GATE`
+- `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`
+- `GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`
 - `FREEZE_LINE` only after all freeze criteria are satisfied.
 
 Stop only for external artifacts/data, credentials or paid APIs, access outside
@@ -175,7 +180,41 @@ Freeze is permitted only after:
 - any surviving research-only candidate was audited/falsified.
 - the last candidate was falsified;
 - a post-falsification global reaudit was executed;
-- no materially new backlog hypothesis remains executable inside the repo.
+- `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION` was executed after the latest
+  falsification;
+- no HIGH/MEDIUM priority agenda hypothesis remains executable inside the repo.
+
+## Research Agenda Expansion Before Final Freeze
+
+The current mission reached `FULL_FREEZE_AFTER_REAUDIT` after falsifying
+`cluster_conditioned_polarity`. That state is not accepted as final permanent
+freeze until Codex runs an agenda expansion from specification, code, gates,
+falsifications, blockers and existing modules.
+
+Next safe action: `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`.
+Next logical skill: `sniper-autonomous-research-agenda-synthesizer`.
+Next mode: `GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`.
+
+The agenda expansion must create or update:
+
+- `reports/state/sniper_research_agenda.yaml`
+- `reports/state/sniper_hypothesis_inventory.md`
+- `reports/state/sniper_next_autonomous_mission.md`
+
+If the agenda produces at least one HIGH or MEDIUM priority hypothesis that is
+executable inside the repo, Codex must select the highest expected-value
+hypothesis, open a research-only gate, implement only in research/sandbox,
+validate, falsify or preserve, and continue closed-loop execution.
+
+If the agenda produces no materially new HIGH/MEDIUM executable hypothesis,
+Codex must classify the line as
+`FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED`, update
+`reports/state/**`, update the existing draft PR when reviewable, and stop.
+
+Human decision is not required merely because the previous backlog ended.
+External-resource hypotheses must be classified as `EXTERNAL_RESOURCE_REQUIRED`
+or `REQUEST_EXTERNAL_ARTIFACTS`. Specification-change hypotheses must be
+classified as `SPEC_CHANGE_REQUIRED`.
 
 Human decision is required only for external resources, specification changes,
 official promotion, paper readiness, credentials or paid APIs, operation outside
@@ -196,6 +235,8 @@ Allowed modes:
 - `UPDATE_STATE`
 - `UPDATE_DRAFT_PR`
 - `OPEN_RESEARCH_GATE`
+- `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`
+- `GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`
 - `FREEZE_LINE` only after the full freeze requirements are satisfied.
 - `STOP_FOR_HUMAN_DECISION` only for the explicit external/governance cases
   listed above.

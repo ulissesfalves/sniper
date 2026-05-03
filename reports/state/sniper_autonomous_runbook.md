@@ -22,10 +22,16 @@
     updates until budget exhaustion or a real stop condition.
 17. Do not stop merely because the next recommendation is technical and safe;
     execute it automatically.
+18. Before accepting final freeze after reaudit, execute
+    `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`.
 
 ## Current Recommended Mode
 
-`FULL_FREEZE_AFTER_REAUDIT`
+`AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`
+
+Next logical skill: `sniper-autonomous-research-agenda-synthesizer`.
+
+Next mode: `GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`.
 
 Allowed mission modes:
 
@@ -40,8 +46,10 @@ Allowed mission modes:
 - `UPDATE_STATE`
 - `UPDATE_DRAFT_PR`
 - `OPEN_RESEARCH_GATE`
-- `FREEZE_LINE` only after full freeze requirements are satisfied.
-- `STOP_FOR_HUMAN_DECISION` only for external/governance cases.
+- `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`
+- `GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`
+- `FREEZE_LINE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED` only after agenda
+  expansion generates no HIGH/MEDIUM executable hypothesis.
 
 Forbidden modes:
 
@@ -116,6 +124,8 @@ Automatically execute:
 - `UPDATE_STATE`
 - `UPDATE_DRAFT_PR`
 - `OPEN_RESEARCH_GATE`
+- `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`
+- `GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`
 - `FREEZE_LINE` only after freeze criteria are satisfied.
 
 Stop only for external artifacts/data, credentials or paid APIs, access outside
@@ -154,7 +164,9 @@ Freeze is allowed only after:
 - any surviving research-only candidate was audited/falsified.
 - the last candidate was falsified;
 - post-falsification global reaudit was executed;
-- no materially new backlog hypothesis remains executable inside the repo.
+- autonomous research agenda expansion was executed after the latest
+  falsification;
+- no HIGH/MEDIUM priority agenda hypothesis remains executable inside the repo.
 
 ## Human Decision Last Resort
 
@@ -172,6 +184,7 @@ Do not stop for human decision while any internal path remains:
 - candidate decision gate;
 - post-falsification global reaudit;
 - state update or draft PR update;
+- autonomous research agenda expansion;
 - governed freeze review;
 - internal strategic decision rubric.
 
@@ -180,7 +193,33 @@ If the next step is ambiguous, apply a strategic decision rubric equivalent to
 `RUN_GLOBAL_REAUDIT`, `RUN_GLOBAL_REAUDIT_CANDIDATE`,
 `POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT`, `CONTINUE_AUTONOMOUS`,
 `START_RESEARCH_ONLY_THESIS`, `FREEZE_LINE`, `UPDATE_DRAFT_PR`, `UPDATE_STATE`,
-`OPEN_RESEARCH_GATE`, or `STOP_FOR_EXTERNAL_RESOURCE`.
+`OPEN_RESEARCH_GATE`, `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`,
+`GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`, or `STOP_FOR_EXTERNAL_RESOURCE`.
+
+## Research Agenda Expansion Before Final Freeze
+
+The current mission reached `FULL_FREEZE_AFTER_REAUDIT` after falsifying
+`cluster_conditioned_polarity`, but final permanent freeze is not accepted until
+the agenda is expanded from specification, code, gates, falsifications,
+blockers and existing modules.
+
+Run `sniper-autonomous-research-agenda-synthesizer` in mode
+`GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`.
+
+Required outputs:
+
+- `reports/state/sniper_research_agenda.yaml`
+- `reports/state/sniper_hypothesis_inventory.md`
+- `reports/state/sniper_next_autonomous_mission.md`
+
+If the agenda produces at least one HIGH/MEDIUM priority hypothesis executable
+inside the repo, select the highest expected-value hypothesis, open a new
+research-only gate, implement only in research/sandbox, validate, falsify or
+preserve, and continue closed-loop execution.
+
+If the agenda produces no HIGH/MEDIUM executable hypothesis, classify
+`FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED`, update
+`reports/state/**`, update the existing draft PR when reviewable, and stop.
 
 ## Functional Phase Order
 
@@ -273,11 +312,14 @@ Post-falsification protocol:
    candidate as falsified.
 5. `phase5_post_candidate_falsification_governed_freeze_gate` passed with
    `FULL_FREEZE_AFTER_REAUDIT`.
-6. Update `reports/state/**` and the existing draft PR. Do not open PR ready.
+6. Execute `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION` before accepting permanent
+   final freeze.
+7. Update `reports/state/**` and the existing draft PR. Do not open PR ready.
 
 ## Current Closed-Loop Result
 
-Final classification: `FULL_FREEZE_AFTER_REAUDIT`.
+Current classification: `FULL_FREEZE_AFTER_REAUDIT` pending research agenda
+expansion.
 
 Gates added in the closed-loop mission:
 
@@ -289,11 +331,11 @@ Gates added in the closed-loop mission:
   `PASS/abandon`;
 - `phase5_post_candidate_falsification_governed_freeze_gate`: `PASS/freeze`.
 
-The current autonomous loop must stop because no safe material in-repo
-hypothesis remains after post-falsification reaudit and governed freeze. This is
-not promotion, not paper readiness and not merge approval. Future autonomous
-continuation requires materially new evidence, an external artifact/resource, or
-a new spec-safe research direction.
+The current autonomous loop must continue with
+`AUTONOMOUS_RESEARCH_AGENDA_EXPANSION` before accepting permanent final freeze.
+This is not promotion, not paper readiness and not merge approval. If the new
+agenda yields no HIGH/MEDIUM executable hypothesis, the next valid final
+classification is `FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED`.
 
 ## Forbidden Interpretations
 
@@ -312,8 +354,9 @@ Stop if the next step requires:
 - human product/strategy decision only after internal strategic decision and
   only when no internal research/sandbox/candidate audit path remains;
 - exploration budget exhaustion;
-- no materially new hypothesis after candidate falsification,
-  post-falsification global reaudit and governed freeze;
+- no materially new HIGH/MEDIUM hypothesis after candidate falsification,
+  post-falsification global reaudit, governed freeze and autonomous research
+  agenda expansion;
 - external artifact or private data not present;
 - credential, paid API or real capital;
 - merge or ready PR transition;
@@ -325,6 +368,7 @@ Stop if the next step requires:
 Do not stop for human decision while there is an open gap, defensible
 research-only hypothesis, internal correction, unfinished quantitative
 diagnostic, possible sandbox/research module, post-falsification global reaudit,
-state update, draft PR update or governed freeze review inside the repo. The
-prior surviving candidate and the cluster-conditioned candidate have now been
-audited/falsified, and the current line is frozen after reaudit.
+autonomous research agenda expansion, state update, draft PR update or governed
+freeze review inside the repo. The prior surviving candidate and the
+cluster-conditioned candidate have now been audited/falsified, and the current
+line requires agenda expansion before permanent freeze.

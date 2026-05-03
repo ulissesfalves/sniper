@@ -1,5 +1,5 @@
 {
-  "program_status": "FULL_FREEZE_AFTER_REAUDIT_PROMOTION_BLOCKED",
+  "program_status": "FULL_FREEZE_AFTER_REAUDIT_PENDING_RESEARCH_AGENDA_EXPANSION",
   "active_branch": "codex/autonomous-sniper-implementation",
   "latest_pr": {
     "number": 1,
@@ -17,7 +17,7 @@
     "status": "PASS",
     "decision": "freeze"
   },
-  "latest_decision": "FULL_FREEZE_AFTER_REAUDIT",
+  "latest_decision": "FULL_FREEZE_AFTER_REAUDIT_PENDING_AGENDA_EXPANSION",
   "resolved_blockers": [
     "source_doc_alignment_restored",
     "phase4_official_artifacts_found_and_hashed",
@@ -44,7 +44,8 @@
     "post_candidate_falsification_global_reaudit_completed",
     "cluster_conditioned_polarity_family_tested",
     "cluster_conditioned_polarity_candidate_falsified_and_abandoned",
-    "closed_loop_governed_freeze_completed"
+    "closed_loop_governed_freeze_completed",
+    "research_agenda_expansion_before_final_freeze_policy_adopted"
   ],
   "open_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -56,7 +57,9 @@
     "threshold_family_cross_combo_instability",
     "no_surviving_research_candidate_after_falsification",
     "no_promotable_official_alpha_candidate",
-    "no_materially_new_safe_in_repo_hypothesis_remaining"
+    "no_materially_new_safe_in_repo_hypothesis_remaining",
+    "research_agenda_expansion_required_before_final_freeze",
+    "new_research_agenda_not_yet_generated"
   ],
   "promotion_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -75,8 +78,9 @@
     "UPDATE_STATE",
     "UPDATE_DRAFT_PR",
     "OPEN_RESEARCH_GATE",
-    "FREEZE_LINE",
-    "STOP_FOR_HUMAN_DECISION"
+    "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION",
+    "GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC",
+    "FREEZE_LINE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED"
   ],
   "forbidden_next_modes": [
     "OFFICIAL_PROMOTION",
@@ -96,7 +100,10 @@
     "STOP_AFTER_SAFE_TECHNICAL_RECOMMENDATION",
     "STOP_AFTER_RUN_GLOBAL_REAUDIT_RECOMMENDATION",
     "STOP_AFTER_START_RESEARCH_ONLY_THESIS_RECOMMENDATION",
-    "FREEZE_LINE_BEFORE_POST_FALSIFICATION_REAUDIT"
+    "FREEZE_LINE_BEFORE_POST_FALSIFICATION_REAUDIT",
+    "FULL_FREEZE_AFTER_REAUDIT_WITHOUT_AGENDA_EXPANSION",
+    "FREEZE_LINE_BEFORE_RESEARCH_AGENDA_EXPANSION",
+    "STOP_FOR_HUMAN_DECISION_BECAUSE_BACKLOG_ENDED"
   ],
   "autonomous_exploration_policy": {
     "research_only_failure_requires_human_decision": false,
@@ -127,8 +134,22 @@
       "explicit_dsr_diagnostic",
       "research_cvar_nonzero_exposure_if_research_exposure_available",
       "family_comparison_or_falsification_recorded",
+      "research_agenda_expansion_after_latest_falsification",
       "decision_ledger_updated"
     ],
+    "research_agenda_expansion_before_final_freeze": {
+      "required": true,
+      "executed_after_latest_falsification": false,
+      "next_action": "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION",
+      "next_skill": "sniper-autonomous-research-agenda-synthesizer",
+      "next_mode": "GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC",
+      "required_outputs": [
+        "reports/state/sniper_research_agenda.yaml",
+        "reports/state/sniper_hypothesis_inventory.md",
+        "reports/state/sniper_next_autonomous_mission.md"
+      ],
+      "freeze_if_no_high_or_medium_executable_hypothesis": "FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED"
+    },
     "previous_mission_research_gate_budget_used": 5,
     "previous_mission_research_gate_budget_limit": 5,
     "closed_loop_execution_policy": {
@@ -151,11 +172,14 @@
         "AUTONOMOUS_BUDGET_EXHAUSTED",
         "FUNCTIONAL_RESEARCH_MODULE_DELIVERED",
         "FULL_FREEZE_AFTER_REAUDIT",
+        "FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED",
         "PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION"
       ],
       "current_mission_gates_used": 5,
       "current_mission_final_classification": "FULL_FREEZE_AFTER_REAUDIT",
-      "safe_internal_next_action_available": false
+      "final_freeze_accepted": false,
+      "safe_internal_next_action_available": true,
+      "safe_internal_next_action": "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION"
     }
   },
   "last_clean_regeneration_status": {
@@ -265,6 +289,8 @@
     "status": "PASS",
     "decision": "freeze",
     "classification": "FULL_FREEZE_AFTER_REAUDIT",
+    "final_freeze_accepted": false,
+    "agenda_expansion_required_before_final_freeze": true,
     "surviving_modules": [
       "research_sandbox_nonzero_exposure_cvar_evaluator",
       "dsr_zero_root_cause_diagnostic",
@@ -300,11 +326,11 @@
       }
     ],
     "surviving_promotable_candidates": 0,
-    "can_continue_autonomously_under_current_policy": false,
+    "can_continue_autonomously_under_current_policy": true,
     "requires_external_artifact": false,
     "candidate_review_status": "ALL_CANDIDATES_FALSIFIED_AND_ABANDONED",
     "next_candidate_gate": null,
-    "next_recommended_gate": null
+    "next_recommended_gate": "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION"
   },
   "internal_strategic_decision_policy": {
     "human_decision_is_last_resort": true,
@@ -316,16 +342,23 @@
       "FREEZE_LINE",
       "UPDATE_DRAFT_PR",
       "POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT",
+      "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION",
+      "GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC",
       "STOP_FOR_EXTERNAL_RESOURCE"
     ],
     "default_when_research_candidate_survives": "RUN_GLOBAL_REAUDIT_CANDIDATE",
     "default_after_candidate_falsified": "POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT",
-    "freeze_line_allowed_before_candidate_audit": true
+    "default_after_full_freeze_reaudit_without_agenda": "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION",
+    "freeze_line_allowed_before_candidate_audit": false,
+    "freeze_line_allowed_before_agenda_expansion": false
   },
   "latest_candidate_status": "NO_SURVIVING_RESEARCH_CANDIDATE_AFTER_FALSIFICATION",
   "human_decision_required": false,
-  "autonomous_can_continue": false,
-  "next_recommended_mode": "FULL_FREEZE_AFTER_REAUDIT",
+  "autonomous_can_continue": true,
+  "next_recommended_mode": "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION",
+  "next_recommended_skill": "sniper-autonomous-research-agenda-synthesizer",
+  "next_recommended_submode": "GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC",
   "next_recommended_gate": null,
-  "updated_at_utc": "2026-05-03T18:00:12Z"
+  "if_agenda_has_no_high_or_medium_executable_hypothesis": "FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED",
+  "updated_at_utc": "2026-05-03T20:50:56Z"
 }

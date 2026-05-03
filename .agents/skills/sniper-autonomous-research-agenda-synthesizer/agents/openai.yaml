@@ -1,0 +1,7 @@
+policy:
+  allow_implicit_invocation: false
+
+interface:
+  display_name: "SNIPER Autonomous Research Agenda Synthesizer"
+  short_description: "Gera novas hipóteses research-only quando o backlog atual do SNIPER é esgotado."
+  default_prompt: "$sniper-autonomous-research-agenda-synthesizer\n\nGere uma nova agenda research-only para o SNIPER a partir da especificação, gates, falsificações e memória operacional."

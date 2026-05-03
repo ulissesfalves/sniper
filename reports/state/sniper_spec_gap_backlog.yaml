@@ -545,16 +545,18 @@ gaps:
     stop_condition_if_unresolved: "The cluster-conditioned candidate is abandoned; do not revive it without materially new evidence."
 
   - id: GAP-FREEZE-002
-    title: Closed-loop research hypothesis space frozen after post-falsification reaudit
+    title: Closed-loop freeze after post-falsification reaudit requires agenda expansion
     type: governance_state
     severity: critical
-    status: resolved
+    status: pending_agenda_expansion
     evidence:
       - "reports/gates/phase5_post_candidate_falsification_governed_freeze_gate/gate_report.json"
       - "classification=FULL_FREEZE_AFTER_REAUDIT"
+      - "final permanent freeze not accepted until AUTONOMOUS_RESEARCH_AGENDA_EXPANSION runs"
       - "tested_family_count=5"
       - "tested_families=stage_a_safe_top1,rank_score_threshold,alternative_exante_p_bma_sigma_hmm,signal_polarity_short_high,cluster_conditioned_polarity"
       - "remaining_safe_material_hypothesis_count=0"
+      - "research_agenda_expansion_executed_after_latest_falsification=false"
       - "dsr_honest=0.0"
       - "official_promotion_allowed=false"
       - "paper_readiness_allowed=false"
@@ -563,12 +565,16 @@ gaps:
       - "reports/state/sniper_current_state.json"
       - "reports/state/sniper_decision_ledger.md"
     allowed_actions:
+      - "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION"
+      - "GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC"
       - "UPDATE_STATE"
       - "UPDATE_DRAFT_PR"
       - "RUN_GLOBAL_REAUDIT"
       - "STOP_FOR_EXTERNAL_RESOURCE"
     forbidden_actions:
       - "START_RESEARCH_ONLY_THESIS_WITHOUT_MATERIAL_NEW_EVIDENCE"
+      - "FULL_FREEZE_AFTER_REAUDIT_WITHOUT_AGENDA_EXPANSION"
+      - "STOP_FOR_HUMAN_DECISION_BECAUSE_BACKLOG_ENDED"
       - "PROMOTE_OFFICIAL"
       - "DECLARE_PAPER_READINESS"
       - "MERGE_PR"
@@ -576,5 +582,43 @@ gaps:
       - "A4_REOPEN"
       - "THRESHOLD_RELAXATION"
       - "REAL_TRADING"
-    suggested_gate: "none_until_materially_new_hypothesis_or_external_resource"
-    stop_condition_if_unresolved: "Current autonomous loop stops as FULL_FREEZE_AFTER_REAUDIT; future progress needs materially new evidence, external data/artifact, or a new spec-safe research direction."
+    suggested_gate: "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION"
+    stop_condition_if_unresolved: "Before accepting final freeze, run sniper-autonomous-research-agenda-synthesizer. If no HIGH/MEDIUM executable hypothesis is generated, classify FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED."
+
+  - id: GAP-AGENDA-001
+    title: Research-only agenda expansion required before final freeze
+    type: governance_state
+    severity: critical
+    status: open
+    evidence:
+      - "current mission reached FULL_FREEZE_AFTER_REAUDIT"
+      - "cluster_conditioned_polarity was falsified"
+      - "previous backlog has no surviving candidate"
+      - "human_decision_required=false"
+      - "autonomous_can_continue=true"
+      - "next_recommended_mode=AUTONOMOUS_RESEARCH_AGENDA_EXPANSION"
+      - "next_logical_skill=sniper-autonomous-research-agenda-synthesizer"
+      - "next_mode=GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC"
+    source_files:
+      - "AGENTS.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+      - "reports/state/sniper_decision_ledger.md"
+      - ".agents/skills/sniper-autonomous-research-agenda-synthesizer/SKILL.md"
+    allowed_actions:
+      - "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION"
+      - "GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC"
+      - "UPDATE_STATE"
+      - "UPDATE_DRAFT_PR"
+    forbidden_actions:
+      - "FULL_FREEZE_AFTER_REAUDIT_WITHOUT_AGENDA_EXPANSION"
+      - "STOP_FOR_HUMAN_DECISION_BECAUSE_BACKLOG_ENDED"
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "MERGE_PR"
+      - "A3_REOPEN"
+      - "A4_REOPEN"
+      - "THRESHOLD_RELAXATION"
+      - "REAL_TRADING"
+    suggested_gate: "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION"
+    stop_condition_if_unresolved: "Final freeze is allowed only after the agenda synthesizer creates reports/state/sniper_research_agenda.yaml, reports/state/sniper_hypothesis_inventory.md and reports/state/sniper_next_autonomous_mission.md, and no HIGH/MEDIUM executable hypothesis remains."
