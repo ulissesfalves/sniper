@@ -1,0 +1,106 @@
+{
+  "hypothesis": "The surviving short_high_p_bma_k3_p60_h70 candidate can pass a governance and ex-ante validity reaudit as research/sandbox only, while remaining non-promotable.",
+  "status": "PASS",
+  "decision": "advance",
+  "classification": "CANDIDATE_GLOBAL_REAUDIT_PASS_RESEARCH_ONLY_NOT_PROMOTABLE",
+  "candidate": "short_high_p_bma_k3_p60_h70",
+  "candidate_config": {
+    "family": "signal_polarity_stability_filtered",
+    "policy": "short_high_p_bma_k3_p60_h70",
+    "score_col": "p_bma_pkf",
+    "mode": "short_high",
+    "top_k": 3,
+    "gross_exposure": 0.04,
+    "p_bma_threshold": 0.6,
+    "hmm_threshold": 0.7
+  },
+  "candidate_summary": {
+    "family": "signal_polarity_stability_filtered",
+    "policy": "short_high_p_bma_k3_p60_h70",
+    "combo": null,
+    "total_days": null,
+    "active_days": null,
+    "active_ratio": null,
+    "cum_return_proxy": null,
+    "annualized_sharpe_proxy": null,
+    "var_95_loss_fraction": null,
+    "cvar_95_loss_fraction": null,
+    "max_drawdown_proxy": 0.05222008,
+    "max_exposure_fraction": null,
+    "mean_turnover_fraction": null,
+    "metric_level": "policy",
+    "combo_count": 15.0,
+    "median_active_days": 471.0,
+    "min_active_days": 399.0,
+    "median_combo_sharpe": 1.361592,
+    "min_combo_sharpe": 0.261111,
+    "median_cum_return_proxy": 0.11682479,
+    "max_cvar_95_loss_fraction": 0.00344841,
+    "median_turnover_fraction": 0.02210773
+  },
+  "status_flags": {
+    "positive_median_sharpe": true,
+    "positive_min_sharpe": true,
+    "active_days_sufficient": true,
+    "cvar_within_research_limit": true,
+    "below_sr_needed": true,
+    "promotion_allowed": false
+  },
+  "metric_reconciliation": {
+    "prior_median_combo_sharpe": 1.361592,
+    "recomputed_median_combo_sharpe": 1.361592,
+    "prior_min_combo_sharpe": 0.261111,
+    "recomputed_min_combo_sharpe": 0.261111,
+    "prior_max_cvar_95_loss_fraction": 0.00344841,
+    "recomputed_max_cvar_95_loss_fraction": 0.00344841,
+    "matches_prior_rounded": true
+  },
+  "governance": {
+    "candidate": "short_high_p_bma_k3_p60_h70",
+    "research_only": true,
+    "sandbox_only": true,
+    "uses_short_exposure": true,
+    "promotes_official": false,
+    "reopens_a3_a4": false,
+    "relaxes_thresholds": false,
+    "declares_paper_readiness": false,
+    "masks_dsr": false,
+    "treats_zero_exposure_cvar_as_economic_robustness": false,
+    "selection_inputs": [
+      "hmm_prob_bull",
+      "p_bma_pkf"
+    ],
+    "forbidden_exante_selection_columns": [
+      "avg_sl_train",
+      "forward_return",
+      "future_return",
+      "label",
+      "pnl_real",
+      "rank_target_stage_a",
+      "stage_a_eligible"
+    ],
+    "forbidden_selection_columns_used": [],
+    "uses_realized_variable_as_ex_ante_rule": false,
+    "pnl_real_usage": "realized_backtest_outcome_only"
+  },
+  "prior_candidate_gate_summary": [],
+  "full_phase_comparison_summary": [
+    "classification=RESEARCH_ONLY_SURVIVOR_IDENTIFIED_BELOW_DSR_PROMOTION_BAR",
+    "families_compared=6",
+    "families_abandoned=stage_a_safe_top1,rank_score_threshold_correction,alternative_exante_p_bma_sigma_hmm",
+    "surviving_candidate_policy=short_high_p_bma_k3_p60_h70",
+    "surviving_candidate_family=signal_polarity_stability_correction",
+    "surviving_candidate_median_combo_sharpe=1.361592",
+    "surviving_candidate_min_combo_sharpe=0.261111",
+    "surviving_candidate_median_active_days=471.0",
+    "surviving_candidate_max_cvar_95_loss_fraction=0.00344841",
+    "candidate remains research/sandbox only",
+    "no official promotion attempted"
+  ],
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "candidate_sharpe_below_sr_needed",
+    "short_exposure_research_sandbox_only",
+    "official_cvar_zero_exposure_not_economic_robustness"
+  ]
+}

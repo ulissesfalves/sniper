@@ -1,0 +1,102 @@
+{
+  "gate_slug": "phase5_research_candidate_global_reaudit_gate",
+  "timestamp_utc": "2026-05-03T13:31:33+00:00",
+  "baseline_commit": "4d6129184225566b039654663e555eb322abb6fb",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_predictions.parquet",
+      "exists": true,
+      "size_bytes": 4365296,
+      "mtime_utc": "2026-03-29T06:55:53+00:00",
+      "sha256": "FC947D4C3C71175BCF5F773665DD1D5BB5F033D0E67E881F0B07B338FDA1B67E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_stability_correction_gate\\portfolio_cvar_research_report.json",
+      "exists": true,
+      "size_bytes": 6600,
+      "mtime_utc": "2026-05-02T14:40:05+00:00",
+      "sha256": "02BD73287A4134539FEB9BED9C9C719779D8BA7F33E9A491780F5C728F8B31EC"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_full_phase_family_comparison_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3984,
+      "mtime_utc": "2026-05-02T14:42:04+00:00",
+      "sha256": "030DC2CE388F59F5E1A137C27606A7E4ABAB44EC6A3E467A2C60B0A21C3ADF90"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_global_reaudit_gate\\candidate_global_reaudit_positions.parquet",
+      "exists": true,
+      "size_bytes": 334233,
+      "mtime_utc": "2026-05-03T13:31:33+00:00",
+      "sha256": "F6B1C58A060F9764344570E1BA092DD67829A2A7DF7658C7F6067A560F851E2C"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_global_reaudit_gate\\candidate_global_reaudit_daily_returns.parquet",
+      "exists": true,
+      "size_bytes": 49389,
+      "mtime_utc": "2026-05-03T13:31:33+00:00",
+      "sha256": "5B30622C1132392F00D46AD49B43127844BB7271A11D45642BA1E5E2182A3DB8"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_global_reaudit_gate\\candidate_global_reaudit_trade_log.parquet",
+      "exists": true,
+      "size_bytes": 26506,
+      "mtime_utc": "2026-05-03T13:31:33+00:00",
+      "sha256": "17864F591229984A086A506A58AA8638118706736FC358DEB4E275ADFB43D828"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_global_reaudit_gate\\candidate_global_reaudit_metrics.parquet",
+      "exists": true,
+      "size_bytes": 15669,
+      "mtime_utc": "2026-05-03T13:31:33+00:00",
+      "sha256": "ADA3A2D943426DBC999F7AAB6E2EFA94F5AAEE2C05AEF355C4292A770A9092BE"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_global_reaudit_gate\\candidate_global_reaudit_report.json",
+      "exists": true,
+      "size_bytes": 3861,
+      "mtime_utc": "2026-05-03T13:31:33+00:00",
+      "sha256": "76C8C87A00C28BA3D54C01251B9D9AD6BAE474FFE22A11054D06B260CF5D4B85"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_global_reaudit_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4753,
+      "mtime_utc": "2026-05-03T13:31:33+00:00",
+      "sha256": "C31B1E58C3573ADB7CD4F5EAE979F052280DBE799B4E3B4224698863506EE7F2"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_global_reaudit_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 1422,
+      "mtime_utc": "2026-05-03T13:31:33+00:00",
+      "sha256": "2F4FF20E9F38B926AC6C385FC1EE90D928189F8DC820294C682A5368D5C52D7E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_global_reaudit_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 4148,
+      "mtime_utc": "2026-05-03T13:31:33+00:00",
+      "sha256": "6F43A41854C89CBEE42F7AF019F0207326C0D76B214C0911F40838E75A8AB368"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_global_reaudit_gate\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    ".\\.venv\\Scripts\\python.exe services\\ml_engine\\phase5_research_candidate_global_reaudit.py"
+  ],
+  "notes": [
+    "Autonomous global reaudit of surviving research-only candidate.",
+    "No official artifacts were promoted.",
+    "Selection rules were checked for realized-variable leakage."
+  ]
+}
