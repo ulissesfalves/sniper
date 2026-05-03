@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-05-02T14:42:38Z",
+  "updated_at_utc": "2026-05-03T13:35:04Z",
   "official_artifacts": [
     {
       "path": "data/models/phase4/phase4_report_v4.json",
@@ -75,7 +75,11 @@
     "reports/gates/phase5_research_alternative_exante_family_gate",
     "reports/gates/phase5_research_signal_polarity_long_short_gate",
     "reports/gates/phase5_research_signal_polarity_stability_correction_gate",
-    "reports/gates/phase5_research_full_phase_family_comparison_gate"
+    "reports/gates/phase5_research_full_phase_family_comparison_gate",
+    "reports/gates/phase5_research_candidate_global_reaudit_gate",
+    "reports/gates/phase5_research_candidate_stability_gate",
+    "reports/gates/phase5_research_candidate_falsification_gate",
+    "reports/gates/phase5_research_candidate_decision_gate"
   ],
   "missing_artifacts": [],
   "ignored_or_heavy_artifacts": [
@@ -98,6 +102,10 @@
     "phase5_research_alternative_exante_family_gate abandoned the p_bma/sigma/hmm long-only family because best median combo Sharpe was -0.632456.",
     "phase5_research_signal_polarity_long_short_gate found a positive research-only short-high signal polarity candidate but required stability correction.",
     "phase5_research_signal_polarity_stability_correction_gate passed as a stable research-only survivor: short_high_p_bma_k3_p60_h70, median Sharpe 1.361592, min Sharpe 0.261111, max CVaR95 0.00344841.",
-    "phase5_research_full_phase_family_comparison_gate selected the signal-polarity survivor as research-only and explicitly blocked official promotion."
+    "phase5_research_full_phase_family_comparison_gate selected the signal-polarity survivor as research-only and explicitly blocked official promotion.",
+    "phase5_research_candidate_global_reaudit_gate confirmed short_high_p_bma_k3_p60_h70 was ex-ante valid as research/sandbox only and still below sr_needed.",
+    "phase5_research_candidate_stability_gate found PARTIAL/correct evidence: 29 of 49 stability scenarios failed, including temporal thirds and 20 bps cost stress.",
+    "phase5_research_candidate_falsification_gate abandoned the candidate because temporal_subperiod_min_sharpe=-1.160839 and extra_cost_20bps_min_sharpe=-0.12201 were hard falsifiers.",
+    "phase5_research_candidate_decision_gate classified the candidate as RESEARCH_CANDIDATE_FALSIFIED; no official promotion, paper readiness, A3/A4 reopening or threshold relaxation occurred."
   ]
 }

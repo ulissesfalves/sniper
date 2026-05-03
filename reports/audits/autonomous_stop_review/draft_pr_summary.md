@@ -12,6 +12,10 @@ Resultado final da missao: `PARTIAL/correct`
 
 Atualizacao full-phase: `PASS/advance` como evidencia research-only, sem promocao.
 
+Atualizacao candidate reaudit/falsification: `PASS/abandon` como decisao
+research-only; a candidata `short_high_p_bma_k3_p60_h70` foi falsificada e
+abandonada sem promocao.
+
 Recomendacao: manter PR draft para revisao humana. Nao abrir PR ready e nao promover nada para official.
 
 ## Resumo executivo
@@ -47,10 +51,37 @@ Esse candidato usa exposicao short em sandbox/research, nao existe promocao
 official, nao ha paper readiness, e DSR/CVaR official continuam bloqueando
 qualquer leitura operacional.
 
+## Atualizacao da candidata research-only
+
+A rodada `AUTONOMOUS_CANDIDATE_REAUDIT_AND_FALSIFICATION` auditou e tentou
+falsificar autonomamente a candidata `short_high_p_bma_k3_p60_h70`:
+
+- `phase5_research_candidate_global_reaudit_gate`: `PASS/advance`; confirmou
+  aderencia research/sandbox, regra ex-ante com `p_bma_pkf` e `hmm_prob_bull`,
+  ausencia de variavel realizada como regra operacional, sem promocao official.
+- `phase5_research_candidate_stability_gate`: `PARTIAL/correct`; rodou 49
+  cenarios e encontrou 29 falhas, incluindo thirds temporais, sensibilidade
+  parametrica, custo extra de 20 bps e fragilidade no regime `hmm_prob_bull`
+  entre 0.70 e 0.80.
+- `phase5_research_candidate_falsification_gate`: `FAIL/abandon`; falsificou a
+  candidata por `temporal_subperiod_min_sharpe=-1.160839` e
+  `extra_cost_20bps_min_sharpe=-0.12201`. O controle de leakage passou.
+- `phase5_research_candidate_decision_gate`: `PASS/abandon`; classificou a
+  candidata como `RESEARCH_CANDIDATE_FALSIFIED`.
+
+Conclusao: a candidata era valida como experimento research-only, mas nao
+resistiu a falsificacao temporal/custos. Ela nao deve ser promovida, nao deve
+ser tratada como suporte official de short exposure e nao sustenta paper
+readiness.
+
 ## Commits da branch
 
 Commits acima de `codex/openclaw-sniper-handoff`:
 
+- `a31bb54` - Add phase5 research candidate decision gate
+- `eda07a6` - Add phase5 research candidate falsification gate
+- `4d430fd` - Add phase5 research candidate stability gate
+- `9f95447` - Add phase5 research candidate global reaudit gate
 - `d7829b7` - Add phase6 clean regeneration gate
 - `e86f0db` - Prepare phase6 clean regeneration gate support
 - `c4bf284` - Add phase6 artifact rehydration DSR stop gate
@@ -72,6 +103,10 @@ Commits acima de `codex/openclaw-sniper-handoff`:
 | `phase5_research_signal_polarity_long_short_gate` | `PARTIAL` | `correct` | Familia de polaridade achou alpha mediano positivo, mas exigiu correcao. |
 | `phase5_research_signal_polarity_stability_correction_gate` | `PASS` | `advance` | Candidato research-only estavel sobrevivente; nao promotable. |
 | `phase5_research_full_phase_family_comparison_gate` | `PASS` | `advance` | Selecionou sobrevivente research-only e preservou blockers official. |
+| `phase5_research_candidate_global_reaudit_gate` | `PASS` | `advance` | Reauditou a candidata como research/sandbox valida, sem promocao. |
+| `phase5_research_candidate_stability_gate` | `PARTIAL` | `correct` | Encontrou fragilidade temporal, parametrica e de custo. |
+| `phase5_research_candidate_falsification_gate` | `FAIL` | `abandon` | Falsificou a candidata por thirds temporais e custo extra de 20 bps. |
+| `phase5_research_candidate_decision_gate` | `PASS` | `abandon` | Registrou `RESEARCH_CANDIDATE_FALSIFIED`. |
 
 ## Evidencias do ultimo gate
 
@@ -136,8 +171,15 @@ Artifacts research baseline usados e hasheados:
   - CVaR research com exposicao short nao prova CVaR economico official
 
 - `short_exposure_research_only_not_official`
-  - o candidato `short_high_p_bma_k3_p60_h70` e sandbox/research apenas
+  - o candidato `short_high_p_bma_k3_p60_h70` era sandbox/research apenas
+  - a candidata foi falsificada e abandonada em
+    `phase5_research_candidate_decision_gate`
   - nao ha gate de promocao, nem readiness operacional
+
+- `no_surviving_research_candidate_after_falsification`
+  - nenhum candidato promotable sobreviveu a falsificacao
+  - proximo passo recomendado: auditoria global pos-falsificacao ou nova tese
+    research-only materialmente diferente
 
 ## Testes executados
 
@@ -154,6 +196,14 @@ Testes full-phase adicionais:
 ```
 
 Resultado observado: `11 passed`.
+
+Testes de candidate reaudit/falsification:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest tests/unit/test_phase5_research_candidate_validation.py -q
+```
+
+Resultado observado: `6 passed`.
 
 ## Risco residual
 

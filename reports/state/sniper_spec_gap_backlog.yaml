@@ -15,6 +15,8 @@ gaps:
       - "reports/gates/phase5_research_deep_quant_diagnostic_gate/gate_report.json"
       - "reports/gates/phase5_research_signal_polarity_stability_correction_gate/gate_report.json"
       - "reports/gates/phase5_research_full_phase_family_comparison_gate/gate_report.json"
+      - "reports/gates/phase5_research_candidate_falsification_gate/gate_report.json"
+      - "reports/gates/phase5_research_candidate_decision_gate/gate_report.json"
       - "dsr_honest=0.0"
       - "dsr_passed=false"
       - "safe Stage A top1 median combo Sharpe=-0.727203"
@@ -23,7 +25,8 @@ gaps:
       - "threshold family stability correction failed; best correction median Sharpe=0.195832"
       - "signal polarity survivor median combo Sharpe=1.361592"
       - "signal polarity survivor min combo Sharpe=0.261111"
-      - "signal polarity survivor remains below sr_needed=4.47 and is research-only"
+      - "signal polarity survivor remained below sr_needed=4.47 and was later falsified by temporal/cost stress"
+      - "hard_falsifiers=temporal_subperiod_min_sharpe,extra_cost_20bps_min_sharpe"
       - "current hypothesis space frozen under previous 5-gate policy"
       - "AUTONOMOUS FULL PHASE EXECUTION POLICY now authorizes broader future missions"
     source_files:
@@ -38,7 +41,7 @@ gaps:
       - "PROMOTE_OFFICIAL"
       - "RELAX_DSR_THRESHOLD"
       - "DECLARE_READINESS"
-    suggested_gate: "phase5_research_candidate_global_reaudit_gate"
+    suggested_gate: "post_candidate_falsification_global_reaudit"
     stop_condition_if_unresolved: "No promotion or readiness claim is allowed while honest DSR remains 0.0."
 
   - id: GAP-DSR-002
@@ -76,7 +79,8 @@ gaps:
       - "reports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/portfolio_cvar_report.json"
       - "reports/gates/phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate/gate_report.json"
       - "reports/gates/phase5_research_signal_polarity_stability_correction_gate/gate_report.json"
-      - "phase5_research_candidate_global_reaudit_gate is the next required candidate audit"
+      - "reports/gates/phase5_research_candidate_decision_gate/gate_report.json"
+      - "phase5_research_candidate_decision_gate abandoned the surviving candidate after temporal/cost falsification"
       - "positions={}"
       - "total_exposure_pct=0.0"
       - "economic_robustness_status=NOT_PROVEN_ZERO_EXPOSURE"
@@ -93,7 +97,7 @@ gaps:
     forbidden_actions:
       - "TREAT_ZERO_EXPOSURE_CVAR_AS_ECONOMIC_ROBUSTNESS"
       - "DECLARE_PAPER_READINESS"
-    suggested_gate: "phase5_research_candidate_global_reaudit_gate"
+    suggested_gate: "post_candidate_falsification_global_reaudit"
     stop_condition_if_unresolved: "Paper readiness is forbidden unless nonzero exposure or approved stress evidence exists."
 
   - id: GAP-CVAR-002
@@ -134,6 +138,7 @@ gaps:
       - "reports/gates/phase5_research_alternative_exante_family_gate/gate_report.json"
       - "reports/gates/phase5_research_signal_polarity_stability_correction_gate/gate_report.json"
       - "reports/gates/phase5_research_full_phase_family_comparison_gate/gate_report.json"
+      - "reports/gates/phase5_research_candidate_decision_gate/gate_report.json"
       - "ALIVE_BUT_NOT_PROMOTABLE"
     source_files:
       - "docs/SNIPER_openclaw_handoff.md"
@@ -146,7 +151,7 @@ gaps:
     forbidden_actions:
       - "PROMOTE_OFFICIAL"
       - "TREAT_RESEARCH_AS_OFFICIAL"
-    suggested_gate: "phase5_research_candidate_global_reaudit_gate"
+    suggested_gate: "post_candidate_falsification_global_reaudit"
     stop_condition_if_unresolved: "Do not promote cross-sectional while this status remains."
 
   - id: GAP-PAPER-001
@@ -323,7 +328,8 @@ gaps:
       - "fail_abandon_does_not_end_mission_when_materially_different_hypothesis_exists"
       - "freeze_requires_two_materially_different_families_and_family_comparison"
       - "human_decision_is_last_resort"
-      - "surviving_research_candidate_requires_autonomous_audit_or_falsification"
+      - "surviving_research_candidate_audited_and_falsified"
+      - "phase5_research_candidate_decision_gate=PASS/abandon"
     source_files:
       - "AGENTS.md"
       - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
@@ -342,8 +348,8 @@ gaps:
       - "A4_REOPEN"
       - "THRESHOLD_RELAXATION"
       - "REAL_TRADING"
-    suggested_gate: "phase5_research_candidate_global_reaudit_gate"
-    stop_condition_if_unresolved: "A mission must continue within budget while defensible research-only hypotheses or candidate audit/falsification gates remain inside the repo."
+    suggested_gate: "post_candidate_falsification_global_reaudit"
+    stop_condition_if_unresolved: "A mission must continue within budget while defensible research-only hypotheses remain inside the repo; the previous survivor has been abandoned."
 
   - id: GAP-ALTEXANTE-001
     title: Alternative p_bma/sigma/hmm long-only ex-ante family failed
@@ -371,44 +377,58 @@ gaps:
     stop_condition_if_unresolved: "Do not repeat this long-only p_bma/sigma/hmm family under another name; continue only with materially different thesis."
 
   - id: GAP-POLARITY-001
-    title: Signal-polarity short-high research candidate survived but is not promotable
+    title: Signal-polarity short-high research candidate was falsified
     type: research_hypothesis
     severity: high
-    status: candidate_research_only
+    status: abandoned
     evidence:
       - "reports/gates/phase5_research_signal_polarity_long_short_gate/gate_report.json"
       - "reports/gates/phase5_research_signal_polarity_stability_correction_gate/gate_report.json"
       - "reports/gates/phase5_research_full_phase_family_comparison_gate/gate_report.json"
+      - "reports/gates/phase5_research_candidate_global_reaudit_gate/gate_report.json"
+      - "reports/gates/phase5_research_candidate_stability_gate/gate_report.json"
+      - "reports/gates/phase5_research_candidate_falsification_gate/gate_report.json"
+      - "reports/gates/phase5_research_candidate_decision_gate/gate_report.json"
       - "best_correction_policy=short_high_p_bma_k3_p60_h70"
       - "best_correction_median_combo_sharpe=1.361592"
       - "best_correction_min_combo_sharpe=0.261111"
       - "best_correction_median_active_days=471.0"
       - "best_correction_max_cvar_95_loss_fraction=0.00344841"
+      - "candidate_global_reaudit=PASS/advance"
+      - "candidate_stability=PARTIAL/correct"
+      - "candidate_falsification=FAIL/abandon"
+      - "candidate_decision=PASS/abandon"
+      - "hard_falsifiers=temporal_subperiod_min_sharpe,extra_cost_20bps_min_sharpe"
+      - "worst_temporal_min_sharpe=-1.160839"
+      - "extra_cost_20bps_min_sharpe=-0.12201"
       - "short_exposure_is_research_sandbox_only=true"
       - "dsr_honest=0.0"
       - "sr_needed=4.47"
       - "human_decision_is_last_resort"
-      - "FREEZE_LINE is forbidden before candidate audit/falsification"
+      - "FREEZE_LINE is no longer blocked by unaudited survivor, but promotion remains forbidden"
     source_files:
       - "services/ml_engine/phase5_research_signal_polarity_long_short.py"
       - "services/ml_engine/phase5_research_signal_polarity_stability_correction.py"
       - "services/ml_engine/phase5_research_full_phase_family_comparison.py"
+      - "services/ml_engine/phase5_research_candidate_global_reaudit.py"
+      - "services/ml_engine/phase5_research_candidate_stability.py"
+      - "services/ml_engine/phase5_research_candidate_falsification.py"
+      - "services/ml_engine/phase5_research_candidate_decision.py"
       - "tests/unit/test_phase5_research_signal_polarity_long_short.py"
       - "tests/unit/test_phase5_research_full_phase_family_comparison.py"
+      - "tests/unit/test_phase5_research_candidate_validation.py"
     allowed_actions:
-      - "RUN_GLOBAL_REAUDIT_CANDIDATE"
-      - "CANDIDATE_STABILITY_GATE"
-      - "CANDIDATE_FALSIFICATION_GATE"
       - "RUN_GLOBAL_REAUDIT"
       - "CONTINUE_AUTONOMOUS"
       - "START_RESEARCH_ONLY_THESIS"
+      - "FREEZE_LINE"
     forbidden_actions:
       - "PROMOTE_OFFICIAL"
       - "DECLARE_PAPER_READINESS"
       - "TREAT_SHORT_SANDBOX_AS_OFFICIAL"
       - "RELAX_DSR_THRESHOLD"
-    suggested_gate: "phase5_research_candidate_global_reaudit_gate"
-    stop_condition_if_unresolved: "The candidate requires autonomous audit/falsification before freeze or human decision; it cannot be promoted while DSR remains 0.0 and official CVaR remains zero exposure."
+    suggested_gate: "post_candidate_falsification_global_reaudit"
+    stop_condition_if_unresolved: "The candidate has been abandoned; do not revive it without materially new evidence. Continue only with global reaudit, a materially new research-only thesis, or freeze after governance review."
 
   - id: GAP-AUTODECISION-001
     title: Human decision is last resort after internal strategic decision
@@ -420,22 +440,20 @@ gaps:
       - "AGENTS.md"
       - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
       - "reports/state/sniper_current_state.json"
-      - "candidate_survival_protocol_requires_RUN_GLOBAL_REAUDIT_CANDIDATE"
-      - "FREEZE_LINE forbidden before candidate audit/falsification"
+      - "candidate_survival_protocol_completed_for_short_high_p_bma_k3_p60_h70"
+      - "candidate_decision=RESEARCH_CANDIDATE_FALSIFIED"
     source_files:
       - "AGENTS.md"
       - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
       - "reports/state/sniper_current_state.json"
     allowed_actions:
-      - "RUN_GLOBAL_REAUDIT_CANDIDATE"
-      - "CANDIDATE_STABILITY_GATE"
-      - "CANDIDATE_FALSIFICATION_GATE"
       - "UPDATE_DRAFT_PR"
+      - "RUN_GLOBAL_REAUDIT"
       - "CONTINUE_AUTONOMOUS"
+      - "START_RESEARCH_ONLY_THESIS"
     forbidden_actions:
       - "STOP_FOR_HUMAN_DECISION_WHILE_INTERNAL_GATE_EXISTS"
-      - "FREEZE_LINE_BEFORE_CANDIDATE_AUDIT_OR_FALSIFICATION"
       - "PROMOTE_OFFICIAL"
       - "DECLARE_PAPER_READINESS"
-    suggested_gate: "phase5_research_candidate_global_reaudit_gate"
-    stop_condition_if_unresolved: "Do not request human strategy or freeze while candidate audit/falsification can be run inside the repo."
+    suggested_gate: "post_candidate_falsification_global_reaudit"
+    stop_condition_if_unresolved: "Do not request human strategy while global reaudit, a materially new research-only thesis, or governed freeze review can be run inside the repo."

@@ -1,5 +1,5 @@
 {
-  "program_status": "RESEARCH_ONLY_SURVIVOR_IDENTIFIED_NOT_PROMOTABLE",
+  "program_status": "RESEARCH_ONLY_CANDIDATE_FALSIFIED_PROMOTION_BLOCKED",
   "active_branch": "codex/autonomous-sniper-implementation",
   "latest_pr": {
     "number": 1,
@@ -13,11 +13,11 @@
     "observed_before_local_gate_commits": false
   },
   "latest_gate": {
-    "gate_slug": "phase5_research_full_phase_family_comparison_gate",
+    "gate_slug": "phase5_research_candidate_decision_gate",
     "status": "PASS",
-    "decision": "advance"
+    "decision": "abandon"
   },
-  "latest_decision": "RUN_GLOBAL_REAUDIT_CANDIDATE_REQUIRED",
+  "latest_decision": "RUN_GLOBAL_REAUDIT_AFTER_CANDIDATE_FALSIFICATION",
   "resolved_blockers": [
     "source_doc_alignment_restored",
     "phase4_official_artifacts_found_and_hashed",
@@ -35,7 +35,11 @@
     "alternative_exante_p_bma_sigma_hmm_family_tested_and_abandoned",
     "signal_polarity_long_short_family_tested",
     "signal_polarity_stability_correction_research_candidate_survived",
-    "full_phase_family_comparison_completed"
+    "full_phase_family_comparison_completed",
+    "signal_polarity_candidate_global_reaudit_completed",
+    "signal_polarity_candidate_stability_fragility_identified",
+    "signal_polarity_candidate_falsified_and_abandoned",
+    "candidate_decision_gate_completed"
   ],
   "open_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -45,8 +49,7 @@
     "safe_stage_a_top1_policy_negative_median_sharpe",
     "sharpe_gap_to_required_honest_dsr",
     "threshold_family_cross_combo_instability",
-    "surviving_research_candidate_below_required_honest_dsr_sharpe",
-    "short_exposure_research_only_not_official",
+    "no_surviving_research_candidate_after_falsification",
     "no_promotable_official_alpha_candidate"
   ],
   "promotion_blockers": [
@@ -89,11 +92,10 @@
     "max_partial_corrections_per_gate": 2,
     "max_intermediate_global_audits_per_mission": 1,
     "max_pr_draft_updates_at_mission_end": 1,
-    "current_mission_research_gate_budget_used": 5,
+    "current_mission_research_gate_budget_used": 4,
     "current_mission_research_gate_budget_limit": 15,
     "current_mission_hypothesis_families_tested": [
-      "alternative_exante_p_bma_sigma_hmm",
-      "signal_polarity_long_short"
+      "signal_polarity_candidate_reaudit_and_falsification"
     ],
     "current_mission_partial_corrections_used": 1,
     "continue_after_fail_abandon_when_materially_new_hypothesis_exists": true,
@@ -102,8 +104,8 @@
     "human_decision_only_for_external_or_governance_cases": true,
     "human_decision_is_last_resort": true,
     "internal_strategic_decision_required_before_human_stop": true,
-    "surviving_candidate_requires_autonomous_audit_or_falsification": true,
-    "freeze_line_forbidden_before_candidate_audit_or_falsification": true,
+    "surviving_candidate_requires_autonomous_audit_or_falsification": false,
+    "freeze_line_forbidden_before_candidate_audit_or_falsification": false,
     "freeze_requirements": [
       "at_least_2_materially_different_families_tested",
       "explicit_dsr_diagnostic",
@@ -137,17 +139,22 @@
       "caveat": "Research sandbox CVaR passed measurement bounds, but alpha merit, DSR, and official zero exposure remain blockers."
     },
     "research_signal_polarity_status": {
-      "gate_slug": "phase5_research_signal_polarity_stability_correction_gate",
+      "gate_slug": "phase5_research_candidate_decision_gate",
       "status": "PASS",
-      "decision": "advance",
+      "decision": "abandon",
       "policy": "short_high_p_bma_k3_p60_h70",
       "median_active_days": 471.0,
       "median_combo_sharpe": 1.361592,
       "min_combo_sharpe": 0.261111,
       "max_cvar_95_loss_fraction": 0.00344841,
+      "candidate_review_classification": "RESEARCH_CANDIDATE_FALSIFIED",
+      "hard_falsifiers": [
+        "temporal_subperiod_min_sharpe",
+        "extra_cost_20bps_min_sharpe"
+      ],
       "short_exposure_research_only": true,
       "promotion_allowed": false,
-      "caveat": "Stable positive research candidate survives in sandbox, but it uses short exposure and remains below sr_needed for honest DSR promotion."
+      "caveat": "The candidate passed global reaudit but was falsified by temporal subperiod and 20 bps cost stress. It is abandoned as a robust research candidate and remains non-promotable."
     }
   },
   "dsr_status": {
@@ -167,12 +174,17 @@
       "caveat": "Diagnostic explains DSR=0.0 but does not improve the policy or authorize promotion."
     },
     "latest_research_candidate": {
-      "gate_slug": "phase5_research_signal_polarity_stability_correction_gate",
+      "gate_slug": "phase5_research_candidate_decision_gate",
       "policy": "short_high_p_bma_k3_p60_h70",
       "median_combo_sharpe": 1.361592,
       "min_combo_sharpe": 0.261111,
       "sr_needed": 4.47,
       "sharpe_gap_to_sr_needed": 3.108408,
+      "candidate_review_classification": "RESEARCH_CANDIDATE_FALSIFIED",
+      "hard_falsifiers": [
+        "temporal_subperiod_min_sharpe",
+        "extra_cost_20bps_min_sharpe"
+      ],
       "promotion_allowed": false
     }
   },
@@ -185,32 +197,39 @@
   "paper_readiness_allowed": false,
   "required_external_artifacts": [],
   "latest_research_thesis": {
-    "gate_slug": "phase5_research_full_phase_family_comparison_gate",
-    "hypothesis": "A signal-polarity short-high research/sandbox family can survive comparison as a stable positive candidate without promotion.",
+    "gate_slug": "phase5_research_candidate_decision_gate",
+    "hypothesis": "The short_high_p_bma_k3_p60_h70 research-only survivor can withstand autonomous reaudit, stability testing and falsification without promotion.",
     "status": "PASS",
-    "decision": "advance",
-    "classification": "RESEARCH_ONLY_SURVIVOR_IDENTIFIED_BELOW_DSR_PROMOTION_BAR",
+    "decision": "abandon",
+    "classification": "RESEARCH_CANDIDATE_FALSIFIED",
     "surviving_modules": [
       "research_sandbox_nonzero_exposure_cvar_evaluator",
       "dsr_zero_root_cause_diagnostic",
-      "deep_quant_diagnostic",
-      "signal_polarity_stability_research_candidate"
+      "deep_quant_diagnostic"
     ],
-    "surviving_research_only_candidates": [
+    "surviving_research_only_candidates": [],
+    "abandoned_research_only_candidates": [
       {
         "policy": "short_high_p_bma_k3_p60_h70",
         "median_combo_sharpe": 1.361592,
         "min_combo_sharpe": 0.261111,
         "median_active_days": 471.0,
         "max_cvar_95_loss_fraction": 0.00344841,
+        "decision_gate": "phase5_research_candidate_decision_gate",
+        "classification": "RESEARCH_CANDIDATE_FALSIFIED",
+        "hard_falsifiers": [
+          "temporal_subperiod_min_sharpe",
+          "extra_cost_20bps_min_sharpe"
+        ],
         "promotion_allowed": false
       }
     ],
     "surviving_promotable_candidates": 0,
     "can_continue_autonomously_under_current_policy": true,
     "requires_external_artifact": false,
-    "candidate_review_status": "PENDING_AUTONOMOUS_GLOBAL_REAUDIT",
-    "next_candidate_gate": "phase5_research_candidate_global_reaudit_gate"
+    "candidate_review_status": "FALSIFIED_AND_ABANDONED",
+    "next_candidate_gate": null,
+    "next_recommended_gate": "post_candidate_falsification_global_reaudit"
   },
   "internal_strategic_decision_policy": {
     "human_decision_is_last_resort": true,
@@ -224,9 +243,10 @@
       "STOP_FOR_EXTERNAL_RESOURCE"
     ],
     "default_when_research_candidate_survives": "RUN_GLOBAL_REAUDIT_CANDIDATE",
-    "freeze_line_allowed_before_candidate_audit": false
+    "default_after_candidate_falsified": "RUN_GLOBAL_REAUDIT",
+    "freeze_line_allowed_before_candidate_audit": true
   },
-  "next_recommended_mode": "RUN_GLOBAL_REAUDIT_CANDIDATE",
-  "next_recommended_gate": "phase5_research_candidate_global_reaudit_gate",
-  "updated_at_utc": "2026-05-03T13:16:23Z"
+  "next_recommended_mode": "RUN_GLOBAL_REAUDIT",
+  "next_recommended_gate": "post_candidate_falsification_global_reaudit",
+  "updated_at_utc": "2026-05-03T13:35:04Z"
 }

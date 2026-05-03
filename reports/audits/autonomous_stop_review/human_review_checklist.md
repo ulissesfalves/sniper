@@ -10,6 +10,10 @@
 
 ## Commits
 
+- [ ] Revisar `a31bb54` - candidate decision gate.
+- [ ] Revisar `eda07a6` - candidate falsification gate.
+- [ ] Revisar `4d430fd` - candidate stability gate.
+- [ ] Revisar `9f95447` - candidate global reaudit gate.
 - [ ] Revisar `649e9a9` - skill autonomous implementation manager.
 - [ ] Revisar `add6ce1` - primeiro gate Phase6.
 - [ ] Revisar `b1004fb` - preflight/source-doc alignment.
@@ -38,6 +42,19 @@
 - [ ] Confirmar mediana Sharpe `1.361592`, min Sharpe `0.261111`, dias ativos medianos `471.0` e CVaR95 max `0.00344841`.
 - [ ] Confirmar que exposicao short nao foi tratada como official.
 - [ ] Confirmar que o candidato continua abaixo de `sr_needed=4.47`.
+
+## Gates candidate reaudit/falsification
+
+- [ ] Verificar `reports/gates/phase5_research_candidate_global_reaudit_gate/gate_report.json`.
+- [ ] Verificar `reports/gates/phase5_research_candidate_stability_gate/gate_report.json`.
+- [ ] Verificar `reports/gates/phase5_research_candidate_falsification_gate/gate_report.json`.
+- [ ] Verificar `reports/gates/phase5_research_candidate_decision_gate/gate_report.json`.
+- [ ] Confirmar que `phase5_research_candidate_global_reaudit_gate` foi `PASS/advance` apenas como research/sandbox.
+- [ ] Confirmar que `phase5_research_candidate_stability_gate` foi `PARTIAL/correct` com 29 falhas em 49 cenarios.
+- [ ] Confirmar hard falsifiers: `temporal_subperiod_min_sharpe=-1.160839` e `extra_cost_20bps_min_sharpe=-0.12201`.
+- [ ] Confirmar que o controle de leakage passou.
+- [ ] Confirmar classificacao final `RESEARCH_CANDIDATE_FALSIFIED`.
+- [ ] Confirmar que `short_high_p_bma_k3_p60_h70` foi abandonada e nao deve ser promovida.
 
 ## Clean regeneration
 
@@ -74,7 +91,7 @@
 - [ ] Confirmar `cvar_economic_status=NOT_PROVEN_ZERO_EXPOSURE`.
 - [ ] Confirmar que CVaR zero exposure nao foi tratado como robustez economica.
 - [ ] Confirmar que o novo CVaR research com exposicao short nao foi tratado como CVaR economico official.
-- [ ] Confirmar que o candidato research-only nao foi usado para declarar paper readiness.
+- [ ] Confirmar que o candidato research-only falsificado nao foi usado para declarar paper readiness.
 
 ## Testes
 
@@ -94,10 +111,18 @@
 
 - [ ] Esperado observado: `11 passed`.
 
+- [ ] Rodar ou revisar resultado candidate reaudit/falsification:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest tests/unit/test_phase5_research_candidate_validation.py -q
+```
+
+- [ ] Esperado observado: `6 passed`.
+
 ## Decisao humana
 
 - [ ] Aprovar PR draft como evidencia de reprodutibilidade/governanca Phase6.
 - [ ] Nao aprovar promocao official.
 - [ ] Decidir se a linha cross-sectional deve ser congelada como research-only.
-- [ ] Revisar o candidato sandbox `short_high_p_bma_k3_p60_h70` como research-only.
-- [ ] Decidir se uma futura tese deve validar suporte short sandbox/official ou continuar buscando alternativa long-only, sem usar esta missao como promocao.
+- [ ] Revisar o abandono do candidato sandbox `short_high_p_bma_k3_p60_h70`.
+- [ ] Decidir se a proxima rodada deve ser auditoria global pos-falsificacao, nova tese research-only materialmente diferente, ou freeze governado; nao usar esta missao como promocao.

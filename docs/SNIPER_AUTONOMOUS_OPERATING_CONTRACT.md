@@ -49,7 +49,7 @@ Codex must not stop for human decision while any safe internal path remains:
 
 ## Surviving Research Candidate Protocol
 
-Current surviving candidate:
+Prior surviving candidate after autonomous audit/falsification:
 
 - policy: `short_high_p_bma_k3_p60_h70`;
 - scope: research/sandbox only;
@@ -58,16 +58,16 @@ Current surviving candidate:
 - median active days: `471.0`;
 - max CVaR95: `0.00344841`;
 - below `sr_needed=4.47`;
+- failed temporal and 20 bps cost falsification;
 - not promotable.
 
-The next autonomous mode is `RUN_GLOBAL_REAUDIT_CANDIDATE`.
-The next suggested gate is `phase5_research_candidate_global_reaudit_gate`.
+The next autonomous mode is `RUN_GLOBAL_REAUDIT`.
+The next suggested gate is `post_candidate_falsification_global_reaudit`.
 
-The candidate must be audited and/or falsified before `FREEZE_LINE` can be
-chosen. Audit/falsification must confirm ex-ante validity, research/sandbox
-scope, no official promotion, CVaR research, exposure, turnover, drawdown,
-stability, subperiod behavior, friction sensitivity, regime dependency and
-economic interpretability.
+The candidate has already been audited and falsified. Do not revive it without
+materially new evidence. Any next action must be a focused global reaudit,
+materially new research-only thesis, or governed freeze review; no official
+promotion or paper readiness is allowed.
 
 ## Stop Required
 

@@ -1,6 +1,6 @@
 # SNIPER Decision Ledger
 
-Updated: 2026-05-03T13:16:23Z
+Updated: 2026-05-03T13:35:04Z
 
 ## Closed Decisions
 
@@ -30,20 +30,21 @@ Updated: 2026-05-03T13:16:23Z
 | Signal-polarity stability correction | Research-only survivor | `phase5_research_signal_polarity_stability_correction_gate` passed/advanced as sandbox research only: `short_high_p_bma_k3_p60_h70` had median combo Sharpe `1.361592`, min combo Sharpe `0.261111`, median active days `471.0`, and max CVaR95 `0.00344841`. It is not official and still below the DSR promotion bar. |
 | Full phase family comparison | Research-only survivor selected | `phase5_research_full_phase_family_comparison_gate` compared six families/gates, abandoned Stage A/rank-score/alternative long-only lines, and preserved `short_high_p_bma_k3_p60_h70` as the only surviving research candidate. No official promotion, paper readiness, A3/A4 reopening or threshold relaxation occurred. |
 | Human decision last resort | Active governance policy | Codex must use internal strategic decision rubrics before stopping for human decision. Human decision is allowed only for external artifacts/data, credentials/API/access, operation outside repo, merge, official promotion, paper readiness, specification change, real capital, or non-technical product/business risk acceptance. |
-| Candidate audit before freeze | Active governance policy | Because `short_high_p_bma_k3_p60_h70` survived as research-only, `FREEZE_LINE` is forbidden before autonomous audit/falsification. Next mode is `RUN_GLOBAL_REAUDIT_CANDIDATE`; next gate is `phase5_research_candidate_global_reaudit_gate`. |
+| Candidate global reaudit | Passed, research-only | `phase5_research_candidate_global_reaudit_gate` recomputed `short_high_p_bma_k3_p60_h70`, confirmed ex-ante selection uses `p_bma_pkf`/`hmm_prob_bull`, no realized variable drives selection, no official promotion occurred, and DSR/CVaR blockers remain. |
+| Candidate stability | Partial/correct | `phase5_research_candidate_stability_gate` ran 49 scenarios and found 29 failures, including temporal thirds, parameter sensitivity, 20 bps cost stress and low-HMM regime fragility. |
+| Candidate falsification | Failed/abandoned | `phase5_research_candidate_falsification_gate` found hard falsifiers: `temporal_subperiod_min_sharpe=-1.160839` and `extra_cost_20bps_min_sharpe=-0.12201`; leakage control passed. |
+| Candidate decision | Falsified | `phase5_research_candidate_decision_gate` classified `short_high_p_bma_k3_p60_h70` as `RESEARCH_CANDIDATE_FALSIFIED` and `PASS/abandon`. It remains research/sandbox only and cannot support promotion, readiness or official short exposure. |
 
 ## Current Decision
 
-The current mission produced a reviewable research-only survivor:
-`short_high_p_bma_k3_p60_h70`. The next safe mode is
-`RUN_GLOBAL_REAUDIT_CANDIDATE`; the next gate is
-`phase5_research_candidate_global_reaudit_gate`. The survivor is sandbox-only,
-uses short exposure, has median Sharpe `1.361592`, min Sharpe `0.261111`,
-median active days `471.0`, max CVaR95 `0.00344841`, remains below
-`sr_needed=4.47`, and cannot clear `dsr_honest=0.0`. Do not promote, merge,
-declare paper readiness, reopen A3/A4, relax thresholds, freeze before
-candidate audit/falsification, or stop for human decision while this internal
-gate can run.
+The current mission audited and falsified the prior research-only survivor
+`short_high_p_bma_k3_p60_h70`. The next safe mode is `RUN_GLOBAL_REAUDIT`
+against the updated evidence, followed by either a materially new research-only
+thesis or a governed freeze review. The candidate had median Sharpe `1.361592`,
+min Sharpe `0.261111`, median active days `471.0`, and max CVaR95 `0.00344841`,
+but failed temporal and 20 bps cost falsification. Do not promote, merge,
+declare paper readiness, reopen A3/A4, relax thresholds, or treat the abandoned
+short-sandbox candidate as official support.
 
 ## Required Review Before Promotion
 

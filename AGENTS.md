@@ -98,7 +98,8 @@ safe internal path such as `RUN_GLOBAL_REAUDIT`, `RUN_GLOBAL_REAUDIT_CANDIDATE`,
 falsification gate, or an internal strategic decision rubric.
 
 When a research-only candidate survives, the next autonomous action is candidate
-audit/falsification before freeze or human decision. Current survivor:
+audit/falsification before freeze or human decision. The prior survivor was
+audited and falsified:
 
 - policy: `short_high_p_bma_k3_p60_h70`;
 - scope: research/sandbox only;
@@ -107,11 +108,12 @@ audit/falsification before freeze or human decision. Current survivor:
 - median active days: `471.0`;
 - max CVaR95: `0.00344841`;
 - still below `sr_needed=4.47`;
+- failed temporal and 20 bps cost falsification;
 - not promotable.
 
-Next recommended mode: `RUN_GLOBAL_REAUDIT_CANDIDATE`.
-Next suggested gate: `phase5_research_candidate_global_reaudit_gate`.
-`FREEZE_LINE` is forbidden until the survivor is audited/falsified.
+Next recommended mode: `RUN_GLOBAL_REAUDIT`.
+Next suggested gate: `post_candidate_falsification_global_reaudit`.
+Do not revive `short_high_p_bma_k3_p60_h70` without materially new evidence.
 
 Must stop before:
 

@@ -22,7 +22,7 @@
 
 ## Current Recommended Mode
 
-`RUN_GLOBAL_REAUDIT_CANDIDATE`
+`RUN_GLOBAL_REAUDIT`
 
 Allowed mission modes:
 
@@ -192,23 +192,34 @@ Current mission update:
 - `phase5_research_full_phase_family_comparison_gate` selected that candidate
   as research-only and non-promotable.
 
-Current recommended next gate:
-`phase5_research_candidate_global_reaudit_gate`.
+Current candidate audit/falsification update:
 
-Recommended next mode: `RUN_GLOBAL_REAUDIT_CANDIDATE`. Do not promote the
-survivor: it uses short sandbox exposure and remains below `sr_needed=4.47`
-while `dsr_honest=0.0`.
+- `phase5_research_candidate_global_reaudit_gate` passed as research-only
+  governance/ex-ante reaudit.
+- `phase5_research_candidate_stability_gate` returned `PARTIAL/correct` after
+  29 of 49 scenarios failed.
+- `phase5_research_candidate_falsification_gate` returned `FAIL/abandon` with
+  hard falsifiers `temporal_subperiod_min_sharpe=-1.160839` and
+  `extra_cost_20bps_min_sharpe=-0.12201`.
+- `phase5_research_candidate_decision_gate` classified
+  `short_high_p_bma_k3_p60_h70` as `RESEARCH_CANDIDATE_FALSIFIED`.
 
-Candidate survival protocol:
+Recommended next gate:
+`post_candidate_falsification_global_reaudit`.
 
-1. Run `phase5_research_candidate_global_reaudit_gate`.
-2. Confirm ex-ante validity, research/sandbox scope, no official promotion,
-   exposure, CVaR research, turnover, drawdown, stability and subperiods.
-3. If needed, run candidate stability/falsification gates for parameters,
-   costs, friction, splits, thresholds, stress and regime dependency.
-4. If the candidate survives, keep it
-   `RESEARCH_CANDIDATE_NOT_PROMOTABLE`.
-5. Update `reports/state/**` and the existing draft PR. Do not open PR ready.
+Recommended next mode: `RUN_GLOBAL_REAUDIT`. Do not promote the abandoned
+candidate: it used short sandbox exposure, remained below `sr_needed=4.47`, and
+failed autonomous falsification while `dsr_honest=0.0`.
+
+Post-falsification protocol:
+
+1. Run a focused global reaudit against the updated Phase5 candidate gates.
+2. Confirm that no official promotion, paper readiness, A3/A4 reopening or
+   threshold relaxation occurred.
+3. Decide between a materially new research-only thesis and a governed freeze
+   review. Do not revive `short_high_p_bma_k3_p60_h70` without materially new
+   evidence.
+4. Update `reports/state/**` and the existing draft PR. Do not open PR ready.
 
 ## Forbidden Interpretations
 
@@ -217,7 +228,8 @@ Candidate survival protocol:
 - Research baseline is not official.
 - PR #1 is not merge/readiness approval.
 - Cross-sectional remains not promotable.
-- `short_high_p_bma_k3_p60_h70` is not official and does not clear DSR.
+- `short_high_p_bma_k3_p60_h70` is not official, does not clear DSR, and has
+  been abandoned after temporal/cost falsification.
 
 ## Stop Conditions
 
@@ -226,8 +238,7 @@ Stop if the next step requires:
 - human product/strategy decision only after internal strategic decision and
   only when no internal research/sandbox/candidate audit path remains;
 - exploration budget exhaustion;
-- no materially new hypothesis and no surviving candidate audit/falsification
-  gate;
+- no materially new hypothesis after candidate falsification;
 - external artifact or private data not present;
 - credential, paid API or real capital;
 - merge or ready PR transition;
@@ -238,6 +249,5 @@ Stop if the next step requires:
 
 Do not stop for human decision while there is an open gap, defensible
 research-only hypothesis, internal correction, unfinished quantitative
-diagnostic, possible sandbox/research module, surviving research candidate, or
-candidate audit/falsification gate inside the repo. `FREEZE_LINE` is prohibited
-before auditing/falsifying the surviving candidate.
+diagnostic, possible sandbox/research module, or global reaudit gate inside the
+repo. The prior surviving candidate has now been audited and falsified.
