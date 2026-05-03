@@ -1,0 +1,80 @@
+{
+  "gate_slug": "phase5_research_cluster_conditioned_polarity_decision_gate",
+  "timestamp_utc": "2026-05-03T17:56:55+00:00",
+  "baseline_commit": "b13896a405f0bbc798ce98568abdc0013d80b58f",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4894,
+      "mtime_utc": "2026-05-03T17:53:07+00:00",
+      "sha256": "FD570C76625FEC19EA45D75F194CF89C160E05D89D093348C92B50FBD5B43186"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_falsification_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4334,
+      "mtime_utc": "2026-05-03T17:55:35+00:00",
+      "sha256": "D3E2A6B6C9834EBD41A585FD2B2E57D8F714BD9FE8143F4B4D6DB5FBC7D77668"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_falsification_gate\\cluster_conditioned_polarity_falsification_report.json",
+      "exists": true,
+      "size_bytes": 10266,
+      "mtime_utc": "2026-05-03T17:55:34+00:00",
+      "sha256": "517098B44F091F6399259F16FA70475B3677A1A9B8C0AE64B023DA7E48CCD070"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_decision_gate\\cluster_conditioned_polarity_decision_metrics.parquet",
+      "exists": true,
+      "size_bytes": 5003,
+      "mtime_utc": "2026-05-03T17:56:55+00:00",
+      "sha256": "421BBE404922F818C12C28763B4ECD9DC44BE9288EA6184BC88F993772141AD9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_decision_gate\\cluster_conditioned_polarity_decision_report.json",
+      "exists": true,
+      "size_bytes": 1160,
+      "mtime_utc": "2026-05-03T17:56:55+00:00",
+      "sha256": "276F11606FE16825E0C6049183EA2471C52774B5F05A97BBD860E84395D58B84"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_decision_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3764,
+      "mtime_utc": "2026-05-03T17:56:55+00:00",
+      "sha256": "A47B13FF184837AC4DB67FFDBDA78522B3DD4B8565323367EE8EF4F178E195ED"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_decision_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 1268,
+      "mtime_utc": "2026-05-03T17:56:55+00:00",
+      "sha256": "9E97DE3AE4490D55927F5F56EA3AB6F824E4E18BC9545D258C22967CF54A4A27"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_decision_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 4021,
+      "mtime_utc": "2026-05-03T17:56:55+00:00",
+      "sha256": "451B95DDC5706C205347B3A6A8E5DB842D9CDCD5817244D9B5CAF3A1964CE9B6"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_decision_gate\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    ".\\.venv\\Scripts\\python.exe services\\ml_engine\\phase5_research_cluster_conditioned_polarity_decision.py"
+  ],
+  "notes": [
+    "Research-only cluster-conditioned candidate decision gate.",
+    "Records abandon decision without promotion, paper readiness, merge, A3/A4 reopen or threshold relaxation."
+  ]
+}
