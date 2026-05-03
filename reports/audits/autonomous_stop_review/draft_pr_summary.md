@@ -47,7 +47,8 @@ da reprodutibilidade Phase6:
   familias, abandonou Stage A/rank-score/long-only p_bma-sigma-hmm e preservou
   o candidato de polaridade como sandbox-only.
 
-Esse candidato usa exposicao short em sandbox/research, nao existe promocao
+Esse candidato usava exposicao short em sandbox/research e depois foi
+falsificado pela rodada de candidate reaudit/falsification. Nao existe promocao
 official, nao ha paper readiness, e DSR/CVaR official continuam bloqueando
 qualquer leitura operacional.
 
@@ -162,7 +163,8 @@ Artifacts research baseline usados e hasheados:
   - `dsr_honest=0.0`
   - `dsr_passed=false`
   - check `DSR honesto > 0.95 [10]` falso
-  - candidato research-only sobrevivente ainda abaixo de `sr_needed=4.47`
+  - a ultima candidata research-only foi falsificada antes de qualquer promocao
+  - `sr_needed=4.47` continua muito acima das metricas observadas
 
 - `cvar_zero_exposure_not_economic_robustness`
   - snapshot official carregado, mas com `n_positions=0`
