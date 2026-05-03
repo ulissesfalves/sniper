@@ -548,15 +548,18 @@ gaps:
     title: Closed-loop freeze after post-falsification reaudit requires agenda expansion
     type: governance_state
     severity: critical
-    status: pending_agenda_expansion
+    status: resolved_candidate_found
     evidence:
       - "reports/gates/phase5_post_candidate_falsification_governed_freeze_gate/gate_report.json"
       - "classification=FULL_FREEZE_AFTER_REAUDIT"
       - "final permanent freeze not accepted until AUTONOMOUS_RESEARCH_AGENDA_EXPANSION runs"
+      - "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION executed"
+      - "phase5_research_meta_disagreement_abstention_gate=PASS/advance"
+      - "selected_agenda_id=AGENDA-H01"
       - "tested_family_count=5"
       - "tested_families=stage_a_safe_top1,rank_score_threshold,alternative_exante_p_bma_sigma_hmm,signal_polarity_short_high,cluster_conditioned_polarity"
       - "remaining_safe_material_hypothesis_count=0"
-      - "research_agenda_expansion_executed_after_latest_falsification=false"
+      - "research_agenda_expansion_executed_after_latest_falsification=true"
       - "dsr_honest=0.0"
       - "official_promotion_allowed=false"
       - "paper_readiness_allowed=false"
@@ -565,11 +568,10 @@ gaps:
       - "reports/state/sniper_current_state.json"
       - "reports/state/sniper_decision_ledger.md"
     allowed_actions:
-      - "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION"
-      - "GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC"
+      - "CANDIDATE_STABILITY_GATE"
+      - "META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE"
       - "UPDATE_STATE"
       - "UPDATE_DRAFT_PR"
-      - "RUN_GLOBAL_REAUDIT"
       - "STOP_FOR_EXTERNAL_RESOURCE"
     forbidden_actions:
       - "START_RESEARCH_ONLY_THESIS_WITHOUT_MATERIAL_NEW_EVIDENCE"
@@ -582,14 +584,14 @@ gaps:
       - "A4_REOPEN"
       - "THRESHOLD_RELAXATION"
       - "REAL_TRADING"
-    suggested_gate: "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION"
-    stop_condition_if_unresolved: "Before accepting final freeze, run sniper-autonomous-research-agenda-synthesizer. If no HIGH/MEDIUM executable hypothesis is generated, classify FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED."
+    suggested_gate: "phase5_research_meta_disagreement_stability_falsification_gate"
+    stop_condition_if_unresolved: "Final freeze is no longer the active next step because agenda expansion found a research/sandbox candidate. The candidate must be stability-tested and falsified or preserved before any new freeze."
 
   - id: GAP-AGENDA-001
     title: Research-only agenda expansion required before final freeze
     type: governance_state
     severity: critical
-    status: open
+    status: resolved_candidate_found
     evidence:
       - "current mission reached FULL_FREEZE_AFTER_REAUDIT"
       - "cluster_conditioned_polarity was falsified"
@@ -599,6 +601,11 @@ gaps:
       - "next_recommended_mode=AUTONOMOUS_RESEARCH_AGENDA_EXPANSION"
       - "next_logical_skill=sniper-autonomous-research-agenda-synthesizer"
       - "next_mode=GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC"
+      - "reports/state/sniper_research_agenda.yaml"
+      - "reports/state/sniper_hypothesis_inventory.md"
+      - "reports/state/sniper_next_autonomous_mission.md"
+      - "HIGH priority hypothesis selected: AGENDA-H01 meta_calibration_disagreement_abstention"
+      - "phase5_research_meta_disagreement_abstention_gate=PASS/advance"
     source_files:
       - "AGENTS.md"
       - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
@@ -606,8 +613,8 @@ gaps:
       - "reports/state/sniper_decision_ledger.md"
       - ".agents/skills/sniper-autonomous-research-agenda-synthesizer/SKILL.md"
     allowed_actions:
-      - "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION"
-      - "GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC"
+      - "CANDIDATE_STABILITY_GATE"
+      - "META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE"
       - "UPDATE_STATE"
       - "UPDATE_DRAFT_PR"
     forbidden_actions:
@@ -620,5 +627,42 @@ gaps:
       - "A4_REOPEN"
       - "THRESHOLD_RELAXATION"
       - "REAL_TRADING"
-    suggested_gate: "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION"
-    stop_condition_if_unresolved: "Final freeze is allowed only after the agenda synthesizer creates reports/state/sniper_research_agenda.yaml, reports/state/sniper_hypothesis_inventory.md and reports/state/sniper_next_autonomous_mission.md, and no HIGH/MEDIUM executable hypothesis remains."
+    suggested_gate: "phase5_research_meta_disagreement_stability_falsification_gate"
+    stop_condition_if_unresolved: "Agenda expansion is resolved because a HIGH priority executable candidate was found. Continue with stability/falsification; do not freeze or promote."
+
+  - id: GAP-META-DISAGREE-001
+    title: Meta calibration disagreement candidate requires stability and falsification
+    type: research_hypothesis
+    severity: high
+    status: open
+    evidence:
+      - "reports/state/sniper_research_agenda.yaml"
+      - "reports/gates/phase5_research_meta_disagreement_abstention_gate/gate_report.json"
+      - "classification=META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE"
+      - "best_policy=short_bma_high_meta_low_p60_m40_k3"
+      - "best_median_combo_sharpe=0.855486"
+      - "best_min_combo_sharpe=0.220622"
+      - "best_median_active_days=322.0"
+      - "best_max_cvar_95_loss_fraction=0.00455141"
+      - "candidate_below_sr_needed=true"
+      - "official_promotion_allowed=false"
+      - "paper_readiness_allowed=false"
+    source_files:
+      - "services/ml_engine/phase5_research_meta_disagreement_abstention.py"
+      - "tests/unit/test_phase5_research_meta_disagreement_abstention.py"
+      - "data/models/phase4/phase4_oos_predictions.parquet"
+    allowed_actions:
+      - "CANDIDATE_STABILITY_GATE"
+      - "CANDIDATE_FALSIFICATION_GATE"
+      - "META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE"
+      - "UPDATE_STATE"
+      - "UPDATE_DRAFT_PR"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "TREAT_SHORT_SANDBOX_AS_OFFICIAL"
+      - "RELAX_DSR_THRESHOLD"
+      - "USE_REALIZED_VARIABLE_AS_EX_ANTE_RULE"
+      - "MERGE_PR"
+    suggested_gate: "phase5_research_meta_disagreement_stability_falsification_gate"
+    stop_condition_if_unresolved: "The candidate is alive but not promotable. It must survive temporal, cost, parameter and leakage falsification before any further research deepening."

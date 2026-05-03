@@ -27,11 +27,13 @@
 
 ## Current Recommended Mode
 
-`AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`
+`CANDIDATE_STABILITY_GATE`
 
-Next logical skill: `sniper-autonomous-research-agenda-synthesizer`.
+Next logical skill: `sniper-autonomous-implementation-manager`.
 
-Next mode: `GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`.
+Next mode: `META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE`.
+
+Next gate: `phase5_research_meta_disagreement_stability_falsification_gate`.
 
 Allowed mission modes:
 
@@ -48,6 +50,7 @@ Allowed mission modes:
 - `OPEN_RESEARCH_GATE`
 - `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`
 - `GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`
+- `META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE`
 - `FREEZE_LINE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED` only after agenda
   expansion generates no HIGH/MEDIUM executable hypothesis.
 
@@ -221,6 +224,29 @@ If the agenda produces no HIGH/MEDIUM executable hypothesis, classify
 `FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED`, update
 `reports/state/**`, update the existing draft PR when reviewable, and stop.
 
+Agenda expansion result:
+
+- generated `reports/state/sniper_research_agenda.yaml`;
+- generated `reports/state/sniper_hypothesis_inventory.md`;
+- generated `reports/state/sniper_next_autonomous_mission.md`;
+- selected `AGENDA-H01`:
+  `meta_calibration_disagreement_abstention`;
+- executed `phase5_research_meta_disagreement_abstention_gate`;
+- result: `PASS/advance`;
+- classification:
+  `META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE`;
+- best policy: `short_bma_high_meta_low_p60_m40_k3`;
+- median Sharpe: `0.855486`;
+- min Sharpe: `0.220622`;
+- median active days: `322.0`;
+- max CVaR95: `0.00455141`;
+- still below `sr_needed=4.47`;
+- research/sandbox only.
+
+The next autonomous step is stability/falsification for the meta-disagreement
+candidate. Do not treat the initial PASS as promotion, readiness, or robust
+candidate survival.
+
 ## Functional Phase Order
 
 1. Deep quantitative diagnostics:
@@ -331,11 +357,10 @@ Gates added in the closed-loop mission:
   `PASS/abandon`;
 - `phase5_post_candidate_falsification_governed_freeze_gate`: `PASS/freeze`.
 
-The current autonomous loop must continue with
-`AUTONOMOUS_RESEARCH_AGENDA_EXPANSION` before accepting permanent final freeze.
-This is not promotion, not paper readiness and not merge approval. If the new
-agenda yields no HIGH/MEDIUM executable hypothesis, the next valid final
-classification is `FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED`.
+The current autonomous loop executed `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION` and
+found a new research/sandbox candidate. Permanent final freeze is not legitimate
+while this candidate has not been stability-tested and falsified or preserved.
+This is not promotion, not paper readiness and not merge approval.
 
 ## Forbidden Interpretations
 

@@ -1,5 +1,5 @@
 {
-  "program_status": "FULL_FREEZE_AFTER_REAUDIT_PENDING_RESEARCH_AGENDA_EXPANSION",
+  "program_status": "FUNCTIONAL_RESEARCH_MODULE_DELIVERED_RESEARCH_CANDIDATE_NOT_PROMOTABLE",
   "active_branch": "codex/autonomous-sniper-implementation",
   "latest_pr": {
     "number": 1,
@@ -13,11 +13,11 @@
     "observed_before_local_gate_commits": false
   },
   "latest_gate": {
-    "gate_slug": "phase5_post_candidate_falsification_governed_freeze_gate",
+    "gate_slug": "phase5_research_meta_disagreement_abstention_gate",
     "status": "PASS",
-    "decision": "freeze"
+    "decision": "advance"
   },
-  "latest_decision": "FULL_FREEZE_AFTER_REAUDIT_PENDING_AGENDA_EXPANSION",
+  "latest_decision": "META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE",
   "resolved_blockers": [
     "source_doc_alignment_restored",
     "phase4_official_artifacts_found_and_hashed",
@@ -45,7 +45,11 @@
     "cluster_conditioned_polarity_family_tested",
     "cluster_conditioned_polarity_candidate_falsified_and_abandoned",
     "closed_loop_governed_freeze_completed",
-    "research_agenda_expansion_before_final_freeze_policy_adopted"
+    "research_agenda_expansion_before_final_freeze_policy_adopted",
+    "research_agenda_expansion_executed_after_final_freeze_reaudit",
+    "research_agenda_generated_with_high_medium_hypotheses",
+    "meta_disagreement_abstention_gate_passed",
+    "meta_disagreement_research_candidate_found"
   ],
   "open_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -58,8 +62,8 @@
     "no_surviving_research_candidate_after_falsification",
     "no_promotable_official_alpha_candidate",
     "no_materially_new_safe_in_repo_hypothesis_remaining",
-    "research_agenda_expansion_required_before_final_freeze",
-    "new_research_agenda_not_yet_generated"
+    "meta_disagreement_candidate_requires_stability_falsification",
+    "meta_disagreement_candidate_below_sr_needed"
   ],
   "promotion_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -80,7 +84,8 @@
     "OPEN_RESEARCH_GATE",
     "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION",
     "GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC",
-    "FREEZE_LINE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED"
+    "FREEZE_LINE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED",
+    "META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE"
   ],
   "forbidden_next_modes": [
     "OFFICIAL_PROMOTION",
@@ -113,12 +118,10 @@
     "max_partial_corrections_per_gate": 2,
     "max_intermediate_global_audits_per_mission": 1,
     "max_pr_draft_updates_at_mission_end": 1,
-    "current_mission_research_gate_budget_used": 5,
+    "current_mission_research_gate_budget_used": 1,
     "current_mission_research_gate_budget_limit": 25,
     "current_mission_hypothesis_families_tested": [
-      "post_candidate_falsification_global_reaudit",
-      "cluster_conditioned_polarity",
-      "governed_freeze_after_reaudit"
+      "meta_calibration_disagreement_abstention"
     ],
     "current_mission_partial_corrections_used": 0,
     "continue_after_fail_abandon_when_materially_new_hypothesis_exists": true,
@@ -139,7 +142,7 @@
     ],
     "research_agenda_expansion_before_final_freeze": {
       "required": true,
-      "executed_after_latest_falsification": false,
+      "executed_after_latest_falsification": true,
       "next_action": "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION",
       "next_skill": "sniper-autonomous-research-agenda-synthesizer",
       "next_mode": "GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC",
@@ -148,7 +151,10 @@
         "reports/state/sniper_hypothesis_inventory.md",
         "reports/state/sniper_next_autonomous_mission.md"
       ],
-      "freeze_if_no_high_or_medium_executable_hypothesis": "FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED"
+      "freeze_if_no_high_or_medium_executable_hypothesis": "FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED",
+      "generated_high_medium_executable_hypothesis_count": 5,
+      "selected_hypothesis": "AGENDA-H01",
+      "selected_gate": "phase5_research_meta_disagreement_abstention_gate"
     },
     "previous_mission_research_gate_budget_used": 5,
     "previous_mission_research_gate_budget_limit": 5,
@@ -175,11 +181,11 @@
         "FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED",
         "PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION"
       ],
-      "current_mission_gates_used": 5,
-      "current_mission_final_classification": "FULL_FREEZE_AFTER_REAUDIT",
+      "current_mission_gates_used": 1,
+      "current_mission_final_classification": "FUNCTIONAL_RESEARCH_MODULE_DELIVERED",
       "final_freeze_accepted": false,
       "safe_internal_next_action_available": true,
-      "safe_internal_next_action": "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION"
+      "safe_internal_next_action": "phase5_research_meta_disagreement_stability_falsification_gate"
     }
   },
   "last_clean_regeneration_status": {
@@ -245,6 +251,21 @@
       ],
       "promotion_allowed": false,
       "caveat": "Cluster-conditioned candidate generated nonzero research exposure but failed temporal, cost and universe falsification. It is abandoned and non-promotable."
+    },
+    "research_meta_disagreement_status": {
+      "gate_slug": "phase5_research_meta_disagreement_abstention_gate",
+      "status": "PASS",
+      "decision": "advance",
+      "policy": "short_bma_high_meta_low_p60_m40_k3",
+      "median_active_days": 322.0,
+      "median_combo_sharpe": 0.855486,
+      "min_combo_sharpe": 0.220622,
+      "max_cvar_95_loss_fraction": 0.00455141,
+      "candidate_review_classification": "META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE",
+      "short_exposure_research_only": true,
+      "promotion_allowed": false,
+      "paper_readiness_allowed": false,
+      "caveat": "Initial research/sandbox gate passed, but the candidate is below sr_needed=4.47 and requires stability/falsification before any deepening."
     }
   },
   "dsr_status": {
@@ -264,14 +285,13 @@
       "caveat": "Diagnostic explains DSR=0.0 but does not improve the policy or authorize promotion."
     },
     "latest_research_candidate": {
-      "gate_slug": "phase5_research_cluster_conditioned_polarity_decision_gate",
-      "policy": "cluster_2_long_high_short_low_p60_h70_k3",
-      "median_combo_sharpe": 1.183459,
-      "min_combo_sharpe": 0.078586,
+      "gate_slug": "phase5_research_meta_disagreement_abstention_gate",
+      "policy": "short_bma_high_meta_low_p60_m40_k3",
+      "median_combo_sharpe": 0.855486,
+      "min_combo_sharpe": 0.220622,
       "sr_needed": 4.47,
-      "sharpe_gap_to_sr_needed": 3.286541,
-      "candidate_review_classification": "CLUSTER_CONDITIONED_RESEARCH_CANDIDATE_FALSIFIED",
-      "hard_falsifier_count": 13,
+      "sharpe_gap_to_sr_needed": 3.614514,
+      "candidate_review_classification": "META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE",
       "promotion_allowed": false
     }
   },
@@ -284,53 +304,39 @@
   "paper_readiness_allowed": false,
   "required_external_artifacts": [],
   "latest_research_thesis": {
-    "gate_slug": "phase5_post_candidate_falsification_governed_freeze_gate",
-    "hypothesis": "After post-falsification reaudit, cluster-conditioned polarity was tested as a materially new in-repo research/sandbox thesis and then abandoned after falsification.",
+    "gate_slug": "phase5_research_meta_disagreement_abstention_gate",
+    "hypothesis": "High BMA confidence paired with low calibrated meta probability can identify overconfident positive predictions to short in research/sandbox only.",
     "status": "PASS",
-    "decision": "freeze",
-    "classification": "FULL_FREEZE_AFTER_REAUDIT",
+    "decision": "advance",
+    "classification": "META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE",
     "final_freeze_accepted": false,
-    "agenda_expansion_required_before_final_freeze": true,
+    "agenda_expansion_executed_after_final_freeze_reaudit": true,
+    "selected_agenda_id": "AGENDA-H01",
     "surviving_modules": [
       "research_sandbox_nonzero_exposure_cvar_evaluator",
       "dsr_zero_root_cause_diagnostic",
       "deep_quant_diagnostic",
-      "cluster_conditioned_polarity_research_runner"
+      "meta_disagreement_abstention_research_runner"
     ],
-    "surviving_research_only_candidates": [],
-    "abandoned_research_only_candidates": [
+    "surviving_research_only_candidates": [
       {
-        "policy": "short_high_p_bma_k3_p60_h70",
-        "median_combo_sharpe": 1.361592,
-        "min_combo_sharpe": 0.261111,
-        "median_active_days": 471.0,
-        "max_cvar_95_loss_fraction": 0.00344841,
-        "decision_gate": "phase5_research_candidate_decision_gate",
-        "classification": "RESEARCH_CANDIDATE_FALSIFIED",
-        "hard_falsifiers": [
-          "temporal_subperiod_min_sharpe",
-          "extra_cost_20bps_min_sharpe"
-        ],
-        "promotion_allowed": false
-      },
-      {
-        "policy": "cluster_2_long_high_short_low_p60_h70_k3",
-        "median_combo_sharpe": 1.183459,
-        "min_combo_sharpe": 0.078586,
-        "median_active_days": 425.0,
-        "max_cvar_95_loss_fraction": 0.00151815,
-        "decision_gate": "phase5_research_cluster_conditioned_polarity_decision_gate",
-        "classification": "CLUSTER_CONDITIONED_RESEARCH_CANDIDATE_FALSIFIED",
-        "hard_falsifier_count": 13,
-        "promotion_allowed": false
+        "policy": "short_bma_high_meta_low_p60_m40_k3",
+        "median_combo_sharpe": 0.855486,
+        "min_combo_sharpe": 0.220622,
+        "median_active_days": 322.0,
+        "max_cvar_95_loss_fraction": 0.00455141,
+        "decision_gate": "phase5_research_meta_disagreement_abstention_gate",
+        "classification": "META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE",
+        "promotion_allowed": false,
+        "paper_readiness_allowed": false
       }
     ],
     "surviving_promotable_candidates": 0,
     "can_continue_autonomously_under_current_policy": true,
     "requires_external_artifact": false,
-    "candidate_review_status": "ALL_CANDIDATES_FALSIFIED_AND_ABANDONED",
-    "next_candidate_gate": null,
-    "next_recommended_gate": "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION"
+    "candidate_review_status": "RESEARCH_CANDIDATE_ALIVE_NOT_PROMOTABLE_REQUIRES_FALSIFICATION",
+    "next_candidate_gate": "phase5_research_meta_disagreement_stability_falsification_gate",
+    "next_recommended_gate": "phase5_research_meta_disagreement_stability_falsification_gate"
   },
   "internal_strategic_decision_policy": {
     "human_decision_is_last_resort": true,
@@ -352,13 +358,13 @@
     "freeze_line_allowed_before_candidate_audit": false,
     "freeze_line_allowed_before_agenda_expansion": false
   },
-  "latest_candidate_status": "NO_SURVIVING_RESEARCH_CANDIDATE_AFTER_FALSIFICATION",
+  "latest_candidate_status": "RESEARCH_CANDIDATE_ALIVE_NOT_PROMOTABLE",
   "human_decision_required": false,
   "autonomous_can_continue": true,
-  "next_recommended_mode": "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION",
-  "next_recommended_skill": "sniper-autonomous-research-agenda-synthesizer",
-  "next_recommended_submode": "GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC",
-  "next_recommended_gate": null,
+  "next_recommended_mode": "CANDIDATE_STABILITY_GATE",
+  "next_recommended_skill": "sniper-autonomous-implementation-manager",
+  "next_recommended_submode": "META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE",
+  "next_recommended_gate": "phase5_research_meta_disagreement_stability_falsification_gate",
   "if_agenda_has_no_high_or_medium_executable_hypothesis": "FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED",
-  "updated_at_utc": "2026-05-03T20:50:56Z"
+  "updated_at_utc": "2026-05-03T22:12:21Z"
 }

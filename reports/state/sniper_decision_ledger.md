@@ -1,6 +1,6 @@
 # SNIPER Decision Ledger
 
-Updated: 2026-05-03T20:50:56Z
+Updated: 2026-05-03T22:12:21Z
 
 ## Closed Decisions
 
@@ -41,6 +41,8 @@ Updated: 2026-05-03T20:50:56Z
 | Cluster-conditioned polarity decision | Falsified | `phase5_research_cluster_conditioned_polarity_decision_gate` classified `cluster_2_long_high_short_low_p60_h70_k3` as `CLUSTER_CONDITIONED_RESEARCH_CANDIDATE_FALSIFIED`; no promotion or readiness. |
 | Closed-loop governed freeze | Frozen | `phase5_post_candidate_falsification_governed_freeze_gate` passed with classification `FULL_FREEZE_AFTER_REAUDIT` after 5 material families, DSR diagnostic, research CVaR, family comparison and no surviving research candidate. |
 | Research agenda expansion before final freeze | Required | `FULL_FREEZE_AFTER_REAUDIT` is not accepted as permanent final freeze until `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION` runs via `sniper-autonomous-research-agenda-synthesizer`. Next mode is `GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`; human decision is not required. |
+| Research agenda expansion | Completed with candidate | `reports/state/sniper_research_agenda.yaml`, `sniper_hypothesis_inventory.md` and `sniper_next_autonomous_mission.md` were generated with six new research-only hypotheses. AGENDA-H01 was selected. |
+| Meta calibration disagreement abstention | Research candidate alive, not promotable | `phase5_research_meta_disagreement_abstention_gate` passed/advanced. Best policy `short_bma_high_meta_low_p60_m40_k3` had median Sharpe `0.855486`, min Sharpe `0.220622`, median active days `322.0`, max CVaR95 `0.00455141`; research/sandbox only, below `sr_needed=4.47`, no official promotion. |
 
 ## Current Decision
 
@@ -49,20 +51,21 @@ materially new `cluster_conditioned_polarity` family, falsified its candidate
 `cluster_2_long_high_short_low_p60_h70_k3`, and reached
 `FULL_FREEZE_AFTER_REAUDIT`.
 
-That freeze is not accepted as a permanent final freeze until the autonomous
-research agenda is expanded from specification, code, gates, falsifications,
-blockers and existing modules. The next safe action is
-`AUTONOMOUS_RESEARCH_AGENDA_EXPANSION` using
-`sniper-autonomous-research-agenda-synthesizer`; the next mode is
-`GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`.
+That freeze is no longer final because autonomous agenda expansion generated
+new HIGH/MEDIUM executable hypotheses. `AGENDA-H01` was implemented in
+`phase5_research_meta_disagreement_abstention_gate` and produced a live
+research/sandbox candidate:
+`short_bma_high_meta_low_p60_m40_k3`.
 
-Human decision is not required merely because the previous backlog ended. If
-the agenda generates a HIGH/MEDIUM priority hypothesis executable inside the
-repo, Codex should open a new research-only gate and continue. If it does not,
-classify `FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED`, update
-`reports/state/**`, update the draft PR when reviewable, and stop. Do not
-promote, merge, declare paper readiness, reopen A3/A4, relax thresholds, or
-treat any frozen research family as official support.
+Current classification:
+`META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE`.
+
+Human decision is not required. The next safe autonomous gate is
+`phase5_research_meta_disagreement_stability_falsification_gate`. The candidate
+must be tested against temporal subperiods, cost stress, parameter sensitivity,
+leakage controls and universe stress before it can be preserved as a robust
+research-only candidate. Do not promote, merge, declare paper readiness, reopen
+A3/A4, relax thresholds, or treat sandbox short exposure as official support.
 
 ## Required Review Before Promotion
 

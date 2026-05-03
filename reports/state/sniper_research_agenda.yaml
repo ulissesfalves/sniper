@@ -1,0 +1,217 @@
+generated_at_utc: "2026-05-03T21:20:00Z"
+mode: "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION"
+execution_status:
+  agenda_generated: true
+  selected_hypothesis: "AGENDA-H01"
+  selected_gate: "phase5_research_meta_disagreement_abstention_gate"
+  selected_gate_status: "PASS"
+  selected_gate_decision: "advance"
+  selected_classification: "META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE"
+  selected_policy: "short_bma_high_meta_low_p60_m40_k3"
+  next_gate: "phase5_research_meta_disagreement_stability_falsification_gate"
+  final_freeze_legitimate: false
+source_context:
+  latest_classification: "FULL_FREEZE_AFTER_REAUDIT"
+  latest_falsified_candidates:
+    - "short_high_p_bma_k3_p60_h70"
+    - "cluster_2_long_high_short_low_p60_h70_k3"
+  official_promotion_allowed: false
+  paper_readiness_allowed: false
+  human_decision_required: false
+  autonomous_can_continue: true
+forbidden_repeats:
+  - "Stage A safe top1"
+  - "rank_score_threshold"
+  - "alternative_exante_p_bma_sigma_hmm long-only"
+  - "signal_polarity_short_high"
+  - "short_high_p_bma_k3_p60_h70"
+  - "cluster_conditioned_polarity"
+  - "cluster_2_long_high_short_low_p60_h70_k3"
+hypotheses:
+  - id: "AGENDA-H01"
+    name: "meta_calibration_disagreement_abstention"
+    description: "Research-only policy that shorts cases where BMA confidence is high but the calibrated meta model is low, treating the disagreement as overconfidence rather than repeating pure high-BMA polarity."
+    blockers:
+      - "dsr_honest_zero"
+      - "no_surviving_research_candidate"
+      - "lack_of_recent_operational_robustness"
+    materially_different_reason: "Uses Phase4 meta calibration disagreement from phase4_oos_predictions, not Stage A rank score, not pure p_bma high polarity, and not cluster-conditioned polarity."
+    required_repo_data:
+      - "data/models/phase4/phase4_oos_predictions.parquet"
+    likely_files:
+      - "services/ml_engine/phase5_research_meta_disagreement_abstention.py"
+      - "tests/unit/test_phase5_research_meta_disagreement_abstention.py"
+      - "reports/gates/phase5_research_meta_disagreement_abstention_gate/**"
+    suggested_gate: "phase5_research_meta_disagreement_abstention_gate"
+    criteria:
+      PASS: "At least one predeclared research policy has median Sharpe > 0, min Sharpe > 0, median active days >= 120, nonzero exposure, and CVaR95 <= 0.15, while remaining non-promotable."
+      PARTIAL: "Positive median Sharpe exists but stability, active days or CVaR criteria are incomplete."
+      FAIL: "No predeclared policy produces positive median Sharpe with nonzero exposure."
+      INCONCLUSIVE: "Required Phase4 OOS predictions are missing or schema is incompatible."
+    falsifiers:
+      - "temporal subperiod min Sharpe <= 0"
+      - "20 bps cost stress min Sharpe <= 0"
+      - "parameter sensitivity loses positive min Sharpe"
+      - "selection uses realized fields"
+    leakage_risks:
+      - "pnl_real must be outcome only"
+      - "avg_sl_train and stage_a_eligible must not be selection inputs"
+    exposure_mode: "long/short sandbox"
+    can_be_research_candidate: true
+    official_requires_gate_or_spec_change: true
+    priority: "HIGH"
+    estimated_cost: "LOW"
+    expected_value_reason: "Existing Phase4 OOS artifact has meta calibration columns already in repo and a quick exploratory check found a nonzero-exposure p60/m40/k3 candidate with positive min combo Sharpe before deeper falsification."
+
+  - id: "AGENDA-H02"
+    name: "meta_uncertainty_abstention_long_only"
+    description: "Long-only research policy that trades only when calibrated meta confidence, BMA confidence and low sigma agree, otherwise abstains."
+    blockers:
+      - "cvar_zero_exposure"
+      - "lack_of_recent_operational_robustness"
+      - "instability_under_costs"
+    materially_different_reason: "Uses calibrated meta agreement and abstention instead of Stage A rank thresholds or short-high polarity."
+    required_repo_data:
+      - "data/models/phase4/phase4_oos_predictions.parquet"
+    likely_files:
+      - "services/ml_engine/phase5_research_meta_uncertainty_abstention.py"
+      - "tests/unit/test_phase5_research_meta_uncertainty_abstention.py"
+    suggested_gate: "phase5_research_meta_uncertainty_abstention_gate"
+    criteria:
+      PASS: "Positive median and min Sharpe with active days >= 120 and nonzero research exposure."
+      PARTIAL: "Positive median Sharpe but instability remains."
+      FAIL: "No positive median alpha."
+      INCONCLUSIVE: "Calibrated meta columns unavailable."
+    falsifiers:
+      - "active days too sparse"
+      - "cost stress removes alpha"
+      - "subperiod instability"
+    leakage_risks:
+      - "do not use pnl_real or stage_a_eligible as selection inputs"
+    exposure_mode: "long-only"
+    can_be_research_candidate: true
+    official_requires_gate_or_spec_change: true
+    priority: "MEDIUM"
+    estimated_cost: "LOW"
+    expected_value_reason: "Long-only form is governance simpler than short sandbox, but prior quick checks suggest sparse exposure."
+
+  - id: "AGENDA-H03"
+    name: "cvar_constrained_meta_sizing"
+    description: "Research sizing policy that uses ex-ante sigma and calibrated probability to cap target weights under a predeclared CVaR budget."
+    blockers:
+      - "cvar_zero_exposure"
+      - "instability_under_costs"
+    materially_different_reason: "Focuses on sizing and stress budget rather than signal polarity or cluster partition."
+    required_repo_data:
+      - "data/models/phase4/phase4_oos_predictions.parquet"
+    likely_files:
+      - "services/ml_engine/phase5_research_cvar_constrained_meta_sizing.py"
+      - "tests/unit/test_phase5_research_cvar_constrained_meta_sizing.py"
+    suggested_gate: "phase5_research_cvar_constrained_meta_sizing_gate"
+    criteria:
+      PASS: "Nonzero exposure, CVaR95 within bound, and positive median/min Sharpe."
+      PARTIAL: "CVaR bound holds but alpha remains weak."
+      FAIL: "No nonzero exposure or negative median Sharpe."
+      INCONCLUSIVE: "Required sigma or calibrated probability columns missing."
+    falsifiers:
+      - "stress rho=1 breach"
+      - "min Sharpe <= 0"
+      - "turnover too high"
+    leakage_risks:
+      - "historical realized losses cannot set current weights except as fixed training constants already in artifacts"
+    exposure_mode: "long-only or long/short sandbox"
+    can_be_research_candidate: true
+    official_requires_gate_or_spec_change: true
+    priority: "MEDIUM"
+    estimated_cost: "MEDIUM"
+    expected_value_reason: "Directly attacks CVaR zero-exposure with a risk-first sizing module."
+
+  - id: "AGENDA-H04"
+    name: "regime_specific_meta_disagreement"
+    description: "Research-only disagreement policy split by HMM bull probability regimes, with separate abstention thresholds per ex-ante regime."
+    blockers:
+      - "regime_dependency"
+      - "no_surviving_research_candidate"
+    materially_different_reason: "Tests regime-specific calibration disagreement rather than cluster-conditioned asset partitions."
+    required_repo_data:
+      - "data/models/phase4/phase4_oos_predictions.parquet"
+    likely_files:
+      - "services/ml_engine/phase5_research_regime_specific_meta_disagreement.py"
+    suggested_gate: "phase5_research_regime_specific_meta_disagreement_gate"
+    criteria:
+      PASS: "At least one regime policy survives median/min Sharpe and active-day criteria."
+      PARTIAL: "Only one regime has weak positive median Sharpe."
+      FAIL: "No regime-specific policy improves over null."
+      INCONCLUSIVE: "HMM probability column missing."
+    falsifiers:
+      - "low-regime or high-regime instability"
+      - "parameter sensitivity"
+      - "20 bps cost stress"
+    leakage_risks:
+      - "regime must be hmm_prob_bull available ex-ante"
+    exposure_mode: "long/short sandbox"
+    can_be_research_candidate: true
+    official_requires_gate_or_spec_change: true
+    priority: "MEDIUM"
+    estimated_cost: "MEDIUM"
+    expected_value_reason: "Could isolate the temporal fragility seen in prior candidates without reusing cluster conditioning."
+
+  - id: "AGENDA-H05"
+    name: "feature_family_ablation_blocker_decomposition"
+    description: "Pure diagnostic module that decomposes which ex-ante feature families contribute to Sharpe gap, DSR zero and instability."
+    blockers:
+      - "dsr_honest_zero"
+      - "no_surviving_research_candidate"
+    materially_different_reason: "Diagnostic ablation, not a trading policy and not a repeat of any signal family."
+    required_repo_data:
+      - "data/models/phase4/phase4_oos_predictions.parquet"
+      - "data/models/research/phase4_cross_sectional_ranking_baseline/stage_a_predictions.parquet"
+    likely_files:
+      - "services/ml_engine/phase5_research_feature_family_ablation_blocker_decomposition.py"
+    suggested_gate: "phase5_research_feature_family_ablation_blocker_decomposition_gate"
+    criteria:
+      PASS: "Produces reproducible decomposition and identifies at least one spec-safe next family."
+      PARTIAL: "Produces decomposition but no actionable family."
+      FAIL: "Diagnostic cannot explain blockers."
+      INCONCLUSIVE: "Required artifacts missing."
+    falsifiers:
+      - "uses realized variables as decision inputs"
+      - "cannot reproduce prior family rankings"
+    leakage_risks:
+      - "diagnostic outputs cannot be treated as operational signal"
+    exposure_mode: "diagnostic"
+    can_be_research_candidate: false
+    official_requires_gate_or_spec_change: true
+    priority: "MEDIUM"
+    estimated_cost: "MEDIUM"
+    expected_value_reason: "Useful if executable policies keep failing; does not itself reduce promotion blockers."
+
+  - id: "AGENDA-H06"
+    name: "unlock_shadow_feature_ablation"
+    description: "Research diagnostic to test whether unlock feature families, if present in Phase2/Phase4 artifacts, explain any part of the alpha gap."
+    blockers:
+      - "dsr_honest_zero"
+      - "lack_of_recent_operational_robustness"
+    materially_different_reason: "Uses unlock-pressure feature family from the specification rather than model probability polarity."
+    required_repo_data:
+      - "data/parquet/unlocks/**"
+      - "data/parquet/unlock_diagnostics/unlock_quality_daily.parquet"
+    likely_files:
+      - "services/ml_engine/phase5_research_unlock_shadow_feature_ablation.py"
+    suggested_gate: "phase5_research_unlock_shadow_feature_ablation_gate"
+    criteria:
+      PASS: "Unlock features exist and produce a valid research-only diagnostic or policy candidate."
+      PARTIAL: "Unlock features exist but remain shadow/diagnostic only."
+      FAIL: "No signal or insufficient coverage."
+      INCONCLUSIVE: "Unlock artifacts absent."
+    falsifiers:
+      - "unlock data not point-in-time"
+      - "shadow coverage too sparse"
+    leakage_risks:
+      - "Wayback or provider data must remain point-in-time"
+    exposure_mode: "diagnostic"
+    can_be_research_candidate: false
+    official_requires_gate_or_spec_change: true
+    priority: "LOW"
+    estimated_cost: "HIGH"
+    expected_value_reason: "Materially different but likely blocked by absent or shadow-only artifacts in this clone."
