@@ -1,0 +1,76 @@
+{
+  "hypothesis": "The surviving short_high_p_bma_k3_p60_h70 candidate can be classified after autonomous reaudit, stability testing and falsification without human decision or official promotion.",
+  "status": "PASS",
+  "decision": "abandon",
+  "classification": "RESEARCH_CANDIDATE_FALSIFIED",
+  "classification_reason": "hard_falsifiers_present",
+  "candidate": "short_high_p_bma_k3_p60_h70",
+  "reaudit_gate": {
+    "status": "PASS",
+    "decision": "advance",
+    "summary": [
+      "classification=CANDIDATE_GLOBAL_REAUDIT_PASS_RESEARCH_ONLY_NOT_PROMOTABLE",
+      "candidate_policy=short_high_p_bma_k3_p60_h70",
+      "median_combo_sharpe=1.361592",
+      "min_combo_sharpe=0.261111",
+      "median_active_days=471.0",
+      "max_cvar_95_loss_fraction=0.00344841",
+      "sr_needed=4.47",
+      "candidate is research/sandbox only",
+      "ex-ante selection uses p_bma_pkf and hmm_prob_bull filters only",
+      "pnl_real remains realized outcome only",
+      "no official promotion attempted"
+    ]
+  },
+  "stability_gate": {
+    "status": "PARTIAL",
+    "decision": "correct",
+    "summary": [
+      "classification=CANDIDATE_STABILITY_PARTIAL_TEMPORAL_OR_STRESS_FRAGILITY",
+      "candidate_policy=short_high_p_bma_k3_p60_h70",
+      "scenario_count=49",
+      "failed_scenario_count=29",
+      "failed_scenarios=short_high_p_bma_k1_p55_h50,short_high_p_bma_k1_p55_h70,short_high_p_bma_k1_p55_h90,short_high_p_bma_k1_p65_h50,short_high_p_bma_k1_p65_h70,short_high_p_bma_k1_p65_h90,short_high_p_bma_k2_p55_h50,short_high_p_bma_k2_p55_h70,short_high_p_bma_k2_p55_h90,short_high_p_bma_k2_p65_h50,short_high_p_bma_k2_p65_h70,short_high_p_bma_k2_p65_h90,short_high_p_bma_k3_p55_h50,short_high_p_bma_k3_p55_h70,short_high_p_bma_k3_p55_h90,short_high_p_bma_k3_p65_h50,short_high_p_bma_k3_p65_h70,short_high_p_bma_k3_p65_h90,short_high_p_bma_k5_p55_h50,short_high_p_bma_k5_p55_h70,short_high_p_bma_k5_p55_h90,short_high_p_bma_k5_p65_h50,short_high_p_bma_k5_p65_h70,short_high_p_bma_k5_p65_h90,extra_cost_0.00200,hmm_band_0_70_to_0_80,temporal_third_1,temporal_third_2,temporal_third_3",
+      "parameter_pass_rate=0.333333",
+      "candidate remains research/sandbox only",
+      "no official promotion attempted"
+    ]
+  },
+  "falsification_gate": {
+    "status": "FAIL",
+    "decision": "abandon",
+    "summary": [
+      "classification=RESEARCH_CANDIDATE_FALSIFIED_BY_TEMPORAL_OR_COST_STRESS",
+      "candidate_policy=short_high_p_bma_k3_p60_h70",
+      "hard_falsifier_count=2",
+      "hard_falsifiers=temporal_subperiod_min_sharpe,extra_cost_20bps_min_sharpe",
+      "candidate_median_combo_sharpe=1.361592",
+      "candidate_min_combo_sharpe=0.261111",
+      "candidate remains research/sandbox only",
+      "no official promotion attempted"
+    ],
+    "hard_falsifiers": [
+      "temporal_subperiod_min_sharpe",
+      "extra_cost_20bps_min_sharpe"
+    ]
+  },
+  "governance": {
+    "research_only": true,
+    "promotes_official": false,
+    "declares_paper_readiness": false,
+    "reopens_a3_a4": false,
+    "relaxes_thresholds": false,
+    "uses_realized_variable_as_ex_ante_rule": false,
+    "short_exposure_is_research_sandbox_only": true,
+    "official_promotion_allowed": false,
+    "paper_readiness_allowed": false
+  },
+  "next_recommended_mode": "RUN_GLOBAL_REAUDIT",
+  "next_recommended_gate": "post_candidate_falsification_global_reaudit",
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "official_cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable",
+    "short_exposure_research_sandbox_only"
+  ]
+}

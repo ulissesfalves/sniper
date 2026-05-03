@@ -1,0 +1,80 @@
+{
+  "gate_slug": "phase5_research_candidate_decision_gate",
+  "phase_family": "phase5_research_candidate_decision",
+  "status": "PASS",
+  "decision": "abandon",
+  "baseline_commit": "eda07a6ab5a192b38ea0498fc8242348b90845d8",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_decision_gate\\candidate_decision_metrics.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_decision_gate\\candidate_decision_report.json"
+  ],
+  "summary": [
+    "classification=RESEARCH_CANDIDATE_FALSIFIED",
+    "classification_reason=hard_falsifiers_present",
+    "candidate_policy=short_high_p_bma_k3_p60_h70",
+    "hard_falsifier_count=2",
+    "hard_falsifiers=temporal_subperiod_min_sharpe,extra_cost_20bps_min_sharpe",
+    "candidate remains research/sandbox only",
+    "official_promotion_allowed=false",
+    "paper_readiness_allowed=false"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_research_candidate_decision_gate",
+      "metric_name": "reaudit_gate_passed",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_decision_gate",
+      "metric_name": "stability_gate_status",
+      "metric_value": "PARTIAL",
+      "metric_threshold": "PASS or PARTIAL accepted for falsification decision",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_decision_gate",
+      "metric_name": "hard_falsifier_count",
+      "metric_value": 2,
+      "metric_threshold": "0 for alive candidate",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_decision_gate",
+      "metric_name": "final_classification",
+      "metric_value": "RESEARCH_CANDIDATE_FALSIFIED",
+      "metric_threshold": "one of decision classifications",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_decision_gate",
+      "metric_name": "official_promotion_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_decision_gate",
+      "metric_name": "paper_readiness_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "official_cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable",
+    "short_exposure_research_sandbox_only"
+  ],
+  "risks_residual": [
+    "DSR remains 0.0 and blocks promotion.",
+    "Official CVaR remains zero exposure and is not economic robustness.",
+    "No official short exposure support is established by this research gate."
+  ],
+  "next_recommended_step": "Update reports/state and the existing draft PR with the candidate decision; run a global reaudit before any new broad mission."
+}
