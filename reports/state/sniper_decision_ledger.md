@@ -46,35 +46,26 @@ Updated: 2026-05-04T02:36:05Z
 | Next gate chain execution | Active governance policy | If `reports/state/sniper_next_autonomous_mission.md` defines a safe next gate, Codex must execute it automatically. `Pode continuar autonomamente: sim` and `Próximo gate recomendado` are not stop conditions. The current live candidate `short_bma_high_meta_low_p60_m40_k3` requires `phase5_research_meta_disagreement_stability_falsification_gate` and then a decision gate; no promotion or paper readiness is allowed. |
 | Meta disagreement stability/falsification | Failed/abandoned | `phase5_research_meta_disagreement_stability_falsification_gate` executed 38 scenarios and found 25 hard falsifiers, including all temporal thirds, 20 bps cost stress, parameter sensitivity failures and universe stress. Leakage control passed. |
 | Meta disagreement candidate decision | Falsified | `phase5_research_meta_disagreement_candidate_decision_gate` classified `short_bma_high_meta_low_p60_m40_k3` as `META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED`. Next agenda hypothesis is `AGENDA-H02` / `phase5_research_meta_uncertainty_abstention_gate`. |
+| Meta uncertainty abstention long-only | Failed/abandoned | `phase5_research_meta_uncertainty_abstention_gate` tested AGENDA-H02 and classified it as `META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS`. Best policy `long_bma_meta_agree_p65_m50_s10_k3` had median Sharpe `0.447334`, min Sharpe `-0.375889`, median active days `55.0`, max CVaR95 `0.00284763`, and 19 hard falsifiers. Next agenda hypothesis is `AGENDA-H03` / `phase5_research_cvar_constrained_meta_sizing_gate`. |
 
 ## Current Decision
 
-The current mission executed the post-falsification global reaudit, tested the
-materially new `cluster_conditioned_polarity` family, falsified its candidate
-`cluster_2_long_high_short_low_p60_h70_k3`, and reached
-`FULL_FREEZE_AFTER_REAUDIT`.
-
-That freeze is no longer final because autonomous agenda expansion generated
-new HIGH/MEDIUM executable hypotheses. `AGENDA-H01` was implemented in
-`phase5_research_meta_disagreement_abstention_gate` and produced a
-research/sandbox candidate:
-`short_bma_high_meta_low_p60_m40_k3`.
+The current mission executed the next-gate chain for
+`short_bma_high_meta_low_p60_m40_k3`, falsified it, then executed the next
+materially different agenda hypothesis `AGENDA-H02`.
 
 Current classification:
-`META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED`.
+`META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS`.
 
-Human decision is not required. The explicit next gate
-`phase5_research_meta_disagreement_stability_falsification_gate` was executed
-and falsified the candidate. The candidate decision gate recorded
-`PASS/abandon`. Do not promote, merge, declare paper readiness, reopen A3/A4,
-relax thresholds, or treat sandbox short exposure as official support.
+Human decision is not required. `phase5_research_meta_uncertainty_abstention_gate`
+was executed as long-only research/sandbox, used only ex-ante selection inputs,
+and abandoned the line because the best policy had negative min Sharpe, sparse
+active days and 19 hard falsifiers. Do not promote, merge, declare paper
+readiness, reopen A3/A4, relax thresholds, or treat research CVaR as official.
 
-`reports/state/sniper_next_autonomous_mission.md` is executable mission context
-for this state because it defined the current next gate, next mission, required
-tests, criteria and stop conditions. That next gate has now been executed. The
-next materially different agenda hypothesis is `AGENDA-H02`
-(`phase5_research_meta_uncertainty_abstention_gate`) if continuing within the
-same autonomous budget and review scope remains safe.
+The next materially different agenda hypothesis is `AGENDA-H03`
+(`phase5_research_cvar_constrained_meta_sizing_gate`) if continuing within the
+autonomous budget and review scope remains safe.
 
 ## Required Review Before Promotion
 

@@ -242,13 +242,37 @@ Artifacts research baseline usados e hasheados:
   - `short_high_p_bma_k3_p60_h70` foi falsificada
   - `cluster_2_long_high_short_low_p60_h70_k3` foi falsificada
   - `short_bma_high_meta_low_p60_m40_k3` foi falsificada
+  - `long_bma_meta_agree_p65_m50_s10_k3` foi falsificada
 
 - `no_materially_new_safe_in_repo_hypothesis_remaining`
   - `phase5_post_candidate_falsification_governed_freeze_gate` registrou
     `remaining_safe_material_hypothesis_count=0`
   - essa condicao foi parcialmente superada por `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`
-  - `AGENDA-H02` permanece como proxima hipotese research-only materialmente
+  - `AGENDA-H02` foi executada e abandonada
+  - `AGENDA-H03` permanece como proxima hipotese research-only materialmente
     diferente, sem promocao official
+
+## Atualizacao AGENDA-H02
+
+Novo gate executado:
+
+| Gate | Status | Decisao | Observacao |
+| --- | --- | --- | --- |
+| `phase5_research_meta_uncertainty_abstention_gate` | FAIL | abandon | H02 long-only research/sandbox falsificada por estabilidade/custos/sensibilidade/universo. |
+
+Metrica principal H02:
+
+- best policy: `long_bma_meta_agree_p65_m50_s10_k3`
+- median Sharpe: `0.447334`
+- min Sharpe: `-0.375889`
+- median active days: `55.0`
+- max CVaR95: `0.00284763`
+- hard falsifier count: `19`
+- classificacao: `META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS`
+- proximo gate registrado: `phase5_research_cvar_constrained_meta_sizing_gate`
+
+Esse resultado nao promove official, nao declara paper readiness e nao remove
+`dsr_honest=0.0` nem o blocker de CVaR official zero exposure.
 
 ## Testes executados
 
@@ -289,6 +313,14 @@ Testes next-gate chain adicionais:
 ```
 
 Resultado observado: `10 passed`.
+
+Testes AGENDA-H02:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest tests/unit/test_phase5_research_meta_uncertainty_abstention.py -q
+```
+
+Resultado observado: `5 passed`.
 
 ## Risco residual
 

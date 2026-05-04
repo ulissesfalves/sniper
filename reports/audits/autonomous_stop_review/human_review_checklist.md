@@ -87,6 +87,17 @@
 - [ ] Confirmar que a proxima hipotese da agenda e `AGENDA-H02` / `phase5_research_meta_uncertainty_abstention_gate`.
 - [ ] Confirmar que a candidata falsificada nao foi usada para promocao official ou paper readiness.
 
+## Gate AGENDA-H02 meta-uncertainty
+
+- [ ] Verificar `reports/gates/phase5_research_meta_uncertainty_abstention_gate/gate_report.json`.
+- [ ] Confirmar que `phase5_research_meta_uncertainty_abstention_gate` foi `FAIL/abandon`.
+- [ ] Confirmar classificacao `META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS`.
+- [ ] Confirmar best policy `long_bma_meta_agree_p65_m50_s10_k3`.
+- [ ] Confirmar mediana Sharpe `0.447334`, min Sharpe `-0.375889`, dias ativos medianos `55.0` e CVaR95 max `0.00284763`.
+- [ ] Confirmar que a linha foi falsificada por 19 hard falsifiers.
+- [ ] Confirmar que a linha era long-only research/sandbox e nao official.
+- [ ] Confirmar proximo gate registrado `phase5_research_cvar_constrained_meta_sizing_gate`.
+
 ## Clean regeneration
 
 - [ ] Confirmar que `phase6_research_baseline_rehydration_clean_regeneration_gate` tem `clean_clone_or_equivalent=true`.
@@ -124,6 +135,7 @@
 - [ ] Confirmar que o novo CVaR research com exposicao short nao foi tratado como CVaR economico official.
 - [ ] Confirmar que o candidato research-only falsificado nao foi usado para declarar paper readiness.
 - [ ] Confirmar que a candidata meta-disagreement falsificada tambem nao foi usada para declarar paper readiness.
+- [ ] Confirmar que a linha meta-uncertainty falsificada tambem nao foi usada para declarar paper readiness.
 
 ## Testes
 
@@ -166,6 +178,14 @@
 ```
 
 - [ ] Esperado observado: `10 passed`.
+
+- [ ] Rodar ou revisar resultado AGENDA-H02:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest tests/unit/test_phase5_research_meta_uncertainty_abstention.py -q
+```
+
+- [ ] Esperado observado: `5 passed`.
 
 ## Decisao humana
 

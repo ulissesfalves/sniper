@@ -1,6 +1,6 @@
 # SNIPER Research Hypothesis Inventory
 
-Updated: 2026-05-04T02:36:05Z
+Updated: 2026-05-04T02:54:06Z
 
 ## Falsified Or Frozen Families
 
@@ -12,6 +12,7 @@ Updated: 2026-05-04T02:36:05Z
 | signal_polarity_short_high | Falsified | `short_high_p_bma_k3_p60_h70` survived initial correction but failed temporal and 20 bps cost falsification. |
 | cluster_conditioned_polarity | Falsified | `cluster_2_long_high_short_low_p60_h70_k3` failed temporal, cost, parameter and universe falsification. |
 | meta_calibration_disagreement_abstention | Falsified | `short_bma_high_meta_low_p60_m40_k3` passed the initial gate but failed temporal, 20 bps cost, parameter sensitivity and universe stress falsification. |
+| meta_uncertainty_abstention_long_only | Falsified | `long_bma_meta_agree_p65_m50_s10_k3` had positive median Sharpe but failed min Sharpe, active-day and 19 stability/sensitivity falsifiers. |
 | governed freeze after reaudit | Pending agenda expansion | `FULL_FREEZE_AFTER_REAUDIT` was reached, but final freeze requires autonomous agenda expansion first. |
 
 ## New Agenda
@@ -27,10 +28,10 @@ Updated: 2026-05-04T02:36:05Z
 
 ## Selected For Execution
 
-`AGENDA-H01` was selected because it is executable with artifacts already in the
-repo, materially differs from the falsified Stage A/rank/short-high/cluster
-families, and can generate nonzero research/sandbox exposure without promoting
-official.
+`AGENDA-H02` was executed after H01 was falsified. It was executable with
+artifacts already in the repo and materially differed from the falsified Stage
+A/rank/short-high/cluster/meta-disagreement families by using long-only
+agreement and abstention.
 
 Policy constraints:
 
@@ -39,28 +40,28 @@ Policy constraints:
 - use `pnl_real` only as realized backtest outcome;
 - do not use `stage_a_eligible`, `avg_sl_train`, `pnl_real` or any realized
   target as a selection rule;
-- short exposure remains research/sandbox only;
+- long-only and sandbox/research exposure remain non-promotional;
 - no official promotion, paper readiness, A3/A4 reopening or threshold
   relaxation is allowed.
 
 ## Execution Result
 
-`phase5_research_meta_disagreement_abstention_gate` was executed and returned
-`PASS/advance`, but the chained stability/falsification and decision gates
-falsified the candidate.
+`phase5_research_meta_disagreement_abstention_gate` returned `PASS/advance`,
+but the chained stability/falsification and decision gates falsified H01. The
+next agenda hypothesis H02 was then executed and abandoned.
 
 | Metric | Value |
 | --- | --- |
-| Initial classification | `META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE` |
-| Final classification | `META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED` |
-| Best policy | `short_bma_high_meta_low_p60_m40_k3` |
-| Median Sharpe | `0.855486` |
-| Min Sharpe | `0.220622` |
-| Median active days | `322.0` |
-| Max CVaR95 | `0.00455141` |
-| Hard falsifier count | `25` |
+| Initial classification | `META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS` |
+| Final classification | `META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS` |
+| Best policy | `long_bma_meta_agree_p65_m50_s10_k3` |
+| Median Sharpe | `0.447334` |
+| Min Sharpe | `-0.375889` |
+| Median active days | `55.0` |
+| Max CVaR95 | `0.00284763` |
+| Hard falsifier count | `19` |
 | Promotion allowed | `false` |
 | Paper readiness allowed | `false` |
 
 Next required gate:
-`phase5_research_meta_uncertainty_abstention_gate` from `AGENDA-H02`.
+`phase5_research_cvar_constrained_meta_sizing_gate` from `AGENDA-H03`.

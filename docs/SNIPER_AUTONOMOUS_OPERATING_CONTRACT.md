@@ -83,21 +83,21 @@ materially new evidence.
 
 Latest research/sandbox candidate chain:
 
-- family: `meta_calibration_disagreement_abstention`;
-- candidate: `short_bma_high_meta_low_p60_m40_k3`;
-- initial gate: `phase5_research_meta_disagreement_abstention_gate`;
-- status: initial `PASS/advance`;
-- stability/falsification gate: `phase5_research_meta_disagreement_stability_falsification_gate`;
-- decision gate: `phase5_research_meta_disagreement_candidate_decision_gate`;
-- final status: `META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED`;
+- family: `meta_uncertainty_abstention_long_only`;
+- candidate: none preserved;
+- gate: `phase5_research_meta_uncertainty_abstention_gate`;
+- status: `FAIL/abandon`;
+- final status: `META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS`;
+- best policy: `long_bma_meta_agree_p65_m50_s10_k3`;
+- hard falsifier count: `19`;
 - promotion allowed: `false`;
 - paper readiness allowed: `false`.
 
 The current recommended mode is
 `START_RESEARCH_ONLY_THESIS`; the next gate is
-`phase5_research_meta_uncertainty_abstention_gate` from `AGENDA-H02`. The
-falsified meta-disagreement candidate does not prove robustness, promotion
-eligibility or paper readiness.
+`phase5_research_cvar_constrained_meta_sizing_gate` from `AGENDA-H03`. The
+falsified meta-disagreement and meta-uncertainty candidates do not prove
+robustness, promotion eligibility or paper readiness.
 
 ## Closed-Loop Autonomous Policy
 

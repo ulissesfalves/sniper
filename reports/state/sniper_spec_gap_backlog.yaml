@@ -671,8 +671,45 @@ gaps:
       - "RELAX_DSR_THRESHOLD"
       - "USE_REALIZED_VARIABLE_AS_EX_ANTE_RULE"
       - "MERGE_PR"
-    suggested_gate: "phase5_research_meta_uncertainty_abstention_gate"
-    stop_condition_if_unresolved: "The meta-disagreement candidate is falsified and abandoned. Continue only with a materially different agenda hypothesis such as AGENDA-H02; do not revive this candidate without new evidence."
+    suggested_gate: "phase5_research_cvar_constrained_meta_sizing_gate"
+    stop_condition_if_unresolved: "The meta-disagreement candidate is falsified and abandoned. AGENDA-H02 was also falsified; continue only with a materially different agenda hypothesis such as AGENDA-H03. Do not revive this candidate without new evidence."
+
+  - id: GAP-META-UNCERTAINTY-001
+    title: Meta uncertainty long-only thesis was falsified by stability stress
+    type: research_hypothesis
+    severity: high
+    status: abandoned
+    evidence:
+      - "reports/state/sniper_research_agenda.yaml"
+      - "reports/gates/phase5_research_meta_uncertainty_abstention_gate/gate_report.json"
+      - "selected_agenda_id=AGENDA-H02"
+      - "classification=META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS"
+      - "best_policy=long_bma_meta_agree_p65_m50_s10_k3"
+      - "best_median_combo_sharpe=0.447334"
+      - "best_min_combo_sharpe=-0.375889"
+      - "best_median_active_days=55.0"
+      - "best_max_cvar_95_loss_fraction=0.00284763"
+      - "hard_falsifier_count=19"
+      - "official_promotion_allowed=false"
+      - "paper_readiness_allowed=false"
+    source_files:
+      - "services/ml_engine/phase5_research_meta_uncertainty_abstention.py"
+      - "tests/unit/test_phase5_research_meta_uncertainty_abstention.py"
+      - "data/models/phase4/phase4_oos_predictions.parquet"
+    allowed_actions:
+      - "START_RESEARCH_ONLY_THESIS"
+      - "CVAR_CONSTRAINED_META_SIZING_GATE"
+      - "UPDATE_STATE"
+      - "UPDATE_DRAFT_PR"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "TREAT_RESEARCH_AS_OFFICIAL"
+      - "RELAX_DSR_THRESHOLD"
+      - "USE_REALIZED_VARIABLE_AS_EX_ANTE_RULE"
+      - "MERGE_PR"
+    suggested_gate: "phase5_research_cvar_constrained_meta_sizing_gate"
+    stop_condition_if_unresolved: "The meta uncertainty long-only family is abandoned. Continue with AGENDA-H03 only if mission budget and review size remain safe; do not treat positive median Sharpe as promotability."
 
   - id: GAP-NEXT-GATE-CHAIN-001
     title: Next safe gate from sniper_next_autonomous_mission must execute automatically
@@ -684,16 +721,15 @@ gaps:
       - "reports/state/sniper_next_autonomous_mission.md defines Current next gate, Next Mission, Required tests, Criteria and Stop Conditions"
       - "Pode continuar autonomamente: sim is not a stop condition"
       - "Próximo gate recomendado is not a stop condition"
-      - "family=meta_calibration_disagreement_abstention"
-      - "candidate=short_bma_high_meta_low_p60_m40_k3"
-      - "initial_gate=phase5_research_meta_disagreement_abstention_gate"
-      - "initial_status=PASS/advance"
-      - "next_gate=phase5_research_meta_disagreement_stability_falsification_gate"
+      - "family=meta_uncertainty_abstention_long_only"
+      - "candidate=none"
+      - "initial_gate=phase5_research_meta_uncertainty_abstention_gate"
+      - "initial_status=FAIL/abandon"
       - "next_gate_executed=true"
-      - "decision_gate=phase5_research_meta_disagreement_candidate_decision_gate"
-      - "decision_classification=META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED"
-      - "next_agenda_id=AGENDA-H02"
-      - "next_agenda_gate=phase5_research_meta_uncertainty_abstention_gate"
+      - "decision_gate=not_required_initial_gate_failed"
+      - "decision_classification=META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS"
+      - "next_agenda_id=AGENDA-H03"
+      - "next_agenda_gate=phase5_research_cvar_constrained_meta_sizing_gate"
       - "promotion_allowed=false"
       - "paper_readiness_allowed=false"
       - "human_decision_required=false"
@@ -707,7 +743,7 @@ gaps:
       - "reports/state/sniper_autonomous_runbook.md"
     allowed_actions:
       - "START_RESEARCH_ONLY_THESIS"
-      - "META_UNCERTAINTY_ABSTENTION_GATE"
+      - "CVAR_CONSTRAINED_META_SIZING_GATE"
       - "UPDATE_STATE"
       - "UPDATE_DRAFT_PR"
     forbidden_actions:
@@ -721,5 +757,5 @@ gaps:
       - "A3_REOPEN"
       - "A4_REOPEN"
       - "THRESHOLD_RELAXATION"
-    suggested_gate: "phase5_research_meta_uncertainty_abstention_gate"
+    suggested_gate: "phase5_research_cvar_constrained_meta_sizing_gate"
     stop_condition_if_unresolved: "The explicit next gate was executed and falsified the candidate. Continue with the next materially different agenda hypothesis if mission budget and review size allow."
