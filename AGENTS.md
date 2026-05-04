@@ -112,28 +112,33 @@ falsification gate, a state update, a draft PR update, a governed freeze review,
 an autonomous research agenda expansion, or an internal strategic decision
 rubric.
 
-When a research-only candidate survives, the next autonomous action is candidate
-audit/falsification before freeze or human decision. The prior survivor was
-audited and falsified:
+Next gate chain execution is mandatory. If
+`reports/state/sniper_next_autonomous_mission.md` defines a safe next gate with
+`Current next gate`, `Next Mission`, `Required tests`, `Criteria` and
+`Stop Conditions`, Codex must treat it as an executable instruction and run the
+gate automatically when it is research/sandbox, internal to the repo, does not
+need an external resource, does not promote official, and does not declare paper
+readiness. `Pode continuar autonomamente: sim` and `Próximo gate recomendado`
+are not stop conditions.
 
-- policy: `short_high_p_bma_k3_p60_h70`;
-- scope: research/sandbox only;
-- median Sharpe: `1.361592`;
-- min Sharpe: `0.261111`;
-- median active days: `471.0`;
-- max CVaR95: `0.00344841`;
-- still below `sr_needed=4.47`;
-- failed temporal and 20 bps cost falsification;
-- not promotable.
+When a research-only candidate has an initial `PASS/advance`, the next
+autonomous action is mandatory stability/falsification followed by a candidate
+decision gate before freeze or human decision.
 
-The subsequent cluster-conditioned candidate
-`cluster_2_long_high_short_low_p60_h70_k3` was also falsified, and the current
-mission reached `FULL_FREEZE_AFTER_REAUDIT`.
+Current live candidate:
 
-Next safe action: `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`.
-Next logical skill: `sniper-autonomous-research-agenda-synthesizer`.
-Next mode: `GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`.
-Do not accept final permanent freeze until the agenda expansion has been run.
+- family: `meta_calibration_disagreement_abstention`;
+- candidate: `short_bma_high_meta_low_p60_m40_k3`;
+- initial gate: `phase5_research_meta_disagreement_abstention_gate`;
+- status: initial `PASS/advance`;
+- next gate: `phase5_research_meta_disagreement_stability_falsification_gate`;
+- promotion allowed: `false`;
+- paper readiness allowed: `false`.
+
+Current recommended mode: `META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE`.
+The candidate is research/sandbox only and must not be treated as official,
+robust, promotable or paper-ready before stability/falsification and decision
+gates complete.
 
 Must stop before:
 

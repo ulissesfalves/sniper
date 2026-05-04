@@ -208,6 +208,82 @@ STOP CONDITION UPDATE
 Substituir qualquer regra operacional equivalente a "revisar candidata research-only exige decisão humana" por:
 "revisar candidata research-only exige gate autônomo de auditoria/falsificação, salvo se houver recurso externo ou mudança de especificação."
 
+NEXT_GATE_CHAIN_EXECUTION_POLICY
+
+A missão não pode parar quando:
+- existe uma candidata research-only viva;
+- existe um próximo gate explícito em reports/state/sniper_next_autonomous_mission.md;
+- o próximo gate é research/sandbox;
+- o próximo gate não exige recurso externo;
+- o próximo gate não promove official;
+- o próximo gate não declara paper readiness.
+
+Se reports/state/sniper_next_autonomous_mission.md contiver:
+- Current next gate;
+- Next Mission;
+- Required tests;
+- Criteria;
+- Stop Conditions;
+
+então interpretar isso como instrução executável e rodar automaticamente o
+próximo gate, desde que ele seja seguro, interno ao repo e permitido pela
+governança.
+
+Caso atual conhecido:
+- candidata: `short_bma_high_meta_low_p60_m40_k3`;
+- família: `meta_calibration_disagreement_abstention`;
+- gate inicial executado: `phase5_research_meta_disagreement_abstention_gate`;
+- resultado: PASS/advance;
+- próximo gate: `phase5_research_meta_disagreement_stability_falsification_gate`.
+
+A próxima missão deve executar automaticamente:
+`phase5_research_meta_disagreement_stability_falsification_gate`.
+
+Se o primeiro gate de uma hipótese retorna PASS/advance mas a candidata ainda
+não foi falsificada nem preservada após estabilidade, continuar com:
+1. stability/falsification gate;
+2. candidate decision gate;
+3. state update;
+4. PR draft update, se houver material revisável.
+
+A saída "Pode continuar autonomamente: sim" não é stop válido. Se a própria
+missão disser que pode continuar autonomamente, ela deve continuar.
+
+A saída "Próximo gate recomendado: <gate_slug>" não é stop válido. O gate deve
+ser executado automaticamente se for seguro e interno ao repo.
+
+A missão só pode parar com candidata viva se:
+- o próximo gate exigir artifact externo;
+- o próximo gate exigir credencial/API/acesso externo;
+- o próximo gate exigir mudança de especificação;
+- o próximo gate exigir promoção official;
+- o próximo gate exigir paper readiness;
+- o orçamento da missão for atingido;
+- o volume de mudanças ficar grande demais para revisão.
+
+Loop obrigatório para candidata viva:
+PASS inicial de hipótese
+-> stability/falsification gate
+-> candidate decision gate
+-> se falsificada, agenda expansion ou próxima hipótese
+-> se sobreviver, classificar como research candidate not promotable
+-> nunca promover official automaticamente.
+
+Ao final de qualquer gate, reler:
+- reports/state/sniper_current_state.json;
+- reports/state/sniper_spec_gap_backlog.yaml;
+- reports/state/sniper_next_autonomous_mission.md;
+- reports/state/sniper_decision_ledger.md;
+
+e decidir automaticamente se há próximo gate seguro.
+
+Proibições explícitas:
+- parar após PASS/advance inicial se a candidata ainda não passou por falsificação;
+- pedir decisão humana para executar stability/falsification gate;
+- pedir decisão humana para executar candidate decision gate;
+- tratar candidata inicial como robusta sem falsificação;
+- tratar candidata research/sandbox como official.
+
 CLOSED_LOOP_AUTONOMOUS_EXECUTION_POLICY
 
 A missão não deve terminar apenas porque produziu uma "próxima recomendação".
@@ -226,6 +302,7 @@ Recomendações que devem ser executadas automaticamente:
 - UPDATE_STATE;
 - UPDATE_DRAFT_PR;
 - OPEN_RESEARCH_GATE;
+- NEXT_GATE_CHAIN_EXECUTION;
 - AUTONOMOUS_RESEARCH_AGENDA_EXPANSION;
 - FREEZE_LINE, somente quando os critérios de freeze estiverem satisfeitos.
 
@@ -332,7 +409,6 @@ A missão em loop fechado só pode terminar com uma destas classificações:
 - GOVERNANCE_HARD_STOP;
 - AUTONOMOUS_BUDGET_EXHAUSTED;
 - FUNCTIONAL_RESEARCH_MODULE_DELIVERED;
-- FULL_FREEZE_AFTER_REAUDIT, somente se o usuário pedir parada explícita antes da expansão de agenda;
 - FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED;
 - PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION.
 
@@ -340,6 +416,10 @@ Não são stops válidos:
 - "próxima recomendação: RUN_GLOBAL_REAUDIT";
 - "próxima recomendação: nova tese research-only";
 - "próxima recomendação: AUTONOMOUS_RESEARCH_AGENDA_EXPANSION";
+- "próximo gate recomendado: <gate_slug>";
+- "Pode continuar autonomamente: sim";
+- "PASS inicial com próximo gate recomendado";
+- "candidata viva aguardando stability/falsification";
 - "backlog esgotado antes de executar agenda synthesizer";
 - "decisão humana para escolher tese".
 
@@ -697,5 +777,6 @@ Ao parar, entregue:
 29. Por que a candidata ainda não é promotable.
 30. Próximo gate autônomo.
 31. Se pode continuar autonomamente.
-32. Classificação final obrigatória: EXTERNAL_RESOURCE_REQUIRED, SPEC_CHANGE_REQUIRED, GOVERNANCE_HARD_STOP, AUTONOMOUS_BUDGET_EXHAUSTED, FUNCTIONAL_RESEARCH_MODULE_DELIVERED, FULL_FREEZE_AFTER_REAUDIT somente se o usuário pedir parada explícita antes da expansão de agenda, FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED ou PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION.
+32. Classificação final obrigatória: EXTERNAL_RESOURCE_REQUIRED, SPEC_CHANGE_REQUIRED, GOVERNANCE_HARD_STOP, AUTONOMOUS_BUDGET_EXHAUSTED, FUNCTIONAL_RESEARCH_MODULE_DELIVERED, FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED ou PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION.
 33. Se houve expansão de agenda, informar hipóteses HIGH/MEDIUM geradas, hipóteses LOW registradas e o próximo gate research-only executado ou a justificativa de agenda esgotada.
+34. Se houver candidata viva, informar o próximo gate encadeado executado ou o hard stop real que impediu sua execução.

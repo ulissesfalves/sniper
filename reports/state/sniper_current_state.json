@@ -82,6 +82,7 @@
     "UPDATE_STATE",
     "UPDATE_DRAFT_PR",
     "OPEN_RESEARCH_GATE",
+    "NEXT_GATE_CHAIN_EXECUTION",
     "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION",
     "GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC",
     "FREEZE_LINE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED",
@@ -105,6 +106,10 @@
     "STOP_AFTER_SAFE_TECHNICAL_RECOMMENDATION",
     "STOP_AFTER_RUN_GLOBAL_REAUDIT_RECOMMENDATION",
     "STOP_AFTER_START_RESEARCH_ONLY_THESIS_RECOMMENDATION",
+    "STOP_AFTER_NEXT_GATE_RECOMMENDATION",
+    "STOP_AFTER_PODE_CONTINUAR_AUTONOMAMENTE_SIM",
+    "STOP_AFTER_INITIAL_PASS_WITH_LIVE_CANDIDATE",
+    "TREAT_INITIAL_RESEARCH_PASS_AS_ROBUST_WITHOUT_FALSIFICATION",
     "FREEZE_LINE_BEFORE_POST_FALSIFICATION_REAUDIT",
     "FULL_FREEZE_AFTER_REAUDIT_WITHOUT_AGENDA_EXPANSION",
     "FREEZE_LINE_BEFORE_RESEARCH_AGENDA_EXPANSION",
@@ -130,8 +135,8 @@
     "human_decision_only_for_external_or_governance_cases": true,
     "human_decision_is_last_resort": true,
     "internal_strategic_decision_required_before_human_stop": true,
-    "surviving_candidate_requires_autonomous_audit_or_falsification": false,
-    "freeze_line_forbidden_before_candidate_audit_or_falsification": false,
+    "surviving_candidate_requires_autonomous_audit_or_falsification": true,
+    "freeze_line_forbidden_before_candidate_audit_or_falsification": true,
     "freeze_requirements": [
       "at_least_2_materially_different_families_tested",
       "explicit_dsr_diagnostic",
@@ -177,7 +182,6 @@
         "GOVERNANCE_HARD_STOP",
         "AUTONOMOUS_BUDGET_EXHAUSTED",
         "FUNCTIONAL_RESEARCH_MODULE_DELIVERED",
-        "FULL_FREEZE_AFTER_REAUDIT",
         "FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED",
         "PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION"
       ],
@@ -186,6 +190,25 @@
       "final_freeze_accepted": false,
       "safe_internal_next_action_available": true,
       "safe_internal_next_action": "phase5_research_meta_disagreement_stability_falsification_gate"
+    },
+    "next_gate_chain_execution_policy": {
+      "enabled": true,
+      "sniper_next_autonomous_mission_is_executable_when_safe": true,
+      "can_stop_after_pode_continuar_autonomamente_sim": false,
+      "can_stop_after_proximo_gate_recomendado": false,
+      "initial_pass_requires_stability_falsification_gate": true,
+      "initial_pass_requires_candidate_decision_gate": true,
+      "current_family": "meta_calibration_disagreement_abstention",
+      "current_candidate": "short_bma_high_meta_low_p60_m40_k3",
+      "initial_gate": "phase5_research_meta_disagreement_abstention_gate",
+      "initial_gate_status": "PASS",
+      "initial_gate_decision": "advance",
+      "current_recommended_mode": "META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE",
+      "current_next_gate": "phase5_research_meta_disagreement_stability_falsification_gate",
+      "autonomous_can_continue": true,
+      "human_decision_required": false,
+      "promotion_allowed": false,
+      "paper_readiness_allowed": false
     }
   },
   "last_clean_regeneration_status": {
@@ -358,13 +381,30 @@
     "freeze_line_allowed_before_candidate_audit": false,
     "freeze_line_allowed_before_agenda_expansion": false
   },
-  "latest_candidate_status": "RESEARCH_CANDIDATE_ALIVE_NOT_PROMOTABLE",
+  "next_gate_chain_execution_policy": {
+    "enabled": true,
+    "source_file": "reports/state/sniper_next_autonomous_mission.md",
+    "current_family": "meta_calibration_disagreement_abstention",
+    "current_candidate": "short_bma_high_meta_low_p60_m40_k3",
+    "initial_gate": "phase5_research_meta_disagreement_abstention_gate",
+    "initial_status": "PASS",
+    "initial_decision": "advance",
+    "next_gate": "phase5_research_meta_disagreement_stability_falsification_gate",
+    "next_mode": "META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE",
+    "autonomous_can_continue": true,
+    "human_decision_required": false,
+    "promotion_allowed": false,
+    "paper_readiness_allowed": false,
+    "stop_after_initial_pass_allowed": false,
+    "stop_after_next_gate_recommended_allowed": false
+  },
+  "latest_candidate_status": "RESEARCH_CANDIDATE_ALIVE_NOT_PROMOTABLE_REQUIRES_STABILITY_FALSIFICATION",
   "human_decision_required": false,
   "autonomous_can_continue": true,
-  "next_recommended_mode": "CANDIDATE_STABILITY_GATE",
+  "next_recommended_mode": "META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE",
   "next_recommended_skill": "sniper-autonomous-implementation-manager",
   "next_recommended_submode": "META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE",
   "next_recommended_gate": "phase5_research_meta_disagreement_stability_falsification_gate",
   "if_agenda_has_no_high_or_medium_executable_hypothesis": "FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED",
-  "updated_at_utc": "2026-05-03T22:12:21Z"
+  "updated_at_utc": "2026-05-04T02:21:07Z"
 }

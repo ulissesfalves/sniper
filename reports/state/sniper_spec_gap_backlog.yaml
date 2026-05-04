@@ -666,3 +666,51 @@ gaps:
       - "MERGE_PR"
     suggested_gate: "phase5_research_meta_disagreement_stability_falsification_gate"
     stop_condition_if_unresolved: "The candidate is alive but not promotable. It must survive temporal, cost, parameter and leakage falsification before any further research deepening."
+
+  - id: GAP-NEXT-GATE-CHAIN-001
+    title: Next safe gate from sniper_next_autonomous_mission must execute automatically
+    type: governance_state
+    severity: high
+    status: resolved_active_policy
+    evidence:
+      - "NEXT_GATE_CHAIN_EXECUTION_POLICY active"
+      - "reports/state/sniper_next_autonomous_mission.md defines Current next gate, Next Mission, Required tests, Criteria and Stop Conditions"
+      - "Pode continuar autonomamente: sim is not a stop condition"
+      - "Próximo gate recomendado is not a stop condition"
+      - "family=meta_calibration_disagreement_abstention"
+      - "candidate=short_bma_high_meta_low_p60_m40_k3"
+      - "initial_gate=phase5_research_meta_disagreement_abstention_gate"
+      - "initial_status=PASS/advance"
+      - "next_gate=phase5_research_meta_disagreement_stability_falsification_gate"
+      - "promotion_allowed=false"
+      - "paper_readiness_allowed=false"
+      - "human_decision_required=false"
+      - "autonomous_can_continue=true"
+    source_files:
+      - "AGENTS.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+      - "reports/state/sniper_next_autonomous_mission.md"
+      - "reports/state/sniper_decision_ledger.md"
+      - "reports/state/sniper_autonomous_runbook.md"
+    allowed_actions:
+      - "NEXT_GATE_CHAIN_EXECUTION"
+      - "META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE"
+      - "CANDIDATE_STABILITY_GATE"
+      - "CANDIDATE_FALSIFICATION_GATE"
+      - "CANDIDATE_DECISION_GATE"
+      - "UPDATE_STATE"
+      - "UPDATE_DRAFT_PR"
+    forbidden_actions:
+      - "STOP_AFTER_NEXT_GATE_RECOMMENDATION"
+      - "STOP_AFTER_PODE_CONTINUAR_AUTONOMAMENTE_SIM"
+      - "STOP_AFTER_INITIAL_PASS_WITH_LIVE_CANDIDATE"
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "TREAT_RESEARCH_AS_OFFICIAL"
+      - "MERGE_PR"
+      - "A3_REOPEN"
+      - "A4_REOPEN"
+      - "THRESHOLD_RELAXATION"
+    suggested_gate: "phase5_research_meta_disagreement_stability_falsification_gate"
+    stop_condition_if_unresolved: "Do not stop after the initial PASS/advance while the live research/sandbox candidate has a safe explicit stability/falsification gate available in reports/state/sniper_next_autonomous_mission.md."

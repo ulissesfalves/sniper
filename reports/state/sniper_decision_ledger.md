@@ -1,6 +1,6 @@
 # SNIPER Decision Ledger
 
-Updated: 2026-05-03T22:12:21Z
+Updated: 2026-05-04T02:21:07Z
 
 ## Closed Decisions
 
@@ -43,6 +43,7 @@ Updated: 2026-05-03T22:12:21Z
 | Research agenda expansion before final freeze | Required | `FULL_FREEZE_AFTER_REAUDIT` is not accepted as permanent final freeze until `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION` runs via `sniper-autonomous-research-agenda-synthesizer`. Next mode is `GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`; human decision is not required. |
 | Research agenda expansion | Completed with candidate | `reports/state/sniper_research_agenda.yaml`, `sniper_hypothesis_inventory.md` and `sniper_next_autonomous_mission.md` were generated with six new research-only hypotheses. AGENDA-H01 was selected. |
 | Meta calibration disagreement abstention | Research candidate alive, not promotable | `phase5_research_meta_disagreement_abstention_gate` passed/advanced. Best policy `short_bma_high_meta_low_p60_m40_k3` had median Sharpe `0.855486`, min Sharpe `0.220622`, median active days `322.0`, max CVaR95 `0.00455141`; research/sandbox only, below `sr_needed=4.47`, no official promotion. |
+| Next gate chain execution | Active governance policy | If `reports/state/sniper_next_autonomous_mission.md` defines a safe next gate, Codex must execute it automatically. `Pode continuar autonomamente: sim` and `Próximo gate recomendado` are not stop conditions. The current live candidate `short_bma_high_meta_low_p60_m40_k3` requires `phase5_research_meta_disagreement_stability_falsification_gate` and then a decision gate; no promotion or paper readiness is allowed. |
 
 ## Current Decision
 
@@ -66,6 +67,12 @@ must be tested against temporal subperiods, cost stress, parameter sensitivity,
 leakage controls and universe stress before it can be preserved as a robust
 research-only candidate. Do not promote, merge, declare paper readiness, reopen
 A3/A4, relax thresholds, or treat sandbox short exposure as official support.
+
+`reports/state/sniper_next_autonomous_mission.md` is executable mission context
+for this state because it defines the current next gate, next mission, required
+tests, criteria and stop conditions. Stopping after the initial PASS/advance or
+after saying "Pode continuar autonomamente: sim" is not valid while the next
+gate is safe and internal to the repo.
 
 ## Required Review Before Promotion
 

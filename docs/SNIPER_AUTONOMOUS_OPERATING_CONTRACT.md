@@ -9,6 +9,8 @@ the current repository and preserves governance:
 
 - execute closed-loop autonomous missions inside this repository;
 - automatically execute safe technical next recommendations inside the repo;
+- automatically execute a safe next gate defined in
+  `reports/state/sniper_next_autonomous_mission.md`;
 - automatically run `RUN_GLOBAL_REAUDIT` when recommended;
 - automatically run `POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT` after a
   candidate is falsified;
@@ -64,7 +66,7 @@ Codex must not stop for human decision while any safe internal path remains:
 
 ## Surviving Research Candidate Protocol
 
-Prior surviving candidate after autonomous audit/falsification:
+Historical surviving candidate after autonomous audit/falsification:
 
 - policy: `short_high_p_bma_k3_p60_h70`;
 - scope: research/sandbox only;
@@ -76,13 +78,24 @@ Prior surviving candidate after autonomous audit/falsification:
 - failed temporal and 20 bps cost falsification;
 - not promotable.
 
-The next autonomous mode is `POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT`.
-The next suggested gate is `phase5_post_candidate_falsification_global_reaudit_gate`.
+That candidate has already been audited and falsified. Do not revive it without
+materially new evidence.
 
-The candidate has already been audited and falsified. Do not revive it without
-materially new evidence. The next action is an automatic post-falsification
-global reaudit, followed by either a materially new research-only thesis or a
-governed freeze review; no official promotion or paper readiness is allowed.
+Current live research/sandbox candidate:
+
+- family: `meta_calibration_disagreement_abstention`;
+- candidate: `short_bma_high_meta_low_p60_m40_k3`;
+- initial gate: `phase5_research_meta_disagreement_abstention_gate`;
+- status: initial `PASS/advance`;
+- next gate: `phase5_research_meta_disagreement_stability_falsification_gate`;
+- promotion allowed: `false`;
+- paper readiness allowed: `false`.
+
+The current recommended mode is
+`META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE`. This initial PASS does not
+prove robustness, promotion eligibility or paper readiness. Codex must run the
+stability/falsification gate and then a candidate decision gate before treating
+the candidate as preserved, falsified or ready for deeper research.
 
 ## Closed-Loop Autonomous Policy
 
@@ -103,6 +116,7 @@ Automatically executable recommendations include:
 - `UPDATE_STATE`
 - `UPDATE_DRAFT_PR`
 - `OPEN_RESEARCH_GATE`
+- `NEXT_GATE_CHAIN_EXECUTION`
 - `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`
 - `GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`
 - `FREEZE_LINE` only after all freeze criteria are satisfied.
@@ -110,6 +124,33 @@ Automatically executable recommendations include:
 Stop only for external artifacts/data, credentials or paid APIs, access outside
 the repo, merge, official promotion, paper readiness, specification change, real
 capital or non-technical business risk acceptance.
+
+## Next Gate Chain Execution
+
+If `reports/state/sniper_next_autonomous_mission.md` defines a safe next gate,
+Codex must execute it automatically. The file is executable mission context when
+it contains:
+
+- `Current next gate`;
+- `Next Mission`;
+- `Required tests`;
+- `Criteria`;
+- `Stop Conditions`.
+
+`Pode continuar autonomamente: sim` is not a stop condition.
+`Próximo gate recomendado` is not a stop condition.
+
+A live research-only candidate with an initial `PASS/advance` must go through:
+
+1. stability/falsification gate;
+2. candidate decision gate;
+3. state update;
+4. draft PR update when reviewable.
+
+Codex may stop with a live candidate only if the next gate needs external
+artifacts, credentials/API/access, operation outside the repo, a specification
+change, official promotion, paper readiness, merge, real capital, budget beyond
+the allowed mission, or changes too large for reasonable review.
 
 ## Stop Required
 

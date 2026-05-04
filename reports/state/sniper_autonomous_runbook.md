@@ -24,6 +24,8 @@
     execute it automatically.
 18. Before accepting final freeze after reaudit, execute
     `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`.
+19. If `reports/state/sniper_next_autonomous_mission.md` defines a safe
+    `Current next gate`, execute that gate automatically.
 
 ## Current Recommended Mode
 
@@ -34,6 +36,20 @@ Next logical skill: `sniper-autonomous-implementation-manager`.
 Next mode: `META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE`.
 
 Next gate: `phase5_research_meta_disagreement_stability_falsification_gate`.
+
+Current candidate chain:
+
+- family: `meta_calibration_disagreement_abstention`;
+- candidate: `short_bma_high_meta_low_p60_m40_k3`;
+- initial gate: `phase5_research_meta_disagreement_abstention_gate`;
+- initial status: `PASS/advance`;
+- promotion allowed: `false`;
+- paper readiness allowed: `false`.
+
+`Pode continuar autonomamente: sim` is not a stop condition.
+`Próximo gate recomendado` is not a stop condition.
+The initial PASS is not final because the candidate still needs
+stability/falsification and a candidate decision gate.
 
 Allowed mission modes:
 
@@ -48,6 +64,7 @@ Allowed mission modes:
 - `UPDATE_STATE`
 - `UPDATE_DRAFT_PR`
 - `OPEN_RESEARCH_GATE`
+- `NEXT_GATE_CHAIN_EXECUTION`
 - `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`
 - `GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`
 - `META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE`
@@ -134,6 +151,29 @@ Automatically execute:
 Stop only for external artifacts/data, credentials or paid APIs, access outside
 the repo, merge, official promotion, paper readiness, specification change, real
 capital or non-technical business risk acceptance.
+
+## Next Gate Chain Execution
+
+When `reports/state/sniper_next_autonomous_mission.md` contains `Current next
+gate`, `Next Mission`, `Required tests`, `Criteria` and `Stop Conditions`, treat
+it as executable mission context. If the next gate is safe, internal to the
+repo, research/sandbox only, does not require external artifacts, does not
+promote official and does not declare paper readiness, run it automatically.
+
+Mandatory live-candidate sequence:
+
+1. initial research-only `PASS/advance`;
+2. stability/falsification gate;
+3. candidate decision gate;
+4. `reports/state/**` update;
+5. draft PR update when reviewable.
+
+Current required next gate:
+`phase5_research_meta_disagreement_stability_falsification_gate`.
+
+Do not stop after `Pode continuar autonomamente: sim`, after
+`Próximo gate recomendado`, or after an initial candidate PASS while the
+stability/falsification gate remains safe and executable.
 
 Closed-loop budget:
 
@@ -318,13 +358,15 @@ Current candidate audit/falsification update:
 - `phase5_research_candidate_decision_gate` classified
   `short_high_p_bma_k3_p60_h70` as `RESEARCH_CANDIDATE_FALSIFIED`.
 
-Recommended next gate:
+Historical post-candidate recommendation:
 `none_until_materially_new_hypothesis_or_external_resource`.
 
-Recommended next mode: `UPDATE_DRAFT_PR` / human review of the existing draft
-PR as governance/research evidence. Do not promote the abandoned candidates:
-they used sandbox/research exposure, remained below `sr_needed=4.47`, and failed
-autonomous falsification while `dsr_honest=0.0`.
+That recommendation was superseded by post-falsification reaudit, governed
+freeze review, autonomous agenda expansion, and the live meta-disagreement
+candidate. The current recommendation is no longer human review as a stopping
+point; it is `META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE`. Do not promote
+the abandoned candidates: they used sandbox/research exposure, remained below
+`sr_needed=4.47`, and failed autonomous falsification while `dsr_honest=0.0`.
 
 Post-falsification protocol:
 
@@ -360,7 +402,10 @@ Gates added in the closed-loop mission:
 The current autonomous loop executed `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION` and
 found a new research/sandbox candidate. Permanent final freeze is not legitimate
 while this candidate has not been stability-tested and falsified or preserved.
-This is not promotion, not paper readiness and not merge approval.
+The next safe gate is
+`phase5_research_meta_disagreement_stability_falsification_gate`, and it must be
+executed automatically. This is not promotion, not paper readiness and not merge
+approval.
 
 ## Forbidden Interpretations
 
@@ -395,5 +440,6 @@ research-only hypothesis, internal correction, unfinished quantitative
 diagnostic, possible sandbox/research module, post-falsification global reaudit,
 autonomous research agenda expansion, state update, draft PR update or governed
 freeze review inside the repo. The prior surviving candidate and the
-cluster-conditioned candidate have now been audited/falsified, and the current
-line requires agenda expansion before permanent freeze.
+cluster-conditioned candidate have now been audited/falsified, agenda expansion
+has found the live meta-disagreement candidate, and the current line requires
+the explicit next stability/falsification gate before any new freeze.
