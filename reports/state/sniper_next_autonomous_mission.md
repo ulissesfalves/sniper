@@ -1,74 +1,68 @@
 # SNIPER Next Autonomous Mission
 
-Mode: `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION_AND_EXECUTION`
+Mode: `START_RESEARCH_ONLY_THESIS`
 
-Initial gate executed: `phase5_research_meta_disagreement_abstention_gate`
+Previous gate executed: `phase5_research_meta_disagreement_stability_falsification_gate`
 
-Selected family: `meta_calibration_disagreement_abstention`
+Previous decision gate executed: `phase5_research_meta_disagreement_candidate_decision_gate`
 
-Current next gate: `phase5_research_meta_disagreement_stability_falsification_gate`
+Previous family: `meta_calibration_disagreement_abstention`
+
+Previous candidate: `short_bma_high_meta_low_p60_m40_k3`
+
+Previous result: `META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED`
+
+Current next gate: `phase5_research_meta_uncertainty_abstention_gate`
 
 ## Rationale
 
-The previous closed-loop mission reached `FULL_FREEZE_AFTER_REAUDIT` after
-falsifying `short_high_p_bma_k3_p60_h70` and
-`cluster_2_long_high_short_low_p60_h70_k3`. Final freeze is not accepted until a
-new research-only agenda is generated and evaluated.
+The agenda expansion selected `AGENDA-H01` first and the initial
+meta-disagreement gate returned `PASS/advance`. The mandatory chained
+stability/falsification gate then found 25 hard falsifiers, including temporal
+subperiod failures, 20 bps cost stress, parameter sensitivity failures and
+universe stress. The candidate decision gate recorded `PASS/abandon`.
 
-The selected hypothesis is materially different because it uses disagreement
-between Phase4 BMA probability and Phase4 calibrated meta probability. It does
-not repeat Stage A safe top1, rank-score thresholding, pure short-high BMA
-polarity or cluster-conditioned polarity.
+The next materially different executable agenda hypothesis is `AGENDA-H02`:
+`meta_uncertainty_abstention_long_only`. It is long-only research/sandbox, uses
+Phase4 BMA and calibrated meta agreement rather than short-high disagreement,
+and remains non-promotional.
 
 ## Execution Scope
 
 Implement a research/sandbox gate that:
 
 - reads `data/models/phase4/phase4_oos_predictions.parquet`;
-- predeclares meta-disagreement policies;
-- selects only with ex-ante columns;
+- predeclares long-only meta uncertainty/agreement abstention policies;
+- selects only with ex-ante columns such as `p_bma_pkf`,
+  `p_meta_calibrated` and `sigma_ewma`;
+- does not use `pnl_real`, `stage_a_eligible`, `avg_sl_train` or realized
+  labels as selection inputs;
 - produces nonzero research/sandbox positions, daily returns, trade log and
-  metrics;
-- classifies the best policy as PASS/PARTIAL/FAIL/INCONCLUSIVE;
-- preserves DSR=0.0, official zero exposure and non-promotability blockers.
-
-## Execution Result
-
-`phase5_research_meta_disagreement_abstention_gate` returned `PASS/advance`.
-
-Best policy:
-
-- `short_bma_high_meta_low_p60_m40_k3`
-- median Sharpe: `0.855486`
-- min Sharpe: `0.220622`
-- median active days: `322.0`
-- max CVaR95: `0.00455141`
-- classification: `META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE`
-
-The policy remains research/sandbox only and below `sr_needed=4.47`. It does
-not change `dsr_honest=0.0`, does not prove paper readiness, and does not
-promote official.
+  metrics if the hypothesis has exposure;
+- preserves `dsr_honest=0.0`, official zero exposure and non-promotability
+  blockers.
 
 ## Next Mission
 
-Mode: `META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE`
+Mode: `META_UNCERTAINTY_ABSTENTION_GATE`
 
-Gate: `phase5_research_meta_disagreement_stability_falsification_gate`
+Gate: `phase5_research_meta_uncertainty_abstention_gate`
 
 Required tests:
 
-- temporal subperiod stability;
-- 5/10/20 bps cost stress;
-- p-threshold and meta-threshold sensitivity;
-- top-k sensitivity;
-- universe stress;
-- leakage controls proving no realized variable is used as selection input.
+- ex-ante selection input validation;
+- long-only nonzero research exposure;
+- median/min combo Sharpe;
+- active days;
+- CVaR research;
+- turnover and drawdown when available;
+- basic cost and parameter sensitivity if an initial candidate appears.
 
 ## Criteria
 
 PASS / advance:
 
-- at least one predeclared policy has nonzero exposure;
+- at least one predeclared long-only research policy has nonzero exposure;
 - median combo Sharpe > 0;
 - min combo Sharpe > 0;
 - median active days >= 120;
@@ -78,13 +72,13 @@ PASS / advance:
 
 PARTIAL / correct:
 
-- positive median Sharpe exists but stability, min Sharpe, active days or CVaR
-  criteria are incomplete.
+- positive median Sharpe exists but min Sharpe, active days, sensitivity or
+  CVaR criteria are incomplete.
 
 FAIL / abandon:
 
-- no predeclared policy produces positive median Sharpe with nonzero exposure,
-  or the policy depends on forbidden realized variables.
+- no predeclared long-only policy produces positive median Sharpe with nonzero
+  exposure, or the policy depends on forbidden realized variables.
 
 INCONCLUSIVE:
 
@@ -100,7 +94,6 @@ hypothesis remains executable, continue in a later autonomous gate.
 ## Required Skills
 
 - `sniper-autonomous-implementation-manager`
-- `sniper-autonomous-research-agenda-synthesizer`
 - `sniper-quant-research-implementation`
 - `sniper-gate-governance`
 

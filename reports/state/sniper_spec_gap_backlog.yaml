@@ -634,16 +634,24 @@ gaps:
     title: Meta calibration disagreement candidate requires stability and falsification
     type: research_hypothesis
     severity: high
-    status: open
+    status: abandoned
     evidence:
       - "reports/state/sniper_research_agenda.yaml"
       - "reports/gates/phase5_research_meta_disagreement_abstention_gate/gate_report.json"
+      - "reports/gates/phase5_research_meta_disagreement_stability_falsification_gate/gate_report.json"
+      - "reports/gates/phase5_research_meta_disagreement_candidate_decision_gate/gate_report.json"
       - "classification=META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE"
+      - "decision_classification=META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED"
       - "best_policy=short_bma_high_meta_low_p60_m40_k3"
       - "best_median_combo_sharpe=0.855486"
       - "best_min_combo_sharpe=0.220622"
       - "best_median_active_days=322.0"
       - "best_max_cvar_95_loss_fraction=0.00455141"
+      - "hard_falsifier_count=25"
+      - "temporal_thirds_failed=true"
+      - "cost_20bps_min_combo_sharpe=-0.053326"
+      - "parameter_pass_rate=0.259259"
+      - "universe_stress_failed=true"
       - "candidate_below_sr_needed=true"
       - "official_promotion_allowed=false"
       - "paper_readiness_allowed=false"
@@ -652,9 +660,8 @@ gaps:
       - "tests/unit/test_phase5_research_meta_disagreement_abstention.py"
       - "data/models/phase4/phase4_oos_predictions.parquet"
     allowed_actions:
-      - "CANDIDATE_STABILITY_GATE"
-      - "CANDIDATE_FALSIFICATION_GATE"
-      - "META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE"
+      - "START_RESEARCH_ONLY_THESIS"
+      - "META_UNCERTAINTY_ABSTENTION_GATE"
       - "UPDATE_STATE"
       - "UPDATE_DRAFT_PR"
     forbidden_actions:
@@ -664,8 +671,8 @@ gaps:
       - "RELAX_DSR_THRESHOLD"
       - "USE_REALIZED_VARIABLE_AS_EX_ANTE_RULE"
       - "MERGE_PR"
-    suggested_gate: "phase5_research_meta_disagreement_stability_falsification_gate"
-    stop_condition_if_unresolved: "The candidate is alive but not promotable. It must survive temporal, cost, parameter and leakage falsification before any further research deepening."
+    suggested_gate: "phase5_research_meta_uncertainty_abstention_gate"
+    stop_condition_if_unresolved: "The meta-disagreement candidate is falsified and abandoned. Continue only with a materially different agenda hypothesis such as AGENDA-H02; do not revive this candidate without new evidence."
 
   - id: GAP-NEXT-GATE-CHAIN-001
     title: Next safe gate from sniper_next_autonomous_mission must execute automatically
@@ -682,6 +689,11 @@ gaps:
       - "initial_gate=phase5_research_meta_disagreement_abstention_gate"
       - "initial_status=PASS/advance"
       - "next_gate=phase5_research_meta_disagreement_stability_falsification_gate"
+      - "next_gate_executed=true"
+      - "decision_gate=phase5_research_meta_disagreement_candidate_decision_gate"
+      - "decision_classification=META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED"
+      - "next_agenda_id=AGENDA-H02"
+      - "next_agenda_gate=phase5_research_meta_uncertainty_abstention_gate"
       - "promotion_allowed=false"
       - "paper_readiness_allowed=false"
       - "human_decision_required=false"
@@ -694,11 +706,8 @@ gaps:
       - "reports/state/sniper_decision_ledger.md"
       - "reports/state/sniper_autonomous_runbook.md"
     allowed_actions:
-      - "NEXT_GATE_CHAIN_EXECUTION"
-      - "META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE"
-      - "CANDIDATE_STABILITY_GATE"
-      - "CANDIDATE_FALSIFICATION_GATE"
-      - "CANDIDATE_DECISION_GATE"
+      - "START_RESEARCH_ONLY_THESIS"
+      - "META_UNCERTAINTY_ABSTENTION_GATE"
       - "UPDATE_STATE"
       - "UPDATE_DRAFT_PR"
     forbidden_actions:
@@ -712,5 +721,5 @@ gaps:
       - "A3_REOPEN"
       - "A4_REOPEN"
       - "THRESHOLD_RELAXATION"
-    suggested_gate: "phase5_research_meta_disagreement_stability_falsification_gate"
-    stop_condition_if_unresolved: "Do not stop after the initial PASS/advance while the live research/sandbox candidate has a safe explicit stability/falsification gate available in reports/state/sniper_next_autonomous_mission.md."
+    suggested_gate: "phase5_research_meta_uncertainty_abstention_gate"
+    stop_condition_if_unresolved: "The explicit next gate was executed and falsified the candidate. Continue with the next materially different agenda hypothesis if mission budget and review size allow."

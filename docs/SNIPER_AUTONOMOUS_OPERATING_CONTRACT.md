@@ -81,21 +81,23 @@ Historical surviving candidate after autonomous audit/falsification:
 That candidate has already been audited and falsified. Do not revive it without
 materially new evidence.
 
-Current live research/sandbox candidate:
+Latest research/sandbox candidate chain:
 
 - family: `meta_calibration_disagreement_abstention`;
 - candidate: `short_bma_high_meta_low_p60_m40_k3`;
 - initial gate: `phase5_research_meta_disagreement_abstention_gate`;
 - status: initial `PASS/advance`;
-- next gate: `phase5_research_meta_disagreement_stability_falsification_gate`;
+- stability/falsification gate: `phase5_research_meta_disagreement_stability_falsification_gate`;
+- decision gate: `phase5_research_meta_disagreement_candidate_decision_gate`;
+- final status: `META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED`;
 - promotion allowed: `false`;
 - paper readiness allowed: `false`.
 
 The current recommended mode is
-`META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE`. This initial PASS does not
-prove robustness, promotion eligibility or paper readiness. Codex must run the
-stability/falsification gate and then a candidate decision gate before treating
-the candidate as preserved, falsified or ready for deeper research.
+`START_RESEARCH_ONLY_THESIS`; the next gate is
+`phase5_research_meta_uncertainty_abstention_gate` from `AGENDA-H02`. The
+falsified meta-disagreement candidate does not prove robustness, promotion
+eligibility or paper readiness.
 
 ## Closed-Loop Autonomous Policy
 

@@ -29,13 +29,13 @@
 
 ## Current Recommended Mode
 
-`CANDIDATE_STABILITY_GATE`
+`START_RESEARCH_ONLY_THESIS`
 
 Next logical skill: `sniper-autonomous-implementation-manager`.
 
-Next mode: `META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE`.
+Next mode: `META_UNCERTAINTY_ABSTENTION_GATE`.
 
-Next gate: `phase5_research_meta_disagreement_stability_falsification_gate`.
+Next gate: `phase5_research_meta_uncertainty_abstention_gate`.
 
 Current candidate chain:
 
@@ -43,13 +43,16 @@ Current candidate chain:
 - candidate: `short_bma_high_meta_low_p60_m40_k3`;
 - initial gate: `phase5_research_meta_disagreement_abstention_gate`;
 - initial status: `PASS/advance`;
+- stability/falsification gate: `phase5_research_meta_disagreement_stability_falsification_gate`;
+- decision gate: `phase5_research_meta_disagreement_candidate_decision_gate`;
+- final status: `META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED`;
 - promotion allowed: `false`;
 - paper readiness allowed: `false`.
 
 `Pode continuar autonomamente: sim` is not a stop condition.
 `Próximo gate recomendado` is not a stop condition.
-The initial PASS is not final because the candidate still needs
-stability/falsification and a candidate decision gate.
+The initial PASS was not final. The candidate has now been falsified and
+abandoned, so the next materially different agenda hypothesis is `AGENDA-H02`.
 
 Allowed mission modes:
 
@@ -68,6 +71,7 @@ Allowed mission modes:
 - `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`
 - `GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`
 - `META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE`
+- `META_UNCERTAINTY_ABSTENTION_GATE`
 - `FREEZE_LINE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED` only after agenda
   expansion generates no HIGH/MEDIUM executable hypothesis.
 
@@ -144,6 +148,7 @@ Automatically execute:
 - `UPDATE_STATE`
 - `UPDATE_DRAFT_PR`
 - `OPEN_RESEARCH_GATE`
+- `NEXT_GATE_CHAIN_EXECUTION`
 - `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`
 - `GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`
 - `FREEZE_LINE` only after freeze criteria are satisfied.
@@ -168,12 +173,15 @@ Mandatory live-candidate sequence:
 4. `reports/state/**` update;
 5. draft PR update when reviewable.
 
-Current required next gate:
+Current completed next gate:
 `phase5_research_meta_disagreement_stability_falsification_gate`.
 
+Current required next agenda gate:
+`phase5_research_meta_uncertainty_abstention_gate`.
+
 Do not stop after `Pode continuar autonomamente: sim`, after
-`Próximo gate recomendado`, or after an initial candidate PASS while the
-stability/falsification gate remains safe and executable.
+`Próximo gate recomendado`, or after a candidate falsification while a
+materially different HIGH/MEDIUM agenda hypothesis remains safe and executable.
 
 Closed-loop budget:
 
@@ -283,9 +291,19 @@ Agenda expansion result:
 - still below `sr_needed=4.47`;
 - research/sandbox only.
 
-The next autonomous step is stability/falsification for the meta-disagreement
-candidate. Do not treat the initial PASS as promotion, readiness, or robust
+The meta-disagreement stability/falsification step has now run and falsified
+the candidate. Do not treat the initial PASS as promotion, readiness, or robust
 candidate survival.
+
+Meta-disagreement chain execution result:
+
+- `phase5_research_meta_disagreement_stability_falsification_gate`:
+  `FAIL/abandon`;
+- `phase5_research_meta_disagreement_candidate_decision_gate`: `PASS/abandon`;
+- final classification: `META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED`;
+- hard falsifier count: `25`;
+- next agenda hypothesis: `AGENDA-H02`;
+- next gate: `phase5_research_meta_uncertainty_abstention_gate`.
 
 ## Functional Phase Order
 
@@ -362,10 +380,10 @@ Historical post-candidate recommendation:
 `none_until_materially_new_hypothesis_or_external_resource`.
 
 That recommendation was superseded by post-falsification reaudit, governed
-freeze review, autonomous agenda expansion, and the live meta-disagreement
-candidate. The current recommendation is no longer human review as a stopping
-point; it is `META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE`. Do not promote
-the abandoned candidates: they used sandbox/research exposure, remained below
+freeze review, autonomous agenda expansion, and the meta-disagreement candidate
+chain. The current recommendation is no longer human review as a stopping point;
+it is `META_UNCERTAINTY_ABSTENTION_GATE` from `AGENDA-H02`. Do not promote the
+abandoned candidates: they used sandbox/research exposure, remained below
 `sr_needed=4.47`, and failed autonomous falsification while `dsr_honest=0.0`.
 
 Post-falsification protocol:
@@ -400,12 +418,11 @@ Gates added in the closed-loop mission:
 - `phase5_post_candidate_falsification_governed_freeze_gate`: `PASS/freeze`.
 
 The current autonomous loop executed `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION` and
-found a new research/sandbox candidate. Permanent final freeze is not legitimate
-while this candidate has not been stability-tested and falsified or preserved.
-The next safe gate is
-`phase5_research_meta_disagreement_stability_falsification_gate`, and it must be
-executed automatically. This is not promotion, not paper readiness and not merge
-approval.
+found a research/sandbox candidate. The explicit next stability/falsification
+gate was executed and the candidate was falsified. Permanent final freeze is
+still not legitimate while agenda hypotheses remain. The next safe gate is
+`phase5_research_meta_uncertainty_abstention_gate`. This is not promotion, not
+paper readiness and not merge approval.
 
 ## Forbidden Interpretations
 
@@ -440,6 +457,6 @@ research-only hypothesis, internal correction, unfinished quantitative
 diagnostic, possible sandbox/research module, post-falsification global reaudit,
 autonomous research agenda expansion, state update, draft PR update or governed
 freeze review inside the repo. The prior surviving candidate and the
-cluster-conditioned candidate have now been audited/falsified, agenda expansion
-has found the live meta-disagreement candidate, and the current line requires
-the explicit next stability/falsification gate before any new freeze.
+cluster-conditioned candidate and the meta-disagreement candidate have now been
+audited/falsified. The current line requires the next materially different
+agenda hypothesis before any new freeze.

@@ -125,20 +125,22 @@ When a research-only candidate has an initial `PASS/advance`, the next
 autonomous action is mandatory stability/falsification followed by a candidate
 decision gate before freeze or human decision.
 
-Current live candidate:
+Latest candidate chain:
 
 - family: `meta_calibration_disagreement_abstention`;
 - candidate: `short_bma_high_meta_low_p60_m40_k3`;
 - initial gate: `phase5_research_meta_disagreement_abstention_gate`;
 - status: initial `PASS/advance`;
-- next gate: `phase5_research_meta_disagreement_stability_falsification_gate`;
+- stability/falsification gate: `phase5_research_meta_disagreement_stability_falsification_gate`;
+- decision gate: `phase5_research_meta_disagreement_candidate_decision_gate`;
+- final status: `META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED`;
 - promotion allowed: `false`;
 - paper readiness allowed: `false`.
 
-Current recommended mode: `META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE`.
-The candidate is research/sandbox only and must not be treated as official,
-robust, promotable or paper-ready before stability/falsification and decision
-gates complete.
+Current recommended mode: `START_RESEARCH_ONLY_THESIS`.
+Current next gate: `phase5_research_meta_uncertainty_abstention_gate`
+(`AGENDA-H02`). The falsified candidate is research/sandbox only and must not be
+treated as official, robust, promotable or paper-ready.
 
 Must stop before:
 

@@ -1,6 +1,6 @@
 # SNIPER Research Hypothesis Inventory
 
-Updated: 2026-05-03T21:20:00Z
+Updated: 2026-05-04T02:36:05Z
 
 ## Falsified Or Frozen Families
 
@@ -11,6 +11,7 @@ Updated: 2026-05-03T21:20:00Z
 | alternative_exante_p_bma_sigma_hmm long-only | Abandoned | `phase5_research_alternative_exante_family_gate`; no positive safe median alpha across tested long-only families. |
 | signal_polarity_short_high | Falsified | `short_high_p_bma_k3_p60_h70` survived initial correction but failed temporal and 20 bps cost falsification. |
 | cluster_conditioned_polarity | Falsified | `cluster_2_long_high_short_low_p60_h70_k3` failed temporal, cost, parameter and universe falsification. |
+| meta_calibration_disagreement_abstention | Falsified | `short_bma_high_meta_low_p60_m40_k3` passed the initial gate but failed temporal, 20 bps cost, parameter sensitivity and universe stress falsification. |
 | governed freeze after reaudit | Pending agenda expansion | `FULL_FREEZE_AFTER_REAUDIT` was reached, but final freeze requires autonomous agenda expansion first. |
 
 ## New Agenda
@@ -45,18 +46,21 @@ Policy constraints:
 ## Execution Result
 
 `phase5_research_meta_disagreement_abstention_gate` was executed and returned
-`PASS/advance`.
+`PASS/advance`, but the chained stability/falsification and decision gates
+falsified the candidate.
 
 | Metric | Value |
 | --- | --- |
-| Classification | `META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE` |
+| Initial classification | `META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE` |
+| Final classification | `META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED` |
 | Best policy | `short_bma_high_meta_low_p60_m40_k3` |
 | Median Sharpe | `0.855486` |
 | Min Sharpe | `0.220622` |
 | Median active days | `322.0` |
 | Max CVaR95 | `0.00455141` |
+| Hard falsifier count | `25` |
 | Promotion allowed | `false` |
 | Paper readiness allowed | `false` |
 
 Next required gate:
-`phase5_research_meta_disagreement_stability_falsification_gate`.
+`phase5_research_meta_uncertainty_abstention_gate` from `AGENDA-H02`.

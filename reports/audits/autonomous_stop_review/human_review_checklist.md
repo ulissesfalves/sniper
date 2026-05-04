@@ -72,6 +72,21 @@
 - [ ] Confirmar `remaining_safe_material_hypothesis_count=0`.
 - [ ] Confirmar que nenhuma dessas evidencias promove official ou declara paper readiness.
 
+## Gates next-gate chain execution
+
+- [ ] Verificar `reports/gates/phase5_research_meta_disagreement_abstention_gate/gate_report.json`.
+- [ ] Verificar `reports/gates/phase5_research_meta_disagreement_stability_falsification_gate/gate_report.json`.
+- [ ] Verificar `reports/gates/phase5_research_meta_disagreement_candidate_decision_gate/gate_report.json`.
+- [ ] Confirmar que `phase5_research_meta_disagreement_abstention_gate` foi `PASS/advance` apenas como research/sandbox.
+- [ ] Confirmar candidata `short_bma_high_meta_low_p60_m40_k3`.
+- [ ] Confirmar mediana Sharpe `0.855486`, min Sharpe `0.220622`, dias ativos medianos `322.0` e CVaR95 max `0.00455141`.
+- [ ] Confirmar que a candidata foi falsificada por 25 hard falsifiers.
+- [ ] Confirmar principais falsificadores: thirds temporais, custo de 20 bps, sensibilidade parametrica e stress de universo.
+- [ ] Confirmar que o controle de leakage passou.
+- [ ] Confirmar classificacao final `META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED`.
+- [ ] Confirmar que a proxima hipotese da agenda e `AGENDA-H02` / `phase5_research_meta_uncertainty_abstention_gate`.
+- [ ] Confirmar que a candidata falsificada nao foi usada para promocao official ou paper readiness.
+
 ## Clean regeneration
 
 - [ ] Confirmar que `phase6_research_baseline_rehydration_clean_regeneration_gate` tem `clean_clone_or_equivalent=true`.
@@ -108,6 +123,7 @@
 - [ ] Confirmar que CVaR zero exposure nao foi tratado como robustez economica.
 - [ ] Confirmar que o novo CVaR research com exposicao short nao foi tratado como CVaR economico official.
 - [ ] Confirmar que o candidato research-only falsificado nao foi usado para declarar paper readiness.
+- [ ] Confirmar que a candidata meta-disagreement falsificada tambem nao foi usada para declarar paper readiness.
 
 ## Testes
 
@@ -142,6 +158,14 @@
 ```
 
 - [ ] Esperado observado: `12 passed`.
+
+- [ ] Rodar ou revisar resultado next-gate chain:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest tests/unit/test_phase5_research_meta_disagreement_abstention.py -q
+```
+
+- [ ] Esperado observado: `10 passed`.
 
 ## Decisao humana
 

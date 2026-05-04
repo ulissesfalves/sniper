@@ -13,6 +13,8 @@ if str(ML_ENGINE) not in sys.path:
     sys.path.insert(0, str(ML_ENGINE))
 
 import phase5_research_meta_disagreement_abstention as gate
+import phase5_research_meta_disagreement_candidate_decision as decision
+import phase5_research_meta_disagreement_stability_falsification as stability
 
 
 def _toy_predictions() -> pd.DataFrame:
@@ -138,3 +140,68 @@ def test_classify_family_abandons_negative_alpha() -> None:
     assert (status, decision) == ("FAIL", "abandon")
     assert classification == "META_DISAGREEMENT_NO_POSITIVE_SAFE_ALPHA"
     assert best["policy"] == "bad"
+
+
+def test_stability_candidate_config_is_current_next_gate_candidate() -> None:
+    config = stability.candidate_config()
+
+    assert config["policy"] == "short_bma_high_meta_low_p60_m40_k3"
+    assert config["selection_inputs"] == ["p_bma_pkf", "p_meta_calibrated", "sigma_ewma"]
+    assert "pnl_real" not in config["selection_inputs"]
+    assert "stage_a_eligible" not in config["selection_inputs"]
+
+
+def test_stability_scenario_classification_falsifies_hard_failures() -> None:
+    status, decision_value, classification = stability.classify_stability_falsification(
+        ["cost_20bps"],
+        {
+            "median_combo_sharpe": 0.8,
+            "min_combo_sharpe": 0.2,
+            "median_active_days": 250,
+            "max_cvar_95_loss_fraction": 0.01,
+        },
+        True,
+    )
+
+    assert (status, decision_value) == ("FAIL", "abandon")
+    assert classification == "META_DISAGREEMENT_CANDIDATE_FALSIFIED_BY_STABILITY_STRESS"
+
+
+def test_stability_scenario_classification_advances_without_hard_failures() -> None:
+    status, decision_value, classification = stability.classify_stability_falsification(
+        [],
+        {
+            "median_combo_sharpe": 0.8,
+            "min_combo_sharpe": 0.2,
+            "median_active_days": 250,
+            "max_cvar_95_loss_fraction": 0.01,
+        },
+        True,
+    )
+
+    assert (status, decision_value) == ("PASS", "advance")
+    assert classification == "META_DISAGREEMENT_CANDIDATE_SURVIVED_FALSIFICATION_RESEARCH_ONLY"
+
+
+def test_meta_disagreement_decision_records_falsified_candidate() -> None:
+    status, decision_value, classification, reason = decision.classify_meta_disagreement_decision(
+        {"status": "PASS", "decision": "advance"},
+        {"status": "FAIL", "decision": "abandon"},
+        {"hard_falsifiers": ["cost_20bps"]},
+    )
+
+    assert (status, decision_value) == ("PASS", "abandon")
+    assert classification == "META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED"
+    assert reason == "hard_falsifiers_present"
+
+
+def test_meta_disagreement_decision_preserves_survivor_as_not_promotable() -> None:
+    status, decision_value, classification, reason = decision.classify_meta_disagreement_decision(
+        {"status": "PASS", "decision": "advance"},
+        {"status": "PASS", "decision": "advance"},
+        {"hard_falsifiers": []},
+    )
+
+    assert (status, decision_value) == ("PASS", "advance")
+    assert classification == "META_DISAGREEMENT_RESEARCH_CANDIDATE_ALIVE_NOT_PROMOTABLE"
+    assert reason == "survived_falsification"

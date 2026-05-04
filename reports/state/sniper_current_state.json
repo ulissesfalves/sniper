@@ -13,11 +13,11 @@
     "observed_before_local_gate_commits": false
   },
   "latest_gate": {
-    "gate_slug": "phase5_research_meta_disagreement_abstention_gate",
+    "gate_slug": "phase5_research_meta_disagreement_candidate_decision_gate",
     "status": "PASS",
-    "decision": "advance"
+    "decision": "abandon"
   },
-  "latest_decision": "META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE",
+  "latest_decision": "META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED",
   "resolved_blockers": [
     "source_doc_alignment_restored",
     "phase4_official_artifacts_found_and_hashed",
@@ -49,7 +49,9 @@
     "research_agenda_expansion_executed_after_final_freeze_reaudit",
     "research_agenda_generated_with_high_medium_hypotheses",
     "meta_disagreement_abstention_gate_passed",
-    "meta_disagreement_research_candidate_found"
+    "meta_disagreement_research_candidate_found",
+    "meta_disagreement_stability_falsification_completed",
+    "meta_disagreement_research_candidate_falsified"
   ],
   "open_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -59,11 +61,9 @@
     "safe_stage_a_top1_policy_negative_median_sharpe",
     "sharpe_gap_to_required_honest_dsr",
     "threshold_family_cross_combo_instability",
-    "no_surviving_research_candidate_after_falsification",
     "no_promotable_official_alpha_candidate",
-    "no_materially_new_safe_in_repo_hypothesis_remaining",
-    "meta_disagreement_candidate_requires_stability_falsification",
-    "meta_disagreement_candidate_below_sr_needed"
+    "meta_disagreement_candidate_below_sr_needed",
+    "meta_uncertainty_abstention_next_agenda_hypothesis_pending"
   ],
   "promotion_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -86,7 +86,8 @@
     "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION",
     "GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC",
     "FREEZE_LINE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED",
-    "META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE"
+    "META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE",
+    "META_UNCERTAINTY_ABSTENTION_GATE"
   ],
   "forbidden_next_modes": [
     "OFFICIAL_PROMOTION",
@@ -189,7 +190,7 @@
       "current_mission_final_classification": "FUNCTIONAL_RESEARCH_MODULE_DELIVERED",
       "final_freeze_accepted": false,
       "safe_internal_next_action_available": true,
-      "safe_internal_next_action": "phase5_research_meta_disagreement_stability_falsification_gate"
+      "safe_internal_next_action": "phase5_research_meta_uncertainty_abstention_gate"
     },
     "next_gate_chain_execution_policy": {
       "enabled": true,
@@ -203,8 +204,12 @@
       "initial_gate": "phase5_research_meta_disagreement_abstention_gate",
       "initial_gate_status": "PASS",
       "initial_gate_decision": "advance",
-      "current_recommended_mode": "META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE",
-      "current_next_gate": "phase5_research_meta_disagreement_stability_falsification_gate",
+      "current_recommended_mode": "START_RESEARCH_ONLY_THESIS",
+      "current_next_gate": "phase5_research_meta_uncertainty_abstention_gate",
+      "completed_gate": "phase5_research_meta_disagreement_stability_falsification_gate",
+      "completed_decision_gate": "phase5_research_meta_disagreement_candidate_decision_gate",
+      "completed_classification": "META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED",
+      "next_agenda_id": "AGENDA-H02",
       "autonomous_can_continue": true,
       "human_decision_required": false,
       "promotion_allowed": false,
@@ -276,19 +281,29 @@
       "caveat": "Cluster-conditioned candidate generated nonzero research exposure but failed temporal, cost and universe falsification. It is abandoned and non-promotable."
     },
     "research_meta_disagreement_status": {
-      "gate_slug": "phase5_research_meta_disagreement_abstention_gate",
+      "gate_slug": "phase5_research_meta_disagreement_candidate_decision_gate",
       "status": "PASS",
-      "decision": "advance",
+      "decision": "abandon",
       "policy": "short_bma_high_meta_low_p60_m40_k3",
       "median_active_days": 322.0,
       "median_combo_sharpe": 0.855486,
       "min_combo_sharpe": 0.220622,
       "max_cvar_95_loss_fraction": 0.00455141,
-      "candidate_review_classification": "META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE",
+      "candidate_review_classification": "META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED",
+      "hard_falsifier_count": 25,
+      "hard_falsifiers": [
+        "temporal_third_1",
+        "temporal_third_2",
+        "temporal_third_3",
+        "cost_20bps",
+        "parameter_sensitivity",
+        "universe_stress"
+      ],
+      "stability_falsification_gate": "phase5_research_meta_disagreement_stability_falsification_gate",
       "short_exposure_research_only": true,
       "promotion_allowed": false,
       "paper_readiness_allowed": false,
-      "caveat": "Initial research/sandbox gate passed, but the candidate is below sr_needed=4.47 and requires stability/falsification before any deepening."
+      "caveat": "Initial research/sandbox gate passed, but the candidate was falsified by temporal subperiods, 20 bps cost stress, parameter sensitivity and universe stress. It is abandoned and non-promotable."
     }
   },
   "dsr_status": {
@@ -308,13 +323,14 @@
       "caveat": "Diagnostic explains DSR=0.0 but does not improve the policy or authorize promotion."
     },
     "latest_research_candidate": {
-      "gate_slug": "phase5_research_meta_disagreement_abstention_gate",
+      "gate_slug": "phase5_research_meta_disagreement_candidate_decision_gate",
       "policy": "short_bma_high_meta_low_p60_m40_k3",
       "median_combo_sharpe": 0.855486,
       "min_combo_sharpe": 0.220622,
       "sr_needed": 4.47,
       "sharpe_gap_to_sr_needed": 3.614514,
-      "candidate_review_classification": "META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE",
+      "candidate_review_classification": "META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED",
+      "hard_falsifier_count": 25,
       "promotion_allowed": false
     }
   },
@@ -327,11 +343,11 @@
   "paper_readiness_allowed": false,
   "required_external_artifacts": [],
   "latest_research_thesis": {
-    "gate_slug": "phase5_research_meta_disagreement_abstention_gate",
+    "gate_slug": "phase5_research_meta_disagreement_candidate_decision_gate",
     "hypothesis": "High BMA confidence paired with low calibrated meta probability can identify overconfident positive predictions to short in research/sandbox only.",
     "status": "PASS",
-    "decision": "advance",
-    "classification": "META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE",
+    "decision": "abandon",
+    "classification": "META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED",
     "final_freeze_accepted": false,
     "agenda_expansion_executed_after_final_freeze_reaudit": true,
     "selected_agenda_id": "AGENDA-H01",
@@ -341,25 +357,14 @@
       "deep_quant_diagnostic",
       "meta_disagreement_abstention_research_runner"
     ],
-    "surviving_research_only_candidates": [
-      {
-        "policy": "short_bma_high_meta_low_p60_m40_k3",
-        "median_combo_sharpe": 0.855486,
-        "min_combo_sharpe": 0.220622,
-        "median_active_days": 322.0,
-        "max_cvar_95_loss_fraction": 0.00455141,
-        "decision_gate": "phase5_research_meta_disagreement_abstention_gate",
-        "classification": "META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE",
-        "promotion_allowed": false,
-        "paper_readiness_allowed": false
-      }
-    ],
+    "surviving_research_only_candidates": [],
     "surviving_promotable_candidates": 0,
     "can_continue_autonomously_under_current_policy": true,
     "requires_external_artifact": false,
-    "candidate_review_status": "RESEARCH_CANDIDATE_ALIVE_NOT_PROMOTABLE_REQUIRES_FALSIFICATION",
-    "next_candidate_gate": "phase5_research_meta_disagreement_stability_falsification_gate",
-    "next_recommended_gate": "phase5_research_meta_disagreement_stability_falsification_gate"
+    "candidate_review_status": "RESEARCH_CANDIDATE_FALSIFIED",
+    "next_agenda_id": "AGENDA-H02",
+    "next_candidate_gate": "phase5_research_meta_uncertainty_abstention_gate",
+    "next_recommended_gate": "phase5_research_meta_uncertainty_abstention_gate"
   },
   "internal_strategic_decision_policy": {
     "human_decision_is_last_resort": true,
@@ -389,8 +394,12 @@
     "initial_gate": "phase5_research_meta_disagreement_abstention_gate",
     "initial_status": "PASS",
     "initial_decision": "advance",
-    "next_gate": "phase5_research_meta_disagreement_stability_falsification_gate",
-    "next_mode": "META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE",
+    "completed_next_gate": "phase5_research_meta_disagreement_stability_falsification_gate",
+    "completed_decision_gate": "phase5_research_meta_disagreement_candidate_decision_gate",
+    "candidate_status": "META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED",
+    "next_gate": "phase5_research_meta_uncertainty_abstention_gate",
+    "next_mode": "START_RESEARCH_ONLY_THESIS",
+    "next_agenda_id": "AGENDA-H02",
     "autonomous_can_continue": true,
     "human_decision_required": false,
     "promotion_allowed": false,
@@ -398,13 +407,14 @@
     "stop_after_initial_pass_allowed": false,
     "stop_after_next_gate_recommended_allowed": false
   },
-  "latest_candidate_status": "RESEARCH_CANDIDATE_ALIVE_NOT_PROMOTABLE_REQUIRES_STABILITY_FALSIFICATION",
+  "latest_candidate_status": "RESEARCH_CANDIDATE_FALSIFIED",
   "human_decision_required": false,
   "autonomous_can_continue": true,
-  "next_recommended_mode": "META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE",
+  "next_recommended_mode": "START_RESEARCH_ONLY_THESIS",
   "next_recommended_skill": "sniper-autonomous-implementation-manager",
-  "next_recommended_submode": "META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE",
-  "next_recommended_gate": "phase5_research_meta_disagreement_stability_falsification_gate",
+  "next_recommended_submode": "META_UNCERTAINTY_ABSTENTION_GATE",
+  "next_recommended_gate": "phase5_research_meta_uncertainty_abstention_gate",
+  "next_recommended_agenda_id": "AGENDA-H02",
   "if_agenda_has_no_high_or_medium_executable_hypothesis": "FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED",
-  "updated_at_utc": "2026-05-04T02:21:07Z"
+  "updated_at_utc": "2026-05-04T02:36:05Z"
 }

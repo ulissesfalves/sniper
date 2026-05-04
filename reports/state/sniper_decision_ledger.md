@@ -1,6 +1,6 @@
 # SNIPER Decision Ledger
 
-Updated: 2026-05-04T02:21:07Z
+Updated: 2026-05-04T02:36:05Z
 
 ## Closed Decisions
 
@@ -44,6 +44,8 @@ Updated: 2026-05-04T02:21:07Z
 | Research agenda expansion | Completed with candidate | `reports/state/sniper_research_agenda.yaml`, `sniper_hypothesis_inventory.md` and `sniper_next_autonomous_mission.md` were generated with six new research-only hypotheses. AGENDA-H01 was selected. |
 | Meta calibration disagreement abstention | Research candidate alive, not promotable | `phase5_research_meta_disagreement_abstention_gate` passed/advanced. Best policy `short_bma_high_meta_low_p60_m40_k3` had median Sharpe `0.855486`, min Sharpe `0.220622`, median active days `322.0`, max CVaR95 `0.00455141`; research/sandbox only, below `sr_needed=4.47`, no official promotion. |
 | Next gate chain execution | Active governance policy | If `reports/state/sniper_next_autonomous_mission.md` defines a safe next gate, Codex must execute it automatically. `Pode continuar autonomamente: sim` and `Próximo gate recomendado` are not stop conditions. The current live candidate `short_bma_high_meta_low_p60_m40_k3` requires `phase5_research_meta_disagreement_stability_falsification_gate` and then a decision gate; no promotion or paper readiness is allowed. |
+| Meta disagreement stability/falsification | Failed/abandoned | `phase5_research_meta_disagreement_stability_falsification_gate` executed 38 scenarios and found 25 hard falsifiers, including all temporal thirds, 20 bps cost stress, parameter sensitivity failures and universe stress. Leakage control passed. |
+| Meta disagreement candidate decision | Falsified | `phase5_research_meta_disagreement_candidate_decision_gate` classified `short_bma_high_meta_low_p60_m40_k3` as `META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED`. Next agenda hypothesis is `AGENDA-H02` / `phase5_research_meta_uncertainty_abstention_gate`. |
 
 ## Current Decision
 
@@ -54,25 +56,25 @@ materially new `cluster_conditioned_polarity` family, falsified its candidate
 
 That freeze is no longer final because autonomous agenda expansion generated
 new HIGH/MEDIUM executable hypotheses. `AGENDA-H01` was implemented in
-`phase5_research_meta_disagreement_abstention_gate` and produced a live
+`phase5_research_meta_disagreement_abstention_gate` and produced a
 research/sandbox candidate:
 `short_bma_high_meta_low_p60_m40_k3`.
 
 Current classification:
-`META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE`.
+`META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED`.
 
-Human decision is not required. The next safe autonomous gate is
-`phase5_research_meta_disagreement_stability_falsification_gate`. The candidate
-must be tested against temporal subperiods, cost stress, parameter sensitivity,
-leakage controls and universe stress before it can be preserved as a robust
-research-only candidate. Do not promote, merge, declare paper readiness, reopen
-A3/A4, relax thresholds, or treat sandbox short exposure as official support.
+Human decision is not required. The explicit next gate
+`phase5_research_meta_disagreement_stability_falsification_gate` was executed
+and falsified the candidate. The candidate decision gate recorded
+`PASS/abandon`. Do not promote, merge, declare paper readiness, reopen A3/A4,
+relax thresholds, or treat sandbox short exposure as official support.
 
 `reports/state/sniper_next_autonomous_mission.md` is executable mission context
-for this state because it defines the current next gate, next mission, required
-tests, criteria and stop conditions. Stopping after the initial PASS/advance or
-after saying "Pode continuar autonomamente: sim" is not valid while the next
-gate is safe and internal to the repo.
+for this state because it defined the current next gate, next mission, required
+tests, criteria and stop conditions. That next gate has now been executed. The
+next materially different agenda hypothesis is `AGENDA-H02`
+(`phase5_research_meta_uncertainty_abstention_gate`) if continuing within the
+same autonomous budget and review scope remains safe.
 
 ## Required Review Before Promotion
 

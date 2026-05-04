@@ -103,6 +103,28 @@ cluster-conditioned e evidencia de falsificacao, mas a linha atual esta
 congelada. O PR continua sendo apenas evidencia de governanca/reprodutibilidade
 e pesquisa, nao readiness operacional.
 
+## Atualizacao next-gate chain execution
+
+A politica `NEXT_GATE_CHAIN_EXECUTION_POLICY` foi executada para a candidata
+gerada pela expansao de agenda:
+
+- `phase5_research_meta_disagreement_abstention_gate`: `PASS/advance`; encontrou
+  `short_bma_high_meta_low_p60_m40_k3` com mediana Sharpe `0.855486`, min Sharpe
+  `0.220622`, mediana de dias ativos `322.0` e CVaR95 max `0.00455141`.
+- `phase5_research_meta_disagreement_stability_falsification_gate`:
+  `FAIL/abandon`; executou 38 cenarios e encontrou 25 hard falsifiers, incluindo
+  thirds temporais, custo de 20 bps, sensibilidade parametrica e stress de
+  universo. O controle de leakage passou.
+- `phase5_research_meta_disagreement_candidate_decision_gate`: `PASS/abandon`;
+  classificou `short_bma_high_meta_low_p60_m40_k3` como
+  `META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED`.
+
+Conclusao: a candidata meta-disagreement tambem foi falsificada. Ela permanece
+research/sandbox only, nao e official, nao sustenta paper readiness e nao remove
+os blockers `dsr_honest=0.0`, CVaR official zero exposure e cross-sectional
+not promotable. A proxima hipotese materialmente diferente da agenda e
+`AGENDA-H02` / `phase5_research_meta_uncertainty_abstention_gate`.
+
 ## Commits da branch
 
 Commits acima de `codex/openclaw-sniper-handoff`:
@@ -141,6 +163,9 @@ Commits acima de `codex/openclaw-sniper-handoff`:
 | `phase5_research_cluster_conditioned_polarity_falsification_gate` | `FAIL` | `abandon` | Falsificou a candidata por temporal/custos/parametros/universo. |
 | `phase5_research_cluster_conditioned_polarity_decision_gate` | `PASS` | `abandon` | Registrou candidata cluster-conditioned falsificada. |
 | `phase5_post_candidate_falsification_governed_freeze_gate` | `PASS` | `freeze` | Congelou a linha atual como `FULL_FREEZE_AFTER_REAUDIT`. |
+| `phase5_research_meta_disagreement_abstention_gate` | `PASS` | `advance` | Encontrou candidata research/sandbox meta-disagreement, nao promotable. |
+| `phase5_research_meta_disagreement_stability_falsification_gate` | `FAIL` | `abandon` | Falsificou a candidata por estabilidade temporal, custo 20 bps, parametros e universo. |
+| `phase5_research_meta_disagreement_candidate_decision_gate` | `PASS` | `abandon` | Registrou `META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED`. |
 
 ## Evidencias do ultimo gate
 
@@ -216,12 +241,14 @@ Artifacts research baseline usados e hasheados:
     falsificacao
   - `short_high_p_bma_k3_p60_h70` foi falsificada
   - `cluster_2_long_high_short_low_p60_h70_k3` foi falsificada
+  - `short_bma_high_meta_low_p60_m40_k3` foi falsificada
 
 - `no_materially_new_safe_in_repo_hypothesis_remaining`
   - `phase5_post_candidate_falsification_governed_freeze_gate` registrou
     `remaining_safe_material_hypothesis_count=0`
-  - futuras rodadas exigem evidencia materialmente nova, artifact externo ou
-    nova direcao research segura
+  - essa condicao foi parcialmente superada por `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`
+  - `AGENDA-H02` permanece como proxima hipotese research-only materialmente
+    diferente, sem promocao official
 
 ## Testes executados
 
@@ -254,6 +281,14 @@ Testes closed-loop adicionais:
 ```
 
 Resultado observado: `12 passed`.
+
+Testes next-gate chain adicionais:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest tests/unit/test_phase5_research_meta_disagreement_abstention.py -q
+```
+
+Resultado observado: `10 passed`.
 
 ## Risco residual
 

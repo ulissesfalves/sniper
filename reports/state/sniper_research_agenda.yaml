@@ -6,9 +6,13 @@ execution_status:
   selected_gate: "phase5_research_meta_disagreement_abstention_gate"
   selected_gate_status: "PASS"
   selected_gate_decision: "advance"
-  selected_classification: "META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE"
+  selected_classification: "META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED"
   selected_policy: "short_bma_high_meta_low_p60_m40_k3"
-  next_gate: "phase5_research_meta_disagreement_stability_falsification_gate"
+  selected_stability_falsification_gate: "phase5_research_meta_disagreement_stability_falsification_gate"
+  selected_decision_gate: "phase5_research_meta_disagreement_candidate_decision_gate"
+  hard_falsifier_count: 25
+  next_agenda_id: "AGENDA-H02"
+  next_gate: "phase5_research_meta_uncertainty_abstention_gate"
   final_freeze_legitimate: false
 source_context:
   latest_classification: "FULL_FREEZE_AFTER_REAUDIT"
