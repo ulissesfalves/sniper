@@ -8,7 +8,7 @@ Base recomendada: `codex/openclaw-sniper-handoff`
 
 Classificacao: `DRAFT_PR_REVIEW_READY`
 
-Resultado final da missao: `FULL_FREEZE_AFTER_REAUDIT`
+Resultado final da missao: `FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED`
 
 Atualizacao full-phase: `PASS/advance` como evidencia research-only, sem promocao.
 
@@ -249,8 +249,10 @@ Artifacts research baseline usados e hasheados:
     `remaining_safe_material_hypothesis_count=0`
   - essa condicao foi parcialmente superada por `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`
   - `AGENDA-H02` foi executada e abandonada
-  - `AGENDA-H03` permanece como proxima hipotese research-only materialmente
-    diferente, sem promocao official
+  - `AGENDA-H03` e `AGENDA-H04` foram executadas e permaneceram apenas
+    `PARTIAL/correct`
+  - `AGENDA-H05` concluiu diagnostico e encontrou ausencia de familia
+    HIGH/MEDIUM executavel restante no repo
 
 ## Atualizacao AGENDA-H02
 
@@ -381,5 +383,5 @@ O PR e reviewable como governanca/reprodutibilidade Phase6, mas nao e uma entreg
 
 ```powershell
 git push origin codex/autonomous-sniper-implementation
-gh pr create --draft --base codex/openclaw-sniper-handoff --head codex/autonomous-sniper-implementation --title "Phase 6 autonomous gate closure" --body-file reports/audits/autonomous_stop_review/draft_pr_summary.md
+gh pr edit 1 --body-file reports/audits/autonomous_stop_review/draft_pr_summary.md
 ```
