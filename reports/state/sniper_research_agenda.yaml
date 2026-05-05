@@ -2,17 +2,17 @@ generated_at_utc: "2026-05-03T21:20:00Z"
 mode: "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION"
 execution_status:
   agenda_generated: true
-  selected_hypothesis: "AGENDA-H03"
-  selected_gate: "phase5_research_cvar_constrained_meta_sizing_gate"
+  selected_hypothesis: "AGENDA-H04"
+  selected_gate: "phase5_research_regime_specific_meta_disagreement_gate"
   selected_gate_status: "PARTIAL"
   selected_gate_decision: "correct"
-  selected_classification: "CVAR_CONSTRAINED_META_SIZING_CVAR_PASS_ALPHA_UNSTABLE"
-  selected_policy: "signed_meta_edge_t52_s15_k5_g04"
+  selected_classification: "REGIME_SPECIFIC_META_DISAGREEMENT_POSITIVE_BUT_UNSTABLE"
+  selected_policy: "neutral_short_meta_low_m40_k3"
   selected_stability_falsification_gate: "integrated_in_initial_gate"
   selected_decision_gate: "not_required_initial_gate_partial"
-  hard_falsifier_count: 20
-  next_agenda_id: "AGENDA-H04"
-  next_gate: "phase5_research_regime_specific_meta_disagreement_gate"
+  hard_falsifier_count: 13
+  next_agenda_id: "AGENDA-H05"
+  next_gate: "phase5_research_feature_family_ablation_blocker_decomposition_gate"
   final_freeze_legitimate: false
 source_context:
   latest_classification: "FULL_FREEZE_AFTER_REAUDIT"
@@ -142,6 +142,10 @@ hypotheses:
 
   - id: "AGENDA-H04"
     name: "regime_specific_meta_disagreement"
+    execution_status: "PARTIAL/correct"
+    execution_gate: "phase5_research_regime_specific_meta_disagreement_gate"
+    execution_classification: "REGIME_SPECIFIC_META_DISAGREEMENT_POSITIVE_BUT_UNSTABLE"
+    execution_summary: "Best policy neutral_short_meta_low_m40_k3 had median Sharpe 0.726729, min Sharpe -0.911080, median active days 82.0, max CVaR95 0.00315145 and 13 hard falsifiers. This is research/sandbox regime evidence, but it is sparse and not stable."
     description: "Research-only disagreement policy split by HMM bull probability regimes, with separate abstention thresholds per ex-ante regime."
     blockers:
       - "regime_dependency"

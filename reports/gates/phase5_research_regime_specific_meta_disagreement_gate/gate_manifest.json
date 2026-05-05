@@ -1,0 +1,111 @@
+{
+  "gate_slug": "phase5_research_regime_specific_meta_disagreement_gate",
+  "timestamp_utc": "2026-05-05T20:27:53+00:00",
+  "baseline_commit": "f45f54578f18ff24ef39d6226d45b1efd7c9fc69",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+      "exists": true,
+      "size_bytes": 2872831,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "5B3144578BB99D48E2A67B3AB60B2B0AD25787A92B8488AFD1D1D5C08AE8F6C7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_research_agenda.yaml",
+      "exists": true,
+      "size_bytes": 12293,
+      "mtime_utc": "2026-05-05T20:19:30+00:00",
+      "sha256": "FD0A244330412F810E931959FC94ACA4AEA7FAAFB7EC38F450C8D9EF09A75195"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_regime_specific_meta_disagreement_gate\\regime_specific_meta_positions.parquet",
+      "exists": true,
+      "size_bytes": 87358,
+      "mtime_utc": "2026-05-05T20:27:53+00:00",
+      "sha256": "60193F2DF8F61E208A667EC5D688901982F174DA11DE32C17F076597A35FFEDC"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_regime_specific_meta_disagreement_gate\\regime_specific_meta_daily_returns.parquet",
+      "exists": true,
+      "size_bytes": 61629,
+      "mtime_utc": "2026-05-05T20:27:53+00:00",
+      "sha256": "B1D0C5ED5A74B9CF5F21AA8D3676A33CF499E5E98704C08FE990BEBB81F20FEB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_regime_specific_meta_disagreement_gate\\regime_specific_meta_trade_log.parquet",
+      "exists": true,
+      "size_bytes": 10036,
+      "mtime_utc": "2026-05-05T20:27:53+00:00",
+      "sha256": "4705375DA251761FF8F7E3B92E7965EE6AC81509791E4C70097581AB567256AF"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_regime_specific_meta_disagreement_gate\\regime_specific_meta_metrics.parquet",
+      "exists": true,
+      "size_bytes": 17817,
+      "mtime_utc": "2026-05-05T20:27:53+00:00",
+      "sha256": "168EC8541B5DAF991DDECE113A8D441C09907A3D84715E7B173ABB9E4848E016"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_regime_specific_meta_disagreement_gate\\regime_specific_meta_scenarios.parquet",
+      "exists": true,
+      "size_bytes": 13427,
+      "mtime_utc": "2026-05-05T20:27:53+00:00",
+      "sha256": "07F99FEFB85F6C02EAD3F57259AEA637868C083A0AAF7231954E390946886C83"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_regime_specific_meta_disagreement_gate\\regime_specific_meta_research_report.json",
+      "exists": true,
+      "size_bytes": 15613,
+      "mtime_utc": "2026-05-05T20:27:53+00:00",
+      "sha256": "2966D080C8FC352F8DA9DA3F14411C7EFF2833E1D9B7BC3F608964438B76CA61"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_regime_specific_meta_disagreement_gate\\regime_specific_meta_snapshot_proxy.parquet",
+      "exists": true,
+      "size_bytes": 10259,
+      "mtime_utc": "2026-05-05T20:27:53+00:00",
+      "sha256": "64EB02765D358EC58FAF923BD5564136D100E31428B33019FFC0D4AE1CFAA0FC"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_regime_specific_meta_disagreement_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 6673,
+      "mtime_utc": "2026-05-05T20:27:53+00:00",
+      "sha256": "6BA1C75A228345C911DE3501A07A00035F0EB54E33BA850AC6BA9464E4198269"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_regime_specific_meta_disagreement_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 3603,
+      "mtime_utc": "2026-05-05T20:27:53+00:00",
+      "sha256": "59B893CE46B28357989F10232F959B4587C10B37BDF8913D51370AA637631BA2"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_regime_specific_meta_disagreement_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 4329,
+      "mtime_utc": "2026-05-05T20:27:53+00:00",
+      "sha256": "A55F91E7B75921AD82A949A5D7938E716B479DB6748AF50FEC54BB173A1F789C"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_regime_specific_meta_disagreement_gate\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    "python services/ml_engine/phase5_research_regime_specific_meta_disagreement.py",
+    "python -m pytest tests/unit/test_phase5_research_regime_specific_meta_disagreement.py -q"
+  ],
+  "notes": [
+    "Research/sandbox-only AGENDA-H04 gate.",
+    "Uses p_bma_pkf, p_meta_calibrated, sigma_ewma and hmm_prob_bull as ex-ante selection inputs.",
+    "pnl_real is realized outcome only.",
+    "No official promotion, no paper readiness, no A3/A4 reopening."
+  ]
+}
