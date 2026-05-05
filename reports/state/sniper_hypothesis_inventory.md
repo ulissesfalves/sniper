@@ -15,7 +15,8 @@ Updated: 2026-05-04T02:54:06Z
 | meta_uncertainty_abstention_long_only | Falsified | `long_bma_meta_agree_p65_m50_s10_k3` had positive median Sharpe but failed min Sharpe, active-day and 19 stability/sensitivity falsifiers. |
 | cvar_constrained_meta_sizing | Partial/correct | `signed_meta_edge_t52_s15_k5_g04` produced nonzero research/sandbox exposure and max CVaR95 `0.00356911`, but min Sharpe `-0.903026` and 20 hard falsifiers block preservation. |
 | regime_specific_meta_disagreement | Partial/correct | `neutral_short_meta_low_m40_k3` produced nonzero research/sandbox exposure and max CVaR95 `0.00315145`, but min Sharpe `-0.911080`, median active days `82.0` and 13 hard falsifiers block preservation. |
-| governed freeze after reaudit | Pending agenda expansion | `FULL_FREEZE_AFTER_REAUDIT` was reached, but final freeze requires autonomous agenda expansion first. |
+| feature_family_ablation_blocker_decomposition | Completed diagnostic | H05 produced diagnostic-only decomposition and found no HIGH/MEDIUM executable in-repo family remaining. |
+| governed freeze after reaudit | Agenda exhausted | `FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED` is now legitimate for this agenda; draft PR review is the next action. |
 
 ## New Agenda
 
@@ -30,11 +31,10 @@ Updated: 2026-05-04T02:54:06Z
 
 ## Selected For Execution
 
-`AGENDA-H04` was executed after H01 and H02 were falsified and H03 stayed
+`AGENDA-H05` was executed after H01 and H02 were falsified and H03/H04 stayed
 partial. It was executable with artifacts already in the repo and materially
-differed from the falsified Stage A/rank/short-high/cluster/meta-disagreement,
-meta-uncertainty and CVaR-sizing families by splitting meta disagreement through
-ex-ante HMM regimes.
+differed from the policy families by acting as diagnostic-only feature-family
+ablation and blocker decomposition.
 
 Policy constraints:
 
@@ -54,20 +54,22 @@ but the chained stability/falsification and decision gates falsified H01. The
 next agenda hypothesis H02 was then executed and abandoned. H03 then produced a
 functional research/sandbox CVaR sizing module, but it stayed only
 `PARTIAL/correct` because alpha stability failed. H04 also stayed
-`PARTIAL/correct` because the best regime policy was sparse and unstable.
+`PARTIAL/correct` because the best regime policy was sparse and unstable. H05
+completed diagnostic-only decomposition and found no remaining HIGH/MEDIUM
+executable in-repo agenda family.
 
 | Metric | Value |
 | --- | --- |
-| Initial classification | `REGIME_SPECIFIC_META_DISAGREEMENT_POSITIVE_BUT_UNSTABLE` |
-| Final classification | `REGIME_SPECIFIC_META_DISAGREEMENT_POSITIVE_BUT_UNSTABLE` |
-| Best policy | `neutral_short_meta_low_m40_k3` |
-| Median Sharpe | `0.726729` |
-| Min Sharpe | `-0.911080` |
-| Median active days | `82.0` |
-| Max CVaR95 | `0.00315145` |
-| Hard falsifier count | `13` |
+| Initial classification | `FEATURE_FAMILY_ABLATION_COMPLETE_NO_HIGH_MEDIUM_EXECUTABLE_FAMILY` |
+| Final classification | `FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED` |
+| Best policy | `diagnostic_only_no_candidate` |
+| Median Sharpe | `N/A` |
+| Min Sharpe | `N/A` |
+| Median active days | `N/A` |
+| Max CVaR95 | `N/A` |
+| Hard falsifier count | `0` |
 | Promotion allowed | `false` |
 | Paper readiness allowed | `false` |
 
 Next required gate:
-`phase5_research_feature_family_ablation_blocker_decomposition_gate` from `AGENDA-H05`.
+`none_high_medium_executable`. Update the draft PR and request human review.

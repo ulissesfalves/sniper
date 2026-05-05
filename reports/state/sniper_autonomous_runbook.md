@@ -474,13 +474,14 @@ The current autonomous loop executed `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`,
 falsified H01 in the explicit next stability/falsification chain, falsified H02
 in a long-only research/sandbox gate, executed H03 in
 `phase5_research_cvar_constrained_meta_sizing_gate`, and executed H04 in
-`phase5_research_regime_specific_meta_disagreement_gate`. H03 and H04 both
-produced nonzero research/sandbox exposure and research CVaR within bound, but
-remained `PARTIAL/correct` because min Sharpe and sensitivity failed. Permanent
-final freeze is still not legitimate while diagnostic agenda hypotheses remain.
-The next safe gate is
-`phase5_research_feature_family_ablation_blocker_decomposition_gate`. This is
-not promotion, not paper readiness and not merge approval.
+`phase5_research_regime_specific_meta_disagreement_gate`, and completed H05 in
+`phase5_research_feature_family_ablation_blocker_decomposition_gate`. H03 and
+H04 both produced nonzero research/sandbox exposure and research CVaR within
+bound, but remained `PARTIAL/correct` because min Sharpe and sensitivity failed.
+H05 found no HIGH/MEDIUM executable in-repo feature family remaining. The current
+classification is `FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED`; the next
+action is draft PR review, not promotion, not paper readiness and not merge
+approval.
 
 ## Forbidden Interpretations
 
@@ -517,6 +518,6 @@ autonomous research agenda expansion, state update, draft PR update or governed
 freeze review inside the repo. The prior surviving candidate and the
 cluster-conditioned candidate, the meta-disagreement candidate and the
 meta-uncertainty long-only line have now been audited/falsified. The current
-line requires the next materially different agenda hypothesis before any new
-freeze. After H04, the next materially different agenda hypothesis is diagnostic
-AGENDA-H05 `feature_family_ablation_blocker_decomposition`.
+line reached governed agenda exhaustion after diagnostic H05. Do not continue
+autonomously without materially new evidence, a new agenda synthesis with a
+HIGH/MEDIUM executable hypothesis, or external artifacts for a new line.

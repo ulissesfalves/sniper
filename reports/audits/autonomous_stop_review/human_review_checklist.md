@@ -136,6 +136,9 @@
 - [ ] Confirmar que o candidato research-only falsificado nao foi usado para declarar paper readiness.
 - [ ] Confirmar que a candidata meta-disagreement falsificada tambem nao foi usada para declarar paper readiness.
 - [ ] Confirmar que a linha meta-uncertainty falsificada tambem nao foi usada para declarar paper readiness.
+- [ ] Confirmar que H03 `cvar_constrained_meta_sizing` e H04 `regime_specific_meta_disagreement` sao apenas research/sandbox parcial, nao promotable.
+- [ ] Confirmar que H05 e diagnostico apenas e nao foi tratado como sinal operacional.
+- [ ] Confirmar `FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED` como classificacao final desta agenda, sem promocao.
 
 ## Testes
 
@@ -187,6 +190,14 @@
 
 - [ ] Esperado observado: `5 passed`.
 
+- [ ] Rodar ou revisar resultado CHECKPOINT_CONTINUATION H03-H05:
+
+```powershell
+python -m pytest tests/unit/test_phase5_research_cvar_constrained_meta_sizing.py tests/unit/test_phase5_research_regime_specific_meta_disagreement.py tests/unit/test_phase5_research_feature_family_ablation_blocker_decomposition.py -q
+```
+
+- [ ] Esperado observado: `14 passed`.
+
 ## Decisao humana
 
 - [ ] Aprovar PR draft como evidencia de reprodutibilidade/governanca Phase6.
@@ -195,4 +206,4 @@
 - [ ] Revisar o abandono do candidato sandbox `short_high_p_bma_k3_p60_h70`.
 - [ ] Revisar a classificacao `FULL_FREEZE_AFTER_REAUDIT`.
 - [ ] Nao pedir promocao official, paper readiness, merge ou reabertura A3/A4 a partir deste PR.
-- [ ] Proxima rodada autonoma so deve ocorrer com evidencia materialmente nova, artifact externo ou nova direcao research segura.
+- [ ] Proxima rodada autonoma so deve ocorrer com evidencia materialmente nova, artifact externo ou nova agenda HIGH/MEDIUM executavel dentro do repo.

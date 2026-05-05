@@ -789,6 +789,40 @@ gaps:
     suggested_gate: "phase5_research_feature_family_ablation_blocker_decomposition_gate"
     stop_condition_if_unresolved: "H04 is useful as research/sandbox regime evidence but not stable. Continue only with diagnostic H05 or a materially new agenda hypothesis; do not preserve the regime policy as robust."
 
+  - id: GAP-FEATURE-FAMILY-ABLATION-001
+    title: Feature-family ablation found no HIGH/MEDIUM executable family remaining
+    type: research_diagnostic
+    severity: high
+    status: completed_no_safe_next_action
+    evidence:
+      - "reports/gates/phase5_research_feature_family_ablation_blocker_decomposition_gate/gate_report.json"
+      - "selected_agenda_id=AGENDA-H05"
+      - "classification=FEATURE_FAMILY_ABLATION_COMPLETE_NO_HIGH_MEDIUM_EXECUTABLE_FAMILY"
+      - "feature_families_evaluated=5"
+      - "families_with_existing_features=5"
+      - "safe_high_medium_next_family_found=false"
+      - "unlock_shadow_artifacts_available=false"
+      - "official_promotion_allowed=false"
+      - "paper_readiness_allowed=false"
+    source_files:
+      - "services/ml_engine/phase5_research_feature_family_ablation_blocker_decomposition.py"
+      - "tests/unit/test_phase5_research_feature_family_ablation_blocker_decomposition.py"
+      - "data/models/phase4/phase4_oos_predictions.parquet"
+      - "data/models/research/phase4_cross_sectional_ranking_baseline/stage_a_predictions.parquet"
+    allowed_actions:
+      - "UPDATE_DRAFT_PR"
+      - "HUMAN_REVIEW_DRAFT_PR"
+      - "REQUEST_EXTERNAL_ARTIFACTS_FOR_LOW_PRIORITY_UNLOCK_SHADOW_LINE"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "TREAT_DIAGNOSTIC_AS_OPERATIONAL_SIGNAL"
+      - "TREAT_RESEARCH_AS_OFFICIAL"
+      - "RELAX_DSR_THRESHOLD"
+      - "MERGE_PR"
+    suggested_gate: "none_high_medium_executable"
+    stop_condition_if_unresolved: "The current HIGH/MEDIUM agenda is exhausted. Do not continue autonomously without materially new evidence, external artifacts for a new line, or a new agenda synthesis."
+
   - id: GAP-NEXT-GATE-CHAIN-001
     title: Next safe gate from sniper_next_autonomous_mission must execute automatically
     type: governance_state
@@ -849,12 +883,12 @@ gaps:
       - "AUTONOMOUS_CHECKPOINT_CONTINUATION_POLICY active"
       - "CHECKPOINT_CONTINUE_AUTONOMOUS is a valid checkpoint classification"
       - "FUNCTIONAL_RESEARCH_MODULE_DELIVERED is not final when a safe next gate exists"
-      - "previous_next_gate=phase5_research_regime_specific_meta_disagreement_gate"
-      - "next_gate=phase5_research_feature_family_ablation_blocker_decomposition_gate"
-      - "next_agenda_id=AGENDA-H05"
-      - "current_recommended_mode=FEATURE_FAMILY_ABLATION_BLOCKER_DECOMPOSITION_GATE"
-      - "autonomous_can_continue=true"
-      - "human_decision_required=false"
+      - "previous_next_gate=phase5_research_feature_family_ablation_blocker_decomposition_gate"
+      - "next_gate=none_high_medium_executable"
+      - "next_agenda_id=none_high_medium_executable"
+      - "current_recommended_mode=PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION"
+      - "autonomous_can_continue=false"
+      - "human_decision_required=true"
       - "official_promotion_allowed=false"
       - "paper_readiness_allowed=false"
     source_files:
@@ -866,7 +900,7 @@ gaps:
       - "reports/state/sniper_autonomous_runbook.md"
     allowed_actions:
       - "CHECKPOINT_CONTINUE_AUTONOMOUS"
-      - "FEATURE_FAMILY_ABLATION_BLOCKER_DECOMPOSITION_GATE"
+      - "UPDATE_DRAFT_PR"
       - "UPDATE_STATE"
       - "UPDATE_DRAFT_PR"
     forbidden_actions:
@@ -879,5 +913,5 @@ gaps:
       - "A3_REOPEN"
       - "A4_REOPEN"
       - "THRESHOLD_RELAXATION"
-    suggested_gate: "phase5_research_feature_family_ablation_blocker_decomposition_gate"
-    stop_condition_if_unresolved: "Do not stop at checkpoint while AGENDA-H05 remains safe, internal to the repo, diagnostic/research-only and does not require external resources or promotion."
+    suggested_gate: "none_high_medium_executable"
+    stop_condition_if_unresolved: "Checkpoint continuation has reached governed agenda exhaustion. Stop after updating the draft PR for review; do not promote or merge."

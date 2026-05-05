@@ -2,18 +2,18 @@ generated_at_utc: "2026-05-03T21:20:00Z"
 mode: "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION"
 execution_status:
   agenda_generated: true
-  selected_hypothesis: "AGENDA-H04"
-  selected_gate: "phase5_research_regime_specific_meta_disagreement_gate"
-  selected_gate_status: "PARTIAL"
-  selected_gate_decision: "correct"
-  selected_classification: "REGIME_SPECIFIC_META_DISAGREEMENT_POSITIVE_BUT_UNSTABLE"
-  selected_policy: "neutral_short_meta_low_m40_k3"
+  selected_hypothesis: "AGENDA-H05"
+  selected_gate: "phase5_research_feature_family_ablation_blocker_decomposition_gate"
+  selected_gate_status: "PASS"
+  selected_gate_decision: "advance"
+  selected_classification: "FEATURE_FAMILY_ABLATION_COMPLETE_NO_HIGH_MEDIUM_EXECUTABLE_FAMILY"
+  selected_policy: "diagnostic_only_no_candidate"
   selected_stability_falsification_gate: "integrated_in_initial_gate"
-  selected_decision_gate: "not_required_initial_gate_partial"
-  hard_falsifier_count: 13
-  next_agenda_id: "AGENDA-H05"
-  next_gate: "phase5_research_feature_family_ablation_blocker_decomposition_gate"
-  final_freeze_legitimate: false
+  selected_decision_gate: "diagnostic_governed_exhaustion"
+  hard_falsifier_count: 0
+  next_agenda_id: "none_high_medium_executable"
+  next_gate: "none_high_medium_executable"
+  final_freeze_legitimate: true
 source_context:
   latest_classification: "FULL_FREEZE_AFTER_REAUDIT"
   latest_falsified_candidates:
@@ -176,6 +176,10 @@ hypotheses:
 
   - id: "AGENDA-H05"
     name: "feature_family_ablation_blocker_decomposition"
+    execution_status: "PASS/advance"
+    execution_gate: "phase5_research_feature_family_ablation_blocker_decomposition_gate"
+    execution_classification: "FEATURE_FAMILY_ABLATION_COMPLETE_NO_HIGH_MEDIUM_EXECUTABLE_FAMILY"
+    execution_summary: "Diagnostic-only decomposition evaluated 5 feature families, found existing features across all 5, did not create an operational signal, and found no HIGH/MEDIUM executable in-repo family remaining. H06 remains LOW and blocked by absent or shadow-only unlock artifacts."
     description: "Pure diagnostic module that decomposes which ex-ante feature families contribute to Sharpe gap, DSR zero and instability."
     blockers:
       - "dsr_honest_zero"

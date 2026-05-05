@@ -1,5 +1,5 @@
 {
-  "program_status": "CHECKPOINT_CONTINUE_AUTONOMOUS",
+  "program_status": "FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED",
   "active_branch": "codex/autonomous-sniper-implementation",
   "latest_pr": {
     "number": 1,
@@ -9,15 +9,15 @@
     "merged": false,
     "base": "codex/openclaw-sniper-handoff",
     "head": "codex/autonomous-sniper-implementation",
-    "observed_head_sha": "f45f54578f18ff24ef39d6226d45b1efd7c9fc69",
+    "observed_head_sha": "68f222f69d78763f9cb0696d01579a33b09b3c3d",
     "observed_before_local_gate_commits": true
   },
   "latest_gate": {
-    "gate_slug": "phase5_research_regime_specific_meta_disagreement_gate",
-    "status": "PARTIAL",
-    "decision": "correct"
+    "gate_slug": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
+    "status": "PASS",
+    "decision": "advance"
   },
-  "latest_decision": "REGIME_SPECIFIC_META_DISAGREEMENT_POSITIVE_BUT_UNSTABLE",
+  "latest_decision": "FEATURE_FAMILY_ABLATION_COMPLETE_NO_HIGH_MEDIUM_EXECUTABLE_FAMILY",
   "resolved_blockers": [
     "source_doc_alignment_restored",
     "phase4_official_artifacts_found_and_hashed",
@@ -55,7 +55,9 @@
     "meta_uncertainty_abstention_long_only_tested_and_abandoned",
     "cvar_constrained_meta_sizing_gate_executed",
     "cvar_constrained_meta_sizing_research_exposure_and_cvar_measured",
-    "regime_specific_meta_disagreement_gate_executed"
+    "regime_specific_meta_disagreement_gate_executed",
+    "feature_family_ablation_blocker_decomposition_complete",
+    "no_high_medium_executable_research_agenda_family_remaining"
   ],
   "open_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -70,7 +72,7 @@
     "meta_uncertainty_long_only_instability_under_falsification",
     "cvar_constrained_meta_sizing_alpha_or_stability_blocker",
     "regime_specific_meta_disagreement_alpha_or_stability_blocker",
-    "feature_family_ablation_blocker_decomposition_next_agenda_hypothesis_pending"
+    "no_high_medium_executable_research_agenda_family_remaining"
   ],
   "promotion_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -201,10 +203,10 @@
         "FUNCTIONAL_RESEARCH_MODULE_DELIVERED_WITH_NO_SAFE_NEXT_GATE"
       ],
       "current_mission_gates_used": 3,
-      "current_mission_final_classification": "CHECKPOINT_CONTINUE_AUTONOMOUS",
+      "current_mission_final_classification": "FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED",
       "final_freeze_accepted": false,
-      "safe_internal_next_action_available": true,
-      "safe_internal_next_action": "phase5_research_feature_family_ablation_blocker_decomposition_gate"
+      "safe_internal_next_action_available": false,
+      "safe_internal_next_action": "none_high_medium_executable"
     },
     "autonomous_checkpoint_continuation_policy": {
       "enabled": true,
@@ -220,11 +222,11 @@
       "max_material_hypothesis_families_per_campaign": 10,
       "max_pr_draft_updates_per_long_mission": 3,
       "current_checkpoint_count_this_mission": 2,
-      "current_safe_next_gate": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
-      "current_recommended_mode": "FEATURE_FAMILY_ABLATION_BLOCKER_DECOMPOSITION_GATE",
+      "current_safe_next_gate": "none_high_medium_executable",
+      "current_recommended_mode": "PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION",
       "current_agenda_id": "AGENDA-H05",
-      "autonomous_can_continue": true,
-      "human_decision_required": false,
+      "autonomous_can_continue": false,
+      "human_decision_required": true,
       "official_promotion_allowed": false,
       "paper_readiness_allowed": false
     },
@@ -235,19 +237,19 @@
       "can_stop_after_proximo_gate_recomendado": false,
       "initial_pass_requires_stability_falsification_gate": true,
       "initial_pass_requires_candidate_decision_gate": true,
-      "current_family": "regime_specific_meta_disagreement",
-      "current_candidate": "neutral_short_meta_low_m40_k3",
-      "initial_gate": "phase5_research_regime_specific_meta_disagreement_gate",
-      "initial_gate_status": "PARTIAL",
-      "initial_gate_decision": "correct",
-      "current_recommended_mode": "FEATURE_FAMILY_ABLATION_BLOCKER_DECOMPOSITION_GATE",
-      "current_next_gate": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
-      "completed_gate": "phase5_research_regime_specific_meta_disagreement_gate",
-      "completed_decision_gate": "not_required_initial_gate_partial",
-      "completed_classification": "REGIME_SPECIFIC_META_DISAGREEMENT_POSITIVE_BUT_UNSTABLE",
-      "next_agenda_id": "AGENDA-H05",
-      "autonomous_can_continue": true,
-      "human_decision_required": false,
+      "current_family": "feature_family_ablation_blocker_decomposition",
+      "current_candidate": "diagnostic_only_no_candidate",
+      "initial_gate": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
+      "initial_gate_status": "PASS",
+      "initial_gate_decision": "advance",
+      "current_recommended_mode": "PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION",
+      "current_next_gate": "none_high_medium_executable",
+      "completed_gate": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
+      "completed_decision_gate": "diagnostic_governed_exhaustion",
+      "completed_classification": "FEATURE_FAMILY_ABLATION_COMPLETE_NO_HIGH_MEDIUM_EXECUTABLE_FAMILY",
+      "next_agenda_id": "none_high_medium_executable",
+      "autonomous_can_continue": false,
+      "human_decision_required": true,
       "promotion_allowed": false,
       "paper_readiness_allowed": false
     }
@@ -396,6 +398,20 @@
       "promotion_allowed": false,
       "paper_readiness_allowed": false,
       "caveat": "Regime-specific meta disagreement generated nonzero research/sandbox exposure and passed the research CVaR bound, but exposure is sparse, min Sharpe is negative and 13 hard falsifiers block preservation."
+    },
+    "research_feature_family_ablation_status": {
+      "gate_slug": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
+      "status": "PASS",
+      "decision": "advance",
+      "classification": "FEATURE_FAMILY_ABLATION_COMPLETE_NO_HIGH_MEDIUM_EXECUTABLE_FAMILY",
+      "feature_families_evaluated": 5,
+      "families_with_existing_features": 5,
+      "safe_high_medium_next_family_found": false,
+      "unlock_shadow_artifacts_available": false,
+      "diagnostic_only": true,
+      "promotion_allowed": false,
+      "paper_readiness_allowed": false,
+      "caveat": "Diagnostic-only feature-family ablation found no remaining HIGH/MEDIUM executable in-repo family after H01-H04. H06 remains LOW and dependent on absent or shadow-only unlock artifacts."
     }
   },
   "dsr_status": {
@@ -415,14 +431,14 @@
       "caveat": "Diagnostic explains DSR=0.0 but does not improve the policy or authorize promotion."
     },
     "latest_research_candidate": {
-      "gate_slug": "phase5_research_regime_specific_meta_disagreement_gate",
-      "policy": "neutral_short_meta_low_m40_k3",
-      "median_combo_sharpe": 0.726729,
-      "min_combo_sharpe": -0.91108,
+      "gate_slug": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
+      "policy": "diagnostic_only_no_candidate",
+      "median_combo_sharpe": 0.0,
+      "min_combo_sharpe": 0.0,
       "sr_needed": 4.47,
-      "sharpe_gap_to_sr_needed": 3.743271,
-      "candidate_review_classification": "REGIME_SPECIFIC_META_DISAGREEMENT_POSITIVE_BUT_UNSTABLE",
-      "hard_falsifier_count": 13,
+      "sharpe_gap_to_sr_needed": 4.47,
+      "candidate_review_classification": "FEATURE_FAMILY_ABLATION_COMPLETE_NO_HIGH_MEDIUM_EXECUTABLE_FAMILY",
+      "hard_falsifier_count": 0,
       "promotion_allowed": false
     }
   },
@@ -435,14 +451,14 @@
   "paper_readiness_allowed": false,
   "required_external_artifacts": [],
   "latest_research_thesis": {
-    "gate_slug": "phase5_research_regime_specific_meta_disagreement_gate",
-    "hypothesis": "Regime-specific meta disagreement can isolate an ex-ante HMM regime where disagreement/abstention is less fragile than global polarity.",
-    "status": "PARTIAL",
-    "decision": "correct",
-    "classification": "REGIME_SPECIFIC_META_DISAGREEMENT_POSITIVE_BUT_UNSTABLE",
+    "gate_slug": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
+    "hypothesis": "Feature-family ablation can decompose remaining blockers and decide whether any HIGH/MEDIUM in-repo research family remains.",
+    "status": "PASS",
+    "decision": "advance",
+    "classification": "FEATURE_FAMILY_ABLATION_COMPLETE_NO_HIGH_MEDIUM_EXECUTABLE_FAMILY",
     "final_freeze_accepted": false,
     "agenda_expansion_executed_after_final_freeze_reaudit": true,
-    "selected_agenda_id": "AGENDA-H04",
+    "selected_agenda_id": "AGENDA-H05",
     "surviving_modules": [
       "research_sandbox_nonzero_exposure_cvar_evaluator",
       "dsr_zero_root_cause_diagnostic",
@@ -450,16 +466,17 @@
       "meta_disagreement_abstention_research_runner",
       "meta_uncertainty_abstention_research_runner",
       "cvar_constrained_meta_sizing_research_runner",
-      "regime_specific_meta_disagreement_research_runner"
+      "regime_specific_meta_disagreement_research_runner",
+      "feature_family_ablation_blocker_decomposition_diagnostic"
     ],
     "surviving_research_only_candidates": [],
     "surviving_promotable_candidates": 0,
     "can_continue_autonomously_under_current_policy": true,
     "requires_external_artifact": false,
-    "candidate_review_status": "RESEARCH_CANDIDATE_PARTIAL_NOT_PROMOTABLE",
-    "next_agenda_id": "AGENDA-H05",
-    "next_candidate_gate": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
-    "next_recommended_gate": "phase5_research_feature_family_ablation_blocker_decomposition_gate"
+    "candidate_review_status": "NO_HIGH_MEDIUM_EXECUTABLE_RESEARCH_FAMILY_REMAINING",
+    "next_agenda_id": "none_high_medium_executable",
+    "next_candidate_gate": "none_high_medium_executable",
+    "next_recommended_gate": "PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION"
   },
   "internal_strategic_decision_policy": {
     "human_decision_is_last_resort": true,
@@ -485,32 +502,32 @@
   "next_gate_chain_execution_policy": {
     "enabled": true,
     "source_file": "reports/state/sniper_next_autonomous_mission.md",
-    "current_family": "regime_specific_meta_disagreement",
-    "current_candidate": "neutral_short_meta_low_m40_k3",
-    "initial_gate": "phase5_research_regime_specific_meta_disagreement_gate",
-    "initial_status": "PARTIAL",
-    "initial_decision": "correct",
-    "completed_next_gate": "phase5_research_regime_specific_meta_disagreement_gate",
-    "completed_decision_gate": "not_required_initial_gate_partial",
-    "candidate_status": "REGIME_SPECIFIC_META_DISAGREEMENT_POSITIVE_BUT_UNSTABLE",
-    "next_gate": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
-    "next_mode": "FEATURE_FAMILY_ABLATION_BLOCKER_DECOMPOSITION_GATE",
-    "next_agenda_id": "AGENDA-H05",
-    "autonomous_can_continue": true,
-    "human_decision_required": false,
+    "current_family": "feature_family_ablation_blocker_decomposition",
+    "current_candidate": "diagnostic_only_no_candidate",
+    "initial_gate": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
+    "initial_status": "PASS",
+    "initial_decision": "advance",
+    "completed_next_gate": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
+    "completed_decision_gate": "diagnostic_governed_exhaustion",
+    "candidate_status": "FEATURE_FAMILY_ABLATION_COMPLETE_NO_HIGH_MEDIUM_EXECUTABLE_FAMILY",
+    "next_gate": "none_high_medium_executable",
+    "next_mode": "PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION",
+    "next_agenda_id": "none_high_medium_executable",
+    "autonomous_can_continue": false,
+    "human_decision_required": true,
     "promotion_allowed": false,
     "paper_readiness_allowed": false,
     "stop_after_initial_pass_allowed": false,
     "stop_after_next_gate_recommended_allowed": false
   },
-  "latest_candidate_status": "RESEARCH_CANDIDATE_PARTIAL_NOT_PROMOTABLE",
-  "human_decision_required": false,
-  "autonomous_can_continue": true,
-  "next_recommended_mode": "FEATURE_FAMILY_ABLATION_BLOCKER_DECOMPOSITION_GATE",
+  "latest_candidate_status": "NO_HIGH_MEDIUM_EXECUTABLE_RESEARCH_FAMILY_REMAINING",
+  "human_decision_required": true,
+  "autonomous_can_continue": false,
+  "next_recommended_mode": "PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION",
   "next_recommended_skill": "sniper-autonomous-implementation-manager",
-  "next_recommended_submode": "FEATURE_FAMILY_ABLATION_BLOCKER_DECOMPOSITION_GATE",
-  "next_recommended_gate": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
-  "next_recommended_agenda_id": "AGENDA-H05",
+  "next_recommended_submode": "UPDATE_DRAFT_PR_AND_HUMAN_REVIEW",
+  "next_recommended_gate": "none_high_medium_executable",
+  "next_recommended_agenda_id": "none_high_medium_executable",
   "if_agenda_has_no_high_or_medium_executable_hypothesis": "FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED",
-  "updated_at_utc": "2026-05-05T22:16:00Z"
+  "updated_at_utc": "2026-05-05T22:58:00Z"
 }

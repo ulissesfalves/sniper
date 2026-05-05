@@ -50,33 +50,31 @@ Updated: 2026-05-04T02:36:05Z
 | Autonomous checkpoint continuation | Active governance policy | Large reviewable packages are checkpoints, not final stops, when validation passes, the branch can be clean, the PR draft can be updated and `reports/state/sniper_next_autonomous_mission.md` defines a safe next gate. Classification `CHECKPOINT_CONTINUE_AUTONOMOUS` is allowed. `FUNCTIONAL_RESEARCH_MODULE_DELIVERED` is not terminal while `phase5_research_cvar_constrained_meta_sizing_gate` remains safe and executable. |
 | CVaR-constrained meta sizing | Partial/correct | `phase5_research_cvar_constrained_meta_sizing_gate` tested AGENDA-H03 and classified `signed_meta_edge_t52_s15_k5_g04` as `CVAR_CONSTRAINED_META_SIZING_CVAR_PASS_ALPHA_UNSTABLE`. The runner produced nonzero research/sandbox exposure and max CVaR95 `0.00356911`, with median Sharpe `2.040444`, but min Sharpe `-0.903026` and 20 hard falsifiers block preservation. Next agenda hypothesis is `AGENDA-H04` / `phase5_research_regime_specific_meta_disagreement_gate`. |
 | Regime-specific meta disagreement | Partial/correct | `phase5_research_regime_specific_meta_disagreement_gate` tested AGENDA-H04 and classified `neutral_short_meta_low_m40_k3` as `REGIME_SPECIFIC_META_DISAGREEMENT_POSITIVE_BUT_UNSTABLE`. The runner produced nonzero research/sandbox exposure and max CVaR95 `0.00315145`, with median Sharpe `0.726729`, but min Sharpe `-0.911080`, median active days `82.0` and 13 hard falsifiers block preservation. Next agenda hypothesis is diagnostic H05 / `phase5_research_feature_family_ablation_blocker_decomposition_gate`. |
+| Feature-family ablation blocker decomposition | Completed / agenda exhausted | `phase5_research_feature_family_ablation_blocker_decomposition_gate` tested AGENDA-H05 and classified the diagnostic as `FEATURE_FAMILY_ABLATION_COMPLETE_NO_HIGH_MEDIUM_EXECUTABLE_FAMILY`. It evaluated 5 feature families, found no HIGH/MEDIUM executable in-repo family remaining, kept diagnostics non-operational, and preserved all promotion blockers. |
 
 ## Current Decision
 
-The current mission executed the checkpoint continuation gate for the next
-materially different agenda hypothesis `AGENDA-H04`.
+The current mission executed checkpoint continuation through H03, H04 and H05.
 
 Current classification:
-`REGIME_SPECIFIC_META_DISAGREEMENT_POSITIVE_BUT_UNSTABLE`.
+`FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED`.
 
-Human decision is not required. `phase5_research_regime_specific_meta_disagreement_gate`
-was executed as research/sandbox, used only ex-ante HMM and probability inputs,
-and kept the line at PARTIAL/correct because the best policy has negative min
-Sharpe, sparse active days and 13 hard falsifiers despite nonzero exposure and
-research CVaR within bound. Do not promote, merge, declare paper readiness,
-reopen A3/A4, relax thresholds, or treat research CVaR as official.
+Human review is now required for the draft PR because no HIGH/MEDIUM executable
+in-repo research family remains in the current agenda. H05 was diagnostic-only
+and did not create an operational signal. Do not promote, merge, declare paper
+readiness, reopen A3/A4, relax thresholds, or treat research CVaR as official.
 
-The next materially different agenda hypothesis is diagnostic `AGENDA-H05`
-(`phase5_research_feature_family_ablation_blocker_decomposition_gate`) if continuing within the
-autonomous budget and review scope remains safe.
+No next autonomous gate is registered. H06 remains LOW priority and depends on
+absent or shadow-only unlock artifacts, so it is not an automatic continuation
+gate for this mission.
 
 Large reviewable output from the prior round is now a governed checkpoint, not a
 final stop. Current checkpoint classification:
 `CHECKPOINT_CONTINUE_AUTONOMOUS`.
 
-The next recommended mode is `FEATURE_FAMILY_ABLATION_BLOCKER_DECOMPOSITION_GATE`; autonomous can
-continue, human decision is not required, and official promotion/paper readiness
-remain forbidden.
+The next recommended mode is `PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION`;
+autonomous continuation is false, human review is required, and official
+promotion/paper readiness remain forbidden.
 
 ## Required Review Before Promotion
 

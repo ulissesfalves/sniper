@@ -274,6 +274,49 @@ Metrica principal H02:
 Esse resultado nao promove official, nao declara paper readiness e nao remove
 `dsr_honest=0.0` nem o blocker de CVaR official zero exposure.
 
+## Atualizacao CHECKPOINT_CONTINUATION H03-H05
+
+Novos gates executados:
+
+| Gate | Status | Decisao | Observacao |
+| --- | --- | --- | --- |
+| `phase5_research_cvar_constrained_meta_sizing_gate` | PARTIAL | correct | H03 gerou exposicao research/sandbox e CVaR research dentro do limite, mas min Sharpe e sensibilidade falharam. |
+| `phase5_research_regime_specific_meta_disagreement_gate` | PARTIAL | correct | H04 gerou exposicao research/sandbox em regime HMM, mas active days, min Sharpe e sensibilidade falharam. |
+| `phase5_research_feature_family_ablation_blocker_decomposition_gate` | PASS | advance | H05 concluiu diagnostico e encontrou ausencia de familia HIGH/MEDIUM executavel restante no repo. |
+
+Metricas principais H03:
+
+- best policy: `signed_meta_edge_t52_s15_k5_g04`
+- median Sharpe: `2.040444`
+- min Sharpe: `-0.903026`
+- median active days: `698.0`
+- max CVaR95: `0.00356911`
+- hard falsifier count: `20`
+- classificacao: `CVAR_CONSTRAINED_META_SIZING_CVAR_PASS_ALPHA_UNSTABLE`
+
+Metricas principais H04:
+
+- best policy: `neutral_short_meta_low_m40_k3`
+- median Sharpe: `0.726729`
+- min Sharpe: `-0.911080`
+- median active days: `82.0`
+- max CVaR95: `0.00315145`
+- hard falsifier count: `13`
+- classificacao: `REGIME_SPECIFIC_META_DISAGREEMENT_POSITIVE_BUT_UNSTABLE`
+
+Resultado H05:
+
+- feature families evaluated: `5`
+- families with existing features: `5`
+- safe HIGH/MEDIUM next family found: `false`
+- unlock shadow artifacts available: `false`
+- classificacao: `FEATURE_FAMILY_ABLATION_COMPLETE_NO_HIGH_MEDIUM_EXECUTABLE_FAMILY`
+- classificacao final da missao: `FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED`
+
+Esse pacote continua sendo evidencia research/sandbox e governanca. Ele nao
+promove official, nao declara paper readiness, nao remove `dsr_honest=0.0`, nao
+prova CVaR economico official e nao reabre A3/A4.
+
 ## Testes executados
 
 ```powershell
@@ -321,6 +364,14 @@ Testes AGENDA-H02:
 ```
 
 Resultado observado: `5 passed`.
+
+Testes CHECKPOINT_CONTINUATION H03-H05:
+
+```powershell
+python -m pytest tests/unit/test_phase5_research_cvar_constrained_meta_sizing.py tests/unit/test_phase5_research_regime_specific_meta_disagreement.py tests/unit/test_phase5_research_feature_family_ablation_blocker_decomposition.py -q
+```
+
+Resultado observado: `14 passed`.
 
 ## Risco residual
 

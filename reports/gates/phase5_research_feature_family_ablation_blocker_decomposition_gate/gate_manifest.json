@@ -1,0 +1,89 @@
+{
+  "gate_slug": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
+  "timestamp_utc": "2026-05-05T20:34:09+00:00",
+  "baseline_commit": "68f222f69d78763f9cb0696d01579a33b09b3c3d",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+      "exists": true,
+      "size_bytes": 2872831,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "5B3144578BB99D48E2A67B3AB60B2B0AD25787A92B8488AFD1D1D5C08AE8F6C7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_predictions.parquet",
+      "exists": true,
+      "size_bytes": 4365296,
+      "mtime_utc": "2026-03-29T06:55:53+00:00",
+      "sha256": "FC947D4C3C71175BCF5F773665DD1D5BB5F033D0E67E881F0B07B338FDA1B67E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_research_agenda.yaml",
+      "exists": true,
+      "size_bytes": 12778,
+      "mtime_utc": "2026-05-05T20:29:52+00:00",
+      "sha256": "D05C57155699D3B526DAD1B64CECDFE8C0B4E4D8DD5D7E5FE4B8F1591DB24B78"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_spec_gap_backlog.yaml",
+      "exists": true,
+      "size_bytes": 41973,
+      "mtime_utc": "2026-05-05T20:29:38+00:00",
+      "sha256": "32DE32B150CB4CF5EC7F7706F4C7D1D4D83E4A4D59CA86BC0FCC1C6E89073436"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_feature_family_ablation_blocker_decomposition_gate\\feature_family_ablation_metrics.parquet",
+      "exists": true,
+      "size_bytes": 6800,
+      "mtime_utc": "2026-05-05T20:34:09+00:00",
+      "sha256": "7A1044CDD718E3512EF50A816AFC76CD1A53C320129F4AA154AA52856B2039F0"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_feature_family_ablation_blocker_decomposition_gate\\feature_family_ablation_report.json",
+      "exists": true,
+      "size_bytes": 7920,
+      "mtime_utc": "2026-05-05T20:34:09+00:00",
+      "sha256": "03D43D56C29D24F9B5DAFDA73D4A6DC8FCC98F1BC3449A81468434D90C4792F0"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_feature_family_ablation_blocker_decomposition_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4193,
+      "mtime_utc": "2026-05-05T20:34:09+00:00",
+      "sha256": "4D7F3B4037506488E8708B9EF7BD09A91DD90D7F8464453A12BE16E353B03B2A"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_feature_family_ablation_blocker_decomposition_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 2204,
+      "mtime_utc": "2026-05-05T20:34:09+00:00",
+      "sha256": "E03D5666876E8B070E22A138F413B4355800E34B2CC3DC30DD820584C8D88E5B"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_feature_family_ablation_blocker_decomposition_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 4200,
+      "mtime_utc": "2026-05-05T20:34:09+00:00",
+      "sha256": "508CEC47FF6BC93AE32880CF0239D4086F9D39D7DC2CA10B1AB214DDC0C47DF5"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_feature_family_ablation_blocker_decomposition_gate\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    "python services/ml_engine/phase5_research_feature_family_ablation_blocker_decomposition.py",
+    "python -m pytest tests/unit/test_phase5_research_feature_family_ablation_blocker_decomposition.py -q"
+  ],
+  "notes": [
+    "Research diagnostic-only AGENDA-H05 gate.",
+    "pnl_real is used only as diagnostic outcome, never as ex-ante rule.",
+    "No official promotion, paper readiness, merge, threshold relaxation or A3/A4 reopening."
+  ]
+}

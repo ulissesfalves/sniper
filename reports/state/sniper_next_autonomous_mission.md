@@ -1,116 +1,64 @@
 # SNIPER Next Autonomous Mission
 
-Mode: `FEATURE_FAMILY_ABLATION_BLOCKER_DECOMPOSITION_GATE`
+Mode: `PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION`
 
-Previous gate executed: `phase5_research_regime_specific_meta_disagreement_gate`
+Previous gate executed: `phase5_research_feature_family_ablation_blocker_decomposition_gate`
 
-Previous family: `regime_specific_meta_disagreement`
+Previous family: `feature_family_ablation_blocker_decomposition`
 
-Previous candidate: `neutral_short_meta_low_m40_k3`
+Previous candidate: `diagnostic_only_no_candidate`
 
-Previous result: `REGIME_SPECIFIC_META_DISAGREEMENT_POSITIVE_BUT_UNSTABLE`
+Previous result: `FEATURE_FAMILY_ABLATION_COMPLETE_NO_HIGH_MEDIUM_EXECUTABLE_FAMILY`
 
-Current next gate: `phase5_research_feature_family_ablation_blocker_decomposition_gate`
+Current next gate: `none_high_medium_executable`
 
-Checkpoint classification: `CHECKPOINT_CONTINUE_AUTONOMOUS`
+Final classification: `FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED`
 
-Autonomous can continue: `true`
+Autonomous can continue: `false`
 
-Human decision required: `false`
+Human decision required: `true`
 
 ## Rationale
 
-The checkpoint continuation mission executed `AGENDA-H04`
-`regime_specific_meta_disagreement` in
-`phase5_research_regime_specific_meta_disagreement_gate`.
+The checkpoint continuation mission executed H03, H04 and H05 after the prior
+H02 falsification.
 
-The gate produced nonzero research/sandbox exposure and measured research CVaR
-with `best_policy=neutral_short_meta_low_m40_k3`, median Sharpe `0.726729`,
-median active days `82.0`, max CVaR95 `0.00315145`, median turnover
-`0.07050847` and max exposure `0.04`.
+- H03 `cvar_constrained_meta_sizing` produced nonzero research/sandbox exposure
+  and research CVaR within bound, but stayed `PARTIAL/correct` because min
+  Sharpe and sensitivity were unstable.
+- H04 `regime_specific_meta_disagreement` produced nonzero research/sandbox
+  exposure and research CVaR within bound, but stayed `PARTIAL/correct` because
+  exposure was sparse and min Sharpe/sensitivity were unstable.
+- H05 `feature_family_ablation_blocker_decomposition` completed diagnostic-only
+  decomposition and found no remaining HIGH/MEDIUM executable in-repo research
+  family.
 
-The gate is only `PARTIAL/correct` because min combo Sharpe is `-0.911080`,
-active days are sparse and there are 13 hard sensitivity/falsification failures.
-This is research/sandbox evidence, not promotability.
-
-The next materially different executable agenda hypothesis is `AGENDA-H05`:
-`feature_family_ablation_blocker_decomposition`. It is a diagnostic gate, not a
-trading policy, and should decompose which ex-ante feature families contribute
-to the Sharpe/DSR/CVaR blockers before any freeze or new agenda expansion.
-
-## Execution Scope
-
-Implement a research/sandbox diagnostic gate that:
-
-- reads `data/models/phase4/phase4_oos_predictions.parquet`;
-- reads `data/models/research/phase4_cross_sectional_ranking_baseline/stage_a_predictions.parquet`
-  if available;
-- evaluates ex-ante feature families without treating diagnostics as an
-  operational signal;
-- reports coverage, rank/score correlations, realized outcome association as
-  diagnostic-only evidence, and blocker decomposition;
-- identifies whether any spec-safe next family remains;
-- never uses diagnostic output as official promotion evidence;
-- preserves `dsr_honest=0.0`, official zero exposure and non-promotability
-  blockers.
+H06 `unlock_shadow_feature_ablation` remains LOW priority and depends on absent
+or shadow-only unlock artifacts. It is not an autonomous next gate for this
+mission.
 
 ## Next Mission
 
-Mode: `FEATURE_FAMILY_ABLATION_BLOCKER_DECOMPOSITION_GATE`
+No safe HIGH/MEDIUM in-repo autonomous gate remains in the current agenda.
 
-Gate: `phase5_research_feature_family_ablation_blocker_decomposition_gate`
+The correct next action is to update the existing draft PR and request human
+review as governance/reproducibility evidence, not operational readiness.
 
-Required tests:
+## Stop Conditions Satisfied
 
-- artifact availability and schema validation;
-- no diagnostic variable is treated as operational signal;
-- no realized variable is used as ex-ante rule;
-- feature-family coverage summary;
-- blocker decomposition output;
-- recommendation of next family, freeze, or external-resource requirement.
-
-## Criteria
-
-PASS / advance:
-
-- produces reproducible feature-family decomposition;
-- identifies at least one spec-safe next family or a governed reason no such
-  family remains;
-- does not promote official or declare paper readiness.
-
-PARTIAL / correct:
-
-- produces decomposition but cannot identify an actionable in-repo family.
-
-FAIL / abandon:
-
-- diagnostic cannot load required artifacts or produces contradictory
-  governance recommendations.
-
-INCONCLUSIVE:
-
-- required artifacts are missing or schema is incompatible.
-
-## Stop Conditions
-
-Stop only if the gate requires external artifacts, specification change,
-official promotion, paper readiness, A3/A4 reopening, real capital, credentials
-or force push. If the diagnostic finds no HIGH/MEDIUM executable family after
-H05, a governed freeze/update-draft-PR decision may be valid.
-
-## Required Skills
-
-- `sniper-autonomous-implementation-manager`
-- `sniper-quant-research-implementation`
-- `sniper-gate-governance`
+- Agenda expansion was executed after freeze.
+- H01-H04 were executed and failed, were falsified or remained only partial.
+- H05 diagnostic completed.
+- No HIGH/MEDIUM executable research-only family remains.
+- Continuing would require a new agenda expansion with materially new evidence,
+  external/shadow unlock artifacts, or a specification/product decision.
 
 ## Restrictions
 
-- Diagnostic/research only.
-- No operational signal from diagnostic output.
 - No official promotion.
 - No paper readiness.
 - No A3/A4 reopening.
 - No threshold relaxation.
 - No fabricated artifacts.
 - No realized variable as ex-ante rule.
+- No merge.
