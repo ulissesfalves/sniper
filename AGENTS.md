@@ -121,6 +121,17 @@ need an external resource, does not promote official, and does not declare paper
 readiness. `Pode continuar autonomamente: sim` and `Próximo gate recomendado`
 are not stop conditions.
 
+Large reviewable packages are checkpoints, not final stops, when a safe next
+gate exists. Use classification `CHECKPOINT_CONTINUE_AUTONOMOUS` when the
+mission delivered research/sandbox work, validation passed, the worktree can be
+left clean, the PR draft can be updated, and
+`reports/state/sniper_next_autonomous_mission.md` still defines a safe internal
+next gate. After a checkpoint Codex must validate, commit, push, update the
+existing draft PR, update `reports/state/**`, reread
+`sniper_next_autonomous_mission.md`, and continue if the next gate remains safe.
+`FUNCTIONAL_RESEARCH_MODULE_DELIVERED` is not a final stop when a safe next gate
+exists.
+
 When a research-only candidate has an initial `PASS/advance`, the next
 autonomous action is mandatory stability/falsification followed by a candidate
 decision gate before freeze or human decision.
@@ -137,7 +148,7 @@ Latest candidate chain:
 - promotion allowed: `false`;
 - paper readiness allowed: `false`.
 
-Current recommended mode: `START_RESEARCH_ONLY_THESIS`.
+Current recommended mode: `CVAR_CONSTRAINED_META_SIZING_GATE`.
 Current next gate: `phase5_research_cvar_constrained_meta_sizing_gate`
 (`AGENDA-H03`). The falsified H01/H02 candidates are research/sandbox only and
 must not be treated as official, robust, promotable or paper-ready.
@@ -165,7 +176,12 @@ Closed-loop autonomous budget per mission:
 - up to 4 gates per family;
 - up to 2 intermediate global audits;
 - up to 2 draft PR updates;
-- stop if changes become too large for reasonable human review.
+- up to 3 automatic checkpoints per long mission;
+- up to 50 total campaign gates;
+- up to 10 materially different hypothesis families per campaign;
+- up to 3 draft PR updates per long mission;
+- stop if accumulated changes remain too large for reasonable human review
+  after checkpoints.
 
 Default budget per autonomous mission:
 
@@ -195,7 +211,7 @@ Stop if the next step needs external/private artifacts, credentials or paid API,
 operation outside the repo, real capital, merge, a specification change,
 official promotion, paper readiness, A3/A4 reopening, budget exhaustion, no
 materially new hypothesis after research agenda expansion, changes too large
-for reasonable review, or any governance violation.
+for reasonable review after checkpoint handling, or any governance violation.
 
 Do not use human strategy as a stop condition while there is an open gap,
 defensible research-only hypothesis, internal correction, unfinished

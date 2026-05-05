@@ -68,6 +68,7 @@ Allowed mission modes:
 - `UPDATE_DRAFT_PR`
 - `OPEN_RESEARCH_GATE`
 - `NEXT_GATE_CHAIN_EXECUTION`
+- `CHECKPOINT_CONTINUE_AUTONOMOUS`
 - `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`
 - `GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`
 - `META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE`
@@ -184,6 +185,38 @@ Do not stop after `Pode continuar autonomamente: sim`, after
 `Próximo gate recomendado`, or after a candidate falsification while a
 materially different HIGH/MEDIUM agenda hypothesis remains safe and executable.
 
+## Checkpoint Continuation
+
+Large reviewable packages are checkpoints, not final stops, when a safe next
+gate remains in `reports/state/sniper_next_autonomous_mission.md`.
+
+Use `CHECKPOINT_CONTINUE_AUTONOMOUS` when:
+
+- research/sandbox work was delivered;
+- the package is large but reviewable;
+- JSON/YAML/parquet/gate-pack validation passed;
+- relevant tests passed;
+- the worktree can be left clean;
+- the existing PR draft can be updated;
+- the next gate is internal to the repo and does not require external resource,
+  official promotion, paper readiness or merge.
+
+Checkpoint sequence:
+
+1. consolidate files;
+2. validate JSON/YAML/parquet/gate packs;
+3. run relevant tests;
+4. commit a coherent package;
+5. push to `origin/codex/autonomous-sniper-implementation`;
+6. update the existing PR draft when reviewable;
+7. update `reports/state/**`;
+8. reread `reports/state/sniper_next_autonomous_mission.md`;
+9. continue automatically if the next gate remains safe.
+
+`FUNCTIONAL_RESEARCH_MODULE_DELIVERED` is not final when a safe next gate
+exists. The current safe next gate is
+`phase5_research_cvar_constrained_meta_sizing_gate` from `AGENDA-H03`.
+
 Closed-loop budget:
 
 - up to 25 gates per mission;
@@ -191,7 +224,12 @@ Closed-loop budget:
 - up to 4 gates per family;
 - up to 2 intermediate global audits;
 - up to 2 draft PR updates;
-- stop if changes become too large for reasonable human review.
+- up to 3 automatic checkpoints per long mission;
+- up to 50 total campaign gates;
+- up to 10 materially different hypothesis families per campaign;
+- up to 3 draft PR updates per long mission;
+- stop if changes remain too large for reasonable human review after checkpoint
+  handling.
 
 ## Full Phase Budget
 

@@ -699,6 +699,7 @@ gaps:
     allowed_actions:
       - "START_RESEARCH_ONLY_THESIS"
       - "CVAR_CONSTRAINED_META_SIZING_GATE"
+      - "CHECKPOINT_CONTINUE_AUTONOMOUS"
       - "UPDATE_STATE"
       - "UPDATE_DRAFT_PR"
     forbidden_actions:
@@ -748,6 +749,8 @@ gaps:
       - "UPDATE_DRAFT_PR"
     forbidden_actions:
       - "STOP_AFTER_NEXT_GATE_RECOMMENDATION"
+      - "STOP_AFTER_FUNCTIONAL_RESEARCH_MODULE_DELIVERED_WITH_SAFE_NEXT_GATE"
+      - "STOP_AFTER_LARGE_REVIEWABLE_PACKAGE_WITH_SAFE_NEXT_GATE"
       - "STOP_AFTER_PODE_CONTINUAR_AUTONOMAMENTE_SIM"
       - "STOP_AFTER_INITIAL_PASS_WITH_LIVE_CANDIDATE"
       - "PROMOTE_OFFICIAL"
@@ -758,4 +761,45 @@ gaps:
       - "A4_REOPEN"
       - "THRESHOLD_RELAXATION"
     suggested_gate: "phase5_research_cvar_constrained_meta_sizing_gate"
-    stop_condition_if_unresolved: "The explicit next gate was executed and falsified the candidate. Continue with the next materially different agenda hypothesis if mission budget and review size allow."
+    stop_condition_if_unresolved: "The explicit next gate was executed and falsified the candidate. Continue with the next materially different agenda hypothesis if mission budget and review size allow; if the package is large but valid, use CHECKPOINT_CONTINUE_AUTONOMOUS rather than a final stop."
+
+  - id: GAP-CHECKPOINT-CONTINUATION-001
+    title: Large reviewable package must become checkpoint when safe next gate exists
+    type: governance_state
+    severity: high
+    status: active_policy
+    evidence:
+      - "AUTONOMOUS_CHECKPOINT_CONTINUATION_POLICY active"
+      - "CHECKPOINT_CONTINUE_AUTONOMOUS is a valid checkpoint classification"
+      - "FUNCTIONAL_RESEARCH_MODULE_DELIVERED is not final when a safe next gate exists"
+      - "next_gate=phase5_research_cvar_constrained_meta_sizing_gate"
+      - "next_agenda_id=AGENDA-H03"
+      - "current_recommended_mode=CVAR_CONSTRAINED_META_SIZING_GATE"
+      - "autonomous_can_continue=true"
+      - "human_decision_required=false"
+      - "official_promotion_allowed=false"
+      - "paper_readiness_allowed=false"
+    source_files:
+      - "AGENTS.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+      - "reports/state/sniper_next_autonomous_mission.md"
+      - "reports/state/sniper_decision_ledger.md"
+      - "reports/state/sniper_autonomous_runbook.md"
+    allowed_actions:
+      - "CHECKPOINT_CONTINUE_AUTONOMOUS"
+      - "CVAR_CONSTRAINED_META_SIZING_GATE"
+      - "UPDATE_STATE"
+      - "UPDATE_DRAFT_PR"
+    forbidden_actions:
+      - "STOP_AFTER_FUNCTIONAL_RESEARCH_MODULE_DELIVERED_WITH_SAFE_NEXT_GATE"
+      - "STOP_AFTER_LARGE_REVIEWABLE_PACKAGE_WITH_SAFE_NEXT_GATE"
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "TREAT_RESEARCH_AS_OFFICIAL"
+      - "MERGE_PR"
+      - "A3_REOPEN"
+      - "A4_REOPEN"
+      - "THRESHOLD_RELAXATION"
+    suggested_gate: "phase5_research_cvar_constrained_meta_sizing_gate"
+    stop_condition_if_unresolved: "Do not stop at checkpoint while AGENDA-H03 remains safe, internal to the repo, research/sandbox only and does not require external resources or promotion."

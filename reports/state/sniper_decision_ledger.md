@@ -47,6 +47,7 @@ Updated: 2026-05-04T02:36:05Z
 | Meta disagreement stability/falsification | Failed/abandoned | `phase5_research_meta_disagreement_stability_falsification_gate` executed 38 scenarios and found 25 hard falsifiers, including all temporal thirds, 20 bps cost stress, parameter sensitivity failures and universe stress. Leakage control passed. |
 | Meta disagreement candidate decision | Falsified | `phase5_research_meta_disagreement_candidate_decision_gate` classified `short_bma_high_meta_low_p60_m40_k3` as `META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED`. Next agenda hypothesis is `AGENDA-H02` / `phase5_research_meta_uncertainty_abstention_gate`. |
 | Meta uncertainty abstention long-only | Failed/abandoned | `phase5_research_meta_uncertainty_abstention_gate` tested AGENDA-H02 and classified it as `META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS`. Best policy `long_bma_meta_agree_p65_m50_s10_k3` had median Sharpe `0.447334`, min Sharpe `-0.375889`, median active days `55.0`, max CVaR95 `0.00284763`, and 19 hard falsifiers. Next agenda hypothesis is `AGENDA-H03` / `phase5_research_cvar_constrained_meta_sizing_gate`. |
+| Autonomous checkpoint continuation | Active governance policy | Large reviewable packages are checkpoints, not final stops, when validation passes, the branch can be clean, the PR draft can be updated and `reports/state/sniper_next_autonomous_mission.md` defines a safe next gate. Classification `CHECKPOINT_CONTINUE_AUTONOMOUS` is allowed. `FUNCTIONAL_RESEARCH_MODULE_DELIVERED` is not terminal while `phase5_research_cvar_constrained_meta_sizing_gate` remains safe and executable. |
 
 ## Current Decision
 
@@ -66,6 +67,14 @@ readiness, reopen A3/A4, relax thresholds, or treat research CVaR as official.
 The next materially different agenda hypothesis is `AGENDA-H03`
 (`phase5_research_cvar_constrained_meta_sizing_gate`) if continuing within the
 autonomous budget and review scope remains safe.
+
+Large reviewable output from the prior round is now a governed checkpoint, not a
+final stop. Current checkpoint classification:
+`CHECKPOINT_CONTINUE_AUTONOMOUS`.
+
+The next recommended mode is `CVAR_CONSTRAINED_META_SIZING_GATE`; autonomous can
+continue, human decision is not required, and official promotion/paper readiness
+remain forbidden.
 
 ## Required Review Before Promotion
 

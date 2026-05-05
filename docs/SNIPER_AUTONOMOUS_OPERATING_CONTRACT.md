@@ -11,6 +11,8 @@ the current repository and preserves governance:
 - automatically execute safe technical next recommendations inside the repo;
 - automatically execute a safe next gate defined in
   `reports/state/sniper_next_autonomous_mission.md`;
+- treat a large reviewable package as `CHECKPOINT_CONTINUE_AUTONOMOUS` instead
+  of a final stop when a safe next gate remains;
 - automatically run `RUN_GLOBAL_REAUDIT` when recommended;
 - automatically run `POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT` after a
   candidate is falsified;
@@ -94,7 +96,7 @@ Latest research/sandbox candidate chain:
 - paper readiness allowed: `false`.
 
 The current recommended mode is
-`START_RESEARCH_ONLY_THESIS`; the next gate is
+`CVAR_CONSTRAINED_META_SIZING_GATE`; the next gate is
 `phase5_research_cvar_constrained_meta_sizing_gate` from `AGENDA-H03`. The
 falsified meta-disagreement and meta-uncertainty candidates do not prove
 robustness, promotion eligibility or paper readiness.
@@ -154,6 +156,30 @@ artifacts, credentials/API/access, operation outside the repo, a specification
 change, official promotion, paper readiness, merge, real capital, budget beyond
 the allowed mission, or changes too large for reasonable review.
 
+## Checkpoint Continuation
+
+A large reviewable package is a checkpoint, not a final stop, when:
+
+- the worktree can be left clean;
+- relevant tests and JSON/YAML/parquet/gate-pack validation pass;
+- the existing PR draft can be updated;
+- `reports/state/sniper_next_autonomous_mission.md` defines a safe next gate;
+- the next gate does not require external resources;
+- the next gate does not promote official, declare paper readiness or require
+  merge.
+
+At checkpoint, Codex may classify `CHECKPOINT_CONTINUE_AUTONOMOUS`, then must
+consolidate files, validate, commit, push, update the draft PR, update
+`reports/state/**`, reread `sniper_next_autonomous_mission.md`, and continue
+automatically if the next gate remains safe.
+
+`FUNCTIONAL_RESEARCH_MODULE_DELIVERED` is not a terminal classification when a
+safe next gate exists. Use
+`FUNCTIONAL_RESEARCH_MODULE_DELIVERED_WITH_NO_SAFE_NEXT_GATE` only when no safe
+next gate exists or continuation would require external resource, spec change,
+official promotion, paper readiness, merge, budget exhaustion or checkpoint
+limit exhaustion.
+
 ## Stop Required
 
 Codex must stop before:
@@ -201,7 +227,12 @@ Closed-loop autonomous budget per mission:
 - up to 4 gates per family;
 - up to 2 intermediate global audits;
 - up to 2 draft PR updates;
-- stop when the amount of change is too large for reasonable human review.
+- up to 3 automatic checkpoints per long mission;
+- up to 50 total campaign gates;
+- up to 10 materially different hypothesis families per campaign;
+- up to 3 draft PR updates per long mission;
+- stop when the accumulated diff remains too large for reasonable human review
+  after checkpoint handling.
 
 Default budget per autonomous mission:
 

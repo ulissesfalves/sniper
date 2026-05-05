@@ -1,6 +1,6 @@
 # SNIPER Next Autonomous Mission
 
-Mode: `START_RESEARCH_ONLY_THESIS`
+Mode: `CVAR_CONSTRAINED_META_SIZING_GATE`
 
 Previous gate executed: `phase5_research_meta_uncertainty_abstention_gate`
 
@@ -11,6 +11,12 @@ Previous candidate: `long_bma_meta_agree_p65_m50_s10_k3`
 Previous result: `META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS`
 
 Current next gate: `phase5_research_cvar_constrained_meta_sizing_gate`
+
+Checkpoint classification: `CHECKPOINT_CONTINUE_AUTONOMOUS`
+
+Autonomous can continue: `true`
+
+Human decision required: `false`
 
 ## Rationale
 
@@ -30,6 +36,11 @@ falsifiers.
 The next materially different executable agenda hypothesis is `AGENDA-H03`:
 `cvar_constrained_meta_sizing`. It focuses on risk-first sizing rather than
 signal polarity, disagreement or pure long-only agreement.
+
+The prior package is a reviewable checkpoint, not a final stop. The branch can
+continue autonomously because this next gate is internal to the repo,
+research/sandbox only, and does not require external resources, official
+promotion, paper readiness or merge.
 
 ## Execution Scope
 

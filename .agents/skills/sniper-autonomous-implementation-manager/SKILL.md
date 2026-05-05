@@ -408,9 +408,9 @@ A missão em loop fechado só pode terminar com uma destas classificações:
 - SPEC_CHANGE_REQUIRED;
 - GOVERNANCE_HARD_STOP;
 - AUTONOMOUS_BUDGET_EXHAUSTED;
-- FUNCTIONAL_RESEARCH_MODULE_DELIVERED;
 - FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED;
-- PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION.
+- PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION;
+- FUNCTIONAL_RESEARCH_MODULE_DELIVERED_WITH_NO_SAFE_NEXT_GATE.
 
 Não são stops válidos:
 - "próxima recomendação: RUN_GLOBAL_REAUDIT";
@@ -420,6 +420,9 @@ Não são stops válidos:
 - "Pode continuar autonomamente: sim";
 - "PASS inicial com próximo gate recomendado";
 - "candidata viva aguardando stability/falsification";
+- "pacote revisável grande com próximo gate seguro";
+- "FUNCTIONAL_RESEARCH_MODULE_DELIVERED com próximo gate seguro";
+- "PR draft atualizado com próximo gate seguro";
 - "backlog esgotado antes de executar agenda synthesizer";
 - "decisão humana para escolher tese".
 
@@ -427,6 +430,87 @@ Caso atual conhecido:
 A candidata `short_high_p_bma_k3_p60_h70` foi falsificada. A recomendação
 anterior foi RUN_GLOBAL_REAUDIT / post_candidate_falsification_global_reaudit.
 Executar isso automaticamente na próxima missão; não tratar como decisão humana.
+
+AUTONOMOUS_CHECKPOINT_CONTINUATION_POLICY
+
+"Pacote revisável grande" não é hard stop automático. Se a missão gerar um
+pacote grande, mas o worktree pode ser deixado limpo, os testes relevantes
+passaram, o PR draft pode ser atualizado, existe próximo gate seguro em
+reports/state/sniper_next_autonomous_mission.md, o próximo gate não exige recurso
+externo, não promove official e não declara paper readiness, tratar o resultado
+como CHECKPOINT, não como parada final.
+
+Ao atingir checkpoint:
+- consolidar arquivos;
+- validar JSON/YAML/parquet/gate packs;
+- rodar testes relevantes;
+- fazer commit coerente;
+- push para origin/codex/autonomous-sniper-implementation;
+- atualizar o PR draft existente, se houver material revisável;
+- atualizar reports/state/**;
+- reler reports/state/sniper_next_autonomous_mission.md;
+- continuar automaticamente se houver próximo gate seguro.
+
+Classificação de checkpoint:
+- CHECKPOINT_CONTINUE_AUTONOMOUS.
+
+Usar CHECKPOINT_CONTINUE_AUTONOMOUS quando:
+- houve entrega funcional research/sandbox;
+- o pacote é grande, mas revisável;
+- a branch está limpa;
+- o PR draft foi atualizado;
+- há próximo gate seguro.
+
+FUNCTIONAL_RESEARCH_MODULE_DELIVERED só pode encerrar a missão se:
+- não existir próximo gate seguro;
+- ou o orçamento total foi atingido;
+- ou a continuação exigiria recurso externo;
+- ou a continuação exigiria mudança de especificação;
+- ou a continuação exigiria promoção official, paper readiness ou merge;
+- ou o número máximo de checkpoints da campanha foi atingido.
+
+Limites de checkpoint por missão/campanha:
+- até 3 checkpoints automáticos por missão longa;
+- até 50 gates totais acumulados na campanha;
+- até 10 famílias de hipótese materialmente diferentes;
+- até 3 atualizações do PR draft por missão longa;
+- parar se os diffs acumulados ultrapassarem nível razoável mesmo após checkpoints.
+
+Se reports/state/sniper_next_autonomous_mission.md declarar:
+- Current next gate;
+- Next Mission;
+- Required tests;
+- Criteria;
+- Stop Conditions;
+então esse arquivo é instrução executável.
+
+Caso atual conhecido:
+- gate anterior: phase5_research_meta_uncertainty_abstention_gate;
+- próximo gate registrado: phase5_research_cvar_constrained_meta_sizing_gate;
+- hipótese: AGENDA-H03 cvar_constrained_meta_sizing;
+- modo: CVAR_CONSTRAINED_META_SIZING_GATE;
+- pode continuar autonomamente: sim.
+
+A próxima missão deve executar automaticamente:
+phase5_research_cvar_constrained_meta_sizing_gate
+
+Proibições explícitas:
+- não parar só porque o pacote ficou grande se ainda há checkpoint seguro;
+- não pedir decisão humana para executar gate research-only seguro;
+- não tratar atualização do PR draft como final se o próximo gate seguro existe;
+- não transformar checkpoint em promoção;
+- não tratar research/sandbox como official.
+
+Stop final legítimo:
+- EXTERNAL_RESOURCE_REQUIRED;
+- SPEC_CHANGE_REQUIRED;
+- GOVERNANCE_HARD_STOP;
+- AUTONOMOUS_BUDGET_EXHAUSTED;
+- FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED;
+- PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION;
+- FUNCTIONAL_RESEARCH_MODULE_DELIVERED_WITH_NO_SAFE_NEXT_GATE.
+
+Não usar FUNCTIONAL_RESEARCH_MODULE_DELIVERED como stop se houver próximo gate seguro.
 
 RESEARCH_AGENDA_EXPANSION_BEFORE_FREEZE
 
@@ -706,7 +790,8 @@ Pare e entregue relatório final se qualquer condição ocorrer:
 4. A correção exigir credenciais externas, API paga, dado privado ou acesso que não existe.
 5. Houver risco de ordem real, capital real ou operação fora de paper/testnet.
 6. O repositório entrar em estado inconsistente que não possa ser recuperado com segurança.
-7. A quantidade de alterações ficar grande demais para revisão humana razoável.
+7. A quantidade de alterações ficar grande demais para revisão humana razoável
+   mesmo após aplicar AUTONOMOUS_CHECKPOINT_CONTINUATION_POLICY.
 8. Você precisar mudar a especificação para passar o gate.
 9. DSR honesto permanecer 0.0 e a única forma de avançar seria promover mesmo assim.
 10. Qualquer violação de governança for detectada.
@@ -777,6 +862,6 @@ Ao parar, entregue:
 29. Por que a candidata ainda não é promotable.
 30. Próximo gate autônomo.
 31. Se pode continuar autonomamente.
-32. Classificação final obrigatória: EXTERNAL_RESOURCE_REQUIRED, SPEC_CHANGE_REQUIRED, GOVERNANCE_HARD_STOP, AUTONOMOUS_BUDGET_EXHAUSTED, FUNCTIONAL_RESEARCH_MODULE_DELIVERED, FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED ou PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION.
+32. Classificação final obrigatória: EXTERNAL_RESOURCE_REQUIRED, SPEC_CHANGE_REQUIRED, GOVERNANCE_HARD_STOP, AUTONOMOUS_BUDGET_EXHAUSTED, FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED, PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION ou FUNCTIONAL_RESEARCH_MODULE_DELIVERED_WITH_NO_SAFE_NEXT_GATE.
 33. Se houve expansão de agenda, informar hipóteses HIGH/MEDIUM geradas, hipóteses LOW registradas e o próximo gate research-only executado ou a justificativa de agenda esgotada.
 34. Se houver candidata viva, informar o próximo gate encadeado executado ou o hard stop real que impediu sua execução.
