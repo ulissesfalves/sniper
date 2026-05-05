@@ -13,6 +13,7 @@ Updated: 2026-05-04T02:54:06Z
 | cluster_conditioned_polarity | Falsified | `cluster_2_long_high_short_low_p60_h70_k3` failed temporal, cost, parameter and universe falsification. |
 | meta_calibration_disagreement_abstention | Falsified | `short_bma_high_meta_low_p60_m40_k3` passed the initial gate but failed temporal, 20 bps cost, parameter sensitivity and universe stress falsification. |
 | meta_uncertainty_abstention_long_only | Falsified | `long_bma_meta_agree_p65_m50_s10_k3` had positive median Sharpe but failed min Sharpe, active-day and 19 stability/sensitivity falsifiers. |
+| cvar_constrained_meta_sizing | Partial/correct | `signed_meta_edge_t52_s15_k5_g04` produced nonzero research/sandbox exposure and max CVaR95 `0.00356911`, but min Sharpe `-0.903026` and 20 hard falsifiers block preservation. |
 | governed freeze after reaudit | Pending agenda expansion | `FULL_FREEZE_AFTER_REAUDIT` was reached, but final freeze requires autonomous agenda expansion first. |
 
 ## New Agenda
@@ -28,10 +29,11 @@ Updated: 2026-05-04T02:54:06Z
 
 ## Selected For Execution
 
-`AGENDA-H02` was executed after H01 was falsified. It was executable with
-artifacts already in the repo and materially differed from the falsified Stage
-A/rank/short-high/cluster/meta-disagreement families by using long-only
-agreement and abstention.
+`AGENDA-H03` was executed after H01 and H02 were falsified. It was executable
+with artifacts already in the repo and materially differed from the falsified
+Stage A/rank/short-high/cluster/meta-disagreement/meta-uncertainty families by
+using risk-budgeted CVaR-constrained sizing from ex-ante probability edges and
+sigma.
 
 Policy constraints:
 
@@ -48,20 +50,22 @@ Policy constraints:
 
 `phase5_research_meta_disagreement_abstention_gate` returned `PASS/advance`,
 but the chained stability/falsification and decision gates falsified H01. The
-next agenda hypothesis H02 was then executed and abandoned.
+next agenda hypothesis H02 was then executed and abandoned. H03 then produced a
+functional research/sandbox CVaR sizing module, but it stayed only
+`PARTIAL/correct` because alpha stability failed.
 
 | Metric | Value |
 | --- | --- |
-| Initial classification | `META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS` |
-| Final classification | `META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS` |
-| Best policy | `long_bma_meta_agree_p65_m50_s10_k3` |
-| Median Sharpe | `0.447334` |
-| Min Sharpe | `-0.375889` |
-| Median active days | `55.0` |
-| Max CVaR95 | `0.00284763` |
-| Hard falsifier count | `19` |
+| Initial classification | `CVAR_CONSTRAINED_META_SIZING_CVAR_PASS_ALPHA_UNSTABLE` |
+| Final classification | `CVAR_CONSTRAINED_META_SIZING_CVAR_PASS_ALPHA_UNSTABLE` |
+| Best policy | `signed_meta_edge_t52_s15_k5_g04` |
+| Median Sharpe | `2.040444` |
+| Min Sharpe | `-0.903026` |
+| Median active days | `698.0` |
+| Max CVaR95 | `0.00356911` |
+| Hard falsifier count | `20` |
 | Promotion allowed | `false` |
 | Paper readiness allowed | `false` |
 
 Next required gate:
-`phase5_research_cvar_constrained_meta_sizing_gate` from `AGENDA-H03`.
+`phase5_research_regime_specific_meta_disagreement_gate` from `AGENDA-H04`.

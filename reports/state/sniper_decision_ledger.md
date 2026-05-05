@@ -48,31 +48,32 @@ Updated: 2026-05-04T02:36:05Z
 | Meta disagreement candidate decision | Falsified | `phase5_research_meta_disagreement_candidate_decision_gate` classified `short_bma_high_meta_low_p60_m40_k3` as `META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED`. Next agenda hypothesis is `AGENDA-H02` / `phase5_research_meta_uncertainty_abstention_gate`. |
 | Meta uncertainty abstention long-only | Failed/abandoned | `phase5_research_meta_uncertainty_abstention_gate` tested AGENDA-H02 and classified it as `META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS`. Best policy `long_bma_meta_agree_p65_m50_s10_k3` had median Sharpe `0.447334`, min Sharpe `-0.375889`, median active days `55.0`, max CVaR95 `0.00284763`, and 19 hard falsifiers. Next agenda hypothesis is `AGENDA-H03` / `phase5_research_cvar_constrained_meta_sizing_gate`. |
 | Autonomous checkpoint continuation | Active governance policy | Large reviewable packages are checkpoints, not final stops, when validation passes, the branch can be clean, the PR draft can be updated and `reports/state/sniper_next_autonomous_mission.md` defines a safe next gate. Classification `CHECKPOINT_CONTINUE_AUTONOMOUS` is allowed. `FUNCTIONAL_RESEARCH_MODULE_DELIVERED` is not terminal while `phase5_research_cvar_constrained_meta_sizing_gate` remains safe and executable. |
+| CVaR-constrained meta sizing | Partial/correct | `phase5_research_cvar_constrained_meta_sizing_gate` tested AGENDA-H03 and classified `signed_meta_edge_t52_s15_k5_g04` as `CVAR_CONSTRAINED_META_SIZING_CVAR_PASS_ALPHA_UNSTABLE`. The runner produced nonzero research/sandbox exposure and max CVaR95 `0.00356911`, with median Sharpe `2.040444`, but min Sharpe `-0.903026` and 20 hard falsifiers block preservation. Next agenda hypothesis is `AGENDA-H04` / `phase5_research_regime_specific_meta_disagreement_gate`. |
 
 ## Current Decision
 
-The current mission executed the next-gate chain for
-`short_bma_high_meta_low_p60_m40_k3`, falsified it, then executed the next
-materially different agenda hypothesis `AGENDA-H02`.
+The current mission executed the checkpoint continuation gate for the next
+materially different agenda hypothesis `AGENDA-H03`.
 
 Current classification:
-`META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS`.
+`CVAR_CONSTRAINED_META_SIZING_CVAR_PASS_ALPHA_UNSTABLE`.
 
-Human decision is not required. `phase5_research_meta_uncertainty_abstention_gate`
-was executed as long-only research/sandbox, used only ex-ante selection inputs,
-and abandoned the line because the best policy had negative min Sharpe, sparse
-active days and 19 hard falsifiers. Do not promote, merge, declare paper
-readiness, reopen A3/A4, relax thresholds, or treat research CVaR as official.
+Human decision is not required. `phase5_research_cvar_constrained_meta_sizing_gate`
+was executed as research/sandbox, used only ex-ante selection/sizing inputs, and
+kept the line at PARTIAL/correct because the best policy has negative min Sharpe
+and 20 hard falsifiers despite nonzero exposure and research CVaR within bound.
+Do not promote, merge, declare paper readiness, reopen A3/A4, relax thresholds,
+or treat research CVaR as official.
 
-The next materially different agenda hypothesis is `AGENDA-H03`
-(`phase5_research_cvar_constrained_meta_sizing_gate`) if continuing within the
+The next materially different agenda hypothesis is `AGENDA-H04`
+(`phase5_research_regime_specific_meta_disagreement_gate`) if continuing within the
 autonomous budget and review scope remains safe.
 
 Large reviewable output from the prior round is now a governed checkpoint, not a
 final stop. Current checkpoint classification:
 `CHECKPOINT_CONTINUE_AUTONOMOUS`.
 
-The next recommended mode is `CVAR_CONSTRAINED_META_SIZING_GATE`; autonomous can
+The next recommended mode is `REGIME_SPECIFIC_META_DISAGREEMENT_GATE`; autonomous can
 continue, human decision is not required, and official promotion/paper readiness
 remain forbidden.
 

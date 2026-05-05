@@ -9,15 +9,15 @@
     "merged": false,
     "base": "codex/openclaw-sniper-handoff",
     "head": "codex/autonomous-sniper-implementation",
-    "observed_head_sha": "e375ae2d4ab0560056a33c21b2ad8e9839392862",
-    "observed_before_local_gate_commits": false
+    "observed_head_sha": "4a1bb099cf2c34cafbfe646b21b6475432d9ea64",
+    "observed_before_local_gate_commits": true
   },
   "latest_gate": {
-    "gate_slug": "phase5_research_meta_uncertainty_abstention_gate",
-    "status": "FAIL",
-    "decision": "abandon"
+    "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+    "status": "PARTIAL",
+    "decision": "correct"
   },
-  "latest_decision": "META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS",
+  "latest_decision": "CVAR_CONSTRAINED_META_SIZING_CVAR_PASS_ALPHA_UNSTABLE",
   "resolved_blockers": [
     "source_doc_alignment_restored",
     "phase4_official_artifacts_found_and_hashed",
@@ -52,7 +52,9 @@
     "meta_disagreement_research_candidate_found",
     "meta_disagreement_stability_falsification_completed",
     "meta_disagreement_research_candidate_falsified",
-    "meta_uncertainty_abstention_long_only_tested_and_abandoned"
+    "meta_uncertainty_abstention_long_only_tested_and_abandoned",
+    "cvar_constrained_meta_sizing_gate_executed",
+    "cvar_constrained_meta_sizing_research_exposure_and_cvar_measured"
   ],
   "open_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -65,7 +67,8 @@
     "no_promotable_official_alpha_candidate",
     "meta_disagreement_candidate_below_sr_needed",
     "meta_uncertainty_long_only_instability_under_falsification",
-    "cvar_constrained_meta_sizing_next_agenda_hypothesis_pending"
+    "cvar_constrained_meta_sizing_alpha_or_stability_blocker",
+    "regime_specific_meta_disagreement_next_agenda_hypothesis_pending"
   ],
   "promotion_blockers": [
     "dsr_honest_zero_blocks_promotion",
@@ -91,7 +94,8 @@
     "FREEZE_LINE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED",
     "META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE",
     "META_UNCERTAINTY_ABSTENTION_GATE",
-    "CVAR_CONSTRAINED_META_SIZING_GATE"
+    "CVAR_CONSTRAINED_META_SIZING_GATE",
+    "REGIME_SPECIFIC_META_DISAGREEMENT_GATE"
   ],
   "forbidden_next_modes": [
     "OFFICIAL_PROMOTION",
@@ -197,7 +201,7 @@
       "current_mission_final_classification": "CHECKPOINT_CONTINUE_AUTONOMOUS",
       "final_freeze_accepted": false,
       "safe_internal_next_action_available": true,
-      "safe_internal_next_action": "phase5_research_cvar_constrained_meta_sizing_gate"
+      "safe_internal_next_action": "phase5_research_regime_specific_meta_disagreement_gate"
     },
     "autonomous_checkpoint_continuation_policy": {
       "enabled": true,
@@ -212,10 +216,10 @@
       "max_total_campaign_gates": 50,
       "max_material_hypothesis_families_per_campaign": 10,
       "max_pr_draft_updates_per_long_mission": 3,
-      "current_checkpoint_count_this_mission": 1,
-      "current_safe_next_gate": "phase5_research_cvar_constrained_meta_sizing_gate",
-      "current_recommended_mode": "CVAR_CONSTRAINED_META_SIZING_GATE",
-      "current_agenda_id": "AGENDA-H03",
+      "current_checkpoint_count_this_mission": 2,
+      "current_safe_next_gate": "phase5_research_regime_specific_meta_disagreement_gate",
+      "current_recommended_mode": "REGIME_SPECIFIC_META_DISAGREEMENT_GATE",
+      "current_agenda_id": "AGENDA-H04",
       "autonomous_can_continue": true,
       "human_decision_required": false,
       "official_promotion_allowed": false,
@@ -228,17 +232,17 @@
       "can_stop_after_proximo_gate_recomendado": false,
       "initial_pass_requires_stability_falsification_gate": true,
       "initial_pass_requires_candidate_decision_gate": true,
-      "current_family": "meta_uncertainty_abstention_long_only",
-      "current_candidate": "none",
-      "initial_gate": "phase5_research_meta_uncertainty_abstention_gate",
-      "initial_gate_status": "FAIL",
-      "initial_gate_decision": "abandon",
-      "current_recommended_mode": "CVAR_CONSTRAINED_META_SIZING_GATE",
-      "current_next_gate": "phase5_research_cvar_constrained_meta_sizing_gate",
-      "completed_gate": "phase5_research_meta_uncertainty_abstention_gate",
-      "completed_decision_gate": "not_required_initial_gate_failed",
-      "completed_classification": "META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS",
-      "next_agenda_id": "AGENDA-H03",
+      "current_family": "cvar_constrained_meta_sizing",
+      "current_candidate": "signed_meta_edge_t52_s15_k5_g04",
+      "initial_gate": "phase5_research_cvar_constrained_meta_sizing_gate",
+      "initial_gate_status": "PARTIAL",
+      "initial_gate_decision": "correct",
+      "current_recommended_mode": "REGIME_SPECIFIC_META_DISAGREEMENT_GATE",
+      "current_next_gate": "phase5_research_regime_specific_meta_disagreement_gate",
+      "completed_gate": "phase5_research_cvar_constrained_meta_sizing_gate",
+      "completed_decision_gate": "not_required_initial_gate_partial",
+      "completed_classification": "CVAR_CONSTRAINED_META_SIZING_CVAR_PASS_ALPHA_UNSTABLE",
+      "next_agenda_id": "AGENDA-H04",
       "autonomous_can_continue": true,
       "human_decision_required": false,
       "promotion_allowed": false,
@@ -351,6 +355,25 @@
       "promotion_allowed": false,
       "paper_readiness_allowed": false,
       "caveat": "The best long-only meta uncertainty policy had sparse active days, negative min Sharpe and failed cost, parameter and universe sensitivity. It is abandoned and non-promotable."
+    },
+    "research_cvar_constrained_meta_sizing_status": {
+      "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+      "status": "PARTIAL",
+      "decision": "correct",
+      "policy": "signed_meta_edge_t52_s15_k5_g04",
+      "median_active_days": 698.0,
+      "median_combo_sharpe": 2.040444,
+      "min_combo_sharpe": -0.903026,
+      "max_cvar_95_loss_fraction": 0.00356911,
+      "max_drawdown_proxy": 0.17842784,
+      "median_turnover_fraction": 0.02376094,
+      "max_exposure_fraction": 0.04,
+      "classification": "CVAR_CONSTRAINED_META_SIZING_CVAR_PASS_ALPHA_UNSTABLE",
+      "hard_falsifier_count": 20,
+      "research_sandbox_only": true,
+      "promotion_allowed": false,
+      "paper_readiness_allowed": false,
+      "caveat": "The risk-budgeted meta sizing module generated nonzero research/sandbox exposure and passed the research CVaR bound, but min Sharpe and sensitivity remain unstable. It is not promotable and requires a materially different next hypothesis."
     }
   },
   "dsr_status": {
@@ -370,14 +393,14 @@
       "caveat": "Diagnostic explains DSR=0.0 but does not improve the policy or authorize promotion."
     },
     "latest_research_candidate": {
-      "gate_slug": "phase5_research_meta_uncertainty_abstention_gate",
-      "policy": "long_bma_meta_agree_p65_m50_s10_k3",
-      "median_combo_sharpe": 0.447334,
-      "min_combo_sharpe": -0.375889,
+      "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+      "policy": "signed_meta_edge_t52_s15_k5_g04",
+      "median_combo_sharpe": 2.040444,
+      "min_combo_sharpe": -0.903026,
       "sr_needed": 4.47,
-      "sharpe_gap_to_sr_needed": 4.022666,
-      "candidate_review_classification": "META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS",
-      "hard_falsifier_count": 19,
+      "sharpe_gap_to_sr_needed": 2.429556,
+      "candidate_review_classification": "CVAR_CONSTRAINED_META_SIZING_CVAR_PASS_ALPHA_UNSTABLE",
+      "hard_falsifier_count": 20,
       "promotion_allowed": false
     }
   },
@@ -390,29 +413,30 @@
   "paper_readiness_allowed": false,
   "required_external_artifacts": [],
   "latest_research_thesis": {
-    "gate_slug": "phase5_research_meta_uncertainty_abstention_gate",
-    "hypothesis": "Long-only meta uncertainty/agreement abstention can generate nonzero research exposure using Phase4 BMA confidence, calibrated meta confidence and low sigma.",
-    "status": "FAIL",
-    "decision": "abandon",
-    "classification": "META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS",
+    "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+    "hypothesis": "CVaR-constrained meta sizing can generate nonzero research/sandbox exposure using ex-ante probability edges and sigma risk budgets.",
+    "status": "PARTIAL",
+    "decision": "correct",
+    "classification": "CVAR_CONSTRAINED_META_SIZING_CVAR_PASS_ALPHA_UNSTABLE",
     "final_freeze_accepted": false,
     "agenda_expansion_executed_after_final_freeze_reaudit": true,
-    "selected_agenda_id": "AGENDA-H02",
+    "selected_agenda_id": "AGENDA-H03",
     "surviving_modules": [
       "research_sandbox_nonzero_exposure_cvar_evaluator",
       "dsr_zero_root_cause_diagnostic",
       "deep_quant_diagnostic",
       "meta_disagreement_abstention_research_runner",
-      "meta_uncertainty_abstention_research_runner"
+      "meta_uncertainty_abstention_research_runner",
+      "cvar_constrained_meta_sizing_research_runner"
     ],
     "surviving_research_only_candidates": [],
     "surviving_promotable_candidates": 0,
     "can_continue_autonomously_under_current_policy": true,
     "requires_external_artifact": false,
-    "candidate_review_status": "RESEARCH_CANDIDATE_FALSIFIED",
-    "next_agenda_id": "AGENDA-H03",
-    "next_candidate_gate": "phase5_research_cvar_constrained_meta_sizing_gate",
-    "next_recommended_gate": "phase5_research_cvar_constrained_meta_sizing_gate"
+    "candidate_review_status": "RESEARCH_CANDIDATE_PARTIAL_NOT_PROMOTABLE",
+    "next_agenda_id": "AGENDA-H04",
+    "next_candidate_gate": "phase5_research_regime_specific_meta_disagreement_gate",
+    "next_recommended_gate": "phase5_research_regime_specific_meta_disagreement_gate"
   },
   "internal_strategic_decision_policy": {
     "human_decision_is_last_resort": true,
@@ -438,17 +462,17 @@
   "next_gate_chain_execution_policy": {
     "enabled": true,
     "source_file": "reports/state/sniper_next_autonomous_mission.md",
-    "current_family": "meta_uncertainty_abstention_long_only",
-    "current_candidate": "none",
-    "initial_gate": "phase5_research_meta_uncertainty_abstention_gate",
-    "initial_status": "FAIL",
-    "initial_decision": "abandon",
-    "completed_next_gate": "phase5_research_meta_uncertainty_abstention_gate",
-    "completed_decision_gate": "not_required_initial_gate_failed",
-    "candidate_status": "META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS",
-    "next_gate": "phase5_research_cvar_constrained_meta_sizing_gate",
-    "next_mode": "CVAR_CONSTRAINED_META_SIZING_GATE",
-    "next_agenda_id": "AGENDA-H03",
+    "current_family": "cvar_constrained_meta_sizing",
+    "current_candidate": "signed_meta_edge_t52_s15_k5_g04",
+    "initial_gate": "phase5_research_cvar_constrained_meta_sizing_gate",
+    "initial_status": "PARTIAL",
+    "initial_decision": "correct",
+    "completed_next_gate": "phase5_research_cvar_constrained_meta_sizing_gate",
+    "completed_decision_gate": "not_required_initial_gate_partial",
+    "candidate_status": "CVAR_CONSTRAINED_META_SIZING_CVAR_PASS_ALPHA_UNSTABLE",
+    "next_gate": "phase5_research_regime_specific_meta_disagreement_gate",
+    "next_mode": "REGIME_SPECIFIC_META_DISAGREEMENT_GATE",
+    "next_agenda_id": "AGENDA-H04",
     "autonomous_can_continue": true,
     "human_decision_required": false,
     "promotion_allowed": false,
@@ -456,14 +480,14 @@
     "stop_after_initial_pass_allowed": false,
     "stop_after_next_gate_recommended_allowed": false
   },
-  "latest_candidate_status": "RESEARCH_CANDIDATE_FALSIFIED",
+  "latest_candidate_status": "RESEARCH_CANDIDATE_PARTIAL_NOT_PROMOTABLE",
   "human_decision_required": false,
   "autonomous_can_continue": true,
-  "next_recommended_mode": "CVAR_CONSTRAINED_META_SIZING_GATE",
+  "next_recommended_mode": "REGIME_SPECIFIC_META_DISAGREEMENT_GATE",
   "next_recommended_skill": "sniper-autonomous-implementation-manager",
-  "next_recommended_submode": "CVAR_CONSTRAINED_META_SIZING_GATE",
-  "next_recommended_gate": "phase5_research_cvar_constrained_meta_sizing_gate",
-  "next_recommended_agenda_id": "AGENDA-H03",
+  "next_recommended_submode": "REGIME_SPECIFIC_META_DISAGREEMENT_GATE",
+  "next_recommended_gate": "phase5_research_regime_specific_meta_disagreement_gate",
+  "next_recommended_agenda_id": "AGENDA-H04",
   "if_agenda_has_no_high_or_medium_executable_hypothesis": "FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED",
-  "updated_at_utc": "2026-05-05T19:58:34Z"
+  "updated_at_utc": "2026-05-05T22:16:00Z"
 }

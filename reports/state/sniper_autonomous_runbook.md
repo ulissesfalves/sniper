@@ -471,11 +471,14 @@ Gates added in the closed-loop mission:
 - `phase5_post_candidate_falsification_governed_freeze_gate`: `PASS/freeze`.
 
 The current autonomous loop executed `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`,
-falsified H01 in the explicit next stability/falsification chain, and then
-falsified H02 in a long-only research/sandbox gate. Permanent final freeze is
-still not legitimate while agenda hypotheses remain. The next safe gate is
-`phase5_research_cvar_constrained_meta_sizing_gate`. This is not promotion, not
-paper readiness and not merge approval.
+falsified H01 in the explicit next stability/falsification chain, falsified H02
+in a long-only research/sandbox gate, and executed H03 in
+`phase5_research_cvar_constrained_meta_sizing_gate`. H03 produced nonzero
+research/sandbox exposure and research CVaR within bound, but remained
+`PARTIAL/correct` because min Sharpe and sensitivity failed. Permanent final
+freeze is still not legitimate while agenda hypotheses remain. The next safe
+gate is `phase5_research_regime_specific_meta_disagreement_gate`. This is not
+promotion, not paper readiness and not merge approval.
 
 ## Forbidden Interpretations
 
@@ -513,4 +516,5 @@ freeze review inside the repo. The prior surviving candidate and the
 cluster-conditioned candidate, the meta-disagreement candidate and the
 meta-uncertainty long-only line have now been audited/falsified. The current
 line requires the next materially different agenda hypothesis before any new
-freeze.
+freeze. After H03, the next materially different agenda hypothesis is AGENDA-H04
+`regime_specific_meta_disagreement`.

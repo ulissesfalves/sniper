@@ -712,6 +712,46 @@ gaps:
     suggested_gate: "phase5_research_cvar_constrained_meta_sizing_gate"
     stop_condition_if_unresolved: "The meta uncertainty long-only family is abandoned. Continue with AGENDA-H03 only if mission budget and review size remain safe; do not treat positive median Sharpe as promotability."
 
+  - id: GAP-CVAR-META-SIZING-001
+    title: CVaR-constrained meta sizing produced research CVaR evidence but unstable alpha
+    type: research_hypothesis
+    severity: high
+    status: partial_correct
+    evidence:
+      - "reports/state/sniper_research_agenda.yaml"
+      - "reports/gates/phase5_research_cvar_constrained_meta_sizing_gate/gate_report.json"
+      - "selected_agenda_id=AGENDA-H03"
+      - "classification=CVAR_CONSTRAINED_META_SIZING_CVAR_PASS_ALPHA_UNSTABLE"
+      - "best_policy=signed_meta_edge_t52_s15_k5_g04"
+      - "best_median_combo_sharpe=2.040444"
+      - "best_min_combo_sharpe=-0.903026"
+      - "best_median_active_days=698.0"
+      - "best_max_cvar_95_loss_fraction=0.00356911"
+      - "best_median_turnover_fraction=0.02376094"
+      - "hard_falsifier_count=20"
+      - "official_promotion_allowed=false"
+      - "paper_readiness_allowed=false"
+    source_files:
+      - "services/ml_engine/phase5_research_cvar_constrained_meta_sizing.py"
+      - "tests/unit/test_phase5_research_cvar_constrained_meta_sizing.py"
+      - "data/models/phase4/phase4_oos_predictions.parquet"
+    allowed_actions:
+      - "START_RESEARCH_ONLY_THESIS"
+      - "REGIME_SPECIFIC_META_DISAGREEMENT_GATE"
+      - "CHECKPOINT_CONTINUE_AUTONOMOUS"
+      - "UPDATE_STATE"
+      - "UPDATE_DRAFT_PR"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "TREAT_RESEARCH_CVAR_AS_OFFICIAL"
+      - "TREAT_RESEARCH_AS_OFFICIAL"
+      - "RELAX_DSR_THRESHOLD"
+      - "USE_REALIZED_VARIABLE_AS_EX_ANTE_RULE"
+      - "MERGE_PR"
+    suggested_gate: "phase5_research_regime_specific_meta_disagreement_gate"
+    stop_condition_if_unresolved: "The H03 module is useful as research/sandbox CVaR evidence but not a stable candidate. Continue only with a materially different agenda hypothesis such as AGENDA-H04; do not treat positive median Sharpe or research CVaR as promotability."
+
   - id: GAP-NEXT-GATE-CHAIN-001
     title: Next safe gate from sniper_next_autonomous_mission must execute automatically
     type: governance_state
@@ -772,9 +812,10 @@ gaps:
       - "AUTONOMOUS_CHECKPOINT_CONTINUATION_POLICY active"
       - "CHECKPOINT_CONTINUE_AUTONOMOUS is a valid checkpoint classification"
       - "FUNCTIONAL_RESEARCH_MODULE_DELIVERED is not final when a safe next gate exists"
-      - "next_gate=phase5_research_cvar_constrained_meta_sizing_gate"
-      - "next_agenda_id=AGENDA-H03"
-      - "current_recommended_mode=CVAR_CONSTRAINED_META_SIZING_GATE"
+      - "previous_next_gate=phase5_research_cvar_constrained_meta_sizing_gate"
+      - "next_gate=phase5_research_regime_specific_meta_disagreement_gate"
+      - "next_agenda_id=AGENDA-H04"
+      - "current_recommended_mode=REGIME_SPECIFIC_META_DISAGREEMENT_GATE"
       - "autonomous_can_continue=true"
       - "human_decision_required=false"
       - "official_promotion_allowed=false"
@@ -788,7 +829,7 @@ gaps:
       - "reports/state/sniper_autonomous_runbook.md"
     allowed_actions:
       - "CHECKPOINT_CONTINUE_AUTONOMOUS"
-      - "CVAR_CONSTRAINED_META_SIZING_GATE"
+      - "REGIME_SPECIFIC_META_DISAGREEMENT_GATE"
       - "UPDATE_STATE"
       - "UPDATE_DRAFT_PR"
     forbidden_actions:
@@ -801,5 +842,5 @@ gaps:
       - "A3_REOPEN"
       - "A4_REOPEN"
       - "THRESHOLD_RELAXATION"
-    suggested_gate: "phase5_research_cvar_constrained_meta_sizing_gate"
-    stop_condition_if_unresolved: "Do not stop at checkpoint while AGENDA-H03 remains safe, internal to the repo, research/sandbox only and does not require external resources or promotion."
+    suggested_gate: "phase5_research_regime_specific_meta_disagreement_gate"
+    stop_condition_if_unresolved: "Do not stop at checkpoint while AGENDA-H04 remains safe, internal to the repo, research/sandbox only and does not require external resources or promotion."

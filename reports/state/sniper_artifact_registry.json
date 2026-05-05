@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-05-05T19:58:34Z",
+  "updated_at_utc": "2026-05-05T22:16:00Z",
   "official_artifacts": [
     {
       "path": "data/models/phase4/phase4_report_v4.json",
@@ -88,7 +88,8 @@
     "reports/gates/phase5_research_meta_disagreement_abstention_gate",
     "reports/gates/phase5_research_meta_disagreement_stability_falsification_gate",
     "reports/gates/phase5_research_meta_disagreement_candidate_decision_gate",
-    "reports/gates/phase5_research_meta_uncertainty_abstention_gate"
+    "reports/gates/phase5_research_meta_uncertainty_abstention_gate",
+    "reports/gates/phase5_research_cvar_constrained_meta_sizing_gate"
   ],
   "missing_artifacts": [],
   "ignored_or_heavy_artifacts": [
@@ -141,6 +142,7 @@
     "phase5_research_meta_disagreement_stability_falsification_gate falsified short_bma_high_meta_low_p60_m40_k3 with 25 hard falsifiers, including temporal thirds, 20 bps cost stress, parameter sensitivity and universe stress.",
     "phase5_research_meta_disagreement_candidate_decision_gate classified the candidate as META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED and selected AGENDA-H02 / phase5_research_meta_uncertainty_abstention_gate as the next materially different agenda hypothesis.",
     "phase5_research_meta_uncertainty_abstention_gate classified AGENDA-H02 as META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS with 19 hard falsifiers and selected AGENDA-H03 / phase5_research_cvar_constrained_meta_sizing_gate as the next materially different agenda hypothesis.",
-    "AUTONOMOUS_CHECKPOINT_CONTINUATION_POLICY treats large reviewable packages as CHECKPOINT_CONTINUE_AUTONOMOUS, not final stops, when validation passes and reports/state/sniper_next_autonomous_mission.md defines a safe next gate."
+    "AUTONOMOUS_CHECKPOINT_CONTINUATION_POLICY treats large reviewable packages as CHECKPOINT_CONTINUE_AUTONOMOUS, not final stops, when validation passes and reports/state/sniper_next_autonomous_mission.md defines a safe next gate.",
+    "phase5_research_cvar_constrained_meta_sizing_gate classified AGENDA-H03 as CVAR_CONSTRAINED_META_SIZING_CVAR_PASS_ALPHA_UNSTABLE. The best research/sandbox policy signed_meta_edge_t52_s15_k5_g04 had nonzero exposure, median Sharpe 2.040444, max CVaR95 0.00356911 and median active days 698.0, but min Sharpe -0.903026 and 20 hard falsifiers block preservation. Next gate is AGENDA-H04 / phase5_research_regime_specific_meta_disagreement_gate."
   ]
 }

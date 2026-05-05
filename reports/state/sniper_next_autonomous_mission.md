@@ -1,16 +1,16 @@
 # SNIPER Next Autonomous Mission
 
-Mode: `CVAR_CONSTRAINED_META_SIZING_GATE`
+Mode: `REGIME_SPECIFIC_META_DISAGREEMENT_GATE`
 
-Previous gate executed: `phase5_research_meta_uncertainty_abstention_gate`
+Previous gate executed: `phase5_research_cvar_constrained_meta_sizing_gate`
 
-Previous family: `meta_uncertainty_abstention_long_only`
+Previous family: `cvar_constrained_meta_sizing`
 
-Previous candidate: `long_bma_meta_agree_p65_m50_s10_k3`
+Previous candidate: `signed_meta_edge_t52_s15_k5_g04`
 
-Previous result: `META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS`
+Previous result: `CVAR_CONSTRAINED_META_SIZING_CVAR_PASS_ALPHA_UNSTABLE`
 
-Current next gate: `phase5_research_cvar_constrained_meta_sizing_gate`
+Current next gate: `phase5_research_regime_specific_meta_disagreement_gate`
 
 Checkpoint classification: `CHECKPOINT_CONTINUE_AUTONOMOUS`
 
@@ -20,84 +20,90 @@ Human decision required: `false`
 
 ## Rationale
 
-The mandatory next-gate chain first falsified
-`short_bma_high_meta_low_p60_m40_k3` in
-`phase5_research_meta_disagreement_stability_falsification_gate` and recorded
-the abandonment in `phase5_research_meta_disagreement_candidate_decision_gate`.
+The checkpoint continuation mission executed `AGENDA-H03`
+`cvar_constrained_meta_sizing` in
+`phase5_research_cvar_constrained_meta_sizing_gate`.
 
-The next agenda hypothesis `AGENDA-H02` was then executed in
-`phase5_research_meta_uncertainty_abstention_gate`. It stayed long-only and
-research/sandbox, used only ex-ante `p_bma_pkf`, `p_meta_calibrated` and
-`sigma_ewma`, but failed stability stress. The best policy
-`long_bma_meta_agree_p65_m50_s10_k3` had median Sharpe `0.447334`, min Sharpe
-`-0.375889`, median active days `55.0`, max CVaR95 `0.00284763` and 19 hard
-falsifiers.
+The gate produced nonzero research/sandbox exposure and measured research CVaR
+with `best_policy=signed_meta_edge_t52_s15_k5_g04`,
+median Sharpe `2.040444`, median active days `698.0`, max CVaR95
+`0.00356911`, median turnover `0.02376094` and max exposure `0.04`.
 
-The next materially different executable agenda hypothesis is `AGENDA-H03`:
-`cvar_constrained_meta_sizing`. It focuses on risk-first sizing rather than
-signal polarity, disagreement or pure long-only agreement.
+The gate is only `PARTIAL/correct` because min combo Sharpe is `-0.903026`,
+there are 20 hard sensitivity/falsification failures, DSR honest remains `0.0`
+and official CVaR remains zero exposure. This is useful research/sandbox CVaR
+evidence, not promotability.
 
-The prior package is a reviewable checkpoint, not a final stop. The branch can
-continue autonomously because this next gate is internal to the repo,
-research/sandbox only, and does not require external resources, official
-promotion, paper readiness or merge.
+The next materially different executable agenda hypothesis is `AGENDA-H04`:
+`regime_specific_meta_disagreement`. It tests whether the meta-disagreement
+signal only has value under ex-ante HMM bull-probability regimes, rather than
+repeating global disagreement, long-only uncertainty or risk-budget sizing.
 
 ## Execution Scope
 
 Implement a research/sandbox gate that:
 
 - reads `data/models/phase4/phase4_oos_predictions.parquet`;
-- predeclares CVaR/risk-budgeted sizing policies using ex-ante `sigma_ewma`,
-  `p_bma_pkf` and/or `p_meta_calibrated`;
-- produces nonzero research/sandbox positions, daily returns, trade log and
-  metrics if exposure is possible;
-- computes CVaR research and stress evidence;
-- does not use `pnl_real`, `stage_a_eligible`, `avg_sl_train` or realized
-  labels as selection inputs;
+- uses only ex-ante `p_bma_pkf`, `p_meta_calibrated`, `sigma_ewma` and
+  `hmm_prob_bull`;
+- defines predeclared HMM-regime buckets and thresholds;
+- produces research/sandbox positions, daily returns, trade log and metrics
+  if exposure is possible;
+- evaluates median/min combo Sharpe, active days, CVaR, turnover, drawdown,
+  costs, regime stability and leakage controls;
+- never uses `pnl_real`, `stage_a_eligible`, `avg_sl_train`, `label` or
+  `y_meta` as selection inputs;
 - preserves `dsr_honest=0.0`, official zero exposure and non-promotability
   blockers.
 
 ## Next Mission
 
-Mode: `CVAR_CONSTRAINED_META_SIZING_GATE`
+Mode: `REGIME_SPECIFIC_META_DISAGREEMENT_GATE`
 
-Gate: `phase5_research_cvar_constrained_meta_sizing_gate`
+Gate: `phase5_research_regime_specific_meta_disagreement_gate`
 
 Required tests:
 
 - ex-ante selection input validation;
 - nonzero research exposure;
-- CVaR research under rho/stress assumptions where supported by existing data;
+- regime-specific split coverage;
 - median/min combo Sharpe;
 - active days;
-- turnover and drawdown when available;
-- cost and parameter sensitivity if an initial candidate appears.
+- CVaR research;
+- turnover and drawdown;
+- cost sensitivity;
+- parameter sensitivity;
+- universe stress;
+- leakage controls.
 
 ## Criteria
 
 PASS / advance:
 
-- at least one predeclared research sizing policy has nonzero exposure;
+- at least one predeclared regime-specific research/sandbox policy has nonzero
+  exposure;
 - max CVaR95 stays within predeclared research bound;
 - median combo Sharpe > 0;
 - min combo Sharpe > 0;
 - median active days >= 120;
+- cost and universe stress do not create hard falsifiers;
 - no realized variable is used as selection input;
 - no official promotion or paper readiness is claimed.
 
 PARTIAL / correct:
 
-- CVaR bound holds but alpha, active days or sensitivity remain weak.
+- CVaR bound and nonzero exposure hold but alpha, active days or sensitivity
+  remain weak.
 
 FAIL / abandon:
 
-- no predeclared sizing policy has nonzero exposure or median Sharpe remains
-  nonpositive after cost/sensitivity checks.
+- no predeclared regime-specific policy has nonzero exposure or median Sharpe
+  remains nonpositive after stress checks.
 
 INCONCLUSIVE:
 
-- required Phase4 OOS predictions, sigma or calibrated probability columns are
-  missing or schema is incompatible.
+- required Phase4 OOS predictions, sigma, HMM or calibrated probability columns
+  are missing or schema is incompatible.
 
 ## Stop Conditions
 
