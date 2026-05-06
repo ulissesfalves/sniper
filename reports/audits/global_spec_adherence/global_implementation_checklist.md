@@ -1,137 +1,131 @@
 # SNIPER Global Implementation Checklist
 
-Veredito de referência: `GLOBAL_PARTIAL`
+Audit date: 2026-04-27
 
-Este checklist separa o estado atual por fase e explicita o que está satisfatório, reprovado no mérito, parcial/inconclusivo, faltante, bloqueante e research-only.
+Branch: `codex/autonomous-sniper-implementation`
 
-## FASE 0 — Fundação, repo, ambiente e reprodutibilidade
+Verdict: `GLOBAL_PARTIAL`
 
-| Item | Status atual | Evidência | Pendência | Risco | Prioridade | Próximo comando/ação |
-|---|---|---|---|---|---|---|
-| Branch e handoff canônico | SATISFATÓRIO | Branch `codex/openclaw-sniper-handoff`; `docs/SNIPER_openclaw_handoff.md` | Manter handoff atualizado após cada gate | Deriva de contexto entre chats | Alta | `git branch --show-current; git rev-parse HEAD` |
-| Regeneration guide | PARCIAL | `docs/SNIPER_regeneration_guide.md` | Provar execução em clone limpo | Artifacts locais podem mascarar dependência | Alta | Rodar restore/revalidate e comparar hashes |
-| Separação official/research/sandbox | SATISFATÓRIO | Handoff e `phase4_gate_diagnostic.py` | Automatizar check em todos gates | Mistura manual de artifacts | Alta | Criar assert de origem em manifest |
-| PDF Technical Architecture auditável | PARCIAL | Extração textual quase vazia | Renderizar/OCR ou substituir por texto canônico | Requisito documental inconclusivo | Média | OCR/render dedicado do PDF |
+This checklist reflects the PR draft branch after the Phase 6 autonomous closure. It is a review checklist, not a promotion checklist.
 
-## FASE 1 — Dados, universo point-in-time e anti-survivorship
+## Phase 0 - Foundation, Repo, Environment, Reproducibility
 
-| Item | Status atual | Evidência | Pendência | Risco | Prioridade | Próximo comando/ação |
-|---|---|---|---|---|---|---|
-| Universo point-in-time | PARCIAL | `AntiSurvivorshipValidator`; Coingecko market cap histórico | Manifest por `as_of_date` e cobertura | Survivorship bias se manifest faltar | Alta | Gerar `universe_manifest.parquet/json` por data |
-| Ativos colapsados | SATISFATÓRIO | `bootstrap_historical.py` marca colapsados obrigatórios | Validar em dataset regenerado | Excluir mortos inflaria backtest | Alta | Testar presença de collapsed assets no parquet |
-| OHLCV HLC real | PARCIAL | Coleta OHLCV e fallback aproximado | Medir cobertura de HLC real | Labels/slippage fracos se fallback virar official | Alta | Relatório de cobertura por fonte/símbolo |
-| Fonte point-in-time de unlock | PARCIAL | `historical.py` usa captura `<= as_of_date` | Quality report diário atualizado | Lookahead/coverage incompleta | Alta | Reexecutar pipeline unlock quality |
+| Item | Status | Evidence | Pending | Risk | Priority | Next action |
+| --- | --- | --- | --- | --- | --- | --- |
+| Work on isolated PR branch | Done | branch `codex/autonomous-sniper-implementation`; PR #1 draft | none | low | high | Keep PR draft. |
+| Preserve base branch | Done | base `codex/openclaw-sniper-handoff` | none | low | high | Do not merge automatically. |
+| Gate pack convention | Done | Phase6 gates include report, manifest, metrics where produced | none | low | high | Continue gate pack format. |
+| Clean regeneration | Done for Phase6 | latest gate has `clean_clone_or_equivalent=true`, returncode 0, Phase5 clean status PASS | no promotion from this evidence | medium | high | Review clean regeneration report. |
+| Environment tests | Done for focused subset | `26 passed` reported for Phase5/Phase6 subset | full CI still not equivalent to readiness | medium | medium | Rerun focused tests during review if needed. |
+| Worktree hygiene | Done after stabilization | stale autonomous stop-review scratch files were triaged as superseded; intended audit/gate artifacts are committed separately | no remaining untracked audit scratch files expected after commits | low | medium | Keep future gate artifacts committed or explicitly discarded before new missions. |
 
-## FASE 2 — Feature store e feature engineering
+## Phase 1 - Data, Universe Point-In-Time, Anti-Survivorship
 
-| Item | Status atual | Evidência | Pendência | Risco | Prioridade | Próximo comando/ação |
-|---|---|---|---|---|---|---|
-| Fracdiff log-space/tau/expanding | SATISFATÓRIO | `fracdiff/weights.py`, `transform.py`, `optimal_d.py` | Persistir `d`, tau e janela por fold | Regressão silenciosa de feature | Média | Adicionar manifest de fracdiff por fold |
-| Retornos/volatilidade/BTC regime | SATISFATÓRIO | `services/ml_engine/main.py`; `features/volatility.py` | Confirmar cobertura em parquet atual | Buracos de feature viram NaN/fallback | Média | Inventário `feature_coverage_report` |
-| Derivativos/macro features | PARCIAL | `main.py` contém hooks/features disponíveis | Provar cobertura efetiva | Feature prometida mas ausente | Média | Relatório de colunas official vs research |
-| `unlock_pressure_rank` rev5 | SATISFATÓRIO | `token_unlocks.py`, `store.py`, `utils.py` | Quality report e shadow exit criteria | Tratar proxy/shadow como official | Alta | Verificar unknown/confidence/cobertura |
+| Item | Status | Evidence | Pending | Risk | Priority | Next action |
+| --- | --- | --- | --- | --- | --- | --- |
+| Phase4 official artifacts available for audit | Done for this clone | latest Phase6 artifact integrity report hashes required files | artifacts are ignored/external, not versioned official outputs | medium | high | Keep hashes in gate packs. |
+| Research baseline artifacts available | Done for this clone | clean regeneration preflight reports no missing baseline artifacts | artifacts remain external/ignored | medium | high | Verify paths before any rerun. |
+| Cemetery/PIT unlock handling | Partial | unlock rev5 docs and data_inserter source preserve PIT/reconstruction rules | live coverage and provider quality remain ongoing concerns | medium | medium | Keep data quality diagnostics before model promotion. |
+| Anti-survivorship controls | Partial | validators and handoff docs exist | not revalidated by this PR-specific audit | medium | medium | Revalidate only in a future data gate if needed. |
 
-## FASE 3 — Regime, labels, meta-labeling e calibração
+## Phase 2 - Feature Store And Feature Engineering
 
-| Item | Status atual | Evidência | Pendência | Risco | Prioridade | Próximo comando/ação |
-|---|---|---|---|---|---|---|
-| Winsor/RobustScaler/PCA | SATISFATÓRIO | `regime/winsorizer.py`; `regime/pca_robust.py` | Persistir parâmetros por janela | Leakage se fit não for train-only | Alta | Teste de fit/transform temporal |
-| HMM walk-forward | SATISFATÓRIO | `regime/hmm_filter.py` | Diagnóstico por janela em gate | Hindsight ou regime instability | Alta | Emitir `hmm_diagnostics.json` |
-| Triple-barrier HLC | SATISFATÓRIO | `triple_barrier/labeler.py` | Samples auditáveis de labels | Erro de prioridade SL/TP | Alta | Exportar amostra label/barrier/slippage |
-| Market impact sqrt | SATISFATÓRIO | `triple_barrier/market_impact.py` | Persistir participation/slippage por trade | Backtest subestima custo | Alta | Adicionar slippage report ao gate |
-| PBMA purged/uniqueness/sample weights | SATISFATÓRIO | `pbma_purged.py`; `uniqueness.py` | Teste de leakage em gate novo | Overlap inflar performance | Alta | Rodar teste purged/leakage |
-| Isotonic/time-decay/ECE | SATISFATÓRIO | `isotonic_calibration.py`; `ISOTONIC_HALFLIFE=180` | Reliability curves por fold | Calibração local sem valor operacional | Média | Exportar reliability/ECE por fold |
+| Item | Status | Evidence | Pending | Risk | Priority | Next action |
+| --- | --- | --- | --- | --- | --- | --- |
+| `unlock_pressure_rank` rev5 architecture | Satisfactory | `docs/unlock_pressure_rank_technical.md`; store/token unlock code | live observed coverage can still be shadow-limited | medium | medium | Keep audit fields outside X. |
+| Fracdiff log-space | Satisfactory | `services/ml_engine/fracdiff/transform.py`; `optimal_d.py` | no new issue in this PR | low | medium | Preserve log-space tests. |
+| Volatility and market features | Partial | `services/ml_engine/features/volatility.py` | not rerun end-to-end in this audit | medium | medium | Require full model gate for readiness. |
+| Feature diagnostics | Partial | `services/ml_engine/phase2_diagnostic.py` | latest quality snapshot not reviewed here | medium | low | Review in future data/feature gate. |
 
-## FASE 4 — CPCV, gates estatísticos e decision-space
+## Phase 3 - Regime, Labels, Meta-Labeling, Calibration
 
-| Item | Status atual | Evidência | Pendência | Risco | Prioridade | Próximo comando/ação |
-|---|---|---|---|---|---|---|
-| CPCV/PBO/N_eff implementado | SATISFATÓRIO | `meta_labeling/cpcv.py`; `phase4_cpcv.py` | Regenerar artifacts official | Implementado não significa aprovado | Alta | Rodar gate CPCV em clone limpo |
-| DSR honesto | REPROVADO NO MÉRITO | `phase4_gate_diagnostic.json` registra `dsr_honest=0.0`, `n_trials_honest=5000` | Corrigir por evidência estrutural, não threshold tweak | Bloqueia promoção | Crítica | Não promover; registrar FAIL |
-| Sharpe OOS | REPROVADO NO MÉRITO | Diagnóstico official registra Sharpe OOS `0.3494` para política fallback citada | Nova hipótese causal se houver | Retorno mínimo não atingido | Crítica | Não avançar para paper official |
-| Subperíodos | REPROVADO/PARCIAL | Diagnóstico official registra subperíodos insuficientes em caminho bloqueante | Revalidar caminhos e critérios | Instabilidade temporal | Crítica | Persistir subperiod report em novo gate |
-| Decision-space | PARCIAL | Docs Fase 4-R e phase5 reports | Alinhar source-doc-artifact | Métrica soberana mal aplicada | Alta | Gate de alignment com asserts |
+| Item | Status | Evidence | Pending | Risk | Priority | Next action |
+| --- | --- | --- | --- | --- | --- | --- |
+| HMM/regime gating | Partial | `tests/unit/test_hmm_regime_alignment.py`; drift and pre-trade hooks | full regime retraining not rerun here | medium | medium | Keep as implemented, not readiness evidence. |
+| Triple-barrier labels | Partial | meta-labeling and uniqueness modules reference triple-barrier outputs | current PR did not rerun label pipeline | medium | medium | Require full model gate before promotion. |
+| CPCV | Satisfactory as implementation | `services/ml_engine/meta_labeling/cpcv.py`; Phase4 report checks | DSR still fails | high | high | Do not override DSR with CPCV/PBO. |
+| Calibration/ECE | Satisfactory as artifact check | Phase4 artifact report has ECE check true | not sufficient for promotion | medium | medium | Keep as supporting evidence only. |
 
-## FASE 5 — Hardening quantitativo
+## Phase 4 - CPCV, Statistical Gates, Decision-Space
 
-| Item | Status atual | Evidência | Pendência | Risco | Prioridade | Próximo comando/ação |
-|---|---|---|---|---|---|---|
-| A3 | REPROVADO NO MÉRITO / OBSOLETO | `reports/gates/phase5_stage_a3_*` | Não reabrir sem evidência nova forte | Loop improdutivo | Crítica | Manter fechado |
-| Cross-sectional sovereign restored | SATISFATÓRIO como research baseline | `phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate` registra `EXACT_RESTORE` | Não promover | Confundir alive com promotable | Alta | Usar apenas como baseline research |
-| Cross-sectional current | PARCIAL | `recent_regime_policy_falsification` registra `ALIVE_BUT_NOT_PROMOTABLE`, DSR 0.0 | Nova hipótese estrutural ou freeze | Otimização narrativa | Crítica | Gate de causalidade/repro antes de tuning |
-| RiskLabAI | RESEARCH-ONLY | Handoff: oracle/shadow | Não official | Vazamento de governança | Alta | Manter em sandbox/research |
-| CVaR empirical artifact | PARCIAL | Código existe; diagnóstico diz artifact official ausente | Persistir CVaR empírico | Risco não auditável | Alta | Adicionar `portfolio_cvar_report.json` |
+| Item | Status | Evidence | Pending | Risk | Priority | Next action |
+| --- | --- | --- | --- | --- | --- | --- |
+| PBO check | Done | Phase4 artifact report has `CPCV PBO < 10% [9]` true | none as isolated check | medium | medium | Preserve in report. |
+| N_eff check | Done | Phase4 artifact report has `N_eff >= 120 [17]` true | none as isolated check | medium | medium | Preserve in report. |
+| Honest DSR | Failed merit | `dsr_honest=0.0`, `dsr_passed=false` | promotion blocked | critical | critical | Do not promote; decide freeze or research-only thesis. |
+| Decision-space ruler | Partial/research-only | handoff says family alive/latest/headroom | cannot become promotable while DSR zero | high | high | Keep as veto/diagnostic, not promotion. |
 
-## FASE 6 — Bridge paper/Nautilus e execução contínua
+## Phase 5 - Quantitative Hardening
 
-| Item | Status atual | Evidência | Pendência | Risco | Prioridade | Próximo comando/ação |
-|---|---|---|---|---|---|---|
-| Redis Streams contract | SATISFATÓRIO | `services/nautilus_bridge/config.py`; `contract.py` | Manter versionamento de schema | Quebra consumer/publisher | Média | Rodar testes unitários bridge |
-| Snapshot freshness/stale | SATISFATÓRIO | `acceptance.py`; `phase4_publisher.py` | Teste com snapshot real do gate | Operar dado velho | Alta | Testar stale snapshot com artifact atual |
-| Idempotência/duplicate/revision | SATISFATÓRIO | `acceptance.py`; `consumer.py` | Teste de replay end-to-end | Ordem duplicada | Alta | Rodar replay bridge |
-| Daemon lock/heartbeat/status terminal | SATISFATÓRIO | `run_phase4_paper_daemon.py` | Teste crash/restart prolongado | Loop sem status terminal | Alta | Simular crash/restart |
-| Alimentar paper official | BLOQUEADO | Upstream gates falham | Aguardar PASS upstream | Paper com modelo não-promotable | Crítica | Não executar official paper ainda |
+| Item | Status | Evidence | Pending | Risk | Priority | Next action |
+| --- | --- | --- | --- | --- | --- | --- |
+| Correct sovereign baseline restored | Done | clean Phase5 restore `EXACT_RESTORE`; `SOVEREIGN_BASELINE_RESTORED_AND_VALID` | no promotion implied | medium | high | Use only as research baseline. |
+| Cross-sectional family state | Partial | `ALIVE_BUT_NOT_PROMOTABLE` in handoff and gate review | quantitative merit unresolved | high | high | Freeze or start separate research-only thesis. |
+| A3 structural choke | Closed | handoff documents A3 closed | no new evidence to reopen | high | high | Do not reopen A3/A4. |
+| Bounded policy tweaks | Exhausted for promotion | handoff says small recent tweaks did not solve DSR | no material advance in current line | high | high | Avoid another generic tweak loop. |
 
-## FASE 7 — Paper/testnet prolongado
+## Phase 6 - Bridge Paper/Nautilus And Continuous Execution
 
-| Item | Status atual | Evidência | Pendência | Risco | Prioridade | Próximo comando/ação |
-|---|---|---|---|---|---|---|
-| Paper prolongado | NÃO IMPLEMENTADO / BLOQUEADO | Bridge existe; upstream não promotable | Gate upstream PASS completo | Execução sem edge validado | Crítica | Aguardar gates quantitativos |
-| Monitoramento drift/risk em paper | PARCIAL | Drift/risk modules existem | Integrar report terminal | Falha operacional não detectada | Alta | Definir `paper_monitoring_report.json` |
-| Reconciliation realista | PARCIAL | `reconciler.py` existe | Teste com exchange adapter/mock realista | Divergência target/executado | Alta | Rodar replay com status terminal |
+| Item | Status | Evidence | Pending | Risk | Priority | Next action |
+| --- | --- | --- | --- | --- | --- | --- |
+| Nautilus bridge source exists | Partial | `services/nautilus_bridge/**` | not readiness because quantitative blockers remain | high | medium | Review only as source/governance. |
+| FULL_SNAPSHOT contract | Satisfactory as source | `services/nautilus_bridge/contract.py` | runtime gate not executed here | medium | medium | Keep contract tests. |
+| Stale/duplicate/out-of-order handling | Satisfactory as source | `services/nautilus_bridge/acceptance.py` statuses | runtime paper gate not run here | medium | medium | Validate in later paper gate if blockers clear. |
+| Redis status/consumer path | Partial | `services/nautilus_bridge/consumer.py`; execution Redis usage | live Redis not exercised in this audit | medium | low | Do not treat as paper readiness. |
+| CVaR persistence | Partial | latest `portfolio_cvar_report.json` persisted | zero exposure means no economic robustness | critical | critical | Require nonzero exposure or approved stress evidence before readiness. |
 
-## FASE 8 — Readiness para capital real
+## Phase 7 - Prolonged Paper/Testnet
 
-| Item | Status atual | Evidência | Pendência | Risco | Prioridade | Próximo comando/ação |
-|---|---|---|---|---|---|---|
-| Todos gates PASS | NÃO IMPLEMENTADO | DSR/Sharpe/subperíodos bloqueiam | PASS reproduzível completo | Perda financeira/violação spec | Crítica | Não preparar capital real |
-| CVaR/drawdown official | PARCIAL | Código existe; artifact empírico falta | Persistir e aprovar | Risco não mensurado | Crítica | Gate CVaR empirical |
-| Handoff de operação | NÃO IMPLEMENTADO | Sem paper prolongado aprovado | Runbook, alertas, rollback | Operação sem governança | Alta | Após paper prolongado PASS |
+| Item | Status | Evidence | Pending | Risk | Priority | Next action |
+| --- | --- | --- | --- | --- | --- | --- |
+| Start prolonged paper/testnet | Not implemented / blocked | no valid readiness gate | DSR and CVaR blockers | critical | critical | Do not start readiness from this PR. |
+| Paper metrics over time | Not implemented / blocked | no prolonged paper evidence in this PR | needs prior Phase4/5/6 gates to pass | critical | high | Only after merit blockers clear. |
+| Continuous daemon acceptance | Partial source only | bridge daemon source exists | runtime evidence missing and blocked | high | medium | Keep out of promotion review. |
 
-## Destaques Obrigatórios
+## Phase 8 - Real Capital Readiness
 
-Já feito e satisfatório:
+| Item | Status | Evidence | Pending | Risk | Priority | Next action |
+| --- | --- | --- | --- | --- | --- | --- |
+| Real capital operation | Not applicable for this branch | governance says no real capital; no orders/credentials used | all gates would need to pass first | critical | critical | Do not operate capital. |
+| Credential creation/storage | Not applicable | no new credentials reported | none | critical | critical | Do not create or store secrets. |
+| Merge/readiness approval | Blocked | PR is draft and not merged | human review only | critical | high | Keep PR draft. |
 
-- `unlock_pressure_rank` rev5 como arquitetura e governança de colunas.
-- Fracdiff log-space/tau/expanding.
-- Regime winsor/RobustScaler/PCA/HMM walk-forward.
-- Triple-barrier HLC e market impact por raiz quadrada.
-- Bridge paper/Nautilus como mecanismo técnico.
+## What Is Satisfactory
 
-Feito, mas reprovado no mérito:
+- Clean regeneration proof is now present and usable for review.
+- Required Phase4 and research baseline artifacts were found and hashed.
+- Source-doc alignment is restored to `ALIGNED`.
+- Focused Phase5/Phase6 tests passed.
+- Governance boundaries were preserved.
 
-- A3/q60 e família de calibradores A3.
-- Cross-sectional hardening como promotable.
-- Policies recentes que preservam latest/headroom mas mantêm `dsr_honest=0.0`.
-- Caminhos official bloqueados por DSR/Sharpe/subperíodos.
+## What Was Done But Failed On Merit
 
-Parcial/inconclusivo:
+- The cross-sectional family remains alive in latest/headroom terms, but it fails promotion because honest DSR is `0.0`.
+- CVaR persistence exists, but official exposure is zero and cannot prove economic robustness.
 
-- Universo/dados por falta de regeneration clean nesta auditoria.
-- Feature inventory completo de macro/derivativos.
-- Cobertura observada de unlock e saída de shadow.
-- CVaR empírico official.
-- Technical Architecture presentation PDF sem texto extraível.
-- Alinhamento Fase 4-R4 source-doc.
+## What Is Partial Or Inconclusive
 
-Ainda falta implementar/provar:
+- Paper/Nautilus bridge source exists, but paper readiness is not proven.
+- HMM/regime and label/calibration code exists, but this audit did not rerun a full modeling gate.
+- Data/models artifacts are available in this clone but remain ignored/external base artifacts.
 
-- Gate de reprodutibilidade limpa.
-- Artifact empírico CVaR official.
-- Paper/testnet prolongado aprovado.
-- Readiness para capital real.
+## What Blocks Operational Advance
 
-Bloqueando avanço operacional:
+- `dsr_honest=0.0`
+- `dsr_passed=false`
+- `cvar_economic_status=NOT_PROVEN_ZERO_EXPOSURE`
+- cross-sectional `ALIVE_BUT_NOT_PROMOTABLE`
+- no Phase7 paper/readiness gate can honestly pass from this state.
 
-- `dsr_honest=0.0`.
-- Sharpe/subperíodos insuficientes nos diagnósticos official.
-- `ALIVE_BUT_NOT_PROMOTABLE`.
-- Falta de alinhamento source-doc-artifact Fase 4-R4.
+## What Is Research Only
 
-Research-only:
+- `phase5_cross_sectional_sovereign_closure_restored`
+- copied research baseline artifacts in `data/models/research/**`
+- any future attempt to repair DSR/CVaR via a new hypothesis.
 
-- RiskLabAI.
-- `phase5_cross_sectional_sovereign_closure_restored`.
-- Família cross-sectional atual.
-- A3 artifacts e diagnósticos pós-fechamento.
+## Recommended Next Action
 
+Keep PR #1 as draft and review it as a governance/reproducibility PR. Do not merge as ready. Do not promote official. If further work is needed, it should be either:
+
+- documentation-only PR review corrections; or
+- a separate research-only thesis with explicit falsification criteria and no official promotion.

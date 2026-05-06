@@ -1,0 +1,150 @@
+{
+  "updated_at_utc": "2026-05-05T22:35:00Z",
+  "official_artifacts": [
+    {
+      "path": "data/models/phase4/phase4_report_v4.json",
+      "size_bytes": 97451,
+      "sha256": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9",
+      "status": "present_external_base_artifact"
+    },
+    {
+      "path": "data/models/phase4/phase4_execution_snapshot.parquet",
+      "size_bytes": 21118,
+      "sha256": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB",
+      "status": "present_external_base_artifact_zero_exposure"
+    },
+    {
+      "path": "data/models/phase4/phase4_aggregated_predictions.parquet",
+      "size_bytes": 1234311,
+      "sha256": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23",
+      "status": "present_external_base_artifact"
+    },
+    {
+      "path": "data/models/phase4/phase4_oos_predictions.parquet",
+      "size_bytes": 2872831,
+      "sha256": "5B3144578BB99D48E2A67B3AB60B2B0AD25787A92B8488AFD1D1D5C08AE8F6C7",
+      "status": "present_external_base_artifact"
+    },
+    {
+      "path": "data/models/phase4/phase4_gate_diagnostic.json",
+      "size_bytes": 40472,
+      "sha256": "EBFC08CDDE6F9AB3F2A6BF7F23F3A4701B2FDB2796E61776E7E842BA21E10954",
+      "status": "present_external_base_artifact"
+    }
+  ],
+  "research_artifacts": [
+    {
+      "path": "data/models/research/phase4_cross_sectional_ranking_baseline/stage_a_predictions.parquet",
+      "size_bytes": 4365296,
+      "sha256": "FC947D4C3C71175BCF5F773665DD1D5BB5F033D0E67E881F0B07B338FDA1B67E",
+      "status": "present_research_baseline"
+    },
+    {
+      "path": "data/models/research/phase4_cross_sectional_ranking_baseline/stage_a_report.json",
+      "size_bytes": 837772,
+      "sha256": "D0DAE9346DF71B272568CF1A5E62AB5D15ADDEADBFC326581D32D99D26F0EBFB",
+      "status": "present_research_baseline"
+    },
+    {
+      "path": "data/models/research/phase4_cross_sectional_ranking_baseline/stage_a_manifest.json",
+      "size_bytes": 7102,
+      "sha256": "BB2341E59A73D417204BFAB3C3D4EDCB6ECE40F612BC85AFC449ED37DED2ECFF",
+      "status": "present_research_baseline"
+    },
+    {
+      "path": "data/models/research/phase4_cross_sectional_ranking_baseline/stage_a_snapshot_proxy.parquet",
+      "size_bytes": 31939,
+      "sha256": "FE1E050820ABE77C7DF35318F13301F2A7443AE45B75B2D322CAC0AF233032B7",
+      "status": "present_research_baseline_zero_proxy_exposure"
+    }
+  ],
+  "gate_packs": [
+    "reports/gates/phase6_global_reproducibility_source_alignment_gate",
+    "reports/gates/phase6_source_doc_and_regeneration_preflight_gate",
+    "reports/gates/phase6_phase4_artifact_rehydration_and_dsr_stop_gate",
+    "reports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate",
+    "reports/gates/phase6_pr_review_global_adherence_gate",
+    "reports/gates/phase6_operating_memory_bootstrap_gate",
+    "reports/gates/phase5_research_only_stage_a_nonzero_exposure_falsification_gate",
+    "reports/gates/phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate",
+    "reports/gates/phase5_research_dsr_zero_diagnostic_gate",
+    "reports/gates/phase5_research_rank_score_threshold_sizing_falsification_gate",
+    "reports/gates/phase5_research_rank_score_stability_correction_gate",
+    "reports/gates/phase5_research_hypothesis_space_freeze_gate",
+    "reports/gates/phase5_research_deep_quant_diagnostic_gate",
+    "reports/gates/phase5_research_alternative_exante_family_gate",
+    "reports/gates/phase5_research_signal_polarity_long_short_gate",
+    "reports/gates/phase5_research_signal_polarity_stability_correction_gate",
+    "reports/gates/phase5_research_full_phase_family_comparison_gate",
+    "reports/gates/phase5_research_candidate_global_reaudit_gate",
+    "reports/gates/phase5_research_candidate_stability_gate",
+    "reports/gates/phase5_research_candidate_falsification_gate",
+    "reports/gates/phase5_research_candidate_decision_gate",
+    "reports/gates/phase5_post_candidate_falsification_global_reaudit_gate",
+    "reports/gates/phase5_research_cluster_conditioned_polarity_gate",
+    "reports/gates/phase5_research_cluster_conditioned_polarity_falsification_gate",
+    "reports/gates/phase5_research_cluster_conditioned_polarity_decision_gate",
+    "reports/gates/phase5_post_candidate_falsification_governed_freeze_gate",
+    "reports/gates/phase5_research_meta_disagreement_abstention_gate",
+    "reports/gates/phase5_research_meta_disagreement_stability_falsification_gate",
+    "reports/gates/phase5_research_meta_disagreement_candidate_decision_gate",
+    "reports/gates/phase5_research_meta_uncertainty_abstention_gate",
+    "reports/gates/phase5_research_cvar_constrained_meta_sizing_gate",
+    "reports/gates/phase5_research_regime_specific_meta_disagreement_gate"
+  ],
+  "missing_artifacts": [],
+  "ignored_or_heavy_artifacts": [
+    "data/models/**",
+    "data/models/research/**",
+    "data/parquet/**"
+  ],
+  "planned_state_artifacts": [
+    {
+      "path": "reports/state/sniper_research_agenda.yaml",
+      "status": "present_generated_by_autonomous_research_agenda_expansion"
+    },
+    {
+      "path": "reports/state/sniper_hypothesis_inventory.md",
+      "status": "present_generated_by_autonomous_research_agenda_expansion"
+    },
+    {
+      "path": "reports/state/sniper_next_autonomous_mission.md",
+      "status": "present_generated_by_autonomous_research_agenda_expansion"
+    }
+  ],
+  "regeneration_command": ".\\.venv\\Scripts\\python.exe -m pytest tests/unit/test_phase6_global_reproducibility_source_alignment_gate.py tests/unit/test_phase5_cross_sectional_latest_headroom_reconciliation_audit.py tests/unit/test_phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate.py tests/unit/test_phase5_cross_sectional_sovereign_hardening_recheck.py tests/unit/test_gate_reports.py tests/unit/test_hmm_regime_alignment.py -q",
+  "notes": [
+    "Artifacts under data/models are external/ignored base inputs and are not promotion evidence.",
+    "Official Phase4 snapshot has zero exposure; CVaR is not economic robustness.",
+    "Research baseline artifacts remain research-only.",
+    "phase5_research_only_stage_a_nonzero_exposure_falsification_gate abandoned the Stage A nonzero-exposure thesis because safe ex-ante top1 had negative median combo Sharpe and the strong result required realized eligibility.",
+    "phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate added a research-only CVaR evaluator with nonzero sandbox exposure, max CVaR95 loss fraction 0.01072844, and no official promotion.",
+    "phase5_research_dsr_zero_diagnostic_gate explained DSR=0.0 as a 3.5892 Sharpe gap to sr_needed under n_trials_honest=5000; diagnostic only, no promotion.",
+    "phase5_research_rank_score_threshold_sizing_falsification_gate found weak positive median alpha for top1_score_ge_0_50, but min combo Sharpe remained negative and no promotion is allowed.",
+    "phase5_research_rank_score_stability_correction_gate consumed the one allowed correction for the threshold-family line and abandoned it because negative min combo Sharpe and DSR gap remained.",
+    "phase5_research_hypothesis_space_freeze_gate froze the current autonomous research hypothesis space with zero promotable candidates and two surviving diagnostic/evaluation modules under the previous budget.",
+    "phase5_research_deep_quant_diagnostic_gate decomposed DSR, SR_needed, subperiods, drawdown, turnover proxy and policy sensitivity; diagnostic only.",
+    "phase5_research_alternative_exante_family_gate abandoned the p_bma/sigma/hmm long-only family because best median combo Sharpe was -0.632456.",
+    "phase5_research_signal_polarity_long_short_gate found a positive research-only short-high signal polarity candidate but required stability correction.",
+    "phase5_research_signal_polarity_stability_correction_gate passed as a stable research-only survivor: short_high_p_bma_k3_p60_h70, median Sharpe 1.361592, min Sharpe 0.261111, max CVaR95 0.00344841.",
+    "phase5_research_full_phase_family_comparison_gate selected the signal-polarity survivor as research-only and explicitly blocked official promotion.",
+    "phase5_research_candidate_global_reaudit_gate confirmed short_high_p_bma_k3_p60_h70 was ex-ante valid as research/sandbox only and still below sr_needed.",
+    "phase5_research_candidate_stability_gate found PARTIAL/correct evidence: 29 of 49 stability scenarios failed, including temporal thirds and 20 bps cost stress.",
+    "phase5_research_candidate_falsification_gate abandoned the candidate because temporal_subperiod_min_sharpe=-1.160839 and extra_cost_20bps_min_sharpe=-0.12201 were hard falsifiers.",
+    "phase5_research_candidate_decision_gate classified the candidate as RESEARCH_CANDIDATE_FALSIFIED; no official promotion, paper readiness, A3/A4 reopening or threshold relaxation occurred.",
+    "phase5_post_candidate_falsification_global_reaudit_gate confirmed the prior survivor was falsified and selected cluster_conditioned_polarity as the next safe in-repo thesis.",
+    "phase5_research_cluster_conditioned_polarity_gate generated nonzero research/sandbox exposure and candidate cluster_2_long_high_short_low_p60_h70_k3, but no official promotion.",
+    "phase5_research_cluster_conditioned_polarity_falsification_gate abandoned the cluster-conditioned candidate after temporal, cost, parameter and universe falsifiers.",
+    "phase5_post_candidate_falsification_governed_freeze_gate reached FULL_FREEZE_AFTER_REAUDIT after five material families with zero surviving promotable candidates.",
+    "Before accepting permanent final freeze, AUTONOMOUS_RESEARCH_AGENDA_EXPANSION must run via sniper-autonomous-research-agenda-synthesizer and create the planned reports/state agenda files.",
+    "If the agenda generates no HIGH/MEDIUM executable hypothesis, classify FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED.",
+    "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION generated sniper_research_agenda.yaml, sniper_hypothesis_inventory.md and sniper_next_autonomous_mission.md.",
+    "phase5_research_meta_disagreement_abstention_gate found research/sandbox candidate short_bma_high_meta_low_p60_m40_k3 with median Sharpe 0.855486, min Sharpe 0.220622, median active days 322.0 and max CVaR95 0.00455141.",
+    "phase5_research_meta_disagreement_stability_falsification_gate falsified short_bma_high_meta_low_p60_m40_k3 with 25 hard falsifiers, including temporal thirds, 20 bps cost stress, parameter sensitivity and universe stress.",
+    "phase5_research_meta_disagreement_candidate_decision_gate classified the candidate as META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED and selected AGENDA-H02 / phase5_research_meta_uncertainty_abstention_gate as the next materially different agenda hypothesis.",
+    "phase5_research_meta_uncertainty_abstention_gate classified AGENDA-H02 as META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS with 19 hard falsifiers and selected AGENDA-H03 / phase5_research_cvar_constrained_meta_sizing_gate as the next materially different agenda hypothesis.",
+    "AUTONOMOUS_CHECKPOINT_CONTINUATION_POLICY treats large reviewable packages as CHECKPOINT_CONTINUE_AUTONOMOUS, not final stops, when validation passes and reports/state/sniper_next_autonomous_mission.md defines a safe next gate.",
+    "phase5_research_cvar_constrained_meta_sizing_gate classified AGENDA-H03 as CVAR_CONSTRAINED_META_SIZING_CVAR_PASS_ALPHA_UNSTABLE. The best research/sandbox policy signed_meta_edge_t52_s15_k5_g04 had nonzero exposure, median Sharpe 2.040444, max CVaR95 0.00356911 and median active days 698.0, but min Sharpe -0.903026 and 20 hard falsifiers block preservation. Next gate is AGENDA-H04 / phase5_research_regime_specific_meta_disagreement_gate.",
+    "phase5_research_regime_specific_meta_disagreement_gate classified AGENDA-H04 as REGIME_SPECIFIC_META_DISAGREEMENT_POSITIVE_BUT_UNSTABLE. The best research/sandbox policy neutral_short_meta_low_m40_k3 had nonzero exposure, median Sharpe 0.726729, max CVaR95 0.00315145 and median active days 82.0, but min Sharpe -0.911080 and 13 hard falsifiers block preservation. Next gate is AGENDA-H05 / phase5_research_feature_family_ablation_blocker_decomposition_gate."
+  ]
+}

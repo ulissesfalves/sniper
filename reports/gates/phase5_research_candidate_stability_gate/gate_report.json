@@ -1,0 +1,88 @@
+{
+  "gate_slug": "phase5_research_candidate_stability_gate",
+  "phase_family": "phase5_research_candidate_stability",
+  "status": "PARTIAL",
+  "decision": "correct",
+  "baseline_commit": "9f9544758782241a38fe783f7ad2f61a32defc9a",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_stability_gate\\candidate_stability_scenarios.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_stability_gate\\candidate_stability_subperiods.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_stability_gate\\candidate_stability_report.json"
+  ],
+  "summary": [
+    "classification=CANDIDATE_STABILITY_PARTIAL_TEMPORAL_OR_STRESS_FRAGILITY",
+    "candidate_policy=short_high_p_bma_k3_p60_h70",
+    "scenario_count=49",
+    "failed_scenario_count=29",
+    "failed_scenarios=short_high_p_bma_k1_p55_h50,short_high_p_bma_k1_p55_h70,short_high_p_bma_k1_p55_h90,short_high_p_bma_k1_p65_h50,short_high_p_bma_k1_p65_h70,short_high_p_bma_k1_p65_h90,short_high_p_bma_k2_p55_h50,short_high_p_bma_k2_p55_h70,short_high_p_bma_k2_p55_h90,short_high_p_bma_k2_p65_h50,short_high_p_bma_k2_p65_h70,short_high_p_bma_k2_p65_h90,short_high_p_bma_k3_p55_h50,short_high_p_bma_k3_p55_h70,short_high_p_bma_k3_p55_h90,short_high_p_bma_k3_p65_h50,short_high_p_bma_k3_p65_h70,short_high_p_bma_k3_p65_h90,short_high_p_bma_k5_p55_h50,short_high_p_bma_k5_p55_h70,short_high_p_bma_k5_p55_h90,short_high_p_bma_k5_p65_h50,short_high_p_bma_k5_p65_h70,short_high_p_bma_k5_p65_h90,extra_cost_0.00200,hmm_band_0_70_to_0_80,temporal_third_1,temporal_third_2,temporal_third_3",
+    "parameter_pass_rate=0.333333",
+    "candidate remains research/sandbox only",
+    "no official promotion attempted"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_research_candidate_stability_gate",
+      "metric_name": "scenario_count",
+      "metric_value": 49,
+      "metric_threshold": ">= 10",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_stability_gate",
+      "metric_name": "failed_scenario_count",
+      "metric_value": 29,
+      "metric_threshold": "0 for PASS; >0 means PARTIAL/falsification needed",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_stability_gate",
+      "metric_name": "parameter_pass_rate",
+      "metric_value": 0.333333,
+      "metric_threshold": ">= 0.50",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_stability_gate",
+      "metric_name": "base_candidate_min_combo_sharpe",
+      "metric_value": 0.261111,
+      "metric_threshold": "> 0",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_stability_gate",
+      "metric_name": "worst_temporal_min_sharpe",
+      "metric_value": -1.160839,
+      "metric_threshold": "> 0 for full stability PASS",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_stability_gate",
+      "metric_name": "parameter_scenario_count",
+      "metric_value": 36,
+      "metric_threshold": ">= 20",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_stability_gate",
+      "metric_name": "official_promotion_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "candidate_stability_fragility",
+    "dsr_honest_zero_blocks_promotion",
+    "short_exposure_research_sandbox_only",
+    "official_cvar_zero_exposure_not_economic_robustness"
+  ],
+  "risks_residual": [
+    "Temporal and stress fragility must be treated as research falsification evidence, not as promotion evidence.",
+    "Short exposure remains sandbox-only.",
+    "DSR=0.0 and official zero-exposure CVaR remain blockers."
+  ],
+  "next_recommended_step": "Run phase5_research_candidate_falsification_gate to decide whether the fragility falsifies the candidate."
+}

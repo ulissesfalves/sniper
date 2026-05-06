@@ -340,6 +340,24 @@ Extrair responsabilidades em módulos coesos sem quebrar consumidores existentes
 - manter compatibilidade com `import phase4_cpcv as phase4`;
 - preservar a superfície pública esperada pelos consumidores.
 
+### 7.7 Correção documental Phase 6: source rastreado atual
+
+Esta memória registra a arquitetura reportada da 4-R4, mas não substitui o repositório-fonte. No gate `phase6_global_reproducibility_source_alignment_gate`, a auditoria do source rastreado mostrou que os módulos abaixo aparecem nesta memória como decomposição arquitetural reportada, mas não existem como arquivos versionados no estado atual do repositório:
+
+- `phase4_config.py` <!-- PHASE6_SOURCE_DOC_ALIGNMENT_CURRENT_SOURCE:phase4_config.py:historical_report_only -->
+- `phase4_data.py` <!-- PHASE6_SOURCE_DOC_ALIGNMENT_CURRENT_SOURCE:phase4_data.py:historical_report_only -->
+- `phase4_dsr.py` <!-- PHASE6_SOURCE_DOC_ALIGNMENT_CURRENT_SOURCE:phase4_dsr.py:historical_report_only -->
+- `phase4_backtest.py` <!-- PHASE6_SOURCE_DOC_ALIGNMENT_CURRENT_SOURCE:phase4_backtest.py:historical_report_only -->
+- `phase4_calibration.py` <!-- PHASE6_SOURCE_DOC_ALIGNMENT_CURRENT_SOURCE:phase4_calibration.py:historical_report_only -->
+
+Para continuidade e gates de reprodutibilidade, a evidência primária do source atual deve ser tratada como:
+
+- `services/ml_engine/phase4_cpcv.py`
+- `services/ml_engine/phase4_gate_diagnostic.py`
+- `services/ml_engine/phase4_stage_a_experiment.py`
+
+Esta correção documental não promove modelo, não altera thresholds, não reabre A3/A4 e não transforma a família cross-sectional em promotable. Ela apenas explicita que os módulos 7.1 a 7.5 são memória histórica/reportada da modularização, enquanto o source rastreado atual permanece concentrado nos arquivos listados acima.
+
 ---
 
 ## 8. Compatibilidade, retrocompatibilidade e impactos indiretos

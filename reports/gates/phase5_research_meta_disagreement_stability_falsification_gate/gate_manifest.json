@@ -1,0 +1,95 @@
+{
+  "gate_slug": "phase5_research_meta_disagreement_stability_falsification_gate",
+  "timestamp_utc": "2026-05-04T02:35:01+00:00",
+  "baseline_commit": "09ebf2e2e737c5766d8c06ad860fb4f8e509f6c5",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+      "exists": true,
+      "size_bytes": 2872831,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "5B3144578BB99D48E2A67B3AB60B2B0AD25787A92B8488AFD1D1D5C08AE8F6C7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_abstention_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 5474,
+      "mtime_utc": "2026-05-03T22:11:59+00:00",
+      "sha256": "681B986C9F310E2A185D62509012DB030CD62240FCC7EF274769EFF75BFDF2AD"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_abstention_gate\\meta_disagreement_research_report.json",
+      "exists": true,
+      "size_bytes": 9526,
+      "mtime_utc": "2026-05-03T22:11:59+00:00",
+      "sha256": "E84C11261BA03EF6D7A308C33E71EE7EB1E81BDD9842FC318C82ABBFFAD1A55D"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_stability_falsification_gate\\meta_disagreement_stability_falsification_scenarios.parquet",
+      "exists": true,
+      "size_bytes": 15530,
+      "mtime_utc": "2026-05-04T02:35:01+00:00",
+      "sha256": "DB9B14994391BFE5864184896103F2220460C971FE87E112FE4F7ED27DF9A3B7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_stability_falsification_gate\\meta_disagreement_stability_falsification_report.json",
+      "exists": true,
+      "size_bytes": 33367,
+      "mtime_utc": "2026-05-04T02:35:01+00:00",
+      "sha256": "A45B96C1D969AF2CB491FD8B8292E4BC4C0CCD7C63F3819B372F49897FC6082A"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_stability_falsification_gate\\meta_disagreement_candidate_positions.parquet",
+      "exists": true,
+      "size_bytes": 310721,
+      "mtime_utc": "2026-05-04T02:35:01+00:00",
+      "sha256": "00C72C21CECB097F7CC9D7600E23F3FABADED47513ED141AA3F103BEA275AE26"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_stability_falsification_gate\\meta_disagreement_candidate_daily_returns.parquet",
+      "exists": true,
+      "size_bytes": 53693,
+      "mtime_utc": "2026-05-04T02:35:01+00:00",
+      "sha256": "0BE309E9EB87059F4BD97C61848585812ADDE3EAEFF1863AF16500A3F036F941"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_stability_falsification_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 7417,
+      "mtime_utc": "2026-05-04T02:35:01+00:00",
+      "sha256": "1F13F185B8B4B0E1D39B2E1E84BF429997B9B7AA286FDC56B4C54112322FDD26"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_stability_falsification_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 2557,
+      "mtime_utc": "2026-05-04T02:35:01+00:00",
+      "sha256": "5AFDEE4F05D9C1B3AB19443157953ADE2A49C74FDE81DAE35033F55F1E7A4A1C"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_stability_falsification_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 4290,
+      "mtime_utc": "2026-05-04T02:35:01+00:00",
+      "sha256": "D008E506BFFB415CC038D42BD5E9095BE5302EA0CD55AB2FE7D89FAF2DA88261"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_stability_falsification_gate\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    ".\\.venv\\Scripts\\python.exe services\\ml_engine\\phase5_research_meta_disagreement_stability_falsification.py"
+  ],
+  "notes": [
+    "Research-only meta-disagreement stability/falsification gate.",
+    "Tests temporal stability, costs, p/meta thresholds, top-k, universe stress, leakage controls, CVaR, turnover and drawdown.",
+    "No official promotion, no paper readiness, no merge, no A3/A4 reopen."
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "gate_slug": "phase5_research_candidate_falsification_gate",
+  "phase_family": "phase5_research_candidate_falsification",
+  "status": "FAIL",
+  "decision": "abandon",
+  "baseline_commit": "4d430fdd0751a69d460cb4fdfc834a31c03fcc60",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_falsification_gate\\candidate_falsification_metrics.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_falsification_gate\\candidate_falsification_report.json"
+  ],
+  "summary": [
+    "classification=RESEARCH_CANDIDATE_FALSIFIED_BY_TEMPORAL_OR_COST_STRESS",
+    "candidate_policy=short_high_p_bma_k3_p60_h70",
+    "hard_falsifier_count=2",
+    "hard_falsifiers=temporal_subperiod_min_sharpe,extra_cost_20bps_min_sharpe",
+    "candidate_median_combo_sharpe=1.361592",
+    "candidate_min_combo_sharpe=0.261111",
+    "candidate remains research/sandbox only",
+    "no official promotion attempted"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_research_candidate_falsification_gate",
+      "metric_name": "hard_falsifier_count",
+      "metric_value": 2,
+      "metric_threshold": "0 to survive falsification",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_falsification_gate",
+      "metric_name": "temporal_subperiod_min_sharpe",
+      "metric_value": -1.160839,
+      "metric_threshold": "> 0",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_falsification_gate",
+      "metric_name": "extra_cost_20bps_min_sharpe",
+      "metric_value": -0.12201,
+      "metric_threshold": "> 0",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_falsification_gate",
+      "metric_name": "leakage_control",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_falsification_gate",
+      "metric_name": "official_promotion_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "candidate_falsified_by_temporal_or_cost_stress",
+    "dsr_honest_zero_blocks_promotion",
+    "short_exposure_research_sandbox_only",
+    "official_cvar_zero_exposure_not_economic_robustness"
+  ],
+  "risks_residual": [
+    "Falsification evidence invalidates the current survivor as a robust research candidate.",
+    "DSR remains 0.0 and official CVaR remains zero exposure.",
+    "Short exposure is sandbox-only and cannot be treated as official support."
+  ],
+  "next_recommended_step": "Run phase5_research_candidate_decision_gate to record the candidate decision and update state."
+}

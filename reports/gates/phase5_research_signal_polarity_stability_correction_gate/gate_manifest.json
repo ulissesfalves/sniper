@@ -1,0 +1,102 @@
+{
+  "gate_slug": "phase5_research_signal_polarity_stability_correction_gate",
+  "timestamp_utc": "2026-05-02T14:40:05+00:00",
+  "baseline_commit": "637f50a7e23b320082d8e08e720bc1ee63e8731c",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_predictions.parquet",
+      "exists": true,
+      "size_bytes": 4365296,
+      "mtime_utc": "2026-03-29T06:55:53+00:00",
+      "sha256": "FC947D4C3C71175BCF5F773665DD1D5BB5F033D0E67E881F0B07B338FDA1B67E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_long_short_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3944,
+      "mtime_utc": "2026-05-02T14:40:00+00:00",
+      "sha256": "90C6FCFE655FD249342BCBA089ABC42454B15500BACCD8253F41E2BDF5E418B0"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_stability_correction_gate\\signal_polarity_stability_positions.parquet",
+      "exists": true,
+      "size_bytes": 611366,
+      "mtime_utc": "2026-05-02T14:40:05+00:00",
+      "sha256": "400A8F72D071FE8E303A99C2913F10CB9A961720C7549C1E6A133DAC07AD1786"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_stability_correction_gate\\signal_polarity_stability_daily_returns.parquet",
+      "exists": true,
+      "size_bytes": 125191,
+      "mtime_utc": "2026-05-02T14:40:05+00:00",
+      "sha256": "DCC15CC5209CA025ECD6191E0F78430286199A8459FFDC18D1DB944990987AAB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_stability_correction_gate\\signal_polarity_stability_trade_log.parquet",
+      "exists": true,
+      "size_bytes": 61817,
+      "mtime_utc": "2026-05-02T14:40:05+00:00",
+      "sha256": "3E984F09BDDB818DE9EA7BB07B0BE838D3364224E2CB84837341257AABC9FAD9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_stability_correction_gate\\signal_polarity_stability_metrics.parquet",
+      "exists": true,
+      "size_bytes": 18540,
+      "mtime_utc": "2026-05-02T14:40:05+00:00",
+      "sha256": "A94453A685A4BF7A51FBBAB7DA337548E15B61D62E15947C318D0685838F7D99"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_stability_correction_gate\\signal_polarity_stability_snapshot_proxy.parquet",
+      "exists": true,
+      "size_bytes": 8295,
+      "mtime_utc": "2026-05-02T14:40:05+00:00",
+      "sha256": "4DF72613AFAACEC666096E9887382EBA62B7CBABDFA105F291DCDC6B5CFA17A8"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_stability_correction_gate\\portfolio_cvar_research_report.json",
+      "exists": true,
+      "size_bytes": 6600,
+      "mtime_utc": "2026-05-02T14:40:05+00:00",
+      "sha256": "02BD73287A4134539FEB9BED9C9C719779D8BA7F33E9A491780F5C728F8B31EC"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_stability_correction_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4213,
+      "mtime_utc": "2026-05-02T14:40:05+00:00",
+      "sha256": "8E2E17537F3B7099503170B36B0ACB8CDBFCE5A98572BA43A16EA22CE51407CA"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_stability_correction_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 1696,
+      "mtime_utc": "2026-05-02T14:40:05+00:00",
+      "sha256": "FABA85133695566412027F3012A9DC5B44FCCD7B3C8F5932FD7E2DFED68349DA"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_stability_correction_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 4125,
+      "mtime_utc": "2026-05-02T14:40:05+00:00",
+      "sha256": "B6C17D579F3ACAC5E71EC19D66F6BFC8C66C77B9039F18C26B5F546ADB4A1AFA"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_stability_correction_gate\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    ".\\.venv\\Scripts\\python.exe services\\ml_engine\\phase5_research_signal_polarity_stability_correction.py"
+  ],
+  "notes": [
+    "Research-only stability correction for signal-polarity family.",
+    "Correction uses p_bma and hmm filters only; no realized eligibility.",
+    "No official artifacts were promoted."
+  ]
+}

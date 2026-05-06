@@ -1,0 +1,156 @@
+{
+  "gate_slug": "phase5_research_meta_disagreement_stability_falsification_gate",
+  "phase_family": "phase5_research_meta_disagreement_stability_falsification",
+  "status": "FAIL",
+  "decision": "abandon",
+  "baseline_commit": "09ebf2e2e737c5766d8c06ad860fb4f8e509f6c5",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_oos_predictions.parquet"
+  ],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_stability_falsification_gate\\meta_disagreement_stability_falsification_scenarios.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_stability_falsification_gate\\meta_disagreement_stability_falsification_report.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_stability_falsification_gate\\meta_disagreement_candidate_positions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_stability_falsification_gate\\meta_disagreement_candidate_daily_returns.parquet"
+  ],
+  "summary": [
+    "classification=META_DISAGREEMENT_CANDIDATE_FALSIFIED_BY_STABILITY_STRESS",
+    "candidate_policy=short_bma_high_meta_low_p60_m40_k3",
+    "scenario_count=38",
+    "failed_scenario_count=25",
+    "hard_falsifier_count=25",
+    "hard_falsifiers=temporal_third_1,temporal_third_2,temporal_third_3,cost_20bps,short_bma_high_meta_low_p55_m35_k1,short_bma_high_meta_low_p55_m35_k3,short_bma_high_meta_low_p55_m35_k5,short_bma_high_meta_low_p55_m40_k1,short_bma_high_meta_low_p55_m40_k3,short_bma_high_meta_low_p55_m40_k5,short_bma_high_meta_low_p55_m45_k1,short_bma_high_meta_low_p55_m45_k3,short_bma_high_meta_low_p55_m45_k5,short_bma_high_meta_low_p60_m35_k3,short_bma_high_meta_low_p60_m35_k5,short_bma_high_meta_low_p65_m35_k1,short_bma_high_meta_low_p65_m35_k3,short_bma_high_meta_low_p65_m35_k5,short_bma_high_meta_low_p65_m40_k1,short_bma_high_meta_low_p65_m40_k3,short_bma_high_meta_low_p65_m40_k5,short_bma_high_meta_low_p65_m45_k1,short_bma_high_meta_low_p65_m45_k3,short_bma_high_meta_low_p65_m45_k5,symbol_hash_even",
+    "base_median_combo_sharpe=0.855486",
+    "base_min_combo_sharpe=0.220622",
+    "base_max_cvar_95_loss_fraction=0.00455141",
+    "base_max_drawdown_proxy=0.06675427",
+    "base_median_turnover_fraction=0.04454902",
+    "cost_20bps_min_combo_sharpe=-0.053326",
+    "candidate remains research/sandbox only",
+    "official_promotion_allowed=false",
+    "paper_readiness_allowed=false",
+    "next_recommended_gate=phase5_research_meta_disagreement_candidate_decision_gate"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_research_meta_disagreement_stability_falsification_gate",
+      "metric_name": "scenario_count",
+      "metric_value": 38,
+      "metric_threshold": ">= 35",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_stability_falsification_gate",
+      "metric_name": "failed_scenario_count",
+      "metric_value": 25,
+      "metric_threshold": "0 to survive",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_stability_falsification_gate",
+      "metric_name": "hard_falsifier_count",
+      "metric_value": 25,
+      "metric_threshold": "0 to survive",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_stability_falsification_gate",
+      "metric_name": "base_median_combo_sharpe",
+      "metric_value": 0.855486,
+      "metric_threshold": "> 0",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_stability_falsification_gate",
+      "metric_name": "base_min_combo_sharpe",
+      "metric_value": 0.220622,
+      "metric_threshold": "> 0",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_stability_falsification_gate",
+      "metric_name": "base_max_cvar_95_loss_fraction",
+      "metric_value": 0.00455141,
+      "metric_threshold": "<= 0.15",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_stability_falsification_gate",
+      "metric_name": "base_max_drawdown_proxy",
+      "metric_value": 0.06675427,
+      "metric_threshold": "reported",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_stability_falsification_gate",
+      "metric_name": "base_median_turnover_fraction",
+      "metric_value": 0.04454902,
+      "metric_threshold": "reported",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_stability_falsification_gate",
+      "metric_name": "worst_temporal_min_sharpe",
+      "metric_value": -0.597664,
+      "metric_threshold": "> 0",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_stability_falsification_gate",
+      "metric_name": "cost_20bps_min_combo_sharpe",
+      "metric_value": -0.053326,
+      "metric_threshold": "> 0",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_stability_falsification_gate",
+      "metric_name": "parameter_pass_rate",
+      "metric_value": 0.259259,
+      "metric_threshold": "1.0 for full stability",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_stability_falsification_gate",
+      "metric_name": "universe_stress_passed",
+      "metric_value": false,
+      "metric_threshold": "true",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_stability_falsification_gate",
+      "metric_name": "leakage_control_passed",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_stability_falsification_gate",
+      "metric_name": "official_promotion_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_stability_falsification_gate",
+      "metric_name": "paper_readiness_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "meta_disagreement_candidate_requires_decision_gate",
+    "dsr_honest_zero_blocks_promotion",
+    "official_cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable",
+    "short_exposure_research_sandbox_only"
+  ],
+  "risks_residual": [
+    "Research/sandbox short exposure is not official support.",
+    "DSR=0.0 and sr_needed=4.47 remain promotion blockers.",
+    "Any hard falsifier must be recorded by the candidate decision gate before selecting another hypothesis."
+  ],
+  "next_recommended_step": "Execute the next safe in-repo gate automatically: phase5_research_meta_disagreement_candidate_decision_gate."
+}

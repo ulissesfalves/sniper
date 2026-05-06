@@ -1,0 +1,106 @@
+{
+  "gate_slug": "phase5_research_meta_disagreement_abstention_gate",
+  "timestamp_utc": "2026-05-03T22:11:59+00:00",
+  "baseline_commit": "7b6c1ec95fd8b3243768fe4f1f3a697669142809",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+      "exists": true,
+      "size_bytes": 2872831,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "5B3144578BB99D48E2A67B3AB60B2B0AD25787A92B8488AFD1D1D5C08AE8F6C7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_research_agenda.yaml",
+      "exists": true,
+      "size_bytes": 10644,
+      "mtime_utc": "2026-05-03T22:07:36+00:00",
+      "sha256": "793ED6CB5D04B8D1F5C2C07CE8666356063A5AA49D47ABED0AA441233BC644E3"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_abstention_gate\\meta_disagreement_positions.parquet",
+      "exists": true,
+      "size_bytes": 1942552,
+      "mtime_utc": "2026-05-03T22:11:59+00:00",
+      "sha256": "4DACBAF4E9D978867795BFDF639E6F5FD3C0D424FD78F922A81EB69F2AD1F2A1"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_abstention_gate\\meta_disagreement_daily_returns.parquet",
+      "exists": true,
+      "size_bytes": 206505,
+      "mtime_utc": "2026-05-03T22:11:59+00:00",
+      "sha256": "9271CB17DA1E8B96E4A8A873DD75FEA0567B3F96E201EE9A29A70A8A770741FE"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_abstention_gate\\meta_disagreement_trade_log.parquet",
+      "exists": true,
+      "size_bytes": 72181,
+      "mtime_utc": "2026-05-03T22:11:59+00:00",
+      "sha256": "5E08202FFBFF0A644E24D250787ED9832B68D2DD7F1FDE3FE264B5299AB1A02A"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_abstention_gate\\meta_disagreement_metrics.parquet",
+      "exists": true,
+      "size_bytes": 20763,
+      "mtime_utc": "2026-05-03T22:11:59+00:00",
+      "sha256": "38F28BD3DFD1EDFEDC028DC9DC029D6FFA30EE8ACB9F4DBA46D78C1DD5D44D82"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_abstention_gate\\meta_disagreement_snapshot_proxy.parquet",
+      "exists": true,
+      "size_bytes": 10454,
+      "mtime_utc": "2026-05-03T22:11:59+00:00",
+      "sha256": "BCA25064FDEA00E59ED3A22B49CC8364DDC543D6E6794F7780E56EFDDCE2722C"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_abstention_gate\\meta_disagreement_research_report.json",
+      "exists": true,
+      "size_bytes": 9526,
+      "mtime_utc": "2026-05-03T22:11:59+00:00",
+      "sha256": "E84C11261BA03EF6D7A308C33E71EE7EB1E81BDD9842FC318C82ABBFFAD1A55D"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_abstention_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 5474,
+      "mtime_utc": "2026-05-03T22:11:59+00:00",
+      "sha256": "681B986C9F310E2A185D62509012DB030CD62240FCC7EF274769EFF75BFDF2AD"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_abstention_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 3374,
+      "mtime_utc": "2026-05-03T22:11:59+00:00",
+      "sha256": "403D7A4CD4BABDFF1B499D7A6FB1F7E43ECAFB0445F5B5F6D076113CE204A0F9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_abstention_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 4075,
+      "mtime_utc": "2026-05-03T22:11:59+00:00",
+      "sha256": "A28074FC63ED8262BE37CC02B7956CB83D6BE8A8919D39E7619C2AB10D72E13C"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_abstention_gate\\gate_manifest.json",
+      "exists": true,
+      "size_bytes": 5284,
+      "mtime_utc": "2026-05-03T22:11:18+00:00",
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    "python services/ml_engine/phase5_research_meta_disagreement_abstention.py",
+    "python -m pytest tests/unit/test_phase5_research_meta_disagreement_abstention.py -q"
+  ],
+  "notes": [
+    "Research/sandbox-only agenda expansion gate.",
+    "Uses p_bma_pkf, p_meta_calibrated and sigma_ewma as ex-ante selection inputs.",
+    "pnl_real is realized outcome only.",
+    "No official promotion, no paper readiness, no A3/A4 reopening."
+  ]
+}

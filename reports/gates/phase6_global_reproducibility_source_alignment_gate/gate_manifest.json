@@ -1,0 +1,128 @@
+{
+  "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
+  "timestamp_utc": "2026-04-26T22:29:41+00:00",
+  "baseline_commit": "649e9a9dede32559b021bf4d4c458bb136698e1e",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\docs\\SNIPER_memoria_especificacao_controle_fase4R_v3.md",
+      "exists": true,
+      "size_bytes": 22772,
+      "mtime_utc": "2026-04-26T21:18:46+00:00",
+      "sha256": "EE075E090D4A83AEAD8EBB18C6B6FE7865669B5CC86B4BD1CFEF5D1026A7E2BD"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\docs\\SNIPER_openclaw_handoff.md",
+      "exists": true,
+      "size_bytes": 5543,
+      "mtime_utc": "2026-04-26T21:18:46+00:00",
+      "sha256": "D717C87DE5C3C0B7816299E76006A12ACDF9529BBAB73F2E63128FF9F55A7684"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\docs\\SNIPER_regeneration_guide.md",
+      "exists": true,
+      "size_bytes": 2684,
+      "mtime_utc": "2026-04-26T21:18:46+00:00",
+      "sha256": "ED7E3953C7EC35E275172149A9DED0E36F0EDB5663EDFD67E2207DDFAFA034E8"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\audits\\global_spec_adherence\\global_spec_adherence_summary.json",
+      "exists": true,
+      "size_bytes": 3618,
+      "mtime_utc": "2026-04-26T21:18:46+00:00",
+      "sha256": "CC673C8225CC146A1DC60303991D87C368081AFC96AA5BC75C0E02DFBCF23B2D"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\audits\\global_spec_adherence\\next_step_recommendation.md",
+      "exists": true,
+      "size_bytes": 4252,
+      "mtime_utc": "2026-04-26T22:29:11+00:00",
+      "sha256": "4F358CB84289E3B10A5EDB91A07A2154ADB8E8BC145B0389484611CA1286B473"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\services\\ml_engine\\phase6_global_reproducibility_source_alignment_gate.py",
+      "exists": true,
+      "size_bytes": 20754,
+      "mtime_utc": "2026-04-26T22:27:16+00:00",
+      "sha256": "F7A4003C35D079FC4298B7FB00EDCBF159D8D5C78550A8261E62426EE59D0098"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\services\\ml_engine\\sizing\\kelly_cvar.py",
+      "exists": true,
+      "size_bytes": 22960,
+      "mtime_utc": "2026-04-26T21:18:29+00:00",
+      "sha256": "B71C5F8E81B165269CBEFD9475D0C3C97C681E1A08D7FBC24C14D2C02CF1D958"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\source_doc_alignment.json",
+      "exists": true,
+      "size_bytes": 3526,
+      "mtime_utc": "2026-04-26T22:29:41+00:00",
+      "sha256": "573CD26612C2B7CE8EC55529F9320332E592B87A1733944B7D0851C71BC70A43"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\portfolio_cvar_report.json",
+      "exists": true,
+      "size_bytes": 734,
+      "mtime_utc": "2026-04-26T22:29:41+00:00",
+      "sha256": "B92D01CB94C6EFA73D51A59837F1C30FB50CCD99292C2DB11F0B340D341EBE85"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\environment_report.json",
+      "exists": true,
+      "size_bytes": 863,
+      "mtime_utc": "2026-04-26T22:29:41+00:00",
+      "sha256": "D3E9462B85AA6817E7271743DFF085EA60D5FB3A224F994904A9C1C7C37D38C2"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\clean_regeneration_report.json",
+      "exists": true,
+      "size_bytes": 3231,
+      "mtime_utc": "2026-04-26T22:29:41+00:00",
+      "sha256": "2764C62BB94704007C93416B04532F5F6623B7EBB9802FD107B45B2F7B856D84"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4080,
+      "mtime_utc": "2026-04-26T22:29:41+00:00",
+      "sha256": "83CE75ADCEFB13CC00CD83897F3BF2F13128136889A315779826BECB8FA1525A"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 3502,
+      "mtime_utc": "2026-04-26T22:29:41+00:00",
+      "sha256": "5638CD05643309C0828D2242EDA4779BC5144D2F99037246BEAC479B4E3DCEB4"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 3974,
+      "mtime_utc": "2026-04-26T22:29:41+00:00",
+      "sha256": "0A7A547ACDA43A4F53F8EDBAC0C2870E1C73E058A8F8781060C1D1677302F0A1"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_global_reproducibility_source_alignment_gate\\gate_manifest.json",
+      "exists": true,
+      "size_bytes": 6779,
+      "mtime_utc": "2026-04-26T22:27:39+00:00",
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    ".\\.venv\\Scripts\\python.exe -m pytest tests/unit/test_gate_reports.py tests/unit/test_hmm_regime_alignment.py -q",
+    ".\\.venv\\Scripts\\python.exe -m pytest tests/unit/test_phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate.py tests/unit/test_phase5_cross_sectional_sovereign_hardening_recheck.py -q",
+    ".\\.venv\\Scripts\\python.exe -m pytest tests/unit/test_phase5_cross_sectional_operational_fragility_audit_and_bounded_correction.py tests/unit/test_phase5_cross_sectional_recent_regime_policy_falsification.py -q",
+    ".\\.venv\\Scripts\\python.exe services\\ml_engine\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate.py",
+    ".\\.venv\\Scripts\\python.exe services\\ml_engine\\phase6_global_reproducibility_source_alignment_gate.py"
+  ],
+  "notes": [
+    "No official promotion, A3/A4 reopening, merge, force push, credential use, or real-capital operation.",
+    "Clean regeneration remains inconclusive because this run is not a clean clone or equivalent proof."
+  ]
+}

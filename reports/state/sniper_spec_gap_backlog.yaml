@@ -1,0 +1,883 @@
+gaps:
+  - id: GAP-DSR-001
+    title: Honest DSR remains zero
+    type: quantitative_merit
+    severity: critical
+    status: open
+    evidence:
+      - "reports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/phase4_artifact_integrity_report.json"
+      - "reports/gates/phase5_research_only_stage_a_nonzero_exposure_falsification_gate/gate_report.json"
+      - "reports/gates/phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate/gate_report.json"
+      - "reports/gates/phase5_research_dsr_zero_diagnostic_gate/gate_report.json"
+      - "reports/gates/phase5_research_rank_score_threshold_sizing_falsification_gate/gate_report.json"
+      - "reports/gates/phase5_research_rank_score_stability_correction_gate/gate_report.json"
+      - "reports/gates/phase5_research_hypothesis_space_freeze_gate/gate_report.json"
+      - "reports/gates/phase5_research_deep_quant_diagnostic_gate/gate_report.json"
+      - "reports/gates/phase5_research_signal_polarity_stability_correction_gate/gate_report.json"
+      - "reports/gates/phase5_research_full_phase_family_comparison_gate/gate_report.json"
+      - "reports/gates/phase5_research_candidate_falsification_gate/gate_report.json"
+      - "reports/gates/phase5_research_candidate_decision_gate/gate_report.json"
+      - "dsr_honest=0.0"
+      - "dsr_passed=false"
+      - "safe Stage A top1 median combo Sharpe=-0.727203"
+      - "sharpe_gap_to_sr_needed=3.5892"
+      - "threshold family best median combo Sharpe=0.331124"
+      - "threshold family stability correction failed; best correction median Sharpe=0.195832"
+      - "signal polarity survivor median combo Sharpe=1.361592"
+      - "signal polarity survivor min combo Sharpe=0.261111"
+      - "signal polarity survivor remained below sr_needed=4.47 and was later falsified by temporal/cost stress"
+      - "hard_falsifiers=temporal_subperiod_min_sharpe,extra_cost_20bps_min_sharpe"
+      - "current hypothesis space frozen under previous 5-gate policy"
+      - "AUTONOMOUS FULL PHASE EXECUTION POLICY now authorizes broader future missions"
+    source_files:
+      - "data/models/phase4/phase4_report_v4.json"
+      - "data/models/phase4/phase4_gate_diagnostic.json"
+    allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
+      - "START_RESEARCH_ONLY_THESIS"
+      - "RUN_GLOBAL_REAUDIT_CANDIDATE"
+      - "FREEZE_LINE"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "RELAX_DSR_THRESHOLD"
+      - "DECLARE_READINESS"
+    suggested_gate: "phase5_post_candidate_falsification_global_reaudit_gate"
+    stop_condition_if_unresolved: "No promotion or readiness claim is allowed while honest DSR remains 0.0."
+
+  - id: GAP-DSR-002
+    title: DSR zero root cause diagnostic is complete
+    type: research_diagnostic
+    severity: medium
+    status: resolved
+    evidence:
+      - "reports/gates/phase5_research_dsr_zero_diagnostic_gate/gate_report.json"
+      - "dsr_honest=0.0"
+      - "sharpe_is=0.8808"
+      - "sr_needed=4.47"
+      - "sharpe_gap_to_sr_needed=3.5892"
+      - "best_dsr_honest_observed=0.6938"
+    source_files:
+      - "services/ml_engine/phase5_research_dsr_zero_diagnostic.py"
+      - "tests/unit/test_phase5_research_dsr_zero_diagnostic.py"
+    allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
+      - "START_RESEARCH_ONLY_THESIS"
+      - "FREEZE_LINE"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "RELAX_DSR_THRESHOLD"
+      - "TREAT_DIAGNOSTIC_AS_SIGNAL"
+    suggested_gate: "autonomous_full_phase_family_selection_gate"
+    stop_condition_if_unresolved: "The diagnostic is resolved, but the DSR blocker remains open until a materially better ex-ante alpha path exists."
+
+  - id: GAP-CVAR-001
+    title: Official CVaR has zero exposure
+    type: economic_robustness
+    severity: critical
+    status: open
+    evidence:
+      - "reports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/portfolio_cvar_report.json"
+      - "reports/gates/phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate/gate_report.json"
+      - "reports/gates/phase5_research_signal_polarity_stability_correction_gate/gate_report.json"
+      - "reports/gates/phase5_research_candidate_decision_gate/gate_report.json"
+      - "phase5_research_candidate_decision_gate abandoned the surviving candidate after temporal/cost falsification"
+      - "positions={}"
+      - "total_exposure_pct=0.0"
+      - "economic_robustness_status=NOT_PROVEN_ZERO_EXPOSURE"
+      - "research_sandbox_active_combo_days=10576"
+      - "research_sandbox_max_cvar_95_loss_fraction=0.01072844"
+      - "signal_polarity_research_max_cvar_95_loss_fraction=0.00344841"
+    source_files:
+      - "data/models/phase4/phase4_execution_snapshot.parquet"
+    allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
+      - "START_RESEARCH_ONLY_THESIS"
+      - "RUN_GLOBAL_REAUDIT"
+      - "RUN_GLOBAL_REAUDIT_CANDIDATE"
+    forbidden_actions:
+      - "TREAT_ZERO_EXPOSURE_CVAR_AS_ECONOMIC_ROBUSTNESS"
+      - "DECLARE_PAPER_READINESS"
+    suggested_gate: "phase5_post_candidate_falsification_global_reaudit_gate"
+    stop_condition_if_unresolved: "Paper readiness is forbidden unless nonzero exposure or approved stress evidence exists."
+
+  - id: GAP-CVAR-002
+    title: Research sandbox nonzero-exposure CVaR evaluator is available
+    type: research_diagnostic
+    severity: medium
+    status: resolved
+    evidence:
+      - "reports/gates/phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate/gate_report.json"
+      - "research_active_combo_days=10576"
+      - "research_max_cvar_95_loss_fraction=0.01072844"
+      - "official_snapshot_exposure_fraction=0.0"
+    source_files:
+      - "services/ml_engine/phase5_research_sandbox_nonzero_exposure_cvar_evaluation.py"
+      - "tests/unit/test_phase5_research_sandbox_nonzero_exposure_cvar_evaluation.py"
+    allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
+      - "START_RESEARCH_ONLY_THESIS"
+      - "RUN_GLOBAL_REAUDIT"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "TREAT_RESEARCH_CVAR_AS_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+    suggested_gate: "autonomous_full_phase_family_selection_gate"
+    stop_condition_if_unresolved: "This resolved research diagnostic does not remove official CVaR or DSR blockers."
+
+  - id: GAP-XSEC-001
+    title: Cross-sectional family is alive but not promotable
+    type: promotability
+    severity: critical
+    status: open
+    evidence:
+      - "reports/audits/global_spec_adherence/global_spec_adherence_summary.json"
+      - "reports/gates/phase5_research_only_stage_a_nonzero_exposure_falsification_gate/gate_report.json"
+      - "reports/gates/phase5_research_rank_score_threshold_sizing_falsification_gate/gate_report.json"
+      - "reports/gates/phase5_research_rank_score_stability_correction_gate/gate_report.json"
+      - "reports/gates/phase5_research_hypothesis_space_freeze_gate/gate_report.json"
+      - "reports/gates/phase5_research_alternative_exante_family_gate/gate_report.json"
+      - "reports/gates/phase5_research_signal_polarity_stability_correction_gate/gate_report.json"
+      - "reports/gates/phase5_research_full_phase_family_comparison_gate/gate_report.json"
+      - "reports/gates/phase5_research_candidate_decision_gate/gate_report.json"
+      - "ALIVE_BUT_NOT_PROMOTABLE"
+    source_files:
+      - "docs/SNIPER_openclaw_handoff.md"
+      - "reports/gates/phase5_cross_sectional_sovereign_hardening_recheck/gate_report.json"
+    allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
+      - "START_RESEARCH_ONLY_THESIS"
+      - "RUN_GLOBAL_REAUDIT_CANDIDATE"
+      - "FREEZE_LINE"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "TREAT_RESEARCH_AS_OFFICIAL"
+    suggested_gate: "phase5_post_candidate_falsification_global_reaudit_gate"
+    stop_condition_if_unresolved: "Do not promote cross-sectional while this status remains."
+
+  - id: GAP-PAPER-001
+    title: Paper readiness remains blocked
+    type: phase_readiness
+    severity: critical
+    status: open
+    evidence:
+      - "DSR and CVaR blockers remain."
+      - "PR #1 is draft governance/reproducibility evidence only."
+    source_files:
+      - "reports/audits/autonomous_stop_review/draft_pr_summary.md"
+      - "reports/gates/phase6_pr_review_global_adherence_gate/gate_report.json"
+    allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
+      - "RUN_GLOBAL_REAUDIT"
+      - "STOP_FOR_HUMAN_DECISION"
+    forbidden_actions:
+      - "DECLARE_PAPER_READINESS"
+      - "OPERATE_CAPITAL"
+      - "CREATE_CREDENTIALS"
+    suggested_gate: "none_until_quant_blockers_clear"
+    stop_condition_if_unresolved: "Do not start Phase7 readiness from zero DSR and zero exposure."
+
+  - id: GAP-MEM-001
+    title: Persistent operating memory was absent
+    type: governance_state
+    severity: high
+    status: resolved
+    evidence:
+      - "phase6_operating_memory_bootstrap_gate created AGENTS.md, contract and reports/state files."
+    source_files:
+      - "AGENTS.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+    allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
+      - "START_RESEARCH_ONLY_THESIS"
+      - "RUN_GLOBAL_REAUDIT"
+    forbidden_actions:
+      - "IGNORE_REPORTS_STATE"
+    suggested_gate: "phase6_operating_memory_bootstrap_gate"
+    stop_condition_if_unresolved: "No autonomous mission should proceed without state files."
+
+  - id: GAP-STAGEA-001
+    title: Stage A nonzero exposure thesis failed under ex-ante-safe policy
+    type: research_hypothesis
+    severity: high
+    status: abandoned
+    evidence:
+      - "reports/gates/phase5_research_only_stage_a_nonzero_exposure_falsification_gate/gate_report.json"
+      - "safe_selected_events=10576"
+      - "safe_selected_dates=2112"
+      - "safe_median_combo_sharpe=-0.727203"
+      - "unsafe_median_combo_sharpe=14.525046 diagnostic only"
+    source_files:
+      - "services/ml_engine/phase5_research_only_stage_a_nonzero_exposure_falsification.py"
+      - "data/models/research/phase4_cross_sectional_ranking_baseline/stage_a_predictions.parquet"
+      - "data/models/research/phase4_cross_sectional_ranking_baseline/stage_a_snapshot_proxy.parquet"
+    allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
+      - "START_RESEARCH_ONLY_THESIS"
+      - "FREEZE_LINE"
+      - "RUN_GLOBAL_REAUDIT"
+      - "STOP_FOR_HUMAN_DECISION"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "USE_STAGE_A_ELIGIBLE_AS_EX_ANTE_POLICY"
+      - "DECLARE_PAPER_READINESS"
+    suggested_gate: "none_without_materially_new_research_hypothesis"
+    stop_condition_if_unresolved: "The current Stage A nonzero-exposure thesis is abandoned; continue only with a materially new hypothesis and consume exploration budget."
+
+  - id: GAP-RANK-001
+    title: Rank-score threshold family produced weak positive median alpha but failed stability
+    type: research_hypothesis
+    severity: high
+    status: abandoned
+    evidence:
+      - "reports/gates/phase5_research_rank_score_threshold_sizing_falsification_gate/gate_report.json"
+      - "reports/gates/phase5_research_rank_score_stability_correction_gate/gate_report.json"
+      - "best_policy=top1_score_ge_0_50"
+      - "best_median_combo_sharpe=0.331124"
+      - "best_min_combo_sharpe=-3.357339"
+      - "best_correction_policy=score_0_60"
+      - "best_correction_median_combo_sharpe=0.195832"
+      - "best_correction_min_combo_sharpe=-2.553324"
+      - "best_max_cvar_95_loss_fraction=0.01070472"
+    source_files:
+      - "services/ml_engine/phase5_research_rank_score_threshold_sizing_falsification.py"
+      - "tests/unit/test_phase5_research_rank_score_threshold_sizing_falsification.py"
+    allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
+      - "START_RESEARCH_ONLY_THESIS"
+      - "FREEZE_LINE"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "TREAT_WEAK_RESEARCH_AS_OFFICIAL"
+      - "RELAX_DSR_THRESHOLD"
+      - "USE_STAGE_A_ELIGIBLE_AS_EX_ANTE_POLICY"
+    suggested_gate: "none_repeat_forbidden"
+    stop_condition_if_unresolved: "The threshold-family line has consumed its correction attempt and should not be repeated under another name."
+
+  - id: GAP-FREEZE-001
+    title: Current autonomous research hypothesis space frozen
+    type: governance_state
+    severity: high
+    status: historical_resolved
+    evidence:
+      - "reports/gates/phase5_research_hypothesis_space_freeze_gate/gate_report.json"
+      - "surviving_promotable_candidates=0"
+      - "official_promotion_allowed=false"
+      - "paper_readiness_allowed=false"
+      - "freeze was produced under previous 5-gate policy"
+      - "future freeze requires at least 2 materially different families, DSR diagnostic, CVaR research when applicable, family comparison and decision ledger update"
+    source_files:
+      - "services/ml_engine/phase5_research_hypothesis_space_freeze_gate.py"
+      - "reports/state/sniper_current_state.json"
+    allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
+      - "START_RESEARCH_ONLY_THESIS"
+      - "RUN_GLOBAL_REAUDIT"
+      - "STOP_FOR_HUMAN_DECISION"
+      - "FREEZE_LINE"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "REPEAT_FALSIFIED_THRESHOLD_FAMILY"
+      - "USE_STAGE_A_ELIGIBLE_AS_EX_ANTE_POLICY"
+    suggested_gate: "autonomous_full_phase_family_selection_gate"
+    stop_condition_if_unresolved: "Do not freeze future missions until the full phase freeze requirements are met."
+
+  - id: GAP-AUTO-001
+    title: Autonomous full phase research execution policy
+    type: governance_state
+    severity: high
+    status: resolved
+    evidence:
+      - ".agents/skills/sniper-autonomous-implementation-manager/SKILL.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+      - "reports/state/sniper_autonomous_runbook.md"
+      - "max_research_only_gates_per_mission=15"
+      - "max_hypothesis_families_per_mission=3"
+      - "max_gates_per_family=3"
+      - "max_partial_corrections_per_gate=2"
+    source_files:
+      - "AGENTS.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+    allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
+      - "START_RESEARCH_ONLY_THESIS"
+      - "RUN_GLOBAL_REAUDIT"
+    forbidden_actions:
+      - "OFFICIAL_PROMOTION"
+      - "PAPER_READINESS"
+      - "A3_REOPEN"
+      - "A4_REOPEN"
+      - "THRESHOLD_RELAXATION"
+      - "REAL_TRADING"
+    suggested_gate: "autonomous_full_phase_family_selection_gate"
+    stop_condition_if_unresolved: "Do not run autonomous research phases without full phase budget and governance limits."
+
+  - id: GAP-FULLPHASE-001
+    title: Full phase autonomous execution policy adopted
+    type: governance_state
+    severity: high
+    status: resolved
+    evidence:
+      - "AGENTS.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+      - "reports/state/sniper_autonomous_runbook.md"
+      - "fail_abandon_does_not_end_mission_when_materially_different_hypothesis_exists"
+      - "freeze_requires_two_materially_different_families_and_family_comparison"
+      - "human_decision_is_last_resort"
+      - "surviving_research_candidate_audited_and_falsified"
+      - "phase5_research_candidate_decision_gate=PASS/abandon"
+    source_files:
+      - "AGENTS.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+      - "reports/state/sniper_decision_ledger.md"
+    allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
+      - "START_RESEARCH_ONLY_THESIS"
+      - "RUN_GLOBAL_REAUDIT"
+      - "RUN_GLOBAL_REAUDIT_CANDIDATE"
+      - "FREEZE_LINE"
+    forbidden_actions:
+      - "OFFICIAL_PROMOTION"
+      - "PAPER_READINESS"
+      - "A3_REOPEN"
+      - "A4_REOPEN"
+      - "THRESHOLD_RELAXATION"
+      - "REAL_TRADING"
+    suggested_gate: "phase5_post_candidate_falsification_global_reaudit_gate"
+    stop_condition_if_unresolved: "A mission must continue within budget while defensible research-only hypotheses remain inside the repo; the previous survivor has been abandoned."
+
+  - id: GAP-ALTEXANTE-001
+    title: Alternative p_bma/sigma/hmm long-only ex-ante family failed
+    type: research_hypothesis
+    severity: high
+    status: abandoned
+    evidence:
+      - "reports/gates/phase5_research_alternative_exante_family_gate/gate_report.json"
+      - "classification=ALTERNATIVE_EXANTE_FAMILIES_NO_POSITIVE_SAFE_MEDIAN_ALPHA"
+      - "families_tested=regime_filtered_defensive_ensemble,risk_budgeted_topk,uncertainty_abstention,volatility_targeted_topk"
+      - "best_policy=ensemble_top3"
+      - "best_median_combo_sharpe=-0.632456"
+      - "best_min_combo_sharpe=-2.11257"
+    source_files:
+      - "services/ml_engine/phase5_research_alternative_exante_family.py"
+      - "tests/unit/test_phase5_research_alternative_exante_family.py"
+    allowed_actions:
+      - "CONTINUE_AUTONOMOUS"
+      - "RUN_GLOBAL_REAUDIT"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "REPEAT_SAME_LONG_ONLY_P_BMA_SIGMA_HMM_FAMILY"
+      - "DECLARE_PAPER_READINESS"
+    suggested_gate: "none_repeat_forbidden_without_materially_new_family"
+    stop_condition_if_unresolved: "Do not repeat this long-only p_bma/sigma/hmm family under another name; continue only with materially different thesis."
+
+  - id: GAP-POLARITY-001
+    title: Signal-polarity short-high research candidate was falsified
+    type: research_hypothesis
+    severity: high
+    status: abandoned
+    evidence:
+      - "reports/gates/phase5_research_signal_polarity_long_short_gate/gate_report.json"
+      - "reports/gates/phase5_research_signal_polarity_stability_correction_gate/gate_report.json"
+      - "reports/gates/phase5_research_full_phase_family_comparison_gate/gate_report.json"
+      - "reports/gates/phase5_research_candidate_global_reaudit_gate/gate_report.json"
+      - "reports/gates/phase5_research_candidate_stability_gate/gate_report.json"
+      - "reports/gates/phase5_research_candidate_falsification_gate/gate_report.json"
+      - "reports/gates/phase5_research_candidate_decision_gate/gate_report.json"
+      - "best_correction_policy=short_high_p_bma_k3_p60_h70"
+      - "best_correction_median_combo_sharpe=1.361592"
+      - "best_correction_min_combo_sharpe=0.261111"
+      - "best_correction_median_active_days=471.0"
+      - "best_correction_max_cvar_95_loss_fraction=0.00344841"
+      - "candidate_global_reaudit=PASS/advance"
+      - "candidate_stability=PARTIAL/correct"
+      - "candidate_falsification=FAIL/abandon"
+      - "candidate_decision=PASS/abandon"
+      - "hard_falsifiers=temporal_subperiod_min_sharpe,extra_cost_20bps_min_sharpe"
+      - "worst_temporal_min_sharpe=-1.160839"
+      - "extra_cost_20bps_min_sharpe=-0.12201"
+      - "short_exposure_is_research_sandbox_only=true"
+      - "dsr_honest=0.0"
+      - "sr_needed=4.47"
+      - "human_decision_is_last_resort"
+      - "FREEZE_LINE is no longer blocked by unaudited survivor, but promotion remains forbidden"
+    source_files:
+      - "services/ml_engine/phase5_research_signal_polarity_long_short.py"
+      - "services/ml_engine/phase5_research_signal_polarity_stability_correction.py"
+      - "services/ml_engine/phase5_research_full_phase_family_comparison.py"
+      - "services/ml_engine/phase5_research_candidate_global_reaudit.py"
+      - "services/ml_engine/phase5_research_candidate_stability.py"
+      - "services/ml_engine/phase5_research_candidate_falsification.py"
+      - "services/ml_engine/phase5_research_candidate_decision.py"
+      - "tests/unit/test_phase5_research_signal_polarity_long_short.py"
+      - "tests/unit/test_phase5_research_full_phase_family_comparison.py"
+      - "tests/unit/test_phase5_research_candidate_validation.py"
+    allowed_actions:
+      - "RUN_GLOBAL_REAUDIT"
+      - "CONTINUE_AUTONOMOUS"
+      - "START_RESEARCH_ONLY_THESIS"
+      - "FREEZE_LINE"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "TREAT_SHORT_SANDBOX_AS_OFFICIAL"
+      - "RELAX_DSR_THRESHOLD"
+    suggested_gate: "phase5_post_candidate_falsification_global_reaudit_gate"
+    stop_condition_if_unresolved: "The candidate has been abandoned; do not revive it without materially new evidence. Continue only with global reaudit, a materially new research-only thesis, or freeze after governance review."
+
+  - id: GAP-AUTODECISION-001
+    title: Human decision is last resort after internal strategic decision
+    type: governance_state
+    severity: high
+    status: resolved
+    evidence:
+      - ".agents/skills/sniper-autonomous-implementation-manager/SKILL.md"
+      - "AGENTS.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+      - "candidate_survival_protocol_completed_for_short_high_p_bma_k3_p60_h70"
+      - "candidate_decision=RESEARCH_CANDIDATE_FALSIFIED"
+    source_files:
+      - "AGENTS.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+    allowed_actions:
+      - "UPDATE_DRAFT_PR"
+      - "RUN_GLOBAL_REAUDIT"
+      - "CONTINUE_AUTONOMOUS"
+      - "START_RESEARCH_ONLY_THESIS"
+    forbidden_actions:
+      - "STOP_FOR_HUMAN_DECISION_WHILE_INTERNAL_GATE_EXISTS"
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+    suggested_gate: "phase5_post_candidate_falsification_global_reaudit_gate"
+    stop_condition_if_unresolved: "Do not request human strategy while global reaudit, a materially new research-only thesis, or governed freeze review can be run inside the repo."
+
+  - id: GAP-CLOSEDLOOP-001
+    title: Closed-loop autonomous execution policy is active
+    type: governance_state
+    severity: high
+    status: resolved
+    evidence:
+      - ".agents/skills/sniper-autonomous-implementation-manager/SKILL.md"
+      - "AGENTS.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+      - "CLOSED_LOOP_AUTONOMOUS_EXECUTION_POLICY authorized"
+      - "safe technical recommendations execute automatically"
+      - "RUN_GLOBAL_REAUDIT is not a valid stop when safe and internal"
+      - "START_RESEARCH_ONLY_THESIS is not a valid stop when a materially new backlog hypothesis exists"
+      - "short_high_p_bma_k3_p60_h70 was falsified"
+      - "falsified candidate requires post-falsification global reaudit, not human stop"
+      - "next_recommended_mode=POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT"
+      - "next_recommended_gate=phase5_post_candidate_falsification_global_reaudit_gate"
+      - "human_decision_required=false"
+      - "autonomous_can_continue=true"
+    source_files:
+      - "AGENTS.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+      - "reports/state/sniper_autonomous_runbook.md"
+    allowed_actions:
+      - "POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT"
+      - "RUN_GLOBAL_REAUDIT"
+      - "START_RESEARCH_ONLY_THESIS"
+      - "CONTINUE_AUTONOMOUS"
+      - "UPDATE_STATE"
+      - "UPDATE_DRAFT_PR"
+      - "FREEZE_LINE_AFTER_REAUDIT_IF_NO_MATERIAL_HYPOTHESIS"
+    forbidden_actions:
+      - "STOP_AFTER_SAFE_TECHNICAL_RECOMMENDATION"
+      - "STOP_AFTER_RUN_GLOBAL_REAUDIT_RECOMMENDATION"
+      - "STOP_AFTER_START_RESEARCH_ONLY_THESIS_RECOMMENDATION"
+      - "STOP_FOR_HUMAN_DECISION_WHILE_INTERNAL_GATE_EXISTS"
+      - "FREEZE_LINE_BEFORE_POST_FALSIFICATION_REAUDIT"
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "MERGE_PR"
+      - "A3_REOPEN"
+      - "A4_REOPEN"
+      - "THRESHOLD_RELAXATION"
+      - "REAL_TRADING"
+    suggested_gate: "phase5_post_candidate_falsification_global_reaudit_gate"
+    stop_condition_if_unresolved: "Closed-loop execution must continue through the post-falsification global reaudit unless an external resource, specification change or governance hard stop is required."
+
+  - id: GAP-CLUSTER-001
+    title: Cluster-conditioned polarity candidate was falsified
+    type: research_hypothesis
+    severity: high
+    status: abandoned
+    evidence:
+      - "reports/gates/phase5_post_candidate_falsification_global_reaudit_gate/gate_report.json"
+      - "reports/gates/phase5_research_cluster_conditioned_polarity_gate/gate_report.json"
+      - "reports/gates/phase5_research_cluster_conditioned_polarity_falsification_gate/gate_report.json"
+      - "reports/gates/phase5_research_cluster_conditioned_polarity_decision_gate/gate_report.json"
+      - "best_policy=cluster_2_long_high_short_low_p60_h70_k3"
+      - "best_median_combo_sharpe=1.183459"
+      - "best_min_combo_sharpe=0.078586"
+      - "best_median_active_days=425.0"
+      - "best_max_cvar_95_loss_fraction=0.00151815"
+      - "hard_falsifier_count=13"
+      - "temporal_subperiod_min_sharpe=-1.633204"
+      - "extra_cost_20bps_min_sharpe=-0.493149"
+      - "classification=CLUSTER_CONDITIONED_RESEARCH_CANDIDATE_FALSIFIED"
+    source_files:
+      - "services/ml_engine/phase5_research_cluster_conditioned_polarity.py"
+      - "services/ml_engine/phase5_research_cluster_conditioned_polarity_falsification.py"
+      - "services/ml_engine/phase5_research_cluster_conditioned_polarity_decision.py"
+      - "tests/unit/test_phase5_research_cluster_conditioned_polarity.py"
+    allowed_actions:
+      - "UPDATE_DRAFT_PR"
+      - "RUN_GLOBAL_REAUDIT"
+      - "FREEZE_LINE_AFTER_REAUDIT_IF_NO_MATERIAL_HYPOTHESIS"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "REPEAT_CLUSTER_CONDITIONED_POLARITY_WITH_SMALL_VARIATION"
+      - "TREAT_RESEARCH_CVAR_AS_OFFICIAL"
+      - "RELAX_DSR_THRESHOLD"
+    suggested_gate: "phase5_post_candidate_falsification_governed_freeze_gate"
+    stop_condition_if_unresolved: "The cluster-conditioned candidate is abandoned; do not revive it without materially new evidence."
+
+  - id: GAP-FREEZE-002
+    title: Closed-loop freeze after post-falsification reaudit requires agenda expansion
+    type: governance_state
+    severity: critical
+    status: resolved_candidate_found
+    evidence:
+      - "reports/gates/phase5_post_candidate_falsification_governed_freeze_gate/gate_report.json"
+      - "classification=FULL_FREEZE_AFTER_REAUDIT"
+      - "final permanent freeze not accepted until AUTONOMOUS_RESEARCH_AGENDA_EXPANSION runs"
+      - "AUTONOMOUS_RESEARCH_AGENDA_EXPANSION executed"
+      - "phase5_research_meta_disagreement_abstention_gate=PASS/advance"
+      - "selected_agenda_id=AGENDA-H01"
+      - "tested_family_count=5"
+      - "tested_families=stage_a_safe_top1,rank_score_threshold,alternative_exante_p_bma_sigma_hmm,signal_polarity_short_high,cluster_conditioned_polarity"
+      - "remaining_safe_material_hypothesis_count=0"
+      - "research_agenda_expansion_executed_after_latest_falsification=true"
+      - "dsr_honest=0.0"
+      - "official_promotion_allowed=false"
+      - "paper_readiness_allowed=false"
+    source_files:
+      - "services/ml_engine/phase5_post_candidate_falsification_governed_freeze.py"
+      - "reports/state/sniper_current_state.json"
+      - "reports/state/sniper_decision_ledger.md"
+    allowed_actions:
+      - "CANDIDATE_STABILITY_GATE"
+      - "META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE"
+      - "UPDATE_STATE"
+      - "UPDATE_DRAFT_PR"
+      - "STOP_FOR_EXTERNAL_RESOURCE"
+    forbidden_actions:
+      - "START_RESEARCH_ONLY_THESIS_WITHOUT_MATERIAL_NEW_EVIDENCE"
+      - "FULL_FREEZE_AFTER_REAUDIT_WITHOUT_AGENDA_EXPANSION"
+      - "STOP_FOR_HUMAN_DECISION_BECAUSE_BACKLOG_ENDED"
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "MERGE_PR"
+      - "A3_REOPEN"
+      - "A4_REOPEN"
+      - "THRESHOLD_RELAXATION"
+      - "REAL_TRADING"
+    suggested_gate: "phase5_research_meta_disagreement_stability_falsification_gate"
+    stop_condition_if_unresolved: "Final freeze is no longer the active next step because agenda expansion found a research/sandbox candidate. The candidate must be stability-tested and falsified or preserved before any new freeze."
+
+  - id: GAP-AGENDA-001
+    title: Research-only agenda expansion required before final freeze
+    type: governance_state
+    severity: critical
+    status: resolved_candidate_found
+    evidence:
+      - "current mission reached FULL_FREEZE_AFTER_REAUDIT"
+      - "cluster_conditioned_polarity was falsified"
+      - "previous backlog has no surviving candidate"
+      - "human_decision_required=false"
+      - "autonomous_can_continue=true"
+      - "next_recommended_mode=AUTONOMOUS_RESEARCH_AGENDA_EXPANSION"
+      - "next_logical_skill=sniper-autonomous-research-agenda-synthesizer"
+      - "next_mode=GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC"
+      - "reports/state/sniper_research_agenda.yaml"
+      - "reports/state/sniper_hypothesis_inventory.md"
+      - "reports/state/sniper_next_autonomous_mission.md"
+      - "HIGH priority hypothesis selected: AGENDA-H01 meta_calibration_disagreement_abstention"
+      - "phase5_research_meta_disagreement_abstention_gate=PASS/advance"
+    source_files:
+      - "AGENTS.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+      - "reports/state/sniper_decision_ledger.md"
+      - ".agents/skills/sniper-autonomous-research-agenda-synthesizer/SKILL.md"
+    allowed_actions:
+      - "CANDIDATE_STABILITY_GATE"
+      - "META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE"
+      - "UPDATE_STATE"
+      - "UPDATE_DRAFT_PR"
+    forbidden_actions:
+      - "FULL_FREEZE_AFTER_REAUDIT_WITHOUT_AGENDA_EXPANSION"
+      - "STOP_FOR_HUMAN_DECISION_BECAUSE_BACKLOG_ENDED"
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "MERGE_PR"
+      - "A3_REOPEN"
+      - "A4_REOPEN"
+      - "THRESHOLD_RELAXATION"
+      - "REAL_TRADING"
+    suggested_gate: "phase5_research_meta_disagreement_stability_falsification_gate"
+    stop_condition_if_unresolved: "Agenda expansion is resolved because a HIGH priority executable candidate was found. Continue with stability/falsification; do not freeze or promote."
+
+  - id: GAP-META-DISAGREE-001
+    title: Meta calibration disagreement candidate requires stability and falsification
+    type: research_hypothesis
+    severity: high
+    status: abandoned
+    evidence:
+      - "reports/state/sniper_research_agenda.yaml"
+      - "reports/gates/phase5_research_meta_disagreement_abstention_gate/gate_report.json"
+      - "reports/gates/phase5_research_meta_disagreement_stability_falsification_gate/gate_report.json"
+      - "reports/gates/phase5_research_meta_disagreement_candidate_decision_gate/gate_report.json"
+      - "classification=META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE"
+      - "decision_classification=META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED"
+      - "best_policy=short_bma_high_meta_low_p60_m40_k3"
+      - "best_median_combo_sharpe=0.855486"
+      - "best_min_combo_sharpe=0.220622"
+      - "best_median_active_days=322.0"
+      - "best_max_cvar_95_loss_fraction=0.00455141"
+      - "hard_falsifier_count=25"
+      - "temporal_thirds_failed=true"
+      - "cost_20bps_min_combo_sharpe=-0.053326"
+      - "parameter_pass_rate=0.259259"
+      - "universe_stress_failed=true"
+      - "candidate_below_sr_needed=true"
+      - "official_promotion_allowed=false"
+      - "paper_readiness_allowed=false"
+    source_files:
+      - "services/ml_engine/phase5_research_meta_disagreement_abstention.py"
+      - "tests/unit/test_phase5_research_meta_disagreement_abstention.py"
+      - "data/models/phase4/phase4_oos_predictions.parquet"
+    allowed_actions:
+      - "START_RESEARCH_ONLY_THESIS"
+      - "META_UNCERTAINTY_ABSTENTION_GATE"
+      - "UPDATE_STATE"
+      - "UPDATE_DRAFT_PR"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "TREAT_SHORT_SANDBOX_AS_OFFICIAL"
+      - "RELAX_DSR_THRESHOLD"
+      - "USE_REALIZED_VARIABLE_AS_EX_ANTE_RULE"
+      - "MERGE_PR"
+    suggested_gate: "phase5_research_cvar_constrained_meta_sizing_gate"
+    stop_condition_if_unresolved: "The meta-disagreement candidate is falsified and abandoned. AGENDA-H02 was also falsified; continue only with a materially different agenda hypothesis such as AGENDA-H03. Do not revive this candidate without new evidence."
+
+  - id: GAP-META-UNCERTAINTY-001
+    title: Meta uncertainty long-only thesis was falsified by stability stress
+    type: research_hypothesis
+    severity: high
+    status: abandoned
+    evidence:
+      - "reports/state/sniper_research_agenda.yaml"
+      - "reports/gates/phase5_research_meta_uncertainty_abstention_gate/gate_report.json"
+      - "selected_agenda_id=AGENDA-H02"
+      - "classification=META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS"
+      - "best_policy=long_bma_meta_agree_p65_m50_s10_k3"
+      - "best_median_combo_sharpe=0.447334"
+      - "best_min_combo_sharpe=-0.375889"
+      - "best_median_active_days=55.0"
+      - "best_max_cvar_95_loss_fraction=0.00284763"
+      - "hard_falsifier_count=19"
+      - "official_promotion_allowed=false"
+      - "paper_readiness_allowed=false"
+    source_files:
+      - "services/ml_engine/phase5_research_meta_uncertainty_abstention.py"
+      - "tests/unit/test_phase5_research_meta_uncertainty_abstention.py"
+      - "data/models/phase4/phase4_oos_predictions.parquet"
+    allowed_actions:
+      - "START_RESEARCH_ONLY_THESIS"
+      - "CVAR_CONSTRAINED_META_SIZING_GATE"
+      - "CHECKPOINT_CONTINUE_AUTONOMOUS"
+      - "UPDATE_STATE"
+      - "UPDATE_DRAFT_PR"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "TREAT_RESEARCH_AS_OFFICIAL"
+      - "RELAX_DSR_THRESHOLD"
+      - "USE_REALIZED_VARIABLE_AS_EX_ANTE_RULE"
+      - "MERGE_PR"
+    suggested_gate: "phase5_research_cvar_constrained_meta_sizing_gate"
+    stop_condition_if_unresolved: "The meta uncertainty long-only family is abandoned. Continue with AGENDA-H03 only if mission budget and review size remain safe; do not treat positive median Sharpe as promotability."
+
+  - id: GAP-CVAR-META-SIZING-001
+    title: CVaR-constrained meta sizing produced research CVaR evidence but unstable alpha
+    type: research_hypothesis
+    severity: high
+    status: partial_correct
+    evidence:
+      - "reports/state/sniper_research_agenda.yaml"
+      - "reports/gates/phase5_research_cvar_constrained_meta_sizing_gate/gate_report.json"
+      - "selected_agenda_id=AGENDA-H03"
+      - "classification=CVAR_CONSTRAINED_META_SIZING_CVAR_PASS_ALPHA_UNSTABLE"
+      - "best_policy=signed_meta_edge_t52_s15_k5_g04"
+      - "best_median_combo_sharpe=2.040444"
+      - "best_min_combo_sharpe=-0.903026"
+      - "best_median_active_days=698.0"
+      - "best_max_cvar_95_loss_fraction=0.00356911"
+      - "best_median_turnover_fraction=0.02376094"
+      - "hard_falsifier_count=20"
+      - "official_promotion_allowed=false"
+      - "paper_readiness_allowed=false"
+    source_files:
+      - "services/ml_engine/phase5_research_cvar_constrained_meta_sizing.py"
+      - "tests/unit/test_phase5_research_cvar_constrained_meta_sizing.py"
+      - "data/models/phase4/phase4_oos_predictions.parquet"
+    allowed_actions:
+      - "START_RESEARCH_ONLY_THESIS"
+      - "REGIME_SPECIFIC_META_DISAGREEMENT_GATE"
+      - "CHECKPOINT_CONTINUE_AUTONOMOUS"
+      - "UPDATE_STATE"
+      - "UPDATE_DRAFT_PR"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "TREAT_RESEARCH_CVAR_AS_OFFICIAL"
+      - "TREAT_RESEARCH_AS_OFFICIAL"
+      - "RELAX_DSR_THRESHOLD"
+      - "USE_REALIZED_VARIABLE_AS_EX_ANTE_RULE"
+      - "MERGE_PR"
+    suggested_gate: "phase5_research_regime_specific_meta_disagreement_gate"
+    stop_condition_if_unresolved: "The H03 module is useful as research/sandbox CVaR evidence but not a stable candidate. Continue only with a materially different agenda hypothesis such as AGENDA-H04; do not treat positive median Sharpe or research CVaR as promotability."
+
+  - id: GAP-REGIME-META-DISAGREEMENT-001
+    title: Regime-specific meta disagreement remained sparse and unstable
+    type: research_hypothesis
+    severity: high
+    status: partial_correct
+    evidence:
+      - "reports/state/sniper_research_agenda.yaml"
+      - "reports/gates/phase5_research_regime_specific_meta_disagreement_gate/gate_report.json"
+      - "selected_agenda_id=AGENDA-H04"
+      - "classification=REGIME_SPECIFIC_META_DISAGREEMENT_POSITIVE_BUT_UNSTABLE"
+      - "best_policy=neutral_short_meta_low_m40_k3"
+      - "best_median_combo_sharpe=0.726729"
+      - "best_min_combo_sharpe=-0.911080"
+      - "best_median_active_days=82.0"
+      - "best_max_cvar_95_loss_fraction=0.00315145"
+      - "hard_falsifier_count=13"
+      - "official_promotion_allowed=false"
+      - "paper_readiness_allowed=false"
+    source_files:
+      - "services/ml_engine/phase5_research_regime_specific_meta_disagreement.py"
+      - "tests/unit/test_phase5_research_regime_specific_meta_disagreement.py"
+      - "data/models/phase4/phase4_oos_predictions.parquet"
+    allowed_actions:
+      - "FEATURE_FAMILY_ABLATION_BLOCKER_DECOMPOSITION_GATE"
+      - "CHECKPOINT_CONTINUE_AUTONOMOUS"
+      - "UPDATE_STATE"
+      - "UPDATE_DRAFT_PR"
+    forbidden_actions:
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "TREAT_RESEARCH_AS_OFFICIAL"
+      - "RELAX_DSR_THRESHOLD"
+      - "USE_REALIZED_VARIABLE_AS_EX_ANTE_RULE"
+      - "MERGE_PR"
+    suggested_gate: "phase5_research_feature_family_ablation_blocker_decomposition_gate"
+    stop_condition_if_unresolved: "H04 is useful as research/sandbox regime evidence but not stable. Continue only with diagnostic H05 or a materially new agenda hypothesis; do not preserve the regime policy as robust."
+
+  - id: GAP-NEXT-GATE-CHAIN-001
+    title: Next safe gate from sniper_next_autonomous_mission must execute automatically
+    type: governance_state
+    severity: high
+    status: resolved_active_policy
+    evidence:
+      - "NEXT_GATE_CHAIN_EXECUTION_POLICY active"
+      - "reports/state/sniper_next_autonomous_mission.md defines Current next gate, Next Mission, Required tests, Criteria and Stop Conditions"
+      - "Pode continuar autonomamente: sim is not a stop condition"
+      - "Próximo gate recomendado is not a stop condition"
+      - "family=meta_uncertainty_abstention_long_only"
+      - "candidate=none"
+      - "initial_gate=phase5_research_meta_uncertainty_abstention_gate"
+      - "initial_status=FAIL/abandon"
+      - "next_gate_executed=true"
+      - "decision_gate=not_required_initial_gate_failed"
+      - "decision_classification=META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS"
+      - "next_agenda_id=AGENDA-H03"
+      - "next_agenda_gate=phase5_research_cvar_constrained_meta_sizing_gate"
+      - "promotion_allowed=false"
+      - "paper_readiness_allowed=false"
+      - "human_decision_required=false"
+      - "autonomous_can_continue=true"
+    source_files:
+      - "AGENTS.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+      - "reports/state/sniper_next_autonomous_mission.md"
+      - "reports/state/sniper_decision_ledger.md"
+      - "reports/state/sniper_autonomous_runbook.md"
+    allowed_actions:
+      - "START_RESEARCH_ONLY_THESIS"
+      - "CVAR_CONSTRAINED_META_SIZING_GATE"
+      - "UPDATE_STATE"
+      - "UPDATE_DRAFT_PR"
+    forbidden_actions:
+      - "STOP_AFTER_NEXT_GATE_RECOMMENDATION"
+      - "STOP_AFTER_FUNCTIONAL_RESEARCH_MODULE_DELIVERED_WITH_SAFE_NEXT_GATE"
+      - "STOP_AFTER_LARGE_REVIEWABLE_PACKAGE_WITH_SAFE_NEXT_GATE"
+      - "STOP_AFTER_PODE_CONTINUAR_AUTONOMAMENTE_SIM"
+      - "STOP_AFTER_INITIAL_PASS_WITH_LIVE_CANDIDATE"
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "TREAT_RESEARCH_AS_OFFICIAL"
+      - "MERGE_PR"
+      - "A3_REOPEN"
+      - "A4_REOPEN"
+      - "THRESHOLD_RELAXATION"
+    suggested_gate: "phase5_research_cvar_constrained_meta_sizing_gate"
+    stop_condition_if_unresolved: "The explicit next gate was executed and falsified the candidate. Continue with the next materially different agenda hypothesis if mission budget and review size allow; if the package is large but valid, use CHECKPOINT_CONTINUE_AUTONOMOUS rather than a final stop."
+
+  - id: GAP-CHECKPOINT-CONTINUATION-001
+    title: Large reviewable package must become checkpoint when safe next gate exists
+    type: governance_state
+    severity: high
+    status: active_policy
+    evidence:
+      - "AUTONOMOUS_CHECKPOINT_CONTINUATION_POLICY active"
+      - "CHECKPOINT_CONTINUE_AUTONOMOUS is a valid checkpoint classification"
+      - "FUNCTIONAL_RESEARCH_MODULE_DELIVERED is not final when a safe next gate exists"
+      - "previous_next_gate=phase5_research_regime_specific_meta_disagreement_gate"
+      - "next_gate=phase5_research_feature_family_ablation_blocker_decomposition_gate"
+      - "next_agenda_id=AGENDA-H05"
+      - "current_recommended_mode=FEATURE_FAMILY_ABLATION_BLOCKER_DECOMPOSITION_GATE"
+      - "autonomous_can_continue=true"
+      - "human_decision_required=false"
+      - "official_promotion_allowed=false"
+      - "paper_readiness_allowed=false"
+    source_files:
+      - "AGENTS.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+      - "reports/state/sniper_next_autonomous_mission.md"
+      - "reports/state/sniper_decision_ledger.md"
+      - "reports/state/sniper_autonomous_runbook.md"
+    allowed_actions:
+      - "CHECKPOINT_CONTINUE_AUTONOMOUS"
+      - "FEATURE_FAMILY_ABLATION_BLOCKER_DECOMPOSITION_GATE"
+      - "UPDATE_STATE"
+      - "UPDATE_DRAFT_PR"
+    forbidden_actions:
+      - "STOP_AFTER_FUNCTIONAL_RESEARCH_MODULE_DELIVERED_WITH_SAFE_NEXT_GATE"
+      - "STOP_AFTER_LARGE_REVIEWABLE_PACKAGE_WITH_SAFE_NEXT_GATE"
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "TREAT_RESEARCH_AS_OFFICIAL"
+      - "MERGE_PR"
+      - "A3_REOPEN"
+      - "A4_REOPEN"
+      - "THRESHOLD_RELAXATION"
+    suggested_gate: "phase5_research_feature_family_ablation_blocker_decomposition_gate"
+    stop_condition_if_unresolved: "Do not stop at checkpoint while AGENDA-H05 remains safe, internal to the repo, diagnostic/research-only and does not require external resources or promotion."

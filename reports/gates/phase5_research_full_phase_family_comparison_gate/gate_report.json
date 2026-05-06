@@ -1,0 +1,88 @@
+{
+  "gate_slug": "phase5_research_full_phase_family_comparison_gate",
+  "phase_family": "phase5_research_full_phase_family_comparison",
+  "status": "PASS",
+  "decision": "advance",
+  "baseline_commit": "030a09cace2934123956871a99b199b3fb5a9e00",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_full_phase_family_comparison_gate\\full_phase_family_comparison_report.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_full_phase_family_comparison_gate\\full_phase_family_comparison_metrics.parquet"
+  ],
+  "summary": [
+    "classification=RESEARCH_ONLY_SURVIVOR_IDENTIFIED_BELOW_DSR_PROMOTION_BAR",
+    "families_compared=6",
+    "families_abandoned=stage_a_safe_top1,rank_score_threshold_correction,alternative_exante_p_bma_sigma_hmm",
+    "surviving_candidate_policy=short_high_p_bma_k3_p60_h70",
+    "surviving_candidate_family=signal_polarity_stability_correction",
+    "surviving_candidate_median_combo_sharpe=1.361592",
+    "surviving_candidate_min_combo_sharpe=0.261111",
+    "surviving_candidate_median_active_days=471.0",
+    "surviving_candidate_max_cvar_95_loss_fraction=0.00344841",
+    "candidate remains research/sandbox only",
+    "no official promotion attempted"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_research_full_phase_family_comparison_gate",
+      "metric_name": "families_compared",
+      "metric_value": 6,
+      "metric_threshold": ">= 2 materially different families",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_full_phase_family_comparison_gate",
+      "metric_name": "families_abandoned",
+      "metric_value": [
+        "stage_a_safe_top1",
+        "rank_score_threshold_correction",
+        "alternative_exante_p_bma_sigma_hmm"
+      ],
+      "metric_threshold": "record abandoned lines",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_full_phase_family_comparison_gate",
+      "metric_name": "survivor_policy",
+      "metric_value": "short_high_p_bma_k3_p60_h70",
+      "metric_threshold": "research-only survivor allowed, not official",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_full_phase_family_comparison_gate",
+      "metric_name": "survivor_median_combo_sharpe",
+      "metric_value": 1.361592,
+      "metric_threshold": "> 0 research-only; >= 4.47 for DSR promotion bar",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_full_phase_family_comparison_gate",
+      "metric_name": "survivor_min_combo_sharpe",
+      "metric_value": 0.261111,
+      "metric_threshold": "> 0.0",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_full_phase_family_comparison_gate",
+      "metric_name": "official_promotion_allowed",
+      "metric_value": false,
+      "metric_threshold": "false while DSR=0.0 and official CVaR zero exposure",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "survivor_below_required_honest_dsr_sharpe",
+    "short_exposure_research_only_not_official",
+    "official_cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable"
+  ],
+  "risks_residual": [
+    "The surviving candidate is research-only and uses sandbox short exposure.",
+    "No official execution path or promotion gate exists for this candidate.",
+    "DSR=0.0 and official zero-exposure CVaR still block readiness."
+  ],
+  "next_recommended_step": "Update reports/state and the draft PR with this research-only survivor. Do not promote official; future work should validate whether short-side sandbox support is in scope or start a new thesis."
+}

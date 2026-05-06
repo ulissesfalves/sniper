@@ -1,0 +1,131 @@
+{
+  "gate_slug": "phase5_post_candidate_falsification_governed_freeze_gate",
+  "phase_family": "phase5_post_candidate_falsification_governed_freeze",
+  "status": "PASS",
+  "decision": "freeze",
+  "baseline_commit": "b13896a405f0bbc798ce98568abdc0013d80b58f",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_post_candidate_falsification_governed_freeze_gate\\post_candidate_falsification_governed_freeze_report.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_post_candidate_falsification_governed_freeze_gate\\post_candidate_falsification_governed_freeze_metrics.parquet"
+  ],
+  "summary": [
+    "classification=FULL_FREEZE_AFTER_REAUDIT",
+    "tested_family_count=5",
+    "tested_families=stage_a_safe_top1,rank_score_threshold,alternative_exante_p_bma_sigma_hmm,signal_polarity_short_high,cluster_conditioned_polarity",
+    "remaining_safe_material_hypothesis_count=0",
+    "prior_candidate=short_high_p_bma_k3_p60_h70 falsified",
+    "cluster_candidate=cluster_2_long_high_short_low_p60_h70_k3 falsified",
+    "official_promotion_allowed=false",
+    "paper_readiness_allowed=false",
+    "no official promotion attempted"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_post_candidate_falsification_governed_freeze_gate",
+      "metric_name": "post_falsification_reaudit_passed",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_post_candidate_falsification_governed_freeze_gate",
+      "metric_name": "at_least_two_material_families_tested",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_post_candidate_falsification_governed_freeze_gate",
+      "metric_name": "explicit_dsr_diagnostic_exists",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_post_candidate_falsification_governed_freeze_gate",
+      "metric_name": "research_cvar_nonzero_exposure_evaluated",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_post_candidate_falsification_governed_freeze_gate",
+      "metric_name": "family_comparison_recorded",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_post_candidate_falsification_governed_freeze_gate",
+      "metric_name": "prior_candidate_falsified",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_post_candidate_falsification_governed_freeze_gate",
+      "metric_name": "cluster_candidate_falsified",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_post_candidate_falsification_governed_freeze_gate",
+      "metric_name": "no_official_promotion",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_post_candidate_falsification_governed_freeze_gate",
+      "metric_name": "no_paper_readiness",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_post_candidate_falsification_governed_freeze_gate",
+      "metric_name": "tested_family_count",
+      "metric_value": 5,
+      "metric_threshold": ">= 2",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_post_candidate_falsification_governed_freeze_gate",
+      "metric_name": "remaining_safe_material_hypothesis_count",
+      "metric_value": 0,
+      "metric_threshold": "0 for governed freeze",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_post_candidate_falsification_governed_freeze_gate",
+      "metric_name": "official_promotion_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_post_candidate_falsification_governed_freeze_gate",
+      "metric_name": "paper_readiness_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "official_cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable",
+    "no_surviving_research_candidate_after_falsification",
+    "no_materially_new_safe_in_repo_hypothesis_remaining"
+  ],
+  "risks_residual": [
+    "Freeze does not prove readiness or economic robustness.",
+    "Future progress requires a materially new evidence source, external artifact, or specification-level research direction.",
+    "Do not promote the frozen research families."
+  ],
+  "next_recommended_step": "Update reports/state and the existing draft PR. Do not merge or mark ready."
+}

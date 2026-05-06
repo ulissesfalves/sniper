@@ -1,0 +1,33 @@
+{
+  "hypothesis": "The cluster-conditioned research candidate can be classified after falsification without promoting official or asking for human thesis selection.",
+  "status": "PASS",
+  "decision": "abandon",
+  "classification": "CLUSTER_CONDITIONED_RESEARCH_CANDIDATE_FALSIFIED",
+  "classification_reason": "hard_falsifiers_present",
+  "candidate_policy": "cluster_2_long_high_short_low_p60_h70_k3",
+  "hard_falsifiers": [
+    "temporal_third_1",
+    "temporal_third_2",
+    "temporal_third_3",
+    "extra_cost_5bps",
+    "extra_cost_10bps",
+    "extra_cost_20bps",
+    "cluster_2_lhsl_p55_h70_k2",
+    "cluster_2_lhsl_p60_h70_k2",
+    "cluster_2_lhsl_p65_h70_k2",
+    "cluster_2_lhsl_p55_h70_k3",
+    "cluster_2_lhsl_p65_h70_k3",
+    "drop_high_sigma_q80",
+    "symbol_hash_even"
+  ],
+  "governance": {
+    "research_only": true,
+    "sandbox_only": true,
+    "promotes_official": false,
+    "declares_paper_readiness": false,
+    "reopens_a3_a4": false,
+    "relaxes_thresholds": false
+  },
+  "next_recommended_mode": "FREEZE_LINE",
+  "next_recommended_gate": "phase5_post_candidate_falsification_governed_freeze_gate"
+}

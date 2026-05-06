@@ -1,0 +1,141 @@
+{
+  "gate_slug": "phase5_research_meta_uncertainty_abstention_gate",
+  "phase_family": "phase5_research_meta_uncertainty_abstention",
+  "status": "FAIL",
+  "decision": "abandon",
+  "baseline_commit": "b3263393bf95e001e6878f1a43a2fa44b3b819eb",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_oos_predictions.parquet"
+  ],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_uncertainty_abstention_gate\\meta_uncertainty_positions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_uncertainty_abstention_gate\\meta_uncertainty_daily_returns.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_uncertainty_abstention_gate\\meta_uncertainty_trade_log.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_uncertainty_abstention_gate\\meta_uncertainty_metrics.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_uncertainty_abstention_gate\\meta_uncertainty_scenarios.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_uncertainty_abstention_gate\\meta_uncertainty_research_report.json"
+  ],
+  "summary": [
+    "classification=META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS",
+    "selected_agenda_id=AGENDA-H02",
+    "best_policy=long_bma_meta_agree_p65_m50_s10_k3",
+    "best_median_combo_sharpe=0.447334",
+    "best_min_combo_sharpe=-0.375889",
+    "best_median_active_days=55.0",
+    "best_max_cvar_95_loss_fraction=0.00284763",
+    "best_max_drawdown_proxy=0.02955821",
+    "best_median_turnover_fraction=0.04703030",
+    "hard_falsifier_count=19",
+    "long-only research/sandbox only",
+    "official_promotion_allowed=false",
+    "paper_readiness_allowed=false",
+    "no realized variable used as selection input"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_research_meta_uncertainty_abstention_gate",
+      "metric_name": "selected_agenda_id",
+      "metric_value": "AGENDA-H02",
+      "metric_threshold": "AGENDA-H02",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_uncertainty_abstention_gate",
+      "metric_name": "policies_tested",
+      "metric_value": 6,
+      "metric_threshold": ">= 5",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_uncertainty_abstention_gate",
+      "metric_name": "forbidden_selection_input_count",
+      "metric_value": 0,
+      "metric_threshold": "0",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_uncertainty_abstention_gate",
+      "metric_name": "best_policy",
+      "metric_value": "long_bma_meta_agree_p65_m50_s10_k3",
+      "metric_threshold": "predeclared policy only",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_uncertainty_abstention_gate",
+      "metric_name": "best_median_combo_sharpe",
+      "metric_value": 0.447334,
+      "metric_threshold": "> 0 research alpha",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_uncertainty_abstention_gate",
+      "metric_name": "best_min_combo_sharpe",
+      "metric_value": -0.375889,
+      "metric_threshold": "> 0 stable alpha",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_meta_uncertainty_abstention_gate",
+      "metric_name": "best_median_active_days",
+      "metric_value": 55.0,
+      "metric_threshold": ">= 120",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_meta_uncertainty_abstention_gate",
+      "metric_name": "best_max_cvar_95_loss_fraction",
+      "metric_value": 0.00284763,
+      "metric_threshold": "<= 0.15",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_uncertainty_abstention_gate",
+      "metric_name": "scenario_count",
+      "metric_value": 20,
+      "metric_threshold": ">= 10",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_uncertainty_abstention_gate",
+      "metric_name": "hard_falsifier_count",
+      "metric_value": 19,
+      "metric_threshold": "0",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_meta_uncertainty_abstention_gate",
+      "metric_name": "candidate_below_sr_needed",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_uncertainty_abstention_gate",
+      "metric_name": "official_promotion_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_uncertainty_abstention_gate",
+      "metric_name": "paper_readiness_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "official_cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable",
+    "meta_uncertainty_long_only_instability_under_falsification"
+  ],
+  "risks_residual": [
+    "Long-only research exposure remains sandbox evidence only and cannot support official promotion.",
+    "The gate does not change DSR=0.0 or the official zero-exposure CVaR blocker.",
+    "Any survivor would still require stability/falsification and a decision gate before preservation."
+  ],
+  "next_recommended_step": "phase5_research_cvar_constrained_meta_sizing_gate"
+}
