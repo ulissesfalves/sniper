@@ -1,0 +1,106 @@
+{
+  "gate_slug": "phase5_final_freeze_resource_and_opportunity_audit_gate",
+  "phase_family": "phase5_final_freeze_resource_and_opportunity_audit",
+  "status": "PASS",
+  "decision": "freeze",
+  "baseline_commit": "01a1b268d95f71a8d2aa16db2ecf1b3ff1170c58",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_final_freeze_resource_and_opportunity_audit_gate\\final_freeze_opportunity_audit.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_final_freeze_resource_and_opportunity_audit_gate\\final_freeze_opportunity_metrics.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_external_resource_manifest.md",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_final_freeze_opportunity_audit.md",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_next_material_evidence_request.md"
+  ],
+  "summary": [
+    "classification=FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED",
+    "remaining_high_medium_executable_count=0",
+    "h06_status=EXTERNAL_RESOURCE_REQUIRED",
+    "h06_missing_expected_patterns=2",
+    "external_resource_manifest_created=true",
+    "final_freeze_opportunity_audit_created=true",
+    "next_material_evidence_request_created=true",
+    "official_promotion_allowed=false",
+    "paper_readiness_allowed=false"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_final_freeze_resource_and_opportunity_audit_gate",
+      "metric_name": "remaining_high_medium_executable_count",
+      "metric_value": 0,
+      "metric_threshold": "0",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_final_freeze_resource_and_opportunity_audit_gate",
+      "metric_name": "h06_preflight_executable",
+      "metric_value": false,
+      "metric_threshold": "false when exact artifacts absent",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_final_freeze_resource_and_opportunity_audit_gate",
+      "metric_name": "h06_missing_expected_pattern_count",
+      "metric_value": 2,
+      "metric_threshold": ">= 1 recorded as external resource",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_final_freeze_resource_and_opportunity_audit_gate",
+      "metric_name": "external_resource_manifest_created",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_final_freeze_resource_and_opportunity_audit_gate",
+      "metric_name": "final_freeze_opportunity_audit_created",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_final_freeze_resource_and_opportunity_audit_gate",
+      "metric_name": "next_material_evidence_request_created",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_final_freeze_resource_and_opportunity_audit_gate",
+      "metric_name": "internal_module_safe_next_action_count",
+      "metric_value": 0,
+      "metric_threshold": "0 after audit",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_final_freeze_resource_and_opportunity_audit_gate",
+      "metric_name": "official_promotion_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_final_freeze_resource_and_opportunity_audit_gate",
+      "metric_name": "paper_readiness_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "official_cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable",
+    "no_high_medium_executable_research_agenda_family_remaining",
+    "h06_requires_external_unlock_artifacts"
+  ],
+  "risks_residual": [
+    "Final freeze is governance/research closure, not readiness.",
+    "H06 cannot be implemented without canonical unlock artifacts.",
+    "Shadow/wayback unlock files must not be treated as official or fabricated into canonical artifacts."
+  ],
+  "next_recommended_step": "FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED; draft PR review or provide listed external unlock artifacts."
+}

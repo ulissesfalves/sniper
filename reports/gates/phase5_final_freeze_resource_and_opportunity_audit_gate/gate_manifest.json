@@ -1,0 +1,126 @@
+{
+  "gate_slug": "phase5_final_freeze_resource_and_opportunity_audit_gate",
+  "timestamp_utc": "2026-05-09T23:45:06+00:00",
+  "baseline_commit": "01a1b268d95f71a8d2aa16db2ecf1b3ff1170c58",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_research_agenda.yaml",
+      "exists": true,
+      "size_bytes": 13287,
+      "mtime_utc": "2026-05-05T20:36:44+00:00",
+      "sha256": "1B2FE99FB3BC59D7961A8F37509E44F72809BC7349E0FB61FA891496AA871C06"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_current_state.json",
+      "exists": true,
+      "size_bytes": 28266,
+      "mtime_utc": "2026-05-09T23:43:26+00:00",
+      "sha256": "496F65DE56CBA3E1B815D798EDC8B71F1F3FBB66BB257595C74E19C06B72A007"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_spec_gap_backlog.yaml",
+      "exists": true,
+      "size_bytes": 46187,
+      "mtime_utc": "2026-05-09T23:43:26+00:00",
+      "sha256": "69AB1DA78A4D805DCDFEF5FE2C76B357F42C2D3A2213BA47EF066476254F71D9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_next_autonomous_mission.md",
+      "exists": true,
+      "size_bytes": 2064,
+      "mtime_utc": "2026-05-09T23:43:26+00:00",
+      "sha256": "05EE7E03115FFB09B7CE27F234EEC71E5929A644F31992D8E88C88FA34E538E9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_artifact_registry.json",
+      "exists": true,
+      "size_bytes": 14283,
+      "mtime_utc": "2026-05-09T23:43:26+00:00",
+      "sha256": "2A46366722BEFE0758F70D293AB1D46AA868127B37F47F79EE5076BA8B4C17D2"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_hypothesis_inventory.md",
+      "exists": true,
+      "size_bytes": 5139,
+      "mtime_utc": "2026-05-05T20:37:04+00:00",
+      "sha256": "58D486A587994C6B08B9596DDFDB335BB8825024C5849480280426F2BB938493"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_final_freeze_resource_and_opportunity_audit_gate\\final_freeze_opportunity_audit.json",
+      "exists": true,
+      "size_bytes": 10938,
+      "mtime_utc": "2026-05-09T23:45:05+00:00",
+      "sha256": "4F6BE9C6610731928B80420D6644233029CF41784D88AF1C93680C31EDCA6C43"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_final_freeze_resource_and_opportunity_audit_gate\\final_freeze_opportunity_metrics.parquet",
+      "exists": true,
+      "size_bytes": 1938,
+      "mtime_utc": "2026-05-09T23:45:05+00:00",
+      "sha256": "9D22F3322EA332F405E48E919330210422BC704667D65FEC66B0B29F616DE08B"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_external_resource_manifest.md",
+      "exists": true,
+      "size_bytes": 1551,
+      "mtime_utc": "2026-05-09T23:45:05+00:00",
+      "sha256": "A686A554C5757AC0DAD0EC250626F19FA8F5C66A103095ADD8A9B65235CD4434"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_final_freeze_opportunity_audit.md",
+      "exists": true,
+      "size_bytes": 3023,
+      "mtime_utc": "2026-05-09T23:45:05+00:00",
+      "sha256": "C919D67ECB2710CC55D7B2F70AD49DC31412A6CA5466FB9694C2F45A6D66558A"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_next_material_evidence_request.md",
+      "exists": true,
+      "size_bytes": 1458,
+      "mtime_utc": "2026-05-09T23:45:05+00:00",
+      "sha256": "EA5807BE4E8A68DDC1EFA1687F7FBF40F5E31692612B9F422AA7D6D288F62500"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_final_freeze_resource_and_opportunity_audit_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4678,
+      "mtime_utc": "2026-05-09T23:45:06+00:00",
+      "sha256": "64FA8FADD198EDAE02771EC3DEEE1477A768AE55C2987A3D4FE46205930D683D"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_final_freeze_resource_and_opportunity_audit_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 2614,
+      "mtime_utc": "2026-05-09T23:45:06+00:00",
+      "sha256": "EE51E43330DFBF2B1148A10AA90271B477848A562F4927580E0E5439722B4E97"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_final_freeze_resource_and_opportunity_audit_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 4116,
+      "mtime_utc": "2026-05-09T23:45:06+00:00",
+      "sha256": "31759F09849E957432F3D60FD9BBE61D75E7FF8E72DBA272D68BCD0B1C19575B"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_final_freeze_resource_and_opportunity_audit_gate\\gate_manifest.json",
+      "exists": true,
+      "size_bytes": 6086,
+      "mtime_utc": "2026-05-09T23:40:45+00:00",
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    "python services/ml_engine/phase5_final_freeze_resource_and_opportunity_audit.py",
+    "python -m pytest tests/unit/test_phase5_final_freeze_resource_and_opportunity_audit.py -q"
+  ],
+  "notes": [
+    "Final freeze resource/opportunity audit.",
+    "H06 is LOW priority and blocked by missing canonical unlock artifacts.",
+    "No official promotion, paper readiness, merge, threshold relaxation or A3/A4 reopening."
+  ]
+}

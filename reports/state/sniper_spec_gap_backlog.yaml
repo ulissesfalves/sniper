@@ -921,14 +921,21 @@ gaps:
     title: Final freeze requires resource and opportunity audit
     type: governance_state
     severity: critical
-    status: open
+    status: resolved_final_audited
     evidence:
       - "FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED is intermediate only"
       - "no HIGH/MEDIUM executable in-repo agenda family remains after H05"
       - "H06 unlock_shadow_feature_ablation is LOW priority"
       - "H06 requires data/parquet/unlocks/** and data/parquet/unlock_diagnostics/unlock_quality_daily.parquet if executed"
       - "human_decision_required=false until final opportunity/resource audit confirms external resource or no safe internal action"
-      - "autonomous_can_continue=true"
+      - "autonomous_can_continue=true before audit"
+      - "reports/gates/phase5_final_freeze_resource_and_opportunity_audit_gate/gate_report.json"
+      - "classification=FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED"
+      - "remaining_high_medium_executable_count=0"
+      - "h06_status=EXTERNAL_RESOURCE_REQUIRED"
+      - "internal_module_safe_next_action_count=0"
+      - "autonomous_can_continue=false after audit"
+      - "human_decision_required=true only for external artifacts or draft PR review"
     source_files:
       - "AGENTS.md"
       - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
@@ -938,9 +945,8 @@ gaps:
       - "reports/state/sniper_autonomous_runbook.md"
       - "reports/state/sniper_research_agenda.yaml"
     allowed_actions:
-      - "FINAL_FREEZE_RESOURCE_AND_OPPORTUNITY_AUDIT"
-      - "LOW_PRIORITY_PREFLIGHT_GATE"
-      - "EXTERNAL_RESOURCE_MANIFEST"
+      - "EXTERNAL_RESOURCE_REQUIRED_FOR_H06"
+      - "DRAFT_PR_REVIEW_READY"
       - "UPDATE_STATE"
       - "UPDATE_DRAFT_PR"
     forbidden_actions:
@@ -954,5 +960,5 @@ gaps:
       - "A3_REOPEN"
       - "A4_REOPEN"
       - "THRESHOLD_RELAXATION"
-    suggested_gate: "phase5_final_freeze_resource_and_opportunity_audit_gate"
-    stop_condition_if_unresolved: "Do not accept final freeze until the opportunity audit creates the external resource manifest, final freeze opportunity audit and next material evidence request, or executes any safe internal action it finds."
+    suggested_gate: "none_safe_internal"
+    stop_condition_if_unresolved: "Resolved by phase5_final_freeze_resource_and_opportunity_audit_gate. Final audited freeze is legitimate unless canonical H06 unlock artifacts or materially new evidence are provided."

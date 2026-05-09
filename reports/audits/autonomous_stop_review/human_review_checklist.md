@@ -68,7 +68,7 @@
 - [ ] Confirmar que `cluster_2_long_high_short_low_p60_h70_k3` teve mediana Sharpe `1.183459`, min Sharpe `0.078586`, dias ativos medianos `425.0` e CVaR95 max `0.00151815`.
 - [ ] Confirmar que essa candidata foi falsificada por 13 hard falsifiers.
 - [ ] Confirmar principais falsificadores: `temporal_subperiod_min_sharpe=-1.633204` e `extra_cost_20bps_min_sharpe=-0.493149`.
-- [ ] Confirmar classificacao final `FULL_FREEZE_AFTER_REAUDIT`.
+- [ ] Confirmar classificacao final auditada `FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED`.
 - [ ] Confirmar `remaining_safe_material_hypothesis_count=0`.
 - [ ] Confirmar que nenhuma dessas evidencias promove official ou declara paper readiness.
 
@@ -138,7 +138,7 @@
 - [ ] Confirmar que a linha meta-uncertainty falsificada tambem nao foi usada para declarar paper readiness.
 - [ ] Confirmar que H03 `cvar_constrained_meta_sizing` e H04 `regime_specific_meta_disagreement` sao apenas research/sandbox parcial, nao promotable.
 - [ ] Confirmar que H05 e diagnostico apenas e nao foi tratado como sinal operacional.
-- [ ] Confirmar `FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED` como classificacao final desta agenda, sem promocao.
+- [ ] Confirmar `FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED` como classificacao final desta agenda, sem promocao.
 
 ## Testes
 
@@ -204,6 +204,11 @@ python -m pytest tests/unit/test_phase5_research_cvar_constrained_meta_sizing.py
 - [ ] Nao aprovar promocao official.
 - [ ] Decidir se a linha cross-sectional deve ser congelada como research-only.
 - [ ] Revisar o abandono do candidato sandbox `short_high_p_bma_k3_p60_h70`.
-- [ ] Revisar a classificacao `FULL_FREEZE_AFTER_REAUDIT`.
+- [ ] Revisar a classificacao auditada `FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED`.
 - [ ] Nao pedir promocao official, paper readiness, merge ou reabertura A3/A4 a partir deste PR.
 - [ ] Proxima rodada autonoma so deve ocorrer com evidencia materialmente nova, artifact externo ou nova agenda HIGH/MEDIUM executavel dentro do repo.
+
+
+## Final Freeze Opportunity Audit Update
+
+`phase5_final_freeze_resource_and_opportunity_audit_gate` returned `PASS/freeze` with `FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED`. It confirmed zero remaining HIGH/MEDIUM executable hypotheses, H06 blocked by missing canonical unlock artifacts, no safe internal module remaining, and no official promotion or paper readiness. The PR remains draft evidence only.
