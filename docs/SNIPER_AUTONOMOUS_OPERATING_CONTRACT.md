@@ -18,6 +18,8 @@ the current repository and preserves governance:
   candidate is falsified;
 - automatically run `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION` before accepting a
   final freeze after reaudit;
+- automatically run `FINAL_FREEZE_RESOURCE_AND_OPPORTUNITY_AUDIT` before
+  accepting `FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED` as final freeze;
 - automatically start a materially new research-only thesis when the backlog
   contains an executable ex-ante hypothesis;
 - create a branch with the `codex/` prefix when needed;
@@ -56,6 +58,8 @@ Codex must not stop for human decision while any safe internal path remains:
 - a candidate decision gate;
 - a post-candidate-falsification global reaudit;
 - an autonomous research agenda expansion;
+- a final freeze resource/opportunity audit;
+- a LOW-priority diagnostic/preflight gate that is executable inside the repo;
 - a state update or draft PR update;
 - a governed freeze review;
 - `RUN_GLOBAL_REAUDIT`;
@@ -96,10 +100,12 @@ Latest research/sandbox candidate chain:
 - paper readiness allowed: `false`.
 
 The current recommended mode is
-`CVAR_CONSTRAINED_META_SIZING_GATE`; the next gate is
-`phase5_research_cvar_constrained_meta_sizing_gate` from `AGENDA-H03`. The
-falsified meta-disagreement and meta-uncertainty candidates do not prove
-robustness, promotion eligibility or paper readiness.
+`FINAL_FREEZE_RESOURCE_AND_OPPORTUNITY_AUDIT`; the next gate is
+`phase5_final_freeze_resource_and_opportunity_audit_gate`. The current agenda
+has no HIGH/MEDIUM executable in-repo family remaining, but
+`FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED` is not final until Codex
+audits remaining LOW/preflight options, external resources and non-promotional
+functional modules.
 
 ## Closed-Loop Autonomous Policy
 
@@ -123,6 +129,8 @@ Automatically executable recommendations include:
 - `NEXT_GATE_CHAIN_EXECUTION`
 - `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`
 - `GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`
+- `FINAL_FREEZE_RESOURCE_AND_OPPORTUNITY_AUDIT`
+- `LOW_PRIORITY_PREFLIGHT_GATE`
 - `FREEZE_LINE` only after all freeze criteria are satisfied.
 
 Stop only for external artifacts/data, credentials or paid APIs, access outside
@@ -256,7 +264,11 @@ Freeze is permitted only after:
 - a post-falsification global reaudit was executed;
 - `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION` was executed after the latest
   falsification;
-- no HIGH/MEDIUM priority agenda hypothesis remains executable inside the repo.
+- no HIGH/MEDIUM priority agenda hypothesis remains executable inside the repo;
+- `FINAL_FREEZE_RESOURCE_AND_OPPORTUNITY_AUDIT` was executed;
+- LOW/preflight hypotheses were evaluated or explicitly justified;
+- external artifacts that would unlock further research were listed with paths
+  and verification commands.
 
 ## Research Agenda Expansion Before Final Freeze
 
@@ -281,9 +293,44 @@ hypothesis, open a research-only gate, implement only in research/sandbox,
 validate, falsify or preserve, and continue closed-loop execution.
 
 If the agenda produces no materially new HIGH/MEDIUM executable hypothesis,
-Codex must classify the line as
-`FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED`, update
-`reports/state/**`, update the existing draft PR when reviewable, and stop.
+Codex must classify
+`FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED` as an intermediate state,
+update `reports/state/**`, and execute
+`FINAL_FREEZE_RESOURCE_AND_OPPORTUNITY_AUDIT` before any final freeze.
+
+## Final Freeze Resource And Opportunity Audit
+
+`FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED` requires a final
+opportunity/resource audit before it can become a final stop. The next safe
+action is `FINAL_FREEZE_RESOURCE_AND_OPPORTUNITY_AUDIT`; human decision is not
+required until that audit confirms either an external resource requirement or
+the absence of all safe internal actions.
+
+The audit must create or update:
+
+- `reports/state/sniper_external_resource_manifest.md`
+- `reports/state/sniper_final_freeze_opportunity_audit.md`
+- `reports/state/sniper_next_material_evidence_request.md`
+
+The audit must verify:
+
+- remaining HIGH/MEDIUM hypotheses; execute any safe in-repo hypothesis
+  automatically;
+- LOW hypotheses; execute a diagnostic/preflight gate when it needs no external
+  artifact;
+- H06 `unlock_shadow_feature_ablation`; if required unlock artifacts exist,
+  execute a diagnostic gate, otherwise generate an external resource manifest;
+- external artifacts/dados that would unlock new research, including expected
+  paths, `Test-Path` checks and why Codex must not fabricate them;
+- non-promotional functional modules that could still be useful inside the repo,
+  including artifact registry, replay/falsification dashboard, report generator,
+  validation runner, reproducibility pack, drift/C2ST monitor research-only,
+  feature availability audit or data quality gate.
+
+If the audit finds a safe internal action, Codex must create a gate, implement,
+validate, update `reports/state/**`, commit and push. If it finds no safe
+internal action, the final classification is
+`FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED`.
 
 Human decision is not required merely because the previous backlog ended.
 External-resource hypotheses must be classified as `EXTERNAL_RESOURCE_REQUIRED`
@@ -311,6 +358,8 @@ Allowed modes:
 - `OPEN_RESEARCH_GATE`
 - `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`
 - `GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`
+- `FINAL_FREEZE_RESOURCE_AND_OPPORTUNITY_AUDIT`
+- `LOW_PRIORITY_PREFLIGHT_GATE`
 - `FREEZE_LINE` only after the full freeze requirements are satisfied.
 - `STOP_FOR_HUMAN_DECISION` only for the explicit external/governance cases
   listed above.

@@ -1,6 +1,6 @@
 # SNIPER Decision Ledger
 
-Updated: 2026-05-04T02:36:05Z
+Updated: 2026-05-09T00:00:00Z
 
 ## Closed Decisions
 
@@ -51,30 +51,39 @@ Updated: 2026-05-04T02:36:05Z
 | CVaR-constrained meta sizing | Partial/correct | `phase5_research_cvar_constrained_meta_sizing_gate` tested AGENDA-H03 and classified `signed_meta_edge_t52_s15_k5_g04` as `CVAR_CONSTRAINED_META_SIZING_CVAR_PASS_ALPHA_UNSTABLE`. The runner produced nonzero research/sandbox exposure and max CVaR95 `0.00356911`, with median Sharpe `2.040444`, but min Sharpe `-0.903026` and 20 hard falsifiers block preservation. Next agenda hypothesis is `AGENDA-H04` / `phase5_research_regime_specific_meta_disagreement_gate`. |
 | Regime-specific meta disagreement | Partial/correct | `phase5_research_regime_specific_meta_disagreement_gate` tested AGENDA-H04 and classified `neutral_short_meta_low_m40_k3` as `REGIME_SPECIFIC_META_DISAGREEMENT_POSITIVE_BUT_UNSTABLE`. The runner produced nonzero research/sandbox exposure and max CVaR95 `0.00315145`, with median Sharpe `0.726729`, but min Sharpe `-0.911080`, median active days `82.0` and 13 hard falsifiers block preservation. Next agenda hypothesis is diagnostic H05 / `phase5_research_feature_family_ablation_blocker_decomposition_gate`. |
 | Feature-family ablation blocker decomposition | Completed / agenda exhausted | `phase5_research_feature_family_ablation_blocker_decomposition_gate` tested AGENDA-H05 and classified the diagnostic as `FEATURE_FAMILY_ABLATION_COMPLETE_NO_HIGH_MEDIUM_EXECUTABLE_FAMILY`. It evaluated 5 feature families, found no HIGH/MEDIUM executable in-repo family remaining, kept diagnostics non-operational, and preserved all promotion blockers. |
+| Final freeze resource/opportunity audit | Required before final freeze | `FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED` is now only an intermediate state. Codex must execute `phase5_final_freeze_resource_and_opportunity_audit_gate`, evaluate LOW/preflight H06, list external artifacts, check non-promotional internal modules, and create the three final freeze state documents before any permanent freeze. |
 
 ## Current Decision
 
 The current mission executed checkpoint continuation through H03, H04 and H05.
 
-Current classification:
+Current intermediate classification:
 `FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED`.
 
-Human review is now required for the draft PR because no HIGH/MEDIUM executable
-in-repo research family remains in the current agenda. H05 was diagnostic-only
-and did not create an operational signal. Do not promote, merge, declare paper
-readiness, reopen A3/A4, relax thresholds, or treat research CVaR as official.
+Human review is not yet required as a final stop. Before final freeze, Codex
+must execute `FINAL_FREEZE_RESOURCE_AND_OPPORTUNITY_AUDIT` through
+`phase5_final_freeze_resource_and_opportunity_audit_gate`. The audit must
+confirm no HIGH/MEDIUM executable in-repo hypothesis remains, evaluate LOW
+preflight H06, list external artifacts, and check non-promotional internal
+modules. Do not promote, merge, declare paper readiness, reopen A3/A4, relax
+thresholds, or treat research CVaR as official.
 
-No next autonomous gate is registered. H06 remains LOW priority and depends on
-absent or shadow-only unlock artifacts, so it is not an automatic continuation
-gate for this mission.
+Next autonomous gate:
+`phase5_final_freeze_resource_and_opportunity_audit_gate`.
+
+H06 remains LOW priority. If unlock artifacts exist at `data/parquet/unlocks/**`
+and `data/parquet/unlock_diagnostics/unlock_quality_daily.parquet`, it may be
+evaluated by diagnostic/preflight gate. If they are absent, generate an external
+resource manifest and do not fabricate unlock artifacts.
 
 Large reviewable output from the prior round is now a governed checkpoint, not a
 final stop. Current checkpoint classification:
 `CHECKPOINT_CONTINUE_AUTONOMOUS`.
 
-The next recommended mode is `PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION`;
-autonomous continuation is false, human review is required, and official
-promotion/paper readiness remain forbidden.
+The next recommended mode is `FINAL_FREEZE_RESOURCE_AND_OPPORTUNITY_AUDIT`;
+autonomous continuation is true, human decision is false until the audit
+confirms external resource requirement or total absence of internal action, and
+official promotion/paper readiness remain forbidden.
 
 ## Required Review Before Promotion
 

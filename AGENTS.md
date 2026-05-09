@@ -84,6 +84,8 @@ Allowed without a new user decision:
   `POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT` when recommended;
 - automatically run `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION` before accepting a
   final freeze after reaudit;
+- automatically run `FINAL_FREEZE_RESOURCE_AND_OPPORTUNITY_AUDIT` before
+  accepting `FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED` as final freeze;
 - automatically start a materially new research-only thesis when the backlog
   contains an executable ex-ante hypothesis;
 - execute autonomous full phase research missions inside this repository;
@@ -109,8 +111,8 @@ safe internal path such as `RUN_GLOBAL_REAUDIT`, `RUN_GLOBAL_REAUDIT_CANDIDATE`,
 `POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT`,
 `START_RESEARCH_ONLY_THESIS`, `CONTINUE_AUTONOMOUS`, a stability gate, a
 falsification gate, a state update, a draft PR update, a governed freeze review,
-an autonomous research agenda expansion, or an internal strategic decision
-rubric.
+an autonomous research agenda expansion, a final freeze resource/opportunity
+audit, or an internal strategic decision rubric.
 
 Next gate chain execution is mandatory. If
 `reports/state/sniper_next_autonomous_mission.md` defines a safe next gate with
@@ -148,10 +150,18 @@ Latest candidate chain:
 - promotion allowed: `false`;
 - paper readiness allowed: `false`.
 
-Current recommended mode: `CVAR_CONSTRAINED_META_SIZING_GATE`.
-Current next gate: `phase5_research_cvar_constrained_meta_sizing_gate`
-(`AGENDA-H03`). The falsified H01/H02 candidates are research/sandbox only and
-must not be treated as official, robust, promotable or paper-ready.
+Current recommended mode: `FINAL_FREEZE_RESOURCE_AND_OPPORTUNITY_AUDIT`.
+Current next gate: `phase5_final_freeze_resource_and_opportunity_audit_gate`.
+The current agenda has no HIGH/MEDIUM executable in-repo family remaining, but
+`FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED` is not final until the final
+opportunity/resource audit verifies HIGH/MEDIUM exhaustion, evaluates LOW
+preflight options, lists external artifacts, and checks non-promotional
+functional modules.
+
+H06 `unlock_shadow_feature_ablation` is LOW priority. If the required unlock
+artifacts exist, Codex may execute a diagnostic/preflight gate; if they are
+absent, Codex must generate an external resource manifest and must not fabricate
+or promote shadow artifacts.
 
 Must stop before:
 
@@ -202,7 +212,9 @@ evaluated when research exposure exists, family comparison/falsification was
 recorded, the last candidate was falsified, a post-falsification global reaudit
 was executed, `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION` was executed after the
 latest falsification, no HIGH/MEDIUM priority agenda hypothesis remains
-executable inside the repo, and `reports/state/sniper_decision_ledger.md` was
+executable inside the repo, `FINAL_FREEZE_RESOURCE_AND_OPPORTUNITY_AUDIT` was
+executed, external resources were explicitly listed, LOW/preflight paths were
+evaluated or justified, and `reports/state/sniper_decision_ledger.md` was
 updated.
 
 ## Stop Conditions
@@ -210,16 +222,18 @@ updated.
 Stop if the next step needs external/private artifacts, credentials or paid API,
 operation outside the repo, real capital, merge, a specification change,
 official promotion, paper readiness, A3/A4 reopening, budget exhaustion, no
-materially new hypothesis after research agenda expansion, changes too large
-for reasonable review after checkpoint handling, or any governance violation.
+materially new hypothesis after research agenda expansion plus final
+opportunity/resource audit, changes too large for reasonable review after
+checkpoint handling, or any governance violation.
 
 Do not use human strategy as a stop condition while there is an open gap,
 defensible research-only hypothesis, internal correction, unfinished
 quantitative diagnostic, possible sandbox/research module, surviving
 research-only candidate, candidate audit/falsification gate, post-falsification
 global reaudit, autonomous research agenda expansion, state update, draft PR
-update or governed freeze review inside the repo. A technical next
-recommendation is not a valid stop if it is safe and internal to this repo.
+update, final freeze resource/opportunity audit, LOW/preflight diagnostic, or
+governed freeze review inside the repo. A technical next recommendation is not
+a valid stop if it is safe and internal to this repo.
 
 ## State Update Obligation
 

@@ -408,7 +408,7 @@ A missão em loop fechado só pode terminar com uma destas classificações:
 - SPEC_CHANGE_REQUIRED;
 - GOVERNANCE_HARD_STOP;
 - AUTONOMOUS_BUDGET_EXHAUSTED;
-- FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED;
+- FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED;
 - PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION;
 - FUNCTIONAL_RESEARCH_MODULE_DELIVERED_WITH_NO_SAFE_NEXT_GATE.
 
@@ -424,6 +424,7 @@ Não são stops válidos:
 - "FUNCTIONAL_RESEARCH_MODULE_DELIVERED com próximo gate seguro";
 - "PR draft atualizado com próximo gate seguro";
 - "backlog esgotado antes de executar agenda synthesizer";
+- "FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED antes da auditoria final de oportunidades";
 - "decisão humana para escolher tese".
 
 Caso atual conhecido:
@@ -506,7 +507,7 @@ Stop final legítimo:
 - SPEC_CHANGE_REQUIRED;
 - GOVERNANCE_HARD_STOP;
 - AUTONOMOUS_BUDGET_EXHAUSTED;
-- FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED;
+- FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED;
 - PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION;
 - FUNCTIONAL_RESEARCH_MODULE_DELIVERED_WITH_NO_SAFE_NEXT_GATE.
 
@@ -537,11 +538,11 @@ dentro do repo:
 - continuar em loop fechado.
 
 Se a agenda não gerar hipótese materialmente nova:
-- registrar FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED;
+- registrar FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED como estado intermediário;
 - atualizar reports/state/sniper_decision_ledger.md;
 - atualizar reports/state/sniper_current_state.json;
 - atualizar o PR draft existente, quando houver entrega revisável;
-- parar.
+- executar FINAL_FREEZE_RESOURCE_AND_OPPORTUNITY_AUDIT antes de qualquer parada final.
 
 Não pedir decisão humana apenas porque o backlog anterior acabou. A missão só
 pode parar por ausência de hipótese quando:
@@ -568,13 +569,93 @@ implementar desde que:
 Saída final:
 - FULL_FREEZE_AFTER_REAUDIT só é permitido antes da expansão de agenda se o
   usuário explicitamente pedir parada.
-- Caso contrário, usar FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED quando a
-  agenda também esgotar.
+- Caso contrário, FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED é apenas estado
+  intermediário. A saída final só pode ser FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED
+  depois da auditoria final de oportunidades.
 
 Caso atual conhecido:
 A missão atual concluiu FULL_FREEZE_AFTER_REAUDIT após falsificar
 cluster_conditioned_polarity. Na próxima missão, a primeira ação deve ser
 AUTONOMOUS_RESEARCH_AGENDA_EXPANSION e não parada para decisão humana.
+
+FINAL_FREEZE_RESOURCE_AND_OPPORTUNITY_AUDIT
+
+FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED não pode ser aceito como parada
+final se ainda não foi executada uma auditoria final de oportunidades internas,
+hipóteses LOW/preflight e recursos externos necessários.
+
+Antes de emitir freeze final, criar ou atualizar obrigatoriamente:
+- reports/state/sniper_external_resource_manifest.md;
+- reports/state/sniper_final_freeze_opportunity_audit.md;
+- reports/state/sniper_next_material_evidence_request.md.
+
+A auditoria final deve verificar e registrar:
+
+A) Hipóteses HIGH/MEDIUM restantes
+- Se existir hipótese HIGH/MEDIUM executável dentro do repo, executar automaticamente.
+- Se não existir hipótese HIGH/MEDIUM executável, registrar explicitamente a ausência.
+
+B) Hipóteses LOW
+- Se existir hipótese LOW executável como diagnóstico/preflight sem recurso externo,
+  executar um preflight gate.
+- Se a hipótese LOW depender de artifact ausente, registrar como
+  EXTERNAL_RESOURCE_REQUIRED e não implementar.
+
+C) Artifacts externos
+- Listar exatamente quais artifacts/dados destravariam nova pesquisa.
+- Informar paths esperados.
+- Informar comando `Test-Path` ou verificação equivalente.
+- Informar por que o Codex não deve fabricá-los.
+
+D) Novos módulos funcionais não promocionais
+- Verificar se ainda há módulo funcional útil a entregar sem mudar tese quantitativa,
+  como registry de artifacts, replay/falsification dashboard, report generator,
+  validation runner, reproducibility pack, drift/C2ST monitor research-only, feature
+  availability audit ou data quality gate.
+- Se existir módulo útil dentro do repo e dentro da especificação, criar gate de
+  governança/research, implementar, validar, atualizar reports/state, commitar e push.
+
+Se a auditoria encontrar uma próxima ação interna segura:
+- não parar;
+- criar gate;
+- implementar somente dentro de governança/research/sandbox;
+- validar;
+- atualizar reports/state/**;
+- fazer commit;
+- fazer push.
+
+Se a auditoria não encontrar ação interna segura:
+- classificar como FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED;
+- atualizar reports/state/sniper_decision_ledger.md;
+- atualizar reports/state/sniper_current_state.json;
+- atualizar o PR draft existente;
+- parar com working tree limpo.
+
+Quando H06 ou qualquer hipótese depender de artifacts ausentes, gerar manifest
+explícito contendo:
+- nome da hipótese;
+- artifacts necessários;
+- paths esperados;
+- por que são necessários;
+- como validar presença;
+- o que o Codex pode fazer depois que forem fornecidos.
+
+Parada final legítima por freeze exige:
+- agenda HIGH/MEDIUM esgotada;
+- hipóteses LOW/preflight avaliadas ou justificadas;
+- artifacts externos listados;
+- nenhum módulo funcional interno útil restante;
+- PR draft atualizado;
+- working tree limpo.
+
+Proibições específicas desta auditoria:
+- não implementar H06 se depender de artifact ausente;
+- não fabricar unlock artifacts;
+- não transformar shadow artifact em official;
+- não promover nada para official;
+- não declarar paper readiness;
+- não mascarar DSR=0.0;
+- não tratar CVaR zero exposure como robustez econômica.
 
 AUTONOMOUS FULL PHASE EXECUTION POLICY
 
@@ -796,8 +877,8 @@ Pare e entregue relatório final se qualquer condição ocorrer:
 9. DSR honesto permanecer 0.0 e a única forma de avançar seria promover mesmo assim.
 10. Qualquer violação de governança for detectada.
 11. A exploração autônoma atingir o orçamento máximo da CLOSED_LOOP_AUTONOMOUS_EXECUTION_POLICY quando a missão estiver em loop fechado, ou da AUTONOMOUS FULL PHASE EXECUTION POLICY quando a missão não estiver em loop fechado.
-12. Não houver hipótese materialmente nova dentro dos gaps abertos depois de executar RESEARCH_AGENDA_EXPANSION_BEFORE_FREEZE.
-13. A linha só puder ser congelada depois de cumprir os requisitos mínimos de freeze: pelo menos 2 famílias materialmente diferentes testadas, diagnóstico DSR explícito, CVaR research com exposição não zero quando houver exposição research disponível, comparação entre famílias, expansão de agenda research-only após a última falsificação e registro no decision ledger.
+12. Não houver hipótese materialmente nova dentro dos gaps abertos depois de executar RESEARCH_AGENDA_EXPANSION_BEFORE_FREEZE e FINAL_FREEZE_RESOURCE_AND_OPPORTUNITY_AUDIT.
+13. A linha só puder ser congelada depois de cumprir os requisitos mínimos de freeze: pelo menos 2 famílias materialmente diferentes testadas, diagnóstico DSR explícito, CVaR research com exposição não zero quando houver exposição research disponível, comparação entre famílias, expansão de agenda research-only após a última falsificação, auditoria final de oportunidades, manifest de recursos externos e registro no decision ledger.
 
 Limites da missão:
 - Não operar capital real.
@@ -862,6 +943,7 @@ Ao parar, entregue:
 29. Por que a candidata ainda não é promotable.
 30. Próximo gate autônomo.
 31. Se pode continuar autonomamente.
-32. Classificação final obrigatória: EXTERNAL_RESOURCE_REQUIRED, SPEC_CHANGE_REQUIRED, GOVERNANCE_HARD_STOP, AUTONOMOUS_BUDGET_EXHAUSTED, FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED, PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION ou FUNCTIONAL_RESEARCH_MODULE_DELIVERED_WITH_NO_SAFE_NEXT_GATE.
+32. Classificação final obrigatória: EXTERNAL_RESOURCE_REQUIRED, SPEC_CHANGE_REQUIRED, GOVERNANCE_HARD_STOP, AUTONOMOUS_BUDGET_EXHAUSTED, FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED, PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION ou FUNCTIONAL_RESEARCH_MODULE_DELIVERED_WITH_NO_SAFE_NEXT_GATE.
 33. Se houve expansão de agenda, informar hipóteses HIGH/MEDIUM geradas, hipóteses LOW registradas e o próximo gate research-only executado ou a justificativa de agenda esgotada.
-34. Se houver candidata viva, informar o próximo gate encadeado executado ou o hard stop real que impediu sua execução.
+34. Se houve auditoria final de oportunidades, informar HIGH/MEDIUM remanescentes, LOW/preflight avaliadas, artifacts externos necessários, módulos internos avaliados e a classificação FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED somente quando não houver próxima ação segura.
+35. Se houver candidata viva, informar o próximo gate encadeado executado ou o hard stop real que impediu sua execução.

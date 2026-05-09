@@ -308,8 +308,10 @@ research-only gate, implement only in research/sandbox, validate, falsify or
 preserve, and continue closed-loop execution.
 
 If the agenda produces no HIGH/MEDIUM executable hypothesis, classify
-`FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED`, update
-`reports/state/**`, update the existing draft PR when reviewable, and stop.
+`FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED` as an intermediate state,
+update `reports/state/**`, then execute
+`FINAL_FREEZE_RESOURCE_AND_OPPORTUNITY_AUDIT` before any final freeze or human
+review stop.
 
 Agenda expansion result:
 
@@ -479,9 +481,34 @@ in a long-only research/sandbox gate, executed H03 in
 H04 both produced nonzero research/sandbox exposure and research CVaR within
 bound, but remained `PARTIAL/correct` because min Sharpe and sensitivity failed.
 H05 found no HIGH/MEDIUM executable in-repo feature family remaining. The current
-classification is `FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED`; the next
-action is draft PR review, not promotion, not paper readiness and not merge
-approval.
+classification `FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED` is intermediate
+only. The next action is `FINAL_FREEZE_RESOURCE_AND_OPPORTUNITY_AUDIT` through
+`phase5_final_freeze_resource_and_opportunity_audit_gate`, not promotion, not
+paper readiness and not merge approval.
+
+## Final Freeze Resource And Opportunity Audit
+
+Before final freeze, Codex must:
+
+1. Confirm no HIGH/MEDIUM executable hypothesis remains.
+2. Evaluate LOW/preflight hypotheses, especially H06
+   `unlock_shadow_feature_ablation`.
+3. If H06 artifacts exist at `data/parquet/unlocks/**` and
+   `data/parquet/unlock_diagnostics/unlock_quality_daily.parquet`, run a
+   diagnostic/preflight gate.
+4. If those artifacts are absent, create an external resource manifest with
+   expected paths and `Test-Path` verification commands.
+5. Check non-promotional internal modules: artifact registry,
+   replay/falsification dashboard, report generator, validation runner,
+   reproducibility pack, drift/C2ST monitor research-only, feature availability
+   audit and data quality gate.
+6. Create or update:
+   - `reports/state/sniper_external_resource_manifest.md`;
+   - `reports/state/sniper_final_freeze_opportunity_audit.md`;
+   - `reports/state/sniper_next_material_evidence_request.md`.
+
+Only after this audit finds no safe internal action may Codex classify
+`FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED`.
 
 ## Forbidden Interpretations
 
@@ -502,7 +529,7 @@ Stop if the next step requires:
 - exploration budget exhaustion;
 - no materially new HIGH/MEDIUM hypothesis after candidate falsification,
   post-falsification global reaudit, governed freeze and autonomous research
-  agenda expansion;
+  agenda expansion plus final opportunity/resource audit;
 - external artifact or private data not present;
 - credential, paid API or real capital;
 - merge or ready PR transition;
@@ -514,10 +541,11 @@ Stop if the next step requires:
 Do not stop for human decision while there is an open gap, defensible
 research-only hypothesis, internal correction, unfinished quantitative
 diagnostic, possible sandbox/research module, post-falsification global reaudit,
-autonomous research agenda expansion, state update, draft PR update or governed
-freeze review inside the repo. The prior surviving candidate and the
+autonomous research agenda expansion, LOW/preflight diagnostic, final
+opportunity/resource audit, state update, draft PR update or governed freeze
+review inside the repo. The prior surviving candidate and the
 cluster-conditioned candidate, the meta-disagreement candidate and the
 meta-uncertainty long-only line have now been audited/falsified. The current
-line reached governed agenda exhaustion after diagnostic H05. Do not continue
-autonomously without materially new evidence, a new agenda synthesis with a
-HIGH/MEDIUM executable hypothesis, or external artifacts for a new line.
+line reached governed agenda exhaustion after diagnostic H05, but must execute
+the final opportunity/resource audit before final freeze. Human decision remains
+false until that audit confirms external artifacts or no safe internal action.
