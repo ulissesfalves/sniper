@@ -2,11 +2,14 @@
 
 ## PR readiness
 
-- [ ] Confirmar que o PR sera aberto como draft.
+- [ ] Confirmar que o PR #1 permanece draft.
+- [ ] Confirmar que o PR #1 permanece open.
+- [ ] Confirmar que o PR #1 nao esta merged.
 - [ ] Confirmar base `codex/openclaw-sniper-handoff`.
 - [ ] Confirmar head `codex/autonomous-sniper-implementation`.
 - [ ] Confirmar que nao ha pedido de merge automatico.
 - [ ] Confirmar que nao ha promocao para official no texto do PR.
+- [ ] Confirmar que a decisao pos-missao atual e `REVIEW_DRAFT_PR`.
 
 ## Commits
 
@@ -21,6 +24,8 @@
 - [ ] Revisar `c4bf284` - artifact rehydration e DSR stop gate.
 - [ ] Revisar `e86f0db` - suporte a clean regeneration em clone isolado.
 - [ ] Revisar `d7829b7` - gate final de clean regeneration.
+- [ ] Revisar `5011b95` - H06 unlock shadow diagnostic gate.
+- [ ] Revisar `1d1a99a` - post-mission next-step decision protocol.
 
 ## Gates Phase6
 
@@ -29,6 +34,24 @@
 - [ ] Verificar `reports/gates/phase6_phase4_artifact_rehydration_and_dsr_stop_gate/gate_report.json`.
 - [ ] Verificar `reports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/gate_report.json`.
 - [ ] Confirmar que todos possuem `gate_report.json`, `gate_report.md`, `gate_manifest.json` e `gate_metrics.parquet`.
+
+## Gates H03-H06 e decisao pos-missao
+
+- [ ] Verificar `reports/gates/phase5_research_cvar_constrained_meta_sizing_gate/gate_report.json`.
+- [ ] Verificar `reports/gates/phase5_research_regime_specific_meta_disagreement_gate/gate_report.json`.
+- [ ] Verificar `reports/gates/phase5_research_feature_family_ablation_blocker_decomposition_gate/gate_report.json`.
+- [ ] Verificar `reports/gates/phase5_final_freeze_resource_and_opportunity_audit_gate/gate_report.json`.
+- [ ] Verificar `reports/gates/phase5_research_unlock_shadow_feature_ablation_gate/gate_report.json`.
+- [ ] Confirmar H03 `PARTIAL/correct` e nao promotable.
+- [ ] Confirmar H04 `PARTIAL/correct` e nao promotable.
+- [ ] Confirmar H05 diagnostico-only, sem sinal operacional.
+- [ ] Confirmar H06 `H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE`.
+- [ ] Confirmar que H06 encontrou artifacts unlock, mas eles sao shadow/proxy-heavy.
+- [ ] Confirmar que H06 nao produziu candidata research sobrevivente.
+- [ ] Confirmar `reports/state/sniper_next_step_decision.json`.
+- [ ] Confirmar decisao `REVIEW_DRAFT_PR`.
+- [ ] Confirmar alternativa futura `REQUEST_MATERIAL_EVIDENCE`.
+- [ ] Confirmar que nao ha proximo gate interno seguro.
 
 ## Gates research-only full-phase
 
@@ -207,13 +230,24 @@ python -m pytest tests/unit/test_phase5_research_cvar_constrained_meta_sizing.py
 - [ ] Revisar a classificacao auditada `FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED`.
 - [ ] Nao pedir promocao official, paper readiness, merge ou reabertura A3/A4 a partir deste PR.
 - [ ] Proxima rodada autonoma so deve ocorrer com evidencia materialmente nova, artifact externo ou nova agenda HIGH/MEDIUM executavel dentro do repo.
+- [ ] Confirmar que a acao correta agora e revisar PR #1 como draft, nao continuar autonomia.
 
 
 ## Final Freeze Opportunity Audit Update
 
-`phase5_final_freeze_resource_and_opportunity_audit_gate` returned `PASS/freeze` with `FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED`. It confirmed zero remaining HIGH/MEDIUM executable hypotheses, H06 blocked by missing canonical unlock artifacts, no safe internal module remaining, and no official promotion or paper readiness. The PR remains draft evidence only.
+`phase5_final_freeze_resource_and_opportunity_audit_gate` returned
+`PASS/freeze` with `FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED`. Its H06
+external-resource status was superseded after H06 artifacts were provided and
+`phase5_research_unlock_shadow_feature_ablation_gate` executed.
 
 
 ## H06 Unlock Shadow Diagnostic Update
 
 `phase5_research_unlock_shadow_feature_ablation_gate` returned `PASS/advance` with `H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE`. The supplied unlock artifacts were inventoried and joined to Phase4 OOS for diagnostic ablation, but the result is research/shadow diagnostic-only: no candidate, no official promotion, no paper readiness, no merge readiness.
+
+## Post-Mission Next-Step Decision Update
+
+`reports/state/sniper_next_step_decision.json` records `REVIEW_DRAFT_PR` as the
+current decision. `REQUEST_MATERIAL_EVIDENCE` is recorded as the future
+alternative. Codex cannot continue autonomously in the current state because no
+safe internal next gate is registered.

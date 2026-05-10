@@ -8,7 +8,7 @@ Base recomendada: `codex/openclaw-sniper-handoff`
 
 Classificacao: `DRAFT_PR_REVIEW_READY`
 
-Resultado final da missao: `FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED`
+Resultado final da missao: `H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_FINAL_FREEZE_RESTORED`
 
 Atualizacao full-phase: `PASS/advance` como evidencia research-only, sem promocao.
 
@@ -17,6 +17,12 @@ research-only; a candidata `short_high_p_bma_k3_p60_h70` foi falsificada e
 abandonada sem promocao.
 
 Recomendacao: manter PR draft para revisao humana. Nao abrir PR ready e nao promover nada para official.
+
+Decisao pos-missao atual: `REVIEW_DRAFT_PR`.
+
+Alternativa futura: `REQUEST_MATERIAL_EVIDENCE` se houver evidencia materialmente
+nova, nova agenda segura ou novo artifact que destrave pesquisa sem violar
+governanca.
 
 ## Resumo executivo
 
@@ -389,9 +395,31 @@ gh pr edit 1 --body-file reports/audits/autonomous_stop_review/draft_pr_summary.
 
 ## Final Freeze Opportunity Audit Update
 
-`phase5_final_freeze_resource_and_opportunity_audit_gate` returned `PASS/freeze` with `FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED`. It confirmed zero remaining HIGH/MEDIUM executable hypotheses, H06 blocked by missing canonical unlock artifacts, no safe internal module remaining, and no official promotion or paper readiness. The PR remains draft evidence only.
+`phase5_final_freeze_resource_and_opportunity_audit_gate` returned
+`PASS/freeze` with `FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED`. At that
+point H06 depended on missing canonical unlock artifacts. That blocker was later
+resolved by providing the unlock artifacts and executing
+`phase5_research_unlock_shadow_feature_ablation_gate`. The audit remains valid
+as the freeze/opportunity checkpoint, but its H06 external-resource status is
+superseded by the H06 diagnostic result below.
 
 
 ## H06 Unlock Shadow Diagnostic Update
 
 `phase5_research_unlock_shadow_feature_ablation_gate` returned `PASS/advance` with `H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE`. The supplied unlock artifacts were inventoried and joined to Phase4 OOS for diagnostic ablation, but the result is research/shadow diagnostic-only: no candidate, no official promotion, no paper readiness, no merge readiness.
+
+
+## Post-Mission Next-Step Decision
+
+`reports/state/sniper_next_step_decision.json` records the current decision as
+`REVIEW_DRAFT_PR`.
+
+There is no safe internal autonomous next gate registered in the current state.
+PR #1 should be reviewed manually as a draft governance/reproducibility/research
+package. It should not be merged, marked ready, used for official promotion, or
+used to declare paper readiness.
+
+Future autonomous work requires `REQUEST_MATERIAL_EVIDENCE`: a materially new
+hypothesis, new safe in-repo agenda or new evidence that can attack the
+remaining DSR/CVaR/promotability blockers without changing specification or
+relaxing thresholds.

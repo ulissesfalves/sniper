@@ -1,0 +1,81 @@
+{
+  "updated_at_utc": "2026-05-10T16:10:00Z",
+  "verdict": "REVIEW_READY_AS_DRAFT",
+  "recommendation": "Review PR #1 manually as draft; do not merge, mark ready, promote official, or declare paper readiness.",
+  "repo": "ulissesfalves/sniper",
+  "pr": {
+    "number": 1,
+    "url": "https://github.com/ulissesfalves/sniper/pull/1",
+    "state": "open",
+    "draft": true,
+    "merged": false,
+    "head": "codex/autonomous-sniper-implementation",
+    "head_sha": "1d1a99a72a5d585343ab2a8edd51dcdc0114af76",
+    "base": "codex/openclaw-sniper-handoff"
+  },
+  "local_repo": {
+    "branch": "codex/autonomous-sniper-implementation",
+    "head": "1d1a99a72a5d585343ab2a8edd51dcdc0114af76",
+    "status_short_before_review_files": "clean"
+  },
+  "post_mission_decision": {
+    "decision": "REVIEW_DRAFT_PR",
+    "alternative_future_action": "REQUEST_MATERIAL_EVIDENCE",
+    "can_continue_autonomously": false,
+    "next_gate": null,
+    "pr_action": "review_existing_draft_pr"
+  },
+  "latest_gate": {
+    "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
+    "status": "PASS",
+    "decision": "advance",
+    "classification": "H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE"
+  },
+  "quality_checks": {
+    "json_validated": true,
+    "gate_pack_presence_validated": true,
+    "state_decision_consistent": true,
+    "draft_pr_summary_updated": true,
+    "human_review_checklist_updated": true,
+    "untracked_files_before_review_generation": false
+  },
+  "governance": {
+    "official_promotion": false,
+    "paper_readiness": false,
+    "merge_performed": false,
+    "a3_a4_reopened": false,
+    "thresholds_relaxed": false,
+    "real_capital_used": false,
+    "credentials_created": false,
+    "research_treated_as_official": false
+  },
+  "blockers_remaining": [
+    "dsr_honest_zero_blocks_promotion",
+    "cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable",
+    "paper_readiness_blocked_by_quant_merit",
+    "no_high_medium_executable_research_agenda_family_remaining",
+    "h06_diagnostic_only_no_research_candidate",
+    "unlock_artifacts_shadow_or_proxy_heavy_not_official"
+  ],
+  "proven": [
+    "Phase6 clean regeneration and source/artifact alignment evidence exist.",
+    "Phase4 official and research baseline artifacts were found and hashed.",
+    "Research-only candidates were audited and falsified or left non-promotable.",
+    "H06 unlock shadow feature ablation completed as diagnostic-only evidence.",
+    "Post-mission next-step decision points to REVIEW_DRAFT_PR."
+  ],
+  "not_proven": [
+    "No official promotion candidate.",
+    "No paper readiness.",
+    "No surviving robust research candidate.",
+    "No economic CVaR robustness from official zero-exposure snapshot.",
+    "No DSR pass."
+  ],
+  "next_user_action": "Review PR #1 as a draft. Keep it draft and unmerged.",
+  "future_resume_conditions": [
+    "Material new evidence that supports a new safe research-only gate.",
+    "A new safe in-repo research agenda with HIGH/MEDIUM hypothesis.",
+    "A concrete external artifact/data package that does not require specification change or threshold relaxation."
+  ]
+}
