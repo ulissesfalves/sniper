@@ -390,3 +390,8 @@ gh pr edit 1 --body-file reports/audits/autonomous_stop_review/draft_pr_summary.
 ## Final Freeze Opportunity Audit Update
 
 `phase5_final_freeze_resource_and_opportunity_audit_gate` returned `PASS/freeze` with `FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED`. It confirmed zero remaining HIGH/MEDIUM executable hypotheses, H06 blocked by missing canonical unlock artifacts, no safe internal module remaining, and no official promotion or paper readiness. The PR remains draft evidence only.
+
+
+## H06 Unlock Shadow Diagnostic Update
+
+`phase5_research_unlock_shadow_feature_ablation_gate` returned `PASS/advance` with `H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE`. The supplied unlock artifacts were inventoried and joined to Phase4 OOS for diagnostic ablation, but the result is research/shadow diagnostic-only: no candidate, no official promotion, no paper readiness, no merge readiness.

@@ -531,3 +531,25 @@ diagnostic, possible sandbox/research module, post-falsification global reaudit,
 autonomous research agenda expansion, LOW/preflight diagnostic, final
 opportunity/resource audit, state update, draft PR update or governed freeze
 review inside the repo. The prior surviving candidate, the cluster-conditioned candidate, the meta-disagreement candidate and the meta-uncertainty long-only line have now been audited/falsified. The current line reached governed agenda exhaustion after diagnostic H05 and completed the final opportunity/resource audit. Human decision is now limited to external artifact provision or draft PR review; Codex cannot continue autonomously on the current agenda without new material evidence.
+
+
+## H06 Unlock Shadow Diagnostic Result
+
+`phase5_research_unlock_shadow_feature_ablation_gate` executed after the canonical H06 artifacts were provided.
+
+Result: `PASS/advance` with `H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE`.
+
+Key evidence:
+
+- unlock files: `69`;
+- Phase4 joined rows with selected unlock feature: `15665`;
+- Phase4 joined coverage: `0.165016`;
+- shadow mode detected: `true`;
+- observed coverage median: `0`;
+- proxy fallback coverage median: `0.979592`;
+- research candidate found: `false`.
+
+The gate is diagnostic/preflight evidence only. It does not authorize official
+promotion, paper readiness, merge, A3/A4 reopening or threshold relaxation.
+Current autonomous continuation is false for the current agenda unless materially
+new evidence or a new safe research agenda appears.

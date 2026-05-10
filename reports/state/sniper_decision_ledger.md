@@ -1,6 +1,6 @@
 # SNIPER Decision Ledger
 
-Updated: 2026-05-09T23:43:26Z
+Updated: 2026-05-10T12:01:52Z
 
 ## Closed Decisions
 
@@ -52,44 +52,30 @@ Updated: 2026-05-09T23:43:26Z
 | Regime-specific meta disagreement | Partial/correct | `phase5_research_regime_specific_meta_disagreement_gate` tested AGENDA-H04 and classified `neutral_short_meta_low_m40_k3` as `REGIME_SPECIFIC_META_DISAGREEMENT_POSITIVE_BUT_UNSTABLE`. The runner produced nonzero research/sandbox exposure and max CVaR95 `0.00315145`, with median Sharpe `0.726729`, but min Sharpe `-0.911080`, median active days `82.0` and 13 hard falsifiers block preservation. Next agenda hypothesis is diagnostic H05 / `phase5_research_feature_family_ablation_blocker_decomposition_gate`. |
 | Feature-family ablation blocker decomposition | Completed / agenda exhausted | `phase5_research_feature_family_ablation_blocker_decomposition_gate` tested AGENDA-H05 and classified the diagnostic as `FEATURE_FAMILY_ABLATION_COMPLETE_NO_HIGH_MEDIUM_EXECUTABLE_FAMILY`. It evaluated 5 feature families, found no HIGH/MEDIUM executable in-repo family remaining, kept diagnostics non-operational, and preserved all promotion blockers. |
 | Final freeze resource/opportunity audit | Completed / final audited freeze | `phase5_final_freeze_resource_and_opportunity_audit_gate` returned `PASS/freeze` with `FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED`: no HIGH/MEDIUM executable hypothesis remains, H06 requires external unlock artifacts, no safe internal module remains, and the three final freeze state documents were created. |
+| H06 unlock shadow feature ablation | Diagnostic complete / not promotable | `phase5_research_unlock_shadow_feature_ablation_gate` returned `PASS/advance` with `H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE`: 69 unlock artifacts were inventoried, Phase4 overlap had 15,665 joined rows, shadow mode was detected, no research candidate was produced, and promotion/readiness remain forbidden. |
 
 ## Current Decision
 
-The final freeze resource/opportunity audit is complete.
+H06 has been reopened after the previously missing unlock artifacts were provided.
 
-Current final classification:
-`FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED`.
+Current classification:
+`H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE`.
 
 Gate:
-`phase5_final_freeze_resource_and_opportunity_audit_gate` returned `PASS/freeze`.
+`phase5_research_unlock_shadow_feature_ablation_gate` returned `PASS/advance` as research/diagnostic only.
 
-The audit confirmed:
+The gate confirmed:
 
-- no HIGH/MEDIUM executable in-repo research agenda hypothesis remains;
-- LOW H06 `unlock_shadow_feature_ablation` cannot run because canonical unlock artifacts are absent;
-- shadow/wayback unlock files are not sufficient and must not be promoted or fabricated;
-- no non-promotional internal module currently reduces the remaining blocker;
-- official promotion, paper readiness, merge, A3/A4 reopening and threshold relaxation remain forbidden.
+- required H06 artifacts are present and inventoried;
+- 69 unlock parquet inputs were hashed into an aggregate inventory;
+- Phase4 overlap exists with 15,665 rows carrying `unlock_pressure_rank_selected_for_reporting`;
+- diagnostics used `pnl_real` only as an outcome for ablation, not as an ex-ante rule;
+- artifacts are proxy/shadow-heavy and remain non-official;
+- no research candidate, official promotion, paper readiness, merge readiness, A3/A4 reopening or threshold relaxation was produced.
 
-Autonomous continuation is now false for the current agenda. The next material
-step requires either external H06 artifacts or draft PR review of the governance
-and research/falsification evidence.
-
-Required external artifacts for H06:
-
-- `data/parquet/unlocks/**`;
-- `data/parquet/unlock_diagnostics/unlock_quality_daily.parquet`.
-
-Verification commands:
-
-```powershell
-Test-Path 'data/parquet/unlocks'
-Test-Path 'data/parquet/unlock_diagnostics/unlock_quality_daily.parquet'
-```
-
-The existing PR remains draft governance/reproducibility/research evidence only.
-It is not operational readiness and must not be merged or marked ready from this
-audit.
+Autonomous continuation is false for the current agenda because H06 was the last
+LOW/preflight path and completed as diagnostic-only with no candidate. The next
+material step is draft PR review or materially new evidence/new agenda.
 
 ## Required Review Before Promotion
 

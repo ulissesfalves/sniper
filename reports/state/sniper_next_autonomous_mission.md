@@ -1,10 +1,10 @@
 # SNIPER Next Autonomous Mission
 
-Mode: `EXTERNAL_RESOURCE_REQUIRED_OR_DRAFT_PR_REVIEW`
+Mode: `DRAFT_PR_REVIEW_READY_OR_MATERIAL_NEW_EVIDENCE`
 
-Previous gate executed: `phase5_final_freeze_resource_and_opportunity_audit_gate`
+Previous gate executed: `phase5_research_unlock_shadow_feature_ablation_gate`
 
-Previous result: `FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED`
+Previous result: `H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE`
 
 Current next gate: `none_safe_internal`
 
@@ -12,42 +12,35 @@ Final freeze accepted: `true`
 
 Autonomous can continue: `false`
 
-Human decision required: `true` only for external artifact provision or PR review disposition.
+Human decision required: `true` only for draft PR review disposition or for providing materially new evidence/new agenda.
 
 ## Rationale
 
-The final opportunity/resource audit confirmed that the agenda expansion was
-exhausted for HIGH/MEDIUM in-repo hypotheses, H06 is LOW priority and blocked by
-missing canonical unlock artifacts, and no non-promotional internal module
-currently reduces the remaining blocker.
+The H06 unlock artifacts were provided and the diagnostic/preflight gate executed.
+It produced reproducible artifact inventory, Phase4 overlap and ablation evidence,
+but no research candidate. The artifacts are proxy/shadow-heavy and remain
+research/diagnostic only.
 
-## External Inputs That Would Reopen Research
+## H06 Result
 
-1. Canonical unlock feature parquet tree:
-   - expected path: `data/parquet/unlocks/**`
-   - verification: `Test-Path 'data/parquet/unlocks'`
-2. Unlock quality daily diagnostic parquet:
-   - expected path: `data/parquet/unlock_diagnostics/unlock_quality_daily.parquet`
-   - verification: `Test-Path 'data/parquet/unlock_diagnostics/unlock_quality_daily.parquet'`
-
-If these inputs are provided, the next safe gate is a diagnostic/preflight H06
-gate. They must not be fabricated, inferred from shadow/wayback payloads, or
-treated as official promotion evidence.
-
-## Draft PR Status
-
-The existing PR remains draft governance/reproducibility/research evidence only.
-It is not paper readiness, operational readiness, official promotion or merge
-readiness.
+- gate: `phase5_research_unlock_shadow_feature_ablation_gate`;
+- status/decision: `PASS/advance`;
+- classification: `H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE`;
+- unlock files: `69`;
+- Phase4 joined rows: `15665`;
+- shadow mode detected: `true`;
+- research candidate found: `false`;
+- official promotion allowed: `false`;
+- paper readiness allowed: `false`.
 
 ## Stop Conditions Satisfied
 
 - Agenda expansion was executed after freeze.
 - H01-H04 were executed and failed, were falsified or remained only partial.
 - H05 diagnostic completed.
-- H06 preflight cannot run because canonical artifacts are absent.
-- Final opportunity/resource audit completed and generated the required state
-  documents.
+- Final opportunity/resource audit completed.
+- H06 external artifacts were provided and diagnostic gate completed.
+- No safe internal next gate remains in the current agenda.
 
 ## Restrictions
 

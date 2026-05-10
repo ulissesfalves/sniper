@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-05-09T23:43:26Z",
+  "updated_at_utc": "2026-05-10T12:01:52Z",
   "official_artifacts": [
     {
       "path": "data/models/phase4/phase4_report_v4.json",
@@ -56,6 +56,20 @@
       "size_bytes": 31939,
       "sha256": "FE1E050820ABE77C7DF35318F13301F2A7443AE45B75B2D322CAC0AF233032B7",
       "status": "present_research_baseline_zero_proxy_exposure"
+    },
+    {
+      "path": "data/parquet/unlocks/*.parquet",
+      "artifact_count": 69,
+      "aggregate_sha256": "CD17A1E0276F67A45D597CD85138286A973C1CB9D55421E415D6E289D2DB0E3E",
+      "status": "present_research_shadow_h06_input",
+      "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate"
+    },
+    {
+      "path": "data/parquet/unlock_diagnostics/unlock_quality_daily.parquet",
+      "size_bytes": 12551,
+      "sha256": "F9CE49ED80AB1481B011146EB0C6F72D70807EDE1FD35BA77C55496411C55980",
+      "status": "present_research_shadow_h06_quality",
+      "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate"
     }
   ],
   "gate_packs": [
@@ -92,12 +106,10 @@
     "reports/gates/phase5_research_cvar_constrained_meta_sizing_gate",
     "reports/gates/phase5_research_regime_specific_meta_disagreement_gate",
     "reports/gates/phase5_research_feature_family_ablation_blocker_decomposition_gate",
-    "reports/gates/phase5_final_freeze_resource_and_opportunity_audit_gate"
+    "reports/gates/phase5_final_freeze_resource_and_opportunity_audit_gate",
+    "reports/gates/phase5_research_unlock_shadow_feature_ablation_gate"
   ],
-  "missing_artifacts": [
-    "data/parquet/unlocks/**",
-    "data/parquet/unlock_diagnostics/unlock_quality_daily.parquet"
-  ],
+  "missing_artifacts": [],
   "ignored_or_heavy_artifacts": [
     "data/models/**",
     "data/models/research/**",
@@ -168,6 +180,8 @@
     "AGENDA-H06 unlock_shadow_feature_ablation is LOW priority. It can run only as diagnostic/preflight if data/parquet/unlocks/** and data/parquet/unlock_diagnostics/unlock_quality_daily.parquet exist; otherwise generate an external resource manifest and do not fabricate artifacts.",
     "phase5_final_freeze_resource_and_opportunity_audit_gate completed the final opportunity/resource audit with FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED.",
     "H06 unlock_shadow_feature_ablation requires canonical unlock artifacts; shadow/wayback files are not sufficient and must not be promoted or fabricated.",
-    "No safe internal HIGH/MEDIUM research agenda hypothesis remains after the final opportunity audit."
+    "No safe internal HIGH/MEDIUM research agenda hypothesis remains after the final opportunity audit.",
+    "phase5_research_unlock_shadow_feature_ablation_gate executed H06 as diagnostic/preflight only with H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE.",
+    "H06 unlock artifacts are now present, but remain research/shadow diagnostic inputs and produced no operational or promotable candidate."
   ]
 }

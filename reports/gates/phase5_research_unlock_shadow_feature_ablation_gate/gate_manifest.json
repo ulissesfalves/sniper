@@ -1,0 +1,89 @@
+{
+  "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
+  "timestamp_utc": "2026-05-10T11:59:38+00:00",
+  "baseline_commit": "0f951fad4afbcf0055ff3339c03b7f3588e79900",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlock_diagnostics\\unlock_quality_daily.parquet",
+      "exists": true,
+      "size_bytes": 12551,
+      "mtime_utc": "2026-03-22T10:35:08+00:00",
+      "sha256": "F9CE49ED80AB1481B011146EB0C6F72D70807EDE1FD35BA77C55496411C55980"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+      "exists": true,
+      "size_bytes": 2872831,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "5B3144578BB99D48E2A67B3AB60B2B0AD25787A92B8488AFD1D1D5C08AE8F6C7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_unlock_shadow_feature_ablation_gate\\unlock_artifact_inventory.json",
+      "exists": true,
+      "size_bytes": 19664,
+      "mtime_utc": "2026-05-10T11:59:38+00:00",
+      "note": "generated inventory hashes all unlock parquet source artifacts"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_unlock_shadow_feature_ablation_gate\\unlock_artifact_inventory.json",
+      "exists": true,
+      "size_bytes": 19664,
+      "mtime_utc": "2026-05-10T11:59:38+00:00",
+      "sha256": "59C9D21BA0809B70E2B04FBCA5EC93B8E51E1008102CDA087C8AF015DAFE4A28"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_unlock_shadow_feature_ablation_gate\\unlock_shadow_feature_ablation_report.json",
+      "exists": true,
+      "size_bytes": 9876,
+      "mtime_utc": "2026-05-10T11:59:38+00:00",
+      "sha256": "92729BCCE468A45385902B3E7ADEA453C2947D41AB442A7E93EDC20A13411872"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_unlock_shadow_feature_ablation_gate\\unlock_shadow_feature_ablation_metrics.parquet",
+      "exists": true,
+      "size_bytes": 8317,
+      "mtime_utc": "2026-05-10T11:59:38+00:00",
+      "sha256": "10D0133C51F9610F740FD3452EB0C6A727099244D8B9FD7DC2FEE657E9C50D7D"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_unlock_shadow_feature_ablation_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 5153,
+      "mtime_utc": "2026-05-10T11:59:38+00:00",
+      "sha256": "A2C61E7761400D64A90141AD47F6D857DFCF0C2965DA13B07A8A700AEA1BD647"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_unlock_shadow_feature_ablation_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 2529,
+      "mtime_utc": "2026-05-10T11:59:38+00:00",
+      "sha256": "BD105003C05FF4CAC13793B2CE941F678C097E8FD152922042C111D2BFED20DC"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_unlock_shadow_feature_ablation_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 4173,
+      "mtime_utc": "2026-05-10T11:59:38+00:00",
+      "sha256": "F17E4F9DB014BFE238CB845BD144F7BF5812B1111F1F2B7A4355E5695C124598"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_unlock_shadow_feature_ablation_gate\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    "python services/ml_engine/phase5_research_unlock_shadow_feature_ablation.py",
+    "python -m pytest tests/unit/test_phase5_research_unlock_shadow_feature_ablation.py -q"
+  ],
+  "notes": [
+    "H06 unlock shadow feature ablation executed as research/diagnostic only.",
+    "No official promotion, paper readiness, A3/A4 reopening, merge or threshold relaxation.",
+    "pnl_real appears only as diagnostic outcome for ablation summaries."
+  ]
+}

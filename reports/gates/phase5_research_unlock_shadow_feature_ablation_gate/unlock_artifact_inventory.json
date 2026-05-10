@@ -1,0 +1,428 @@
+{
+  "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
+  "unlock_artifact_count": 69,
+  "aggregate_inventory_sha256": "CD17A1E0276F67A45D597CD85138286A973C1CB9D55421E415D6E289D2DB0E3E",
+  "quality_artifact": {
+    "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlock_diagnostics\\unlock_quality_daily.parquet",
+    "exists": true,
+    "size_bytes": 12551,
+    "mtime_utc": "2026-03-22T10:35:08+00:00",
+    "sha256": "F9CE49ED80AB1481B011146EB0C6F72D70807EDE1FD35BA77C55496411C55980"
+  },
+  "unlock_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\AAVE.parquet",
+      "symbol": "AAVE",
+      "size_bytes": 22960,
+      "sha256": "53A84B948F649ABCC67E12FDAD1F767F38A8BEAC9A079A98C80B8A5EE8FBB821"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\ADA.parquet",
+      "symbol": "ADA",
+      "size_bytes": 22022,
+      "sha256": "5F21FC8EDBD6F478632393A9B24CFA7E6AB9BEF86820A7DCE10EA95128A677AE"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\ALGO.parquet",
+      "symbol": "ALGO",
+      "size_bytes": 22872,
+      "sha256": "84EDCFA00BADAA5D5ADAF419CB5075871A814357BD4FB30E1FB657CF14E90CAC"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\APT.parquet",
+      "symbol": "APT",
+      "size_bytes": 23100,
+      "sha256": "E772C15BEDF3F732AFEE4601E3FC381C6DEF049AF6267A3935D9DFF3DAA5883D"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\ARB.parquet",
+      "symbol": "ARB",
+      "size_bytes": 22660,
+      "sha256": "470341525E04D9D06EF5B49C45FE69EA304A4AC07342C544BE5F609B867BC8B3"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\ASTER.parquet",
+      "symbol": "ASTER",
+      "size_bytes": 15054,
+      "sha256": "CBD7FAFF6246578940B8DB80CF98ED5A36429CD2616248B68CEA90F920E36486"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\ATOM.parquet",
+      "symbol": "ATOM",
+      "size_bytes": 23078,
+      "sha256": "C487C1D2DABA42CC66311842198589421A3404549BC2B0AEA2695AF4795C7C6D"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\AVAX.parquet",
+      "symbol": "AVAX",
+      "size_bytes": 23167,
+      "sha256": "0099CF9189FEEF3AE00C78FD1B54E56A08E62D9906E4B941C3BD39DAE5AB87A0"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\BCH.parquet",
+      "symbol": "BCH",
+      "size_bytes": 22069,
+      "sha256": "3B3254247C161A0A394F4197DEA4DD1B8324E7B81906AC1C4F8C3BEAC1A13FE3"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\BGB.parquet",
+      "symbol": "BGB",
+      "size_bytes": 11731,
+      "sha256": "8CE13CF5C78BB3D9B8285E725B25339AEFBE31B56445D47DCAED165ABEBB6330"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\BNB.parquet",
+      "symbol": "BNB",
+      "size_bytes": 20083,
+      "sha256": "4B2E6B37D6636490EABA47786A161915119C1BBDD54C3139F19C6DFD306120DC"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\BONK.parquet",
+      "symbol": "BONK",
+      "size_bytes": 11536,
+      "sha256": "04551FC9D08B70D1E3EAEA8662A26F2E5242B1BF4BB4896CDFD0DA0EA5213A7E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\CC.parquet",
+      "symbol": "CC",
+      "size_bytes": 12906,
+      "sha256": "E7F84C024EAACFF404720F6370842F33B947B2FFC80A1D9AC7D4FF1369E0E307"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\CEL.parquet",
+      "symbol": "CEL",
+      "size_bytes": 22631,
+      "sha256": "0933FF695BB2611C77B1E865B242ECA2B820D7556D64794046245A73853B08F7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\DOGE.parquet",
+      "symbol": "DOGE",
+      "size_bytes": 23110,
+      "sha256": "DCC6A6179C8689D2D7CB5869F27862C6FEE59548396B0C9804E015318E5D4B97"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\DOT.parquet",
+      "symbol": "DOT",
+      "size_bytes": 21996,
+      "sha256": "B9767E67C9A8A932D1DDB5F8A93CCD3D77CFFD95A9FFAB430D29B13B213E90E6"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\ENA.parquet",
+      "symbol": "ENA",
+      "size_bytes": 23148,
+      "sha256": "095058D3883A86911441FA621134DB8DEE6578BFD67B2A064F94EC22C744ADA8"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\ETC.parquet",
+      "symbol": "ETC",
+      "size_bytes": 22965,
+      "sha256": "B33F4FFC0783AB3FB30CE934759E1DD98A73DA04716AAE51FB437DC544F4EA8E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\FIGR_HELOC.parquet",
+      "symbol": "FIGR_HELOC",
+      "size_bytes": 11406,
+      "sha256": "BFBA0193B1EED6D686775D2D8A31E9C7E6C3D079D973D3A8692DCF004238E9CD"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\FIL.parquet",
+      "symbol": "FIL",
+      "size_bytes": 21852,
+      "sha256": "08A201F0618710A28420510572248E3DBCC7D1E8BB541E71E94D0315A3EFA49E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\FTT.parquet",
+      "symbol": "FTT",
+      "size_bytes": 13202,
+      "sha256": "83F4A7C298788732566943478B5A4411A08E3D88FA361EA2D8B895A9E733D848"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\GHO.parquet",
+      "symbol": "GHO",
+      "size_bytes": 6955,
+      "sha256": "C8813AB13A902B9A6B36E97B95E6E7BAF1A606D0F5021481A66DD66C695B0CEF"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\HBAR.parquet",
+      "symbol": "HBAR",
+      "size_bytes": 23180,
+      "sha256": "8455E3132893F3FAF560821A9B6E9F2D79554546658EF7D8109091B7A2D92063"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\HTX.parquet",
+      "symbol": "HTX",
+      "size_bytes": 11697,
+      "sha256": "EB718A6F7DE93BE96B38BB2FF0E5593557301E93C260037B0F2704B8992F5B9E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\HYPE.parquet",
+      "symbol": "HYPE",
+      "size_bytes": 22999,
+      "sha256": "FD25291476BDACAFEBBF768CAE1904E00FA3DBEF4C67DC109155A187816AAD38"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\ICP.parquet",
+      "symbol": "ICP",
+      "size_bytes": 23108,
+      "sha256": "92C4176118106E7A72821C3E0F45F4BB60C373477D3F76A3CD4EA4F570943CE0"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\JUP.parquet",
+      "symbol": "JUP",
+      "size_bytes": 23050,
+      "sha256": "E5EC2F856216A77D4070266DA7AD6E49B0B03EDEA648F3FD304AF2E2FB8B6632"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\KAS.parquet",
+      "symbol": "KAS",
+      "size_bytes": 11675,
+      "sha256": "D57AB6AB35001BC76D3414C6E30171D73049BAC91DFF1D2CFD8E0A90A593349D"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\KITE.parquet",
+      "symbol": "KITE",
+      "size_bytes": 11272,
+      "sha256": "89A1D827D5D8A9595DA5524810D92A3D0641B6CDE0A122B265C1A673212FCEE9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\LINK.parquet",
+      "symbol": "LINK",
+      "size_bytes": 23236,
+      "sha256": "1BF39DAA1A01F4D675EAE414215BD7A592285DE6772A53FEDE3E549BFA50D354"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\LTC.parquet",
+      "symbol": "LTC",
+      "size_bytes": 22168,
+      "sha256": "52C1299FCEE8CCF5B1E8958417FAA6B081F115A5749391D0428A7F37BB5DCF88"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\LUNA.parquet",
+      "symbol": "LUNA",
+      "size_bytes": 23068,
+      "sha256": "8D2DF8DA7F76179A1C6BDB1FC331795E83ECD28BF4A6A511F978AB1445C2768D"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\LUNA2.parquet",
+      "symbol": "LUNA2",
+      "size_bytes": 22561,
+      "sha256": "3AA52DFA141E7A3745FDDBC104E51D1356A25305B297B755C8851384531F034B"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\LUNC.parquet",
+      "symbol": "LUNC",
+      "size_bytes": 20531,
+      "sha256": "584D248CBBCF1022EC3D214CEFE47D2E6B7E25E925EB22142FF74CFB0E0A2615"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\MNT.parquet",
+      "symbol": "MNT",
+      "size_bytes": 23273,
+      "sha256": "BF71FA7D5619A317BEAD8E67DA993150EFBB3CD2AAE36E14994E881428591D2B"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\MORPHO.parquet",
+      "symbol": "MORPHO",
+      "size_bytes": 11718,
+      "sha256": "57144785911803B4BEC0E4150FF08BEEF127EFD8AD02CB9A6CAFE96EE7730773"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\NEAR.parquet",
+      "symbol": "NEAR",
+      "size_bytes": 22000,
+      "sha256": "7D2B65439C8BEEC21C192F7C13802FEEE639C10E834610E27911A7ECF36987FF"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\NIGHT.parquet",
+      "symbol": "NIGHT",
+      "size_bytes": 6957,
+      "sha256": "FD151368CAD5F926A43F116DAFA4CD182C5DE19D3928D6A5BFDEF04520A434EC"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\OKB.parquet",
+      "symbol": "OKB",
+      "size_bytes": 22629,
+      "sha256": "A709F28AE36BEE0B8E18506C03151DBED17943EB56C11BD98ECD0E31F458189C"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\ONDO.parquet",
+      "symbol": "ONDO",
+      "size_bytes": 22901,
+      "sha256": "7AFB0C5F822E078BADBCC0CFE3DE35E7120D3A736D7EEAACC986CDB6A5AB621C"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\PAXG.parquet",
+      "symbol": "PAXG",
+      "size_bytes": 23595,
+      "sha256": "EE74030EEDC24EE50D5ADA74B407B68E58613DEF51F6CCF582215308050E81BC"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\PEPE.parquet",
+      "symbol": "PEPE",
+      "size_bytes": 22480,
+      "sha256": "D92E3794B669044948647381DD82859328DEEC08A6823AEE3D11E7F4A88FE2C1"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\PI.parquet",
+      "symbol": "PI",
+      "size_bytes": 23235,
+      "sha256": "FAABB75C96655CD66C72DEF6C44F77BE42DBF1DFF96AC4738334CBB1F9342EC3"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\PIPPIN.parquet",
+      "symbol": "PIPPIN",
+      "size_bytes": 11814,
+      "sha256": "7C6B64500042A2B10BFE7DDB89FF050FFF38284C95BBA16C869E67E3856AEB15"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\POL.parquet",
+      "symbol": "POL",
+      "size_bytes": 23255,
+      "sha256": "C3B20EDD7BA804E6E139BB00FA6E3198AFD1CD7F1FCF4405CFE505D19F37650E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\PUMP.parquet",
+      "symbol": "PUMP",
+      "size_bytes": 15473,
+      "sha256": "7E018BC6B410546C030BA192C7CD0B84E19E72463EEF5F73F3E943AA34845207"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\RAIN.parquet",
+      "symbol": "RAIN",
+      "size_bytes": 13642,
+      "sha256": "FC7AC3EBE0B321AFA115AE46D69F519F127AB5538D4FF6955B9A203D3D564BE7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\RENDER.parquet",
+      "symbol": "RENDER",
+      "size_bytes": 23015,
+      "sha256": "56E54A11FC10DF020F6CA426B5947CBA5778140BEBF767AF32D5D483A58C9A3A"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\SHIB.parquet",
+      "symbol": "SHIB",
+      "size_bytes": 22565,
+      "sha256": "C7DA8A7FBC7D1B206900EB2BEFD3D8E6F2D636F07FC4AB690D454EFC044B4838"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\SIREN.parquet",
+      "symbol": "SIREN",
+      "size_bytes": 6957,
+      "sha256": "AD0A84C190D419C8B647268D9DED2785CE01D86003D33CAFB2D17E25338C6ACF"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\SKY.parquet",
+      "symbol": "SKY",
+      "size_bytes": 10882,
+      "sha256": "244FF8A3851B87BDD26F9668DFDDB4232B6DACDB2CCFA312C620BA2195E61FBA"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\SOL.parquet",
+      "symbol": "SOL",
+      "size_bytes": 23008,
+      "sha256": "09CB228EB187D124A868AF17E7242DABC1FD0DE78F3CFCD87AC3CF4AD26B411F"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\STABLE.parquet",
+      "symbol": "STABLE",
+      "size_bytes": 11798,
+      "sha256": "24DAE64D5022D2764542F571B971ACD4590DCE6F197222B8CB2F3AF4A233AAB3"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\SUI.parquet",
+      "symbol": "SUI",
+      "size_bytes": 23073,
+      "sha256": "BFD4B4EA0BD2485520DD5ACC22F0CA24FC351977C6502406EE9A353D345FE1D7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\TAO.parquet",
+      "symbol": "TAO",
+      "size_bytes": 23191,
+      "sha256": "EA7A1673C58634EE4350BCC96BA5A39564DF5430DED84338FC0CA3CBB82B49F5"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\TON.parquet",
+      "symbol": "TON",
+      "size_bytes": 22665,
+      "sha256": "E06D8BCAD4EA4D99983F681A7BD37802F9A339D5668DB144B133C7357FA5B3EE"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\TRUMP.parquet",
+      "symbol": "TRUMP",
+      "size_bytes": 19985,
+      "sha256": "78DE0A543670AA9841C125BE0B1E8B4A0957B6129B7DA58FB5A08AA933F1201E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\TRX.parquet",
+      "symbol": "TRX",
+      "size_bytes": 22843,
+      "sha256": "AE7FEF4C5F7B5AD858858A63BA7AB22B48B54B8D30DBF62AFDF0DEE90D8BD2C1"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\UNI.parquet",
+      "symbol": "UNI",
+      "size_bytes": 21457,
+      "sha256": "DEDC106E41BF782C0E72E2D2190AE1C3B6CF273E3E932B30A49270B90742C453"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\VET.parquet",
+      "symbol": "VET",
+      "size_bytes": 11710,
+      "sha256": "1A5EBE4B5F39465CE21822180182AB2AEB10B8581CF3B31D5F83E37A0DFC59AA"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\WBT.parquet",
+      "symbol": "WBT",
+      "size_bytes": 22190,
+      "sha256": "7EC3E464D01AD0BFC0AE7642F9EFCBF4280A9AB66C5AA8AF53E22B33C5199414"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\WLD.parquet",
+      "symbol": "WLD",
+      "size_bytes": 23022,
+      "sha256": "334C816D7E7F99230F8BAD62EBF2E9E3E7782E0D89504DAA3C269A27D7DB08B2"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\WLFI.parquet",
+      "symbol": "WLFI",
+      "size_bytes": 15872,
+      "sha256": "C17511131ABDAA03E15913284A7B73C91989E83170124C330F4B06F94FFA6FAD"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\XAUT.parquet",
+      "symbol": "XAUT",
+      "size_bytes": 23195,
+      "sha256": "C1AB988A1A175DE1669A0F7E388530693C55035EE45189A827B23CE0AA8F157B"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\XDC.parquet",
+      "symbol": "XDC",
+      "size_bytes": 11711,
+      "sha256": "754BD67A34CF11372B6BA35546640447E990AEB093CD6F18BD0A0979A359A3EB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\XLM.parquet",
+      "symbol": "XLM",
+      "size_bytes": 23049,
+      "sha256": "D2E4F7F2C1495EA322D665956B9B059A3D5EFE6D4BD099ACE53F08E1AF500010"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\XMR.parquet",
+      "symbol": "XMR",
+      "size_bytes": 22490,
+      "sha256": "51CF790EAFD4B1911F43EF5E122ADA3747683FC3A038E3EB7DD78BAB2BE2DEFB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\XRP.parquet",
+      "symbol": "XRP",
+      "size_bytes": 21936,
+      "sha256": "5A7F541D15D9BC331A9AA8C9DED6BFF6DB87D4920ABBED6A33533B0C87C15E85"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks\\ZEC.parquet",
+      "symbol": "ZEC",
+      "size_bytes": 23355,
+      "sha256": "4068D8562EF91D92B6214087D85A357C7FC5B115E355EBBE4F99D3AB824FBA59"
+    }
+  ]
+}

@@ -53,3 +53,8 @@ No safe internal HIGH/MEDIUM thesis remains. H06 is LOW priority and blocked by
 missing canonical unlock artifacts. No additional non-promotional internal module
 reduces the current blocker beyond this audit. The final audited freeze is
 legitimate unless new artifacts or materially new evidence are provided.
+
+
+## H06 Artifact Provision Update
+
+The previously requested H06 artifacts were provided and `phase5_research_unlock_shadow_feature_ablation_gate` executed as research/diagnostic only. Result: `PASS/advance`, classification `H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE`. No research candidate was produced; artifacts remain proxy/shadow-heavy and non-official.

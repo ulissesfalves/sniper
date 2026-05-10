@@ -1,0 +1,125 @@
+{
+  "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
+  "phase_family": "phase5_research_unlock_shadow_feature_ablation",
+  "status": "PASS",
+  "decision": "advance",
+  "baseline_commit": "0f951fad4afbcf0055ff3339c03b7f3588e79900",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_unlock_shadow_feature_ablation_gate\\unlock_artifact_inventory.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_unlock_shadow_feature_ablation_gate\\unlock_shadow_feature_ablation_report.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_unlock_shadow_feature_ablation_gate\\unlock_shadow_feature_ablation_metrics.parquet"
+  ],
+  "summary": [
+    "classification=H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE",
+    "unlock_file_count=69",
+    "unlock_symbols=69",
+    "phase4_joined_rows_with_selected_unlock=15665",
+    "phase4_joined_coverage_selected_unlock=0.165016",
+    "shadow_mode_detected=true",
+    "research_candidate_found=false",
+    "official_promotion_allowed=false",
+    "paper_readiness_allowed=false"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
+      "metric_name": "required_artifacts_present",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
+      "metric_name": "unlock_file_count",
+      "metric_value": 69,
+      "metric_threshold": ">= 1",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
+      "metric_name": "quality_summary_present",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
+      "metric_name": "phase4_joined_rows_with_selected_unlock",
+      "metric_value": 15665,
+      "metric_threshold": "> 0 for diagnostic",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
+      "metric_name": "phase4_joined_coverage_selected_unlock",
+      "metric_value": 0.165016,
+      "metric_threshold": "> 0 for diagnostic",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
+      "metric_name": "shadow_mode_detected",
+      "metric_value": true,
+      "metric_threshold": "reported, not promotion",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
+      "metric_name": "observed_coverage_median",
+      "metric_value": 0.0,
+      "metric_threshold": "reported",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
+      "metric_name": "proxy_fallback_coverage_median",
+      "metric_value": 0.979592,
+      "metric_threshold": "reported",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
+      "metric_name": "selected_unlock_spearman_to_pnl_real_diagnostic",
+      "metric_value": -0.021533,
+      "metric_threshold": "diagnostic only",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
+      "metric_name": "research_candidate_found",
+      "metric_value": false,
+      "metric_threshold": "false for diagnostic-only H06",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
+      "metric_name": "official_promotion_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
+      "metric_name": "paper_readiness_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "h06_diagnostic_only_no_research_candidate",
+    "unlock_artifacts_shadow_or_proxy_heavy_not_official",
+    "dsr_honest_zero_blocks_promotion",
+    "official_cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable"
+  ],
+  "risks_residual": [
+    "H06 used pnl_real only as a diagnostic outcome, not as an ex-ante rule.",
+    "Unlock artifacts remain research/shadow diagnostics and are not official promotion evidence.",
+    "The diagnostic does not authorize paper readiness, official promotion, merge, A3/A4 reopening or threshold relaxation."
+  ],
+  "next_recommended_step": "Record H06 as diagnostic complete and keep final freeze/draft PR posture unless materially new evidence appears."
+}
