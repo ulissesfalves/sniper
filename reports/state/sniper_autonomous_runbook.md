@@ -553,3 +553,36 @@ The gate is diagnostic/preflight evidence only. It does not authorize official
 promotion, paper readiness, merge, A3/A4 reopening or threshold relaxation.
 Current autonomous continuation is false for the current agenda unless materially
 new evidence or a new safe research agenda appears.
+
+## Post-Mission Next-Step Decision
+
+Every autonomous mission must now end by creating or updating:
+
+- `reports/state/sniper_next_step_decision.md`;
+- `reports/state/sniper_next_step_decision.json`.
+
+The decision must choose one category:
+
+- `CONTINUE_AUTONOMOUS`;
+- `REVIEW_DRAFT_PR`;
+- `REQUEST_EXTERNAL_ARTIFACTS`;
+- `REQUEST_MATERIAL_EVIDENCE`;
+- `RUN_GLOBAL_REAUDIT`;
+- `START_NEW_RESEARCH_AGENDA`;
+- `FREEZE_CURRENT_LINE`;
+- `STOP_FOR_GOVERNANCE_HARD_BLOCK`;
+- `STOP_FOR_SPEC_CHANGE_REQUIRED`;
+- `STOP_FOR_OFFICIAL_PROMOTION_REQUIRED`.
+
+Current decision: `REVIEW_DRAFT_PR`.
+
+Future alternative: `REQUEST_MATERIAL_EVIDENCE`.
+
+Required interpretation:
+
+- PR #1 contains reviewable governance/research evidence;
+- no safe internal autonomous next gate is currently registered;
+- `autonomous_can_continue=false`;
+- `human_decision_required=true` for PR review or materially new evidence;
+- official promotion remains forbidden;
+- paper readiness remains forbidden.

@@ -114,7 +114,9 @@
     "LOW_PRIORITY_PREFLIGHT_GATE",
     "EXTERNAL_RESOURCE_MANIFEST",
     "EXTERNAL_RESOURCE_REQUIRED",
-    "DRAFT_PR_REVIEW_READY"
+    "DRAFT_PR_REVIEW_READY",
+    "REVIEW_DRAFT_PR",
+    "REQUEST_MATERIAL_EVIDENCE"
   ],
   "forbidden_next_modes": [
     "OFFICIAL_PROMOTION",
@@ -556,9 +558,9 @@
   "latest_candidate_status": "H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE",
   "human_decision_required": true,
   "autonomous_can_continue": false,
-  "next_recommended_mode": "DRAFT_PR_REVIEW_READY_OR_MATERIAL_NEW_EVIDENCE",
+  "next_recommended_mode": "REVIEW_DRAFT_PR",
   "next_recommended_skill": "sniper-gate-governance",
-  "next_recommended_submode": "DRAFT_PR_REVIEW_READY_OR_NEW_RESEARCH_AGENDA_WITH_MATERIAL_EVIDENCE",
+  "next_recommended_submode": "REVIEW_DRAFT_PR_OR_REQUEST_MATERIAL_EVIDENCE",
   "next_recommended_gate": null,
   "next_recommended_agenda_id": "none_safe_internal",
   "if_agenda_has_no_high_or_medium_executable_hypothesis": "FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED",
@@ -601,7 +603,7 @@
     "h06_paper_readiness_allowed": false,
     "safe_internal_action_taken": "phase5_research_unlock_shadow_feature_ablation_gate"
   },
-  "updated_at_utc": "2026-05-10T12:04:32Z",
+  "updated_at_utc": "2026-05-10T12:20:00Z",
   "h06_unlock_shadow_feature_ablation_status": {
     "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
     "status": "PASS",
@@ -619,5 +621,76 @@
     "observed_coverage_median": 0,
     "proxy_fallback_coverage_median": 0.979592,
     "caveat": "H06 artifacts are usable for diagnostic/preflight only. They are proxy/shadow-heavy and produced no research candidate or promotion evidence."
+  },
+  "post_mission_next_step_decision_protocol": {
+    "required": true,
+    "output_markdown": "reports/state/sniper_next_step_decision.md",
+    "output_json": "reports/state/sniper_next_step_decision.json",
+    "allowed_decisions": [
+      "CONTINUE_AUTONOMOUS",
+      "REVIEW_DRAFT_PR",
+      "REQUEST_EXTERNAL_ARTIFACTS",
+      "REQUEST_MATERIAL_EVIDENCE",
+      "RUN_GLOBAL_REAUDIT",
+      "START_NEW_RESEARCH_AGENDA",
+      "FREEZE_CURRENT_LINE",
+      "STOP_FOR_GOVERNANCE_HARD_BLOCK",
+      "STOP_FOR_SPEC_CHANGE_REQUIRED",
+      "STOP_FOR_OFFICIAL_PROMOTION_REQUIRED"
+    ],
+    "current_decision": "REVIEW_DRAFT_PR",
+    "current_alternative_future_action": "REQUEST_MATERIAL_EVIDENCE",
+    "no_safe_internal_next_gate_statement": "Não há próxima ação autônoma interna segura no estado atual."
+  },
+  "next_step_decision": {
+    "decision": "REVIEW_DRAFT_PR",
+    "can_continue_autonomously": false,
+    "requires_external_artifact": false,
+    "requires_material_evidence": true,
+    "recommended_user_action": "Review PR #1 as a draft governance/research evidence package, or provide materially new evidence to reopen research safely.",
+    "recommended_codex_action": "Do not start a new autonomous gate in the current state; maintain draft PR posture and wait for review or material evidence.",
+    "next_gate": null,
+    "pr_action": "review_existing_draft_pr",
+    "blockers": [
+      "dsr_honest_zero_blocks_promotion",
+      "cvar_zero_exposure_not_economic_robustness",
+      "cross_sectional_alive_but_not_promotable",
+      "h06_diagnostic_only_no_research_candidate",
+      "unlock_artifacts_shadow_or_proxy_heavy_not_official"
+    ],
+    "alternatives_rejected": [
+      {
+        "decision": "CONTINUE_AUTONOMOUS",
+        "reason": "Rejected because no safe internal next gate or HIGH/MEDIUM executable hypothesis is registered after H06."
+      },
+      {
+        "decision": "REQUEST_EXTERNAL_ARTIFACTS",
+        "reason": "Rejected because the H06 unlock artifacts were provided and inventoried; no missing artifact is currently identified."
+      },
+      {
+        "decision": "REQUEST_MATERIAL_EVIDENCE",
+        "reason": "Kept as future alternative, not current primary decision, because PR #1 already contains reviewable evidence and no concrete new evidence path is present."
+      },
+      {
+        "decision": "RUN_GLOBAL_REAUDIT",
+        "reason": "Rejected because the latest state has no safe new gate or candidate requiring reaudit; blockers remain quantitative/governance blockers."
+      },
+      {
+        "decision": "START_NEW_RESEARCH_AGENDA",
+        "reason": "Rejected because agenda expansion plus H01-H06 have been executed; no material new in-repo thesis is registered."
+      },
+      {
+        "decision": "STOP_FOR_OFFICIAL_PROMOTION_REQUIRED",
+        "reason": "Rejected as forbidden: DSR=0.0, CVaR official zero exposure and cross-sectional not promotable block promotion."
+      }
+    ],
+    "rationale": [
+      "H06 unlock_shadow_feature_ablation executed as PASS/advance diagnostic-only with H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE.",
+      "Unlock artifacts are present but shadow/proxy-heavy and produced no research candidate.",
+      "There is no safe internal next gate registered in reports/state/sniper_next_autonomous_mission.md.",
+      "PR #1 remains draft, open, unmerged and contains governance/research evidence for review.",
+      "DSR=0.0, CVaR official zero exposure and cross-sectional not promotable remain active blockers."
+    ],
+    "statement": "Não há próxima ação autônoma interna segura no estado atual."
   }
 }

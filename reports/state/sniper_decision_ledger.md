@@ -1,6 +1,6 @@
 # SNIPER Decision Ledger
 
-Updated: 2026-05-10T12:01:52Z
+Updated: 2026-05-10T12:20:00Z
 
 ## Closed Decisions
 
@@ -53,6 +53,7 @@ Updated: 2026-05-10T12:01:52Z
 | Feature-family ablation blocker decomposition | Completed / agenda exhausted | `phase5_research_feature_family_ablation_blocker_decomposition_gate` tested AGENDA-H05 and classified the diagnostic as `FEATURE_FAMILY_ABLATION_COMPLETE_NO_HIGH_MEDIUM_EXECUTABLE_FAMILY`. It evaluated 5 feature families, found no HIGH/MEDIUM executable in-repo family remaining, kept diagnostics non-operational, and preserved all promotion blockers. |
 | Final freeze resource/opportunity audit | Completed / final audited freeze | `phase5_final_freeze_resource_and_opportunity_audit_gate` returned `PASS/freeze` with `FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED`: no HIGH/MEDIUM executable hypothesis remains, H06 requires external unlock artifacts, no safe internal module remains, and the three final freeze state documents were created. |
 | H06 unlock shadow feature ablation | Diagnostic complete / not promotable | `phase5_research_unlock_shadow_feature_ablation_gate` returned `PASS/advance` with `H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE`: 69 unlock artifacts were inventoried, Phase4 overlap had 15,665 joined rows, shadow mode was detected, no research candidate was produced, and promotion/readiness remain forbidden. |
+| Post-mission next-step decision | Active / REVIEW_DRAFT_PR | Every autonomous mission must produce `reports/state/sniper_next_step_decision.md` and `.json`. Current decision is `REVIEW_DRAFT_PR`; `REQUEST_MATERIAL_EVIDENCE` is the future alternative if materially new evidence appears. |
 
 ## Current Decision
 
@@ -74,8 +75,15 @@ The gate confirmed:
 - no research candidate, official promotion, paper readiness, merge readiness, A3/A4 reopening or threshold relaxation was produced.
 
 Autonomous continuation is false for the current agenda because H06 was the last
-LOW/preflight path and completed as diagnostic-only with no candidate. The next
-material step is draft PR review or materially new evidence/new agenda.
+LOW/preflight path and completed as diagnostic-only with no candidate.
+
+Structured next-step decision:
+`REVIEW_DRAFT_PR`.
+
+There is no safe internal autonomous next gate in the current state. PR #1 is
+the reviewable artifact. The future alternative is
+`REQUEST_MATERIAL_EVIDENCE` if new evidence, a materially new hypothesis or a
+new safe in-repo agenda is provided.
 
 ## Required Review Before Promotion
 

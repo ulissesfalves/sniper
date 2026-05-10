@@ -52,6 +52,34 @@ docker compose ps
 
 Do not run live trading, store credentials or operate real capital.
 
+## Post-Mission Decision
+
+Every autonomous mission must end with a structured next-step decision and must
+update:
+
+- `reports/state/sniper_next_step_decision.md`
+- `reports/state/sniper_next_step_decision.json`
+
+The decision must choose exactly one category:
+
+- `CONTINUE_AUTONOMOUS`
+- `REVIEW_DRAFT_PR`
+- `REQUEST_EXTERNAL_ARTIFACTS`
+- `REQUEST_MATERIAL_EVIDENCE`
+- `RUN_GLOBAL_REAUDIT`
+- `START_NEW_RESEARCH_AGENDA`
+- `FREEZE_CURRENT_LINE`
+- `STOP_FOR_GOVERNANCE_HARD_BLOCK`
+- `STOP_FOR_SPEC_CHANGE_REQUIRED`
+- `STOP_FOR_OFFICIAL_PROMOTION_REQUIRED`
+
+Current next-step decision: `REVIEW_DRAFT_PR`.
+Alternative future action: `REQUEST_MATERIAL_EVIDENCE`.
+
+There is no safe internal autonomous next gate in the current state. PR #1
+contains reviewable governance/research evidence; it must remain draft and must
+not be merged, marked ready, or used as official promotion/readiness evidence.
+
 ## Gate Pack Rules
 
 Every gate must create or update `reports/gates/<gate_slug>/` with:
@@ -150,18 +178,12 @@ Latest candidate chain:
 - promotion allowed: `false`;
 - paper readiness allowed: `false`.
 
-Current recommended mode: `FINAL_FREEZE_RESOURCE_AND_OPPORTUNITY_AUDIT`.
-Current next gate: `phase5_final_freeze_resource_and_opportunity_audit_gate`.
-The current agenda has no HIGH/MEDIUM executable in-repo family remaining, but
-`FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED` is not final until the final
-opportunity/resource audit verifies HIGH/MEDIUM exhaustion, evaluates LOW
-preflight options, lists external artifacts, and checks non-promotional
-functional modules.
-
-H06 `unlock_shadow_feature_ablation` is LOW priority. If the required unlock
-artifacts exist, Codex may execute a diagnostic/preflight gate; if they are
-absent, Codex must generate an external resource manifest and must not fabricate
-or promote shadow artifacts.
+Current recommended mode: `REVIEW_DRAFT_PR`.
+Current next gate: `none_safe_internal`.
+H06 `unlock_shadow_feature_ablation` has been executed as diagnostic/preflight
+with `H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE`. The unlock
+artifacts are present but shadow/proxy-heavy, no research candidate survived,
+and no promotion/readiness evidence exists.
 
 Must stop before:
 
@@ -242,6 +264,8 @@ At the end of every autonomous mission, update:
 - `reports/state/sniper_current_state.json`
 - `reports/state/sniper_decision_ledger.md`
 - `reports/state/sniper_artifact_registry.json`
+- `reports/state/sniper_next_step_decision.md`
+- `reports/state/sniper_next_step_decision.json`
 
 Update `reports/state/sniper_spec_gap_backlog.yaml` and
 `reports/state/sniper_autonomous_runbook.md` whenever the next safe mode or

@@ -1,6 +1,6 @@
 # SNIPER Next Autonomous Mission
 
-Mode: `DRAFT_PR_REVIEW_READY_OR_MATERIAL_NEW_EVIDENCE`
+Mode: `REVIEW_DRAFT_PR`
 
 Previous gate executed: `phase5_research_unlock_shadow_feature_ablation_gate`
 
@@ -13,6 +13,10 @@ Final freeze accepted: `true`
 Autonomous can continue: `false`
 
 Human decision required: `true` only for draft PR review disposition or for providing materially new evidence/new agenda.
+
+Structured next-step decision: `REVIEW_DRAFT_PR`
+
+Alternative future action: `REQUEST_MATERIAL_EVIDENCE`
 
 ## Rationale
 
@@ -41,6 +45,9 @@ research/diagnostic only.
 - Final opportunity/resource audit completed.
 - H06 external artifacts were provided and diagnostic gate completed.
 - No safe internal next gate remains in the current agenda.
+- `reports/state/sniper_next_step_decision.md` and
+  `reports/state/sniper_next_step_decision.json` now record the required
+  structured next-step decision.
 
 ## Restrictions
 
@@ -51,3 +58,11 @@ research/diagnostic only.
 - No fabricated artifacts.
 - No realized variable as ex-ante rule.
 - No merge.
+
+## Next-Step Decision
+
+Review PR #1 as a draft governance/research evidence package.
+
+Do not continue autonomously in the current state. Do not promote official,
+declare paper readiness, merge, reopen A3/A4, relax thresholds, or treat
+shadow/proxy-heavy unlock artifacts as official evidence.

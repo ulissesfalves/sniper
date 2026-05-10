@@ -100,12 +100,11 @@ Latest research/sandbox candidate chain:
 - paper readiness allowed: `false`.
 
 The current recommended mode is
-`FINAL_FREEZE_RESOURCE_AND_OPPORTUNITY_AUDIT`; the next gate is
-`phase5_final_freeze_resource_and_opportunity_audit_gate`. The current agenda
-has no HIGH/MEDIUM executable in-repo family remaining, but
-`FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED` is not final until Codex
-audits remaining LOW/preflight options, external resources and non-promotional
-functional modules.
+`REVIEW_DRAFT_PR`; the next gate is `none_safe_internal`. H06
+`unlock_shadow_feature_ablation` has been executed as diagnostic/preflight with
+`H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE`. The unlock artifacts are
+present but shadow/proxy-heavy, no research candidate survived, and no
+promotion/readiness evidence exists.
 
 ## Closed-Loop Autonomous Policy
 
@@ -187,6 +186,42 @@ safe next gate exists. Use
 next gate exists or continuation would require external resource, spec change,
 official promotion, paper readiness, merge, budget exhaustion or checkpoint
 limit exhaustion.
+
+## Post-Mission Next-Step Decision
+
+Every autonomous mission must end with a structured next-step decision, even
+when it reaches a valid stop condition. Codex must create or update:
+
+- `reports/state/sniper_next_step_decision.md`
+- `reports/state/sniper_next_step_decision.json`
+
+The decision must choose exactly one category:
+
+- `CONTINUE_AUTONOMOUS`
+- `REVIEW_DRAFT_PR`
+- `REQUEST_EXTERNAL_ARTIFACTS`
+- `REQUEST_MATERIAL_EVIDENCE`
+- `RUN_GLOBAL_REAUDIT`
+- `START_NEW_RESEARCH_AGENDA`
+- `FREEZE_CURRENT_LINE`
+- `STOP_FOR_GOVERNANCE_HARD_BLOCK`
+- `STOP_FOR_SPEC_CHANGE_REQUIRED`
+- `STOP_FOR_OFFICIAL_PROMOTION_REQUIRED`
+
+The decision rubric must consider whether a safe internal gate exists, whether
+a HIGH/MEDIUM hypothesis or surviving research candidate exists, whether an
+external artifact or material evidence is required, whether continuation would
+require specification change, official promotion or paper readiness, whether PR
+#1 already contains reviewable evidence, whether the worktree is clean, and
+whether DSR/CVaR/promotability blockers remain active.
+
+Current decision: `REVIEW_DRAFT_PR`.
+Future alternative: `REQUEST_MATERIAL_EVIDENCE`.
+
+No autonomous continuation is allowed in the current state because there is no
+safe internal next gate. PR #1 should be reviewed as a draft governance/research
+evidence package. It must not be merged, marked ready, or used for official
+promotion or paper readiness.
 
 ## Stop Required
 

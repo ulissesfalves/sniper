@@ -1,0 +1,81 @@
+{
+  "updated_at_utc": "2026-05-10T12:20:00Z",
+  "branch": "codex/autonomous-sniper-implementation",
+  "latest_pr": {
+    "number": 1,
+    "url": "https://github.com/ulissesfalves/sniper/pull/1",
+    "state": "open",
+    "draft": true,
+    "merged": false,
+    "base": "codex/openclaw-sniper-handoff",
+    "head": "codex/autonomous-sniper-implementation",
+    "observed_head_sha": "68f222f69d78763f9cb0696d01579a33b09b3c3d",
+    "observed_before_local_gate_commits": true
+  },
+  "latest_gate": {
+    "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
+    "status": "PASS",
+    "decision": "advance"
+  },
+  "latest_decision": "H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE",
+  "current_state_summary": {
+    "h06_status": "H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE",
+    "unlock_artifacts_present": true,
+    "unlock_artifacts_shadow_or_proxy_heavy": true,
+    "surviving_research_candidate": false,
+    "safe_internal_next_gate": false,
+    "pr_draft_contains_reviewable_evidence": true,
+    "dsr_honest": 0,
+    "cvar_official_status": "PASS_ZERO_EXPOSURE_NOT_ECONOMIC_ROBUSTNESS",
+    "cross_sectional_status": "ALIVE_BUT_NOT_PROMOTABLE"
+  },
+  "decision": "REVIEW_DRAFT_PR",
+  "can_continue_autonomously": false,
+  "requires_external_artifact": false,
+  "requires_material_evidence": true,
+  "recommended_user_action": "Review PR #1 as a draft governance/research evidence package, or provide materially new evidence to reopen research safely.",
+  "recommended_codex_action": "Do not start a new autonomous gate in the current state; maintain draft PR posture and wait for review or material evidence.",
+  "next_gate": null,
+  "pr_action": "review_existing_draft_pr",
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable",
+    "h06_diagnostic_only_no_research_candidate",
+    "unlock_artifacts_shadow_or_proxy_heavy_not_official"
+  ],
+  "alternatives_rejected": [
+    {
+      "decision": "CONTINUE_AUTONOMOUS",
+      "reason": "Rejected because no safe internal next gate or HIGH/MEDIUM executable hypothesis is registered after H06."
+    },
+    {
+      "decision": "REQUEST_EXTERNAL_ARTIFACTS",
+      "reason": "Rejected because the H06 unlock artifacts were provided and inventoried; no missing artifact is currently identified."
+    },
+    {
+      "decision": "REQUEST_MATERIAL_EVIDENCE",
+      "reason": "Kept as future alternative, not current primary decision, because PR #1 already contains reviewable evidence and no concrete new evidence path is present."
+    },
+    {
+      "decision": "RUN_GLOBAL_REAUDIT",
+      "reason": "Rejected because the latest state has no safe new gate or candidate requiring reaudit; blockers remain quantitative/governance blockers."
+    },
+    {
+      "decision": "START_NEW_RESEARCH_AGENDA",
+      "reason": "Rejected because agenda expansion plus H01-H06 have been executed; no material new in-repo thesis is registered."
+    },
+    {
+      "decision": "STOP_FOR_OFFICIAL_PROMOTION_REQUIRED",
+      "reason": "Rejected as forbidden: DSR=0.0, CVaR official zero exposure and cross-sectional not promotable block promotion."
+    }
+  ],
+  "rationale": [
+    "H06 unlock_shadow_feature_ablation executed as PASS/advance diagnostic-only with H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE.",
+    "Unlock artifacts are present but shadow/proxy-heavy and produced no research candidate.",
+    "There is no safe internal next gate registered in reports/state/sniper_next_autonomous_mission.md.",
+    "PR #1 remains draft, open, unmerged and contains governance/research evidence for review.",
+    "DSR=0.0, CVaR official zero exposure and cross-sectional not promotable remain active blockers."
+  ],
+  "statement": "Não há próxima ação autônoma interna segura no estado atual."
+}

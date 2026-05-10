@@ -1003,3 +1003,50 @@ gaps:
       - "THRESHOLD_RELAXATION"
     suggested_gate: "none_safe_internal"
     stop_condition_if_unresolved: "Resolved by phase5_research_unlock_shadow_feature_ablation_gate. H06 is diagnostic/shadow only, produced no candidate, and cannot be used for official promotion or paper readiness."
+
+  - id: GAP-POST-MISSION-NEXT-STEP-DECISION-001
+    title: Autonomous missions require structured next-step decision
+    type: governance_state
+    severity: high
+    status: active_policy_current_decision_review_draft_pr
+    evidence:
+      - "POST_MISSION_NEXT_STEP_DECISION_PROTOCOL active"
+      - "reports/state/sniper_next_step_decision.md"
+      - "reports/state/sniper_next_step_decision.json"
+      - "decision=REVIEW_DRAFT_PR"
+      - "future_alternative=REQUEST_MATERIAL_EVIDENCE"
+      - "safe_internal_next_gate=false"
+      - "autonomous_can_continue=false"
+      - "human_decision_required=true"
+      - "official_promotion_allowed=false"
+      - "paper_readiness_allowed=false"
+      - "dsr_honest=0.0"
+      - "cvar_official_zero_exposure=true"
+      - "cross_sectional_status=ALIVE_BUT_NOT_PROMOTABLE"
+    source_files:
+      - "AGENTS.md"
+      - "docs/SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md"
+      - "reports/state/sniper_current_state.json"
+      - "reports/state/sniper_next_autonomous_mission.md"
+      - "reports/state/sniper_next_step_decision.md"
+      - "reports/state/sniper_next_step_decision.json"
+      - "reports/state/sniper_decision_ledger.md"
+      - "reports/state/sniper_autonomous_runbook.md"
+    allowed_actions:
+      - "REVIEW_DRAFT_PR"
+      - "REQUEST_MATERIAL_EVIDENCE"
+      - "UPDATE_STATE"
+      - "UPDATE_DRAFT_PR"
+    forbidden_actions:
+      - "TERMINATE_WITHOUT_STRUCTURED_NEXT_STEP_DECISION"
+      - "CONTINUE_AUTONOMOUS_WITHOUT_SAFE_INTERNAL_GATE"
+      - "PROMOTE_OFFICIAL"
+      - "DECLARE_PAPER_READINESS"
+      - "MERGE_PR"
+      - "A3_REOPEN"
+      - "A4_REOPEN"
+      - "THRESHOLD_RELAXATION"
+      - "TREAT_SHADOW_ARTIFACT_AS_OFFICIAL"
+      - "TREAT_ZERO_EXPOSURE_CVAR_AS_ECONOMIC_ROBUSTNESS"
+    suggested_gate: "none_safe_internal"
+    stop_condition_if_unresolved: "Resolved by creating sniper_next_step_decision.md/json. Current correct action is to review PR #1 as draft or provide materially new evidence for future autonomous work."

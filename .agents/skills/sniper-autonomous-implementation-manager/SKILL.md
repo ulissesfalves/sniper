@@ -79,6 +79,8 @@ Ao final da missão:
 - atualizar reports/state/sniper_current_state.json;
 - atualizar reports/state/sniper_decision_ledger.md;
 - atualizar reports/state/sniper_artifact_registry.json;
+- atualizar reports/state/sniper_next_step_decision.md;
+- atualizar reports/state/sniper_next_step_decision.json;
 - registrar novo gate e nova decisão;
 - se abrir PR draft, registrar latest_pr.
 
@@ -909,6 +911,98 @@ Depois disso, reavaliar:
 - bridge/paper contínuo;
 - readiness de Fase 6/7 somente se gates anteriores passarem.
 
+POST_MISSION_NEXT_STEP_DECISION_PROTOCOL
+
+Antes de encerrar qualquer missão autônoma, gerar uma decisão final estruturada
+do próximo passo, como parecer estratégico interno. A missão não pode terminar
+sem essa decisão, mesmo quando atingir stop condition real.
+
+A decisão final deve escolher exatamente uma categoria:
+- CONTINUE_AUTONOMOUS
+- REVIEW_DRAFT_PR
+- REQUEST_EXTERNAL_ARTIFACTS
+- REQUEST_MATERIAL_EVIDENCE
+- RUN_GLOBAL_REAUDIT
+- START_NEW_RESEARCH_AGENDA
+- FREEZE_CURRENT_LINE
+- STOP_FOR_GOVERNANCE_HARD_BLOCK
+- STOP_FOR_SPEC_CHANGE_REQUIRED
+- STOP_FOR_OFFICIAL_PROMOTION_REQUIRED
+
+Tomar a decisão por rubrica interna equivalente a um agente estratégico
+especializado. A rubrica obrigatória deve responder:
+- Existe próximo gate interno seguro?
+- Existe hipótese HIGH/MEDIUM executável?
+- Existe candidata research sobrevivente?
+- Existe artifact externo ausente?
+- Existe nova evidência material disponível?
+- A continuação exigiria mudança de especificação?
+- A continuação exigiria promoção official?
+- A continuação exigiria paper readiness?
+- O PR draft já contém evidência revisável suficiente?
+- O working tree está limpo?
+- Os blockers DSR/CVaR/promotabilidade continuam ativos?
+
+A resposta final da missão deve conter obrigatoriamente:
+- Decisão recomendada.
+- Justificativa.
+- Alternativas consideradas e rejeitadas.
+- Próxima ação exata.
+- Se o Codex pode continuar sozinho ou não.
+- Se precisa de artifact externo ou nova evidência.
+- Se o PR draft deve ser revisado, atualizado ou mantido.
+- Próximo prompt sugerido, caso exista ação interna segura.
+- Comandos sugeridos, quando aplicável.
+
+Criar ou atualizar sempre:
+- reports/state/sniper_next_step_decision.md
+- reports/state/sniper_next_step_decision.json
+
+O JSON deve conter:
+- decision
+- can_continue_autonomously
+- requires_external_artifact
+- requires_material_evidence
+- recommended_user_action
+- recommended_codex_action
+- next_gate
+- pr_action
+- blockers
+- alternatives_rejected
+- rationale
+
+Se não houver próximo gate interno seguro, declarar explicitamente:
+"Não há próxima ação autônoma interna segura no estado atual."
+
+Se houver PR draft com evidência revisável e não houver próximo gate seguro, a
+decisão deve ser REVIEW_DRAFT_PR.
+
+Se a única forma de avançar for nova evidência, artifact ou hipótese
+materialmente nova, a decisão deve ser REQUEST_MATERIAL_EVIDENCE ou
+REQUEST_EXTERNAL_ARTIFACTS.
+
+Caso atual conhecido:
+- H06 unlock_shadow_feature_ablation foi executado.
+- Resultado: H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE.
+- unlock deixou de ser blocker externo.
+- artifacts unlock são shadow/proxy-heavy.
+- não houve candidata research sobrevivente.
+- DSR continua 0.0.
+- CVaR official continua zero exposure.
+- cross-sectional continua not promotable.
+- não há próximo gate interno seguro registrado.
+
+Nesse caso, a decisão esperada é REVIEW_DRAFT_PR. Registrar
+REQUEST_MATERIAL_EVIDENCE como alternativa para futura retomada.
+
+Proibições adicionais:
+- terminar missão sem decisão estruturada do próximo passo;
+- dizer apenas "revisar PR ou nova evidência" sem estruturar recomendação;
+- recomendar continuar autonomamente quando não há gate interno seguro;
+- recomendar promoção official com DSR=0.0;
+- recomendar paper readiness com CVaR official zero exposure;
+- recomendar merge a partir deste PR.
+
 Formato do relatório final da missão:
 Ao parar, entregue:
 
@@ -947,3 +1041,8 @@ Ao parar, entregue:
 33. Se houve expansão de agenda, informar hipóteses HIGH/MEDIUM geradas, hipóteses LOW registradas e o próximo gate research-only executado ou a justificativa de agenda esgotada.
 34. Se houve auditoria final de oportunidades, informar HIGH/MEDIUM remanescentes, LOW/preflight avaliadas, artifacts externos necessários, módulos internos avaliados e a classificação FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED somente quando não houver próxima ação segura.
 35. Se houver candidata viva, informar o próximo gate encadeado executado ou o hard stop real que impediu sua execução.
+36. Decisão final estruturada do próximo passo.
+37. Alternativas consideradas e rejeitadas.
+38. Se o PR draft deve ser revisado, atualizado ou mantido.
+39. Se há artifact externo ou evidência material necessária.
+40. Caminhos reports/state/sniper_next_step_decision.md e reports/state/sniper_next_step_decision.json atualizados.

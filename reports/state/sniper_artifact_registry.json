@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-05-10T12:01:52Z",
+  "updated_at_utc": "2026-05-10T12:20:00Z",
   "official_artifacts": [
     {
       "path": "data/models/phase4/phase4_report_v4.json",
@@ -139,6 +139,14 @@
     {
       "path": "reports/state/sniper_next_material_evidence_request.md",
       "status": "present_generated_by_final_freeze_resource_and_opportunity_audit"
+    },
+    {
+      "path": "reports/state/sniper_next_step_decision.md",
+      "status": "present_post_mission_next_step_decision"
+    },
+    {
+      "path": "reports/state/sniper_next_step_decision.json",
+      "status": "present_post_mission_next_step_decision"
     }
   ],
   "regeneration_command": ".\\.venv\\Scripts\\python.exe -m pytest tests/unit/test_phase6_global_reproducibility_source_alignment_gate.py tests/unit/test_phase5_cross_sectional_latest_headroom_reconciliation_audit.py tests/unit/test_phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate.py tests/unit/test_phase5_cross_sectional_sovereign_hardening_recheck.py tests/unit/test_gate_reports.py tests/unit/test_hmm_regime_alignment.py -q",
@@ -182,6 +190,7 @@
     "H06 unlock_shadow_feature_ablation requires canonical unlock artifacts; shadow/wayback files are not sufficient and must not be promoted or fabricated.",
     "No safe internal HIGH/MEDIUM research agenda hypothesis remains after the final opportunity audit.",
     "phase5_research_unlock_shadow_feature_ablation_gate executed H06 as diagnostic/preflight only with H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE.",
-    "H06 unlock artifacts are now present, but remain research/shadow diagnostic inputs and produced no operational or promotable candidate."
+    "H06 unlock artifacts are now present, but remain research/shadow diagnostic inputs and produced no operational or promotable candidate.",
+    "POST_MISSION_NEXT_STEP_DECISION_PROTOCOL requires sniper_next_step_decision.md/json at the end of every autonomous mission; current decision is REVIEW_DRAFT_PR with REQUEST_MATERIAL_EVIDENCE as future alternative."
   ]
 }
