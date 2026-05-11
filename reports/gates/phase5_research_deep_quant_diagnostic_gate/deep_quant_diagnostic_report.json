@@ -1,0 +1,60 @@
+{
+  "hypothesis": "A deep research-only diagnostic can decompose why DSR remains 0.0 and identify which mathematical constraints block promotion without relaxing thresholds.",
+  "status": "PASS",
+  "decision": "advance",
+  "classification": "DEEP_QUANT_DSR_AND_STABILITY_DIAGNOSTIC_COMPLETE",
+  "diagnostic": {
+    "dsr": {
+      "dsr_honest": 0.0,
+      "dsr_passed": false,
+      "dsr_pass_threshold": 0.95,
+      "n_trials_honest": 5000,
+      "sharpe_is": 0.8808,
+      "sr_needed": 4.47,
+      "sharpe_gap_to_sr_needed": 3.5892
+    },
+    "research_nonzero_exposure_returns": {
+      "combo_count": 15,
+      "median_active_days": 712.0,
+      "median_sharpe": -0.727203,
+      "min_sharpe": -4.321026,
+      "median_skew": -2.487254,
+      "median_kurtosis": 9.331981,
+      "max_drawdown": 0.50323054,
+      "median_turnover_proxy": 0.0
+    },
+    "subperiods": {
+      "rows": 45,
+      "median_subperiod_sharpe": -0.623005,
+      "min_subperiod_sharpe": -6.37089,
+      "negative_subperiod_count": 32
+    },
+    "sensitivity": {
+      "policy_rows_scanned": 10,
+      "best_policy": {
+        "policy": "score_0_40_sigma_lte_q90",
+        "median_active_days": 127.0,
+        "median_combo_sharpe": 0.53027,
+        "min_combo_sharpe": -4.031838,
+        "max_cvar_95_loss_fraction": 0.01065314
+      },
+      "positive_median_policy_count": 10,
+      "positive_and_stable_policy_count": 0
+    },
+    "root_causes": [
+      "honest DSR remains 0.0 under the fixed honest n_trials budget",
+      "chosen Sharpe is far below sr_needed; closing the gap requires new ex-ante alpha, not threshold relaxation",
+      "subperiod and cross-combo dispersion show instability in research-only exposure paths",
+      "prior weak positive threshold variants do not remove negative min combo Sharpe",
+      "diagnostics do not authorize official promotion or paper readiness"
+    ]
+  },
+  "governance": {
+    "research_only": true,
+    "promotes_official": false,
+    "reopens_a3_a4": false,
+    "relaxes_thresholds": false,
+    "masks_dsr": false,
+    "treats_diagnostic_as_operational_signal": false
+  }
+}

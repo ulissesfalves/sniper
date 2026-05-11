@@ -1,0 +1,107 @@
+{
+  "gate_slug": "phase5_research_candidate_global_reaudit_gate",
+  "phase_family": "phase5_research_candidate_global_reaudit",
+  "status": "PASS",
+  "decision": "advance",
+  "baseline_commit": "4d6129184225566b039654663e555eb322abb6fb",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_global_reaudit_gate\\candidate_global_reaudit_positions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_global_reaudit_gate\\candidate_global_reaudit_daily_returns.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_global_reaudit_gate\\candidate_global_reaudit_trade_log.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_global_reaudit_gate\\candidate_global_reaudit_metrics.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_global_reaudit_gate\\candidate_global_reaudit_report.json"
+  ],
+  "summary": [
+    "classification=CANDIDATE_GLOBAL_REAUDIT_PASS_RESEARCH_ONLY_NOT_PROMOTABLE",
+    "candidate_policy=short_high_p_bma_k3_p60_h70",
+    "median_combo_sharpe=1.361592",
+    "min_combo_sharpe=0.261111",
+    "median_active_days=471.0",
+    "max_cvar_95_loss_fraction=0.00344841",
+    "sr_needed=4.47",
+    "candidate is research/sandbox only",
+    "ex-ante selection uses p_bma_pkf and hmm_prob_bull filters only",
+    "pnl_real remains realized outcome only",
+    "no official promotion attempted"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_research_candidate_global_reaudit_gate",
+      "metric_name": "candidate_policy",
+      "metric_value": "short_high_p_bma_k3_p60_h70",
+      "metric_threshold": "must match survivor",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_global_reaudit_gate",
+      "metric_name": "research_only",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_global_reaudit_gate",
+      "metric_name": "uses_realized_variable_as_ex_ante_rule",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_global_reaudit_gate",
+      "metric_name": "metric_reconciliation_matches_prior",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_global_reaudit_gate",
+      "metric_name": "median_combo_sharpe",
+      "metric_value": 1.361592,
+      "metric_threshold": "> 0 research-only; < sr_needed means not promotable",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_global_reaudit_gate",
+      "metric_name": "min_combo_sharpe",
+      "metric_value": 0.261111,
+      "metric_threshold": "> 0",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_global_reaudit_gate",
+      "metric_name": "median_active_days",
+      "metric_value": 471.0,
+      "metric_threshold": ">= 120",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_global_reaudit_gate",
+      "metric_name": "max_cvar_95_loss_fraction",
+      "metric_value": 0.00344841,
+      "metric_threshold": "<= 0.15",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_global_reaudit_gate",
+      "metric_name": "official_promotion_allowed",
+      "metric_value": false,
+      "metric_threshold": "false while DSR=0.0 and candidate below sr_needed",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "candidate_sharpe_below_sr_needed",
+    "short_exposure_research_sandbox_only",
+    "official_cvar_zero_exposure_not_economic_robustness"
+  ],
+  "risks_residual": [
+    "The candidate uses sandbox short exposure and is not an official execution policy.",
+    "Median Sharpe remains far below sr_needed for honest DSR clearance.",
+    "A stability/falsification sequence is still required before any deepening decision."
+  ],
+  "next_recommended_step": "Run phase5_research_candidate_stability_gate and phase5_research_candidate_falsification_gate; keep the candidate research-only and non-promotable."
+}

@@ -101,7 +101,7 @@ def _git_output(*args: str) -> str:
 
 def _git_show_bytes(commit: str, path: str) -> bytes:
     result = subprocess.run(
-        ["git", "show", f"{commit}:{path}"],
+        ["git", "-c", "core.longpaths=true", "show", f"{commit}:{path}"],
         cwd=REPO_ROOT,
         check=True,
         capture_output=True,

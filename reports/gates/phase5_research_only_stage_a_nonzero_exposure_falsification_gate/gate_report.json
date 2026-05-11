@@ -1,0 +1,88 @@
+{
+  "gate_slug": "phase5_research_only_stage_a_nonzero_exposure_falsification_gate",
+  "phase_family": "phase5_research_only_stage_a_nonzero_exposure_falsification",
+  "status": "FAIL",
+  "decision": "abandon",
+  "baseline_commit": "bd0719c722326c808a05a66aaa7c43ae1edcefb8",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_report_v4.json"
+  ],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_only_stage_a_nonzero_exposure_falsification_gate\\stage_a_nonzero_exposure_summary.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_only_stage_a_nonzero_exposure_falsification_gate\\stage_a_nonzero_exposure_combo_metrics.parquet"
+  ],
+  "summary": [
+    "classification=ONLY_REALIZED_ELIGIBILITY_LOOKS_GOOD_SAFE_POLICY_FAILS",
+    "safe_selected_events=10576",
+    "safe_selected_dates=2112",
+    "safe_median_combo_sharpe=-0.727203",
+    "unsafe_median_combo_sharpe=14.525046",
+    "unsafe policy uses realized stage_a_eligible and is diagnostic only",
+    "no official promotion attempted"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_research_only_stage_a_nonzero_exposure_falsification_gate",
+      "metric_name": "safe_selected_events",
+      "metric_value": 10576,
+      "metric_threshold": "> 0",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_only_stage_a_nonzero_exposure_falsification_gate",
+      "metric_name": "safe_selected_dates",
+      "metric_value": 2112,
+      "metric_threshold": ">= 120",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_only_stage_a_nonzero_exposure_falsification_gate",
+      "metric_name": "safe_median_combo_sharpe",
+      "metric_value": -0.727203,
+      "metric_threshold": ">= 4.47",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_only_stage_a_nonzero_exposure_falsification_gate",
+      "metric_name": "safe_min_combo_sharpe",
+      "metric_value": -4.321026,
+      "metric_threshold": "> 0.0",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_only_stage_a_nonzero_exposure_falsification_gate",
+      "metric_name": "unsafe_median_combo_sharpe",
+      "metric_value": 14.525046,
+      "metric_threshold": "diagnostic only; must not be used for policy",
+      "metric_status": "INCONCLUSIVE"
+    },
+    {
+      "gate_slug": "phase5_research_only_stage_a_nonzero_exposure_falsification_gate",
+      "metric_name": "official_snapshot_exposure_usdt",
+      "metric_value": 0.0,
+      "metric_threshold": "> 0 for economic CVaR",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_only_stage_a_nonzero_exposure_falsification_gate",
+      "metric_name": "research_snapshot_proxy_exposure_usdt",
+      "metric_value": 0.0,
+      "metric_threshold": "> 0 for research proxy exposure",
+      "metric_status": "FAIL"
+    }
+  ],
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable"
+  ],
+  "risks_residual": [
+    "Safe ex-ante top1 policy has negative median combo Sharpe.",
+    "Positive unsafe diagnostic result depends on realized eligibility and cannot drive decisions.",
+    "Official and research snapshot exposures remain zero."
+  ],
+  "next_recommended_step": "Abandon this Stage A nonzero-exposure thesis as a promotion path. Keep PR draft as governance evidence and either freeze the line or require a materially new research-only hypothesis."
+}

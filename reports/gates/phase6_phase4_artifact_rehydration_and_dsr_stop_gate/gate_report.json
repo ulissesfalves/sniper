@@ -1,0 +1,108 @@
+{
+  "gate_slug": "phase6_phase4_artifact_rehydration_and_dsr_stop_gate",
+  "phase_family": "phase6_global_reproducibility_source_alignment",
+  "status": "PARTIAL",
+  "decision": "correct",
+  "baseline_commit": "f62284221426acd2bd07fc1811b346dc6157897a",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "compare_url": "https://github.com/ulissesfalves/sniper/compare/codex/openclaw-sniper-handoff...codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_report_v4.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_gate_diagnostic.json"
+  ],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_phase4_artifact_rehydration_and_dsr_stop_gate\\source_doc_alignment.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_phase4_artifact_rehydration_and_dsr_stop_gate\\phase4_artifact_integrity_report.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_phase4_artifact_rehydration_and_dsr_stop_gate\\portfolio_cvar_report.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_phase4_artifact_rehydration_and_dsr_stop_gate\\environment_report.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_phase4_artifact_rehydration_and_dsr_stop_gate\\clean_regeneration_report.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_phase4_artifact_rehydration_and_dsr_stop_gate\\clean_regeneration_preflight.json"
+  ],
+  "summary": [
+    "source_doc_alignment=ALIGNED",
+    "phase4_artifact_integrity=PASS",
+    "dsr_honest=0.0",
+    "phase4_promotion_status=BLOCKED_DSR_HONEST_ZERO",
+    "missing_documented_modules=[]",
+    "cvar_technical_status=PASS_ZERO_EXPOSURE",
+    "cvar_economic_status=NOT_PROVEN_ZERO_EXPOSURE",
+    "regeneration_returncode=None",
+    "regeneration_blocker=MISSING_RESEARCH_BASELINE_ARTIFACTS",
+    "missing_regeneration_baseline_artifacts=['C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper_codex_autonomous\\\\data\\\\models\\\\research\\\\phase4_cross_sectional_ranking_baseline\\\\stage_a_predictions.parquet', 'C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper_codex_autonomous\\\\data\\\\models\\\\research\\\\phase4_cross_sectional_ranking_baseline\\\\stage_a_report.json', 'C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper_codex_autonomous\\\\data\\\\models\\\\research\\\\phase4_cross_sectional_ranking_baseline\\\\stage_a_manifest.json', 'C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper_codex_autonomous\\\\data\\\\models\\\\research\\\\phase4_cross_sectional_ranking_baseline\\\\stage_a_snapshot_proxy.parquet']"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase6_phase4_artifact_rehydration_and_dsr_stop_gate",
+      "metric_name": "source_doc_alignment",
+      "metric_value": "ALIGNED",
+      "metric_threshold": "ALIGNED",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase6_phase4_artifact_rehydration_and_dsr_stop_gate",
+      "metric_name": "phase4_artifact_integrity",
+      "metric_value": "PASS",
+      "metric_threshold": "PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase6_phase4_artifact_rehydration_and_dsr_stop_gate",
+      "metric_name": "phase4_dsr_honest",
+      "metric_value": 0.0,
+      "metric_threshold": "> 0.95 and passed=true for promotion",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase6_phase4_artifact_rehydration_and_dsr_stop_gate",
+      "metric_name": "cvar_artifact_persisted",
+      "metric_value": "PASS_ZERO_EXPOSURE",
+      "metric_threshold": "persisted with explicit zero-exposure caveat",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase6_phase4_artifact_rehydration_and_dsr_stop_gate",
+      "metric_name": "cvar_economic_robustness",
+      "metric_value": "NOT_PROVEN_ZERO_EXPOSURE",
+      "metric_threshold": "MEASURED_NONZERO_EXPOSURE_OR_APPROVED_STRESS",
+      "metric_status": "INCONCLUSIVE"
+    },
+    {
+      "gate_slug": "phase6_phase4_artifact_rehydration_and_dsr_stop_gate",
+      "metric_name": "test_environment_probe",
+      "metric_value": true,
+      "metric_threshold": true,
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase6_phase4_artifact_rehydration_and_dsr_stop_gate",
+      "metric_name": "local_regeneration_probe",
+      "metric_value": null,
+      "metric_threshold": 0,
+      "metric_status": "INCONCLUSIVE"
+    },
+    {
+      "gate_slug": "phase6_phase4_artifact_rehydration_and_dsr_stop_gate",
+      "metric_name": "clean_regeneration_proof",
+      "metric_value": false,
+      "metric_threshold": true,
+      "metric_status": "INCONCLUSIVE"
+    }
+  ],
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "cvar_zero_exposure_not_economic_robustness",
+    "clean_regeneration_not_proven_in_clean_clone_or_equivalent",
+    "research_regeneration_baseline_artifacts_missing"
+  ],
+  "risks_residual": [
+    "A3/A4 remain closed; no promotion attempted.",
+    "RiskLabAI remains oracle/shadow only.",
+    "Cross-sectional family remains ALIVE_BUT_NOT_PROMOTABLE.",
+    "DSR=0.0 remains a promotion blocker; this gate does not alter thresholds."
+  ],
+  "next_recommended_step": "Provide the research regeneration baseline artifacts under data/models/research/phase4_cross_sectional_ranking_baseline/ to prove clean regeneration. Even after that, stop promotion/readiness escalation while DSR honest remains 0.0 and CVaR has zero exposure."
+}

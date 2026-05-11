@@ -18,6 +18,15 @@ Documentar como regenerar, em um clone novo, os artifacts research-only minimos 
 
 ## Ordem minima de regeneracao
 
+## Preflight obrigatorio antes da regeneracao
+
+Antes de executar os runners de Phase 5, verificar se os artifacts official de Phase 4 existem no ambiente atual:
+
+- `data/models/phase4/phase4_report_v4.json`
+- `data/models/phase4/phase4_execution_snapshot.parquet`
+
+Se `data/models/phase4` estiver ausente, classificar a rodada como `MISSING_OFFICIAL_PHASE4_ARTIFACTS` ou `INCONCLUSIVE`, e nao como PASS. Essa falha e blocker de artifact/ambiente para clean regeneration; nao deve ser mascarada por stacktrace, narrativa ou copia manual nao auditada.
+
 ### 1. Recriar a baseline preservada de predictions
 
 Usar o runner do Stage A cross-sectional ranking para recriar `phase4_cross_sectional_ranking_baseline`.

@@ -1,0 +1,20 @@
+{
+  "mode": "local_regeneration_probe_not_clean_clone",
+  "clean_clone_or_equivalent": false,
+  "command": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\.venv\\Scripts\\python.exe services/ml_engine/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate.py",
+  "returncode": 1,
+  "stdout_tail": "",
+  "stderr_tail": "Traceback (most recent call last):\n  File \"C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\services\\ml_engine\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate.py\", line 948, in <module>\n    main()\n  File \"C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\services\\ml_engine\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate.py\", line 943, in main\n    result = run_phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate()\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\services\\ml_engine\\phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate.py\", line 673, in run_phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate\n    official_before = stage5._collect_official_inventory(model_path)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\services\\ml_engine\\phase5_stage_a3_spec_hardening.py\", line 109, in _collect_official_inventory\n    [path for path in (model_path / \"phase4\").iterdir() if path.is_file() and path.suffix.lower() in {\".json\", \".parquet\"}]\n  File \"C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\services\\ml_engine\\phase5_stage_a3_spec_hardening.py\", line 109, in <listcomp>\n    [path for path in (model_path / \"phase4\").iterdir() if path.is_file() and path.suffix.lower() in {\".json\", \".parquet\"}]\n  File \"C:\\Users\\uliss\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\pathlib.py\", line 931, in iterdir\n    for name in os.listdir(self):\n                ^^^^^^^^^^^^^^^^\nFileNotFoundError: [WinError 3] O sistema nÃ£o pode encontrar o caminho especificado: 'C:\\\\Users\\\\uliss\\\\Documentos\\\\Meus_projetos\\\\sniper_codex_autonomous\\\\data\\\\models\\\\phase4'\n",
+  "preflight": {
+    "model_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models",
+    "model_path_exists": true,
+    "phase4_dir": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4",
+    "phase4_dir_exists": false,
+    "phase4_report": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_report_v4.json",
+    "phase4_report_exists": false,
+    "phase4_snapshot": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+    "phase4_snapshot_exists": false
+  },
+  "classification": "INCONCLUSIVE",
+  "blocker": "local regeneration probe failed before clean-clone proof; missing official phase4 artifacts are a blocker in this clone"
+}

@@ -1,0 +1,58 @@
+{
+  "hypothesis": "After the research-only survivor was falsified, the branch can be globally reaudited and the next safe in-repo action can be selected without human decision or official promotion.",
+  "status": "PASS",
+  "decision": "advance",
+  "classification": "POST_FALSIFICATION_REAUDIT_PASS_START_NEW_RESEARCH_THESIS",
+  "classification_reason": "material_new_hypothesis_available",
+  "candidate_policy": "short_high_p_bma_k3_p60_h70",
+  "candidate_status": "RESEARCH_CANDIDATE_FALSIFIED",
+  "hard_falsifiers": [
+    "temporal_subperiod_min_sharpe",
+    "extra_cost_20bps_min_sharpe"
+  ],
+  "candidate_gates": {
+    "decision": {
+      "status": "PASS",
+      "decision": "abandon",
+      "classification": "RESEARCH_CANDIDATE_FALSIFIED"
+    },
+    "falsification": {
+      "status": "FAIL",
+      "decision": "abandon"
+    },
+    "stability": {
+      "status": "PARTIAL",
+      "decision": "correct"
+    },
+    "full_phase_comparison": {
+      "status": "PASS",
+      "decision": "advance"
+    }
+  },
+  "governance": {
+    "official_promotion_allowed": false,
+    "paper_readiness_allowed": false,
+    "promotes_official": false,
+    "declares_paper_readiness": false,
+    "reopens_a3_a4": false,
+    "relaxes_thresholds": false,
+    "treats_zero_exposure_cvar_as_economic_robustness": false,
+    "requires_human_decision": false
+  },
+  "next_hypothesis": {
+    "available": true,
+    "hypothesis_family": "cluster_conditioned_polarity",
+    "suggested_gate": "phase5_research_cluster_conditioned_polarity_gate",
+    "reason": "cluster_name is present in the research baseline and no cluster-conditioned polarity gate exists",
+    "uses_external_resource": false,
+    "uses_realized_variable_as_ex_ante_rule": false
+  },
+  "next_recommended_mode": "START_RESEARCH_ONLY_THESIS",
+  "next_recommended_gate": "phase5_research_cluster_conditioned_polarity_gate",
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "official_cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable",
+    "no_surviving_research_candidate_after_falsification"
+  ]
+}

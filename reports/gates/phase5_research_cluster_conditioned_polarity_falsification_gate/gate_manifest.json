@@ -1,0 +1,94 @@
+{
+  "gate_slug": "phase5_research_cluster_conditioned_polarity_falsification_gate",
+  "timestamp_utc": "2026-05-03T17:55:35+00:00",
+  "baseline_commit": "b13896a405f0bbc798ce98568abdc0013d80b58f",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4894,
+      "mtime_utc": "2026-05-03T17:53:07+00:00",
+      "sha256": "FD570C76625FEC19EA45D75F194CF89C160E05D89D093348C92B50FBD5B43186"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_gate\\portfolio_cvar_research_report.json",
+      "exists": true,
+      "size_bytes": 30344,
+      "mtime_utc": "2026-05-03T17:53:07+00:00",
+      "sha256": "C9F660F994DB7AF657C82EA8DD53FA71CBFEA34C102E025846B6B85F4F76A896"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_predictions.parquet",
+      "exists": true,
+      "size_bytes": 4365296,
+      "mtime_utc": "2026-03-29T06:55:53+00:00",
+      "sha256": "FC947D4C3C71175BCF5F773665DD1D5BB5F033D0E67E881F0B07B338FDA1B67E"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_falsification_gate\\cluster_conditioned_polarity_falsification_scenarios.parquet",
+      "exists": true,
+      "size_bytes": 8608,
+      "mtime_utc": "2026-05-03T17:55:34+00:00",
+      "sha256": "93D51FF78B905F11390629CD7E073C861220D8458242372CEAB3707967178A1F"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_falsification_gate\\cluster_conditioned_polarity_falsification_report.json",
+      "exists": true,
+      "size_bytes": 10266,
+      "mtime_utc": "2026-05-03T17:55:34+00:00",
+      "sha256": "517098B44F091F6399259F16FA70475B3677A1A9B8C0AE64B023DA7E48CCD070"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_falsification_gate\\cluster_conditioned_polarity_candidate_positions.parquet",
+      "exists": true,
+      "size_bytes": 269567,
+      "mtime_utc": "2026-05-03T17:55:34+00:00",
+      "sha256": "F9526EEDF261711AE18560D8D1F3F8ED337F360E266906599C7614D2545B7D2B"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_falsification_gate\\cluster_conditioned_polarity_candidate_daily_returns.parquet",
+      "exists": true,
+      "size_bytes": 46279,
+      "mtime_utc": "2026-05-03T17:55:34+00:00",
+      "sha256": "AD4992C1BFE807231B8F012DC9C799A1BC1665CBDADB5EEFC6381657AB8CDF95"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_falsification_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4334,
+      "mtime_utc": "2026-05-03T17:55:35+00:00",
+      "sha256": "D3E2A6B6C9834EBD41A585FD2B2E57D8F714BD9FE8143F4B4D6DB5FBC7D77668"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_falsification_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 1901,
+      "mtime_utc": "2026-05-03T17:55:35+00:00",
+      "sha256": "0CEBCA5EB0CC6675C059D882A6B41CD670E5E1A964D521A74A9CEF0761A0A340"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_falsification_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 3978,
+      "mtime_utc": "2026-05-03T17:55:35+00:00",
+      "sha256": "B6CD177ED8DF35AD16D413FC42590148F70A64552433481156F4C39D65F6C2B5"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_falsification_gate\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    ".\\.venv\\Scripts\\python.exe services\\ml_engine\\phase5_research_cluster_conditioned_polarity_falsification.py"
+  ],
+  "notes": [
+    "Research-only cluster-conditioned candidate falsification gate.",
+    "No official promotion, readiness, A3/A4 reopen, merge or real trading."
+  ]
+}

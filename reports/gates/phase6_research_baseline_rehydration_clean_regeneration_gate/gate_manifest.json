@@ -1,0 +1,208 @@
+{
+  "gate_slug": "phase6_research_baseline_rehydration_clean_regeneration_gate",
+  "timestamp_utc": "2026-04-27T00:57:21+00:00",
+  "baseline_commit": "e86f0dbfa07e4ac36d590fee46eb9a8c98bdc765",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\docs\\SNIPER_memoria_especificacao_controle_fase4R_v3.md",
+      "exists": true,
+      "size_bytes": 24357,
+      "mtime_utc": "2026-04-26T22:33:13+00:00",
+      "sha256": "036B41222EB01E9CC09765A6CF549E1AE8C0F3C912F4480F71274AEE65D6CB8F"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\docs\\SNIPER_openclaw_handoff.md",
+      "exists": true,
+      "size_bytes": 5543,
+      "mtime_utc": "2026-04-26T21:18:46+00:00",
+      "sha256": "D717C87DE5C3C0B7816299E76006A12ACDF9529BBAB73F2E63128FF9F55A7684"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\docs\\SNIPER_regeneration_guide.md",
+      "exists": true,
+      "size_bytes": 3232,
+      "mtime_utc": "2026-04-26T22:33:13+00:00",
+      "sha256": "460634C6F9A1C48F301091D003A2A3A1F132CC92BE136E3C12BD7B197043B96B"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\audits\\global_spec_adherence\\global_spec_adherence_summary.json",
+      "exists": true,
+      "size_bytes": 3618,
+      "mtime_utc": "2026-04-26T21:18:46+00:00",
+      "sha256": "CC673C8225CC146A1DC60303991D87C368081AFC96AA5BC75C0E02DFBCF23B2D"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\audits\\global_spec_adherence\\next_step_recommendation.md",
+      "exists": true,
+      "size_bytes": 2850,
+      "mtime_utc": "2026-04-27T00:36:42+00:00",
+      "sha256": "207E92FDA9CE0EB0947EE090EE755BA0CB3C4B87E9122B5361320C5A65EF8D5C"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_report_v4.json",
+      "exists": true,
+      "size_bytes": 97451,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "exists": true,
+      "size_bytes": 21118,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+      "exists": true,
+      "size_bytes": 1234311,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+      "exists": true,
+      "size_bytes": 2872831,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "5B3144578BB99D48E2A67B3AB60B2B0AD25787A92B8488AFD1D1D5C08AE8F6C7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_gate_diagnostic.json",
+      "exists": true,
+      "size_bytes": 40472,
+      "mtime_utc": "2026-04-26T21:48:31+00:00",
+      "sha256": "EBFC08CDDE6F9AB3F2A6BF7F23F3A4701B2FDB2796E61776E7E842BA21E10954"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_predictions.parquet",
+      "exists": true,
+      "size_bytes": 4365296,
+      "mtime_utc": "2026-03-29T06:55:53+00:00",
+      "sha256": "FC947D4C3C71175BCF5F773665DD1D5BB5F033D0E67E881F0B07B338FDA1B67E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_report.json",
+      "exists": true,
+      "size_bytes": 837772,
+      "mtime_utc": "2026-03-29T06:55:53+00:00",
+      "sha256": "D0DAE9346DF71B272568CF1A5E62AB5D15ADDEADBFC326581D32D99D26F0EBFB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_manifest.json",
+      "exists": true,
+      "size_bytes": 7102,
+      "mtime_utc": "2026-03-29T06:55:53+00:00",
+      "sha256": "BB2341E59A73D417204BFAB3C3D4EDCB6ECE40F612BC85AFC449ED37DED2ECFF"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_snapshot_proxy.parquet",
+      "exists": true,
+      "size_bytes": 31939,
+      "mtime_utc": "2026-03-29T06:55:53+00:00",
+      "sha256": "FE1E050820ABE77C7DF35318F13301F2A7443AE45B75B2D322CAC0AF233032B7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\services\\ml_engine\\phase6_global_reproducibility_source_alignment_gate.py",
+      "exists": true,
+      "size_bytes": 40999,
+      "mtime_utc": "2026-04-27T00:55:57+00:00",
+      "sha256": "8DAB6A97B2068F3F24BA5DAE8C6F12F305E807AA7D31C8B9DCA37BB5DD65A587"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\services\\ml_engine\\sizing\\kelly_cvar.py",
+      "exists": true,
+      "size_bytes": 22960,
+      "mtime_utc": "2026-04-26T21:18:29+00:00",
+      "sha256": "B71C5F8E81B165269CBEFD9475D0C3C97C681E1A08D7FBC24C14D2C02CF1D958"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_research_baseline_rehydration_clean_regeneration_gate\\source_doc_alignment.json",
+      "exists": true,
+      "size_bytes": 3769,
+      "mtime_utc": "2026-04-27T00:57:21+00:00",
+      "sha256": "84F367598D23BEA5F95278B38881C379D12719C3754B3219008855747187FE9E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_research_baseline_rehydration_clean_regeneration_gate\\phase4_artifact_integrity_report.json",
+      "exists": true,
+      "size_bytes": 2781,
+      "mtime_utc": "2026-04-27T00:57:21+00:00",
+      "sha256": "25D81A8096EAD57C1AD6E54D87B0A09B6A911E4ADD62EC042D71552A6ECCE272"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_research_baseline_rehydration_clean_regeneration_gate\\portfolio_cvar_report.json",
+      "exists": true,
+      "size_bytes": 733,
+      "mtime_utc": "2026-04-27T00:57:21+00:00",
+      "sha256": "AE4442A6D178C7ABF4DC35C622279202C8F8A57DB12FCC44A384FB7F8AECBDF1"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_research_baseline_rehydration_clean_regeneration_gate\\environment_report.json",
+      "exists": true,
+      "size_bytes": 863,
+      "mtime_utc": "2026-04-27T00:57:21+00:00",
+      "sha256": "D3E9462B85AA6817E7271743DFF085EA60D5FB3A224F994904A9C1C7C37D38C2"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_research_baseline_rehydration_clean_regeneration_gate\\clean_regeneration_report.json",
+      "exists": true,
+      "size_bytes": 14752,
+      "mtime_utc": "2026-04-27T00:57:21+00:00",
+      "sha256": "5CE2952EA21A7C7EDF001C6235990D29B5B9973D0DFCF431380A0E5216B4CD8A"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_research_baseline_rehydration_clean_regeneration_gate\\clean_regeneration_preflight.json",
+      "exists": true,
+      "size_bytes": 14752,
+      "mtime_utc": "2026-04-27T00:57:21+00:00",
+      "sha256": "5CE2952EA21A7C7EDF001C6235990D29B5B9973D0DFCF431380A0E5216B4CD8A"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_research_baseline_rehydration_clean_regeneration_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 5710,
+      "mtime_utc": "2026-04-27T00:57:21+00:00",
+      "sha256": "318E453A4CA86B90289A943D4AC4D693CCB8A6690D6FF65E538CF4D332266AEF"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_research_baseline_rehydration_clean_regeneration_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 5035,
+      "mtime_utc": "2026-04-27T00:57:21+00:00",
+      "sha256": "C2664652FB06BD68BD75D7C75758166F7A02F2B1BE56E8830DDC3A07AB90B6FC"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_research_baseline_rehydration_clean_regeneration_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 4112,
+      "mtime_utc": "2026-04-27T00:57:21+00:00",
+      "sha256": "89969F099A500E8090F518DA890312904743230282CDC45452BAC85952273506"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_research_baseline_rehydration_clean_regeneration_gate\\gate_manifest.json",
+      "exists": true,
+      "size_bytes": 11517,
+      "mtime_utc": "2026-04-27T00:54:59+00:00",
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    ".\\.venv\\Scripts\\python.exe -m pytest tests/unit/test_phase6_global_reproducibility_source_alignment_gate.py tests/unit/test_gate_reports.py tests/unit/test_hmm_regime_alignment.py -q",
+    "$env:SNIPER_PHASE6_GATE_SLUG='phase6_research_baseline_rehydration_clean_regeneration_gate'; .\\.venv\\Scripts\\python.exe services\\ml_engine\\phase6_global_reproducibility_source_alignment_gate.py; Remove-Item Env:SNIPER_PHASE6_GATE_SLUG",
+    "git -c core.longpaths=true clone --no-hardlinks --quiet --no-checkout C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\p6cw\\9e7679baeca9\\r",
+    "git -c core.longpaths=true checkout --quiet e86f0dbfa07e4ac36d590fee46eb9a8c98bdc765",
+    "git -c core.longpaths=true fetch --quiet origin +refs/heads/*:refs/remotes/origin/* +refs/remotes/*:refs/remotes/source/*",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\.venv\\Scripts\\python.exe services/ml_engine/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate.py"
+  ],
+  "notes": [
+    "No official promotion, A3/A4 reopening, merge, force push, credential use, or real-capital operation.",
+    "Clean regeneration PASS requires required research baseline artifacts plus an isolated clone/equivalent proof.",
+    "DSR honest is read from phase4_report_v4.json and blocks any promotion when equal to 0.0.",
+    "Phase5 restore is executed only inside the isolated clean clone when preflight passes."
+  ]
+}

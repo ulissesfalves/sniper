@@ -1,0 +1,62 @@
+{
+  "hypothesis": "The honest DSR=0.0 blocker can be explained by measured Sharpe being far below the required Sharpe under the fixed honest multiple-testing budget, without relaxing thresholds.",
+  "status": "PASS",
+  "decision": "advance",
+  "classification": "DSR_ZERO_ROOT_CAUSE_DIAGNOSTIC_COMPLETE",
+  "diagnostic": {
+    "dsr_honest": 0.0,
+    "dsr_passed": false,
+    "dsr_pass_threshold": 0.95,
+    "n_trials_honest": 5000,
+    "sharpe_is": 0.8808,
+    "sr_needed": 4.47,
+    "sharpe_gap_to_sr_needed": 3.5892,
+    "best_dsr_honest_observed": 0.6938,
+    "best_dsr_honest_path": "fallback.rolling_stability.best_window",
+    "best_dsr_honest_scope": "validation_diagnostic",
+    "best_sharpe_observed": 8.5792,
+    "best_sharpe_path": "cpcv_trajectories[0]",
+    "best_sharpe_scope": "cpcv_fold_diagnostic",
+    "candidate_rows_scanned": 223,
+    "root_causes": [
+      "honest DSR is exactly 0.0 and fails the 0.95 pass threshold",
+      "honest multiple-testing budget remains n_trials_honest=5000",
+      "chosen Sharpe 0.8808 is 3.5892 below sr_needed 4.47",
+      "diagnostic high-Sharpe or higher-DSR windows are not full official promotion evidence",
+      "research sandbox CVaR measurement did not fix negative alpha or DSR"
+    ]
+  },
+  "prior_research_context": {
+    "stage_a_gate_status": "FAIL",
+    "stage_a_gate_decision": "abandon",
+    "stage_a_gate_summary": [
+      "classification=ONLY_REALIZED_ELIGIBILITY_LOOKS_GOOD_SAFE_POLICY_FAILS",
+      "safe_selected_events=10576",
+      "safe_selected_dates=2112",
+      "safe_median_combo_sharpe=-0.727203",
+      "unsafe_median_combo_sharpe=14.525046",
+      "unsafe policy uses realized stage_a_eligible and is diagnostic only",
+      "no official promotion attempted"
+    ],
+    "research_cvar_gate_status": "PARTIAL",
+    "research_cvar_gate_decision": "correct",
+    "research_cvar_gate_summary": [
+      "classification=NONZERO_EXPOSURE_RESEARCH_CVAR_PASS_BUT_ALPHA_DSR_BLOCKERS_REMAIN",
+      "research_active_combo_days=10576",
+      "research_max_cvar_95_loss_fraction=0.01072844",
+      "research_median_cvar_95_loss_fraction=0.00313685",
+      "research_median_combo_sharpe=-0.727203",
+      "research sandbox CVaR module produced nonzero-exposure measurements",
+      "official CVaR remains NOT_PROVEN_ZERO_EXPOSURE",
+      "no official promotion attempted"
+    ]
+  },
+  "governance": {
+    "research_only": true,
+    "promotes_official": false,
+    "reopens_a3_a4": false,
+    "relaxes_thresholds": false,
+    "masks_dsr": false,
+    "treats_diagnostic_as_operational_signal": false
+  }
+}

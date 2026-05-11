@@ -1,0 +1,97 @@
+{
+  "gate_slug": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
+  "phase_family": "phase5_research_feature_family_ablation_blocker_decomposition",
+  "status": "PASS",
+  "decision": "advance",
+  "baseline_commit": "68f222f69d78763f9cb0696d01579a33b09b3c3d",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_oos_predictions.parquet"
+  ],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_feature_family_ablation_blocker_decomposition_gate\\feature_family_ablation_metrics.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_feature_family_ablation_blocker_decomposition_gate\\feature_family_ablation_report.json"
+  ],
+  "summary": [
+    "classification=FEATURE_FAMILY_ABLATION_COMPLETE_NO_HIGH_MEDIUM_EXECUTABLE_FAMILY",
+    "selected_agenda_id=AGENDA-H05",
+    "feature_families_evaluated=5",
+    "families_with_existing_features=5",
+    "safe_high_medium_next_family_found=False",
+    "unlock_shadow_artifacts_available=False",
+    "diagnostic_only=true",
+    "official_promotion_allowed=false",
+    "paper_readiness_allowed=false"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
+      "metric_name": "selected_agenda_id",
+      "metric_value": "AGENDA-H05",
+      "metric_threshold": "AGENDA-H05",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
+      "metric_name": "feature_families_evaluated",
+      "metric_value": 5,
+      "metric_threshold": ">= 5",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
+      "metric_name": "families_with_existing_features",
+      "metric_value": 5,
+      "metric_threshold": ">= 4",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
+      "metric_name": "forbidden_operational_family_count",
+      "metric_value": 1,
+      "metric_threshold": "reported, not used operationally",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
+      "metric_name": "safe_high_medium_next_family_found",
+      "metric_value": false,
+      "metric_threshold": "false for governed exhaustion",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
+      "metric_name": "diagnostic_output_is_operational_signal",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
+      "metric_name": "official_promotion_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_feature_family_ablation_blocker_decomposition_gate",
+      "metric_name": "paper_readiness_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "official_cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable",
+    "no_high_medium_executable_research_agenda_family_remaining"
+  ],
+  "risks_residual": [
+    "Diagnostic correlations are not operational signals.",
+    "H06 unlock shadow ablation is LOW priority and depends on absent or shadow-only artifacts.",
+    "Official promotion and paper readiness remain forbidden while DSR=0.0 and official CVaR is zero exposure."
+  ],
+  "next_recommended_step": "FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED; update PR draft for human review."
+}

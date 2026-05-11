@@ -1,0 +1,233 @@
+{
+  "hypothesis": "The surviving candidate should withstand autonomous falsification through temporal splits, cost stress, universe reductions, null controls, turnover, drawdown and leakage checks.",
+  "status": "FAIL",
+  "decision": "abandon",
+  "classification": "RESEARCH_CANDIDATE_FALSIFIED_BY_TEMPORAL_OR_COST_STRESS",
+  "candidate": "short_high_p_bma_k3_p60_h70",
+  "falsification_tests": [
+    {
+      "test": "temporal_subperiod_min_sharpe",
+      "test_type": "temporal_oos",
+      "observed_value": -1.160839,
+      "threshold": "> 0.0 across temporal thirds",
+      "passed": false,
+      "falsifier": true,
+      "candidate_median_sharpe": null,
+      "null_median_sharpe": null
+    },
+    {
+      "test": "extra_cost_20bps_min_sharpe",
+      "test_type": "friction_stress",
+      "observed_value": -0.12201,
+      "threshold": "> 0.0 under 0.002 extra cost per position",
+      "passed": false,
+      "falsifier": true,
+      "candidate_median_sharpe": null,
+      "null_median_sharpe": null
+    },
+    {
+      "test": "extra_cost_50bps_min_sharpe",
+      "test_type": "severe_friction_stress",
+      "observed_value": -0.792719,
+      "threshold": "> 0.0 under 0.005 extra cost per position",
+      "passed": false,
+      "falsifier": true,
+      "candidate_median_sharpe": null,
+      "null_median_sharpe": null
+    },
+    {
+      "test": "universe_perturbation_min_median_sharpe",
+      "test_type": "universe_reduction",
+      "observed_value": 0.70554,
+      "threshold": "> 0.0 median Sharpe under universe perturbations",
+      "passed": true,
+      "falsifier": false,
+      "candidate_median_sharpe": null,
+      "null_median_sharpe": null
+    },
+    {
+      "test": "null_symbol_hash_control",
+      "test_type": "baseline_control",
+      "observed_value": 0.070829,
+      "threshold": "candidate median Sharpe must exceed null control median Sharpe",
+      "passed": true,
+      "falsifier": false,
+      "candidate_median_sharpe": 1.361592,
+      "null_median_sharpe": 1.290763
+    },
+    {
+      "test": "leakage_control",
+      "test_type": "ex_ante_validity",
+      "observed_value": "none",
+      "threshold": "no forbidden realized columns in selection rule",
+      "passed": true,
+      "falsifier": false,
+      "candidate_median_sharpe": null,
+      "null_median_sharpe": null
+    },
+    {
+      "test": "turnover_stress",
+      "test_type": "implementation_risk",
+      "observed_value": 0.02210773,
+      "threshold": "<= 0.05 median turnover fraction",
+      "passed": true,
+      "falsifier": false,
+      "candidate_median_sharpe": null,
+      "null_median_sharpe": null
+    },
+    {
+      "test": "drawdown_stress",
+      "test_type": "risk_stress",
+      "observed_value": 0.05222008,
+      "threshold": "<= 0.10 max drawdown proxy",
+      "passed": true,
+      "falsifier": false,
+      "candidate_median_sharpe": null,
+      "null_median_sharpe": null
+    }
+  ],
+  "evidence": {
+    "base_summary": {
+      "family": "signal_polarity_stability_filtered",
+      "policy": "short_high_p_bma_k3_p60_h70",
+      "combo": null,
+      "total_days": null,
+      "active_days": null,
+      "active_ratio": null,
+      "cum_return_proxy": null,
+      "annualized_sharpe_proxy": null,
+      "var_95_loss_fraction": null,
+      "cvar_95_loss_fraction": null,
+      "max_drawdown_proxy": 0.05222008,
+      "max_exposure_fraction": null,
+      "mean_turnover_fraction": null,
+      "metric_level": "policy",
+      "combo_count": 15.0,
+      "median_active_days": 471.0,
+      "min_active_days": 399.0,
+      "median_combo_sharpe": 1.361592,
+      "min_combo_sharpe": 0.261111,
+      "median_cum_return_proxy": 0.11682479,
+      "max_cvar_95_loss_fraction": 0.00344841,
+      "median_turnover_fraction": 0.02210773
+    },
+    "null_summary": {
+      "family": "null_symbol_hash_control",
+      "policy": "null_short_symbol_hash_k3_p60_h70",
+      "combo": null,
+      "total_days": null,
+      "active_days": null,
+      "active_ratio": null,
+      "cum_return_proxy": null,
+      "annualized_sharpe_proxy": null,
+      "var_95_loss_fraction": null,
+      "cvar_95_loss_fraction": null,
+      "max_drawdown_proxy": 0.0503876,
+      "max_exposure_fraction": null,
+      "mean_turnover_fraction": null,
+      "metric_level": "policy",
+      "combo_count": 15.0,
+      "median_active_days": 471.0,
+      "min_active_days": 399.0,
+      "median_combo_sharpe": 1.290763,
+      "min_combo_sharpe": 0.183449,
+      "median_cum_return_proxy": 0.10900769,
+      "max_cvar_95_loss_fraction": 0.00342813,
+      "median_turnover_fraction": 0.02223263
+    },
+    "severe_cost_summary": {
+      "family": "signal_polarity_stability_filtered",
+      "policy": "short_high_p_bma_k3_p60_h70",
+      "combo": null,
+      "total_days": null,
+      "active_days": null,
+      "active_ratio": null,
+      "cum_return_proxy": null,
+      "annualized_sharpe_proxy": null,
+      "var_95_loss_fraction": null,
+      "cvar_95_loss_fraction": null,
+      "max_drawdown_proxy": 0.07345873,
+      "max_exposure_fraction": null,
+      "mean_turnover_fraction": null,
+      "metric_level": "policy",
+      "combo_count": 15.0,
+      "median_active_days": 471.0,
+      "min_active_days": 399.0,
+      "median_combo_sharpe": 0.712694,
+      "min_combo_sharpe": -0.792719,
+      "median_cum_return_proxy": 0.06915812,
+      "max_cvar_95_loss_fraction": 0.00364208,
+      "median_turnover_fraction": 0.02210773
+    },
+    "governance": {
+      "candidate": "short_high_p_bma_k3_p60_h70",
+      "research_only": true,
+      "sandbox_only": true,
+      "uses_short_exposure": true,
+      "promotes_official": false,
+      "reopens_a3_a4": false,
+      "relaxes_thresholds": false,
+      "declares_paper_readiness": false,
+      "masks_dsr": false,
+      "treats_zero_exposure_cvar_as_economic_robustness": false,
+      "selection_inputs": [
+        "hmm_prob_bull",
+        "p_bma_pkf"
+      ],
+      "forbidden_exante_selection_columns": [
+        "avg_sl_train",
+        "forward_return",
+        "future_return",
+        "label",
+        "pnl_real",
+        "rank_target_stage_a",
+        "stage_a_eligible"
+      ],
+      "forbidden_selection_columns_used": [],
+      "uses_realized_variable_as_ex_ante_rule": false,
+      "pnl_real_usage": "realized_backtest_outcome_only"
+    },
+    "hard_falsifiers": [
+      "temporal_subperiod_min_sharpe",
+      "extra_cost_20bps_min_sharpe"
+    ]
+  },
+  "hard_falsifiers": [
+    "temporal_subperiod_min_sharpe",
+    "extra_cost_20bps_min_sharpe"
+  ],
+  "governance": {
+    "candidate": "short_high_p_bma_k3_p60_h70",
+    "research_only": true,
+    "sandbox_only": true,
+    "uses_short_exposure": true,
+    "promotes_official": false,
+    "reopens_a3_a4": false,
+    "relaxes_thresholds": false,
+    "declares_paper_readiness": false,
+    "masks_dsr": false,
+    "treats_zero_exposure_cvar_as_economic_robustness": false,
+    "selection_inputs": [
+      "hmm_prob_bull",
+      "p_bma_pkf"
+    ],
+    "forbidden_exante_selection_columns": [
+      "avg_sl_train",
+      "forward_return",
+      "future_return",
+      "label",
+      "pnl_real",
+      "rank_target_stage_a",
+      "stage_a_eligible"
+    ],
+    "forbidden_selection_columns_used": [],
+    "uses_realized_variable_as_ex_ante_rule": false,
+    "pnl_real_usage": "realized_backtest_outcome_only"
+  },
+  "blockers": [
+    "candidate_falsified_by_temporal_or_cost_stress",
+    "dsr_honest_zero_blocks_promotion",
+    "short_exposure_research_sandbox_only",
+    "official_cvar_zero_exposure_not_economic_robustness"
+  ]
+}

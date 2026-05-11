@@ -1,0 +1,81 @@
+{
+  "gate_slug": "phase5_research_cluster_conditioned_polarity_decision_gate",
+  "phase_family": "phase5_research_cluster_conditioned_polarity_decision",
+  "status": "PASS",
+  "decision": "abandon",
+  "baseline_commit": "b13896a405f0bbc798ce98568abdc0013d80b58f",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_decision_gate\\cluster_conditioned_polarity_decision_metrics.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_decision_gate\\cluster_conditioned_polarity_decision_report.json"
+  ],
+  "summary": [
+    "classification=CLUSTER_CONDITIONED_RESEARCH_CANDIDATE_FALSIFIED",
+    "classification_reason=hard_falsifiers_present",
+    "candidate_policy=cluster_2_long_high_short_low_p60_h70_k3",
+    "hard_falsifier_count=13",
+    "hard_falsifiers=temporal_third_1,temporal_third_2,temporal_third_3,extra_cost_5bps,extra_cost_10bps,extra_cost_20bps,cluster_2_lhsl_p55_h70_k2,cluster_2_lhsl_p60_h70_k2,cluster_2_lhsl_p65_h70_k2,cluster_2_lhsl_p55_h70_k3,cluster_2_lhsl_p65_h70_k3,drop_high_sigma_q80,symbol_hash_even",
+    "candidate remains research/sandbox only",
+    "official_promotion_allowed=false",
+    "paper_readiness_allowed=false",
+    "next_recommended_gate=phase5_post_candidate_falsification_governed_freeze_gate"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_research_cluster_conditioned_polarity_decision_gate",
+      "metric_name": "initial_gate_passed",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cluster_conditioned_polarity_decision_gate",
+      "metric_name": "falsification_gate_status",
+      "metric_value": "FAIL",
+      "metric_threshold": "FAIL or PASS",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cluster_conditioned_polarity_decision_gate",
+      "metric_name": "hard_falsifier_count",
+      "metric_value": 13,
+      "metric_threshold": "0 for alive candidate",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_cluster_conditioned_polarity_decision_gate",
+      "metric_name": "final_classification",
+      "metric_value": "CLUSTER_CONDITIONED_RESEARCH_CANDIDATE_FALSIFIED",
+      "metric_threshold": "decision classification",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cluster_conditioned_polarity_decision_gate",
+      "metric_name": "official_promotion_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cluster_conditioned_polarity_decision_gate",
+      "metric_name": "paper_readiness_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "cluster_conditioned_candidate_falsified",
+    "dsr_honest_zero_blocks_promotion",
+    "official_cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable"
+  ],
+  "risks_residual": [
+    "No cluster-conditioned candidate survived robust falsification.",
+    "No official promotion or readiness support exists.",
+    "Further work can freeze or require a materially new hypothesis not yet in the backlog."
+  ],
+  "next_recommended_step": "Execute the next safe in-repo gate automatically: phase5_post_candidate_falsification_governed_freeze_gate."
+}

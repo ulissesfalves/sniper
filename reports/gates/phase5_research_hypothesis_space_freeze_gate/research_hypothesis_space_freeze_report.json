@@ -1,0 +1,171 @@
+{
+  "hypothesis": "The current autonomous research hypothesis space is exhausted under governance constraints.",
+  "status": "PASS",
+  "decision": "freeze",
+  "classification": "CURRENT_RESEARCH_HYPOTHESIS_SPACE_EXHAUSTED_UNDER_GOVERNANCE",
+  "freeze_summary": {
+    "gates_considered": [
+      {
+        "name": "stage_a_nonzero_exposure",
+        "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_only_stage_a_nonzero_exposure_falsification_gate\\gate_report.json",
+        "gate_slug": "phase5_research_only_stage_a_nonzero_exposure_falsification_gate",
+        "status": "FAIL",
+        "decision": "abandon",
+        "summary": [
+          "classification=ONLY_REALIZED_ELIGIBILITY_LOOKS_GOOD_SAFE_POLICY_FAILS",
+          "safe_selected_events=10576",
+          "safe_selected_dates=2112",
+          "safe_median_combo_sharpe=-0.727203",
+          "unsafe_median_combo_sharpe=14.525046",
+          "unsafe policy uses realized stage_a_eligible and is diagnostic only",
+          "no official promotion attempted"
+        ],
+        "blockers": [
+          "dsr_honest_zero_blocks_promotion",
+          "cvar_zero_exposure_not_economic_robustness",
+          "cross_sectional_alive_but_not_promotable"
+        ],
+        "next_recommended_step": "Abandon this Stage A nonzero-exposure thesis as a promotion path. Keep PR draft as governance evidence and either freeze the line or require a materially new research-only hypothesis."
+      },
+      {
+        "name": "sandbox_cvar",
+        "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate\\gate_report.json",
+        "gate_slug": "phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate",
+        "status": "PARTIAL",
+        "decision": "correct",
+        "summary": [
+          "classification=NONZERO_EXPOSURE_RESEARCH_CVAR_PASS_BUT_ALPHA_DSR_BLOCKERS_REMAIN",
+          "research_active_combo_days=10576",
+          "research_max_cvar_95_loss_fraction=0.01072844",
+          "research_median_cvar_95_loss_fraction=0.00313685",
+          "research_median_combo_sharpe=-0.727203",
+          "research sandbox CVaR module produced nonzero-exposure measurements",
+          "official CVaR remains NOT_PROVEN_ZERO_EXPOSURE",
+          "no official promotion attempted"
+        ],
+        "blockers": [
+          "dsr_honest_zero_blocks_promotion",
+          "official_cvar_zero_exposure_not_economic_robustness",
+          "safe_policy_alpha_merit_not_proven",
+          "cross_sectional_alive_but_not_promotable"
+        ],
+        "next_recommended_step": "Continue autonomously with a materially different research-only gate focused on DSR-zero diagnostics or an alternate ex-ante ranking/sizing hypothesis. Do not promote official."
+      },
+      {
+        "name": "dsr_zero_diagnostic",
+        "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_dsr_zero_diagnostic_gate\\gate_report.json",
+        "gate_slug": "phase5_research_dsr_zero_diagnostic_gate",
+        "status": "PASS",
+        "decision": "advance",
+        "summary": [
+          "classification=DSR_ZERO_ROOT_CAUSE_DIAGNOSTIC_COMPLETE",
+          "dsr_honest=0.0",
+          "dsr_passed=False",
+          "n_trials_honest=5000",
+          "sharpe_is=0.8808",
+          "sr_needed=4.47",
+          "sharpe_gap_to_sr_needed=3.5892",
+          "best_dsr_honest_observed=0.6938 at fallback.rolling_stability.best_window",
+          "diagnostic does not relax thresholds or promote official"
+        ],
+        "blockers": [
+          "dsr_honest_zero_blocks_promotion",
+          "sharpe_gap_to_required_honest_dsr",
+          "official_cvar_zero_exposure_not_economic_robustness",
+          "cross_sectional_alive_but_not_promotable"
+        ],
+        "next_recommended_step": "Continue autonomously only with a materially new ex-ante ranking/sizing hypothesis that can improve alpha without using realized eligibility. Do not promote official."
+      },
+      {
+        "name": "rank_score_threshold",
+        "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_threshold_sizing_falsification_gate\\gate_report.json",
+        "gate_slug": "phase5_research_rank_score_threshold_sizing_falsification_gate",
+        "status": "PARTIAL",
+        "decision": "correct",
+        "summary": [
+          "classification=WEAK_POSITIVE_MEDIAN_ALPHA_UNSTABLE_NOT_PROMOTABLE",
+          "best_policy=top1_score_ge_0_50",
+          "best_median_combo_sharpe=0.331124",
+          "best_min_combo_sharpe=-3.357339",
+          "best_median_active_days=177.0",
+          "best_max_cvar_95_loss_fraction=0.01070472",
+          "family is research-only and predeclared",
+          "no stage_a_eligible policy input used",
+          "no official promotion attempted"
+        ],
+        "blockers": [
+          "best_policy_below_dsr_required_sharpe",
+          "negative_min_combo_sharpe_blocks_promotability",
+          "dsr_honest_zero_blocks_promotion",
+          "official_cvar_zero_exposure_not_economic_robustness"
+        ],
+        "next_recommended_step": "Use the one allowed PARTIAL correction to test a stability-preserving variant of the best policy, or freeze if no materially defensible correction remains."
+      },
+      {
+        "name": "rank_score_stability_correction",
+        "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_stability_correction_gate\\gate_report.json",
+        "gate_slug": "phase5_research_rank_score_stability_correction_gate",
+        "status": "FAIL",
+        "decision": "abandon",
+        "summary": [
+          "classification=STABILITY_CORRECTION_DID_NOT_CLEAR_NEGATIVE_COMBO_OR_DSR_GAP",
+          "best_correction_policy=score_0_60",
+          "best_correction_median_combo_sharpe=0.195832",
+          "best_correction_min_combo_sharpe=-2.553324",
+          "min_combo_sharpe_improvement_vs_baseline=0.804015",
+          "best_correction_median_active_days=129.0",
+          "best_correction_max_cvar_95_loss_fraction=0.00883824",
+          "one allowed PARTIAL correction consumed for threshold-family line",
+          "no official promotion attempted"
+        ],
+        "blockers": [
+          "threshold_family_stability_correction_failed",
+          "best_correction_min_combo_sharpe_negative",
+          "best_correction_below_required_dsr_sharpe",
+          "dsr_honest_zero_blocks_promotion"
+        ],
+        "next_recommended_step": "Abandon the rank-score threshold-family line. Continue only if a materially different research-only hypothesis remains within budget; otherwise freeze."
+      }
+    ],
+    "hypotheses_tested": [
+      "Stage A nonzero exposure without realized eligibility",
+      "Research sandbox nonzero-exposure CVaR measurement",
+      "DSR zero root-cause diagnostic",
+      "Predeclared rank-score threshold family",
+      "One-shot rank-score stability correction"
+    ],
+    "hypotheses_falsified_or_abandoned": [
+      "Stage A nonzero exposure as promotion path",
+      "Rank-score threshold family as promotable alpha path",
+      "Rank-score stability correction as repair path"
+    ],
+    "surviving_modules": [
+      "research_sandbox_nonzero_exposure_cvar_evaluator",
+      "dsr_zero_root_cause_diagnostic"
+    ],
+    "surviving_candidates": [],
+    "open_blockers": [
+      "dsr_honest_zero_blocks_promotion",
+      "cvar_zero_exposure_not_economic_robustness",
+      "cross_sectional_alive_but_not_promotable",
+      "paper_readiness_blocked_by_quant_merit",
+      "safe_stage_a_top1_policy_negative_median_sharpe",
+      "sharpe_gap_to_required_honest_dsr",
+      "threshold_family_cross_combo_instability",
+      "no_promotable_ex_ante_alpha_candidate"
+    ],
+    "stop_condition": "No materially new defensible research-only hypothesis remains inside the current backlog without repeating a falsified line, changing specification, using realized eligibility, or promoting research.",
+    "can_continue_autonomously": false,
+    "requires_external_artifact": false,
+    "requires_human_decision_for_next_research_direction": true
+  },
+  "governance": {
+    "research_only": true,
+    "promotes_official": false,
+    "declares_paper_readiness": false,
+    "reopens_a3_a4": false,
+    "relaxes_thresholds": false,
+    "fabricates_artifacts": false,
+    "uses_realized_variable_as_ex_ante_rule": false
+  }
+}

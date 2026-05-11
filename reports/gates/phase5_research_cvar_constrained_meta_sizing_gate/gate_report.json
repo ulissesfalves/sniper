@@ -1,0 +1,157 @@
+{
+  "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+  "phase_family": "phase5_research_cvar_constrained_meta_sizing",
+  "status": "PARTIAL",
+  "decision": "correct",
+  "baseline_commit": "4a1bb099cf2c34cafbfe646b21b6475432d9ea64",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_oos_predictions.parquet"
+  ],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cvar_constrained_meta_sizing_gate\\cvar_constrained_meta_positions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cvar_constrained_meta_sizing_gate\\cvar_constrained_meta_daily_returns.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cvar_constrained_meta_sizing_gate\\cvar_constrained_meta_trade_log.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cvar_constrained_meta_sizing_gate\\cvar_constrained_meta_metrics.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cvar_constrained_meta_sizing_gate\\cvar_constrained_meta_scenarios.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cvar_constrained_meta_sizing_gate\\portfolio_cvar_research_report.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cvar_constrained_meta_sizing_gate\\cvar_constrained_meta_snapshot_proxy.parquet"
+  ],
+  "summary": [
+    "classification=CVAR_CONSTRAINED_META_SIZING_CVAR_PASS_ALPHA_UNSTABLE",
+    "selected_agenda_id=AGENDA-H03",
+    "best_policy=signed_meta_edge_t52_s15_k5_g04",
+    "best_median_combo_sharpe=2.040444",
+    "best_min_combo_sharpe=-0.903026",
+    "best_median_active_days=698.0",
+    "best_max_cvar_95_loss_fraction=0.00356911",
+    "best_max_drawdown_proxy=0.17842784",
+    "best_median_turnover_fraction=0.02376094",
+    "best_max_exposure_fraction=0.04000000",
+    "hard_falsifier_count=20",
+    "research/sandbox only",
+    "official_promotion_allowed=false",
+    "paper_readiness_allowed=false",
+    "no realized variable used as selection input"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+      "metric_name": "selected_agenda_id",
+      "metric_value": "AGENDA-H03",
+      "metric_threshold": "AGENDA-H03",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+      "metric_name": "policies_tested",
+      "metric_value": 6,
+      "metric_threshold": ">= 5",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+      "metric_name": "forbidden_selection_input_count",
+      "metric_value": 0,
+      "metric_threshold": "0",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+      "metric_name": "best_policy",
+      "metric_value": "signed_meta_edge_t52_s15_k5_g04",
+      "metric_threshold": "predeclared policy only",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+      "metric_name": "best_max_exposure_fraction",
+      "metric_value": 0.04,
+      "metric_threshold": "> 0",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+      "metric_name": "best_median_combo_sharpe",
+      "metric_value": 2.040444,
+      "metric_threshold": "> 0 research alpha",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+      "metric_name": "best_min_combo_sharpe",
+      "metric_value": -0.903026,
+      "metric_threshold": "> 0 stable alpha",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+      "metric_name": "best_median_active_days",
+      "metric_value": 698.0,
+      "metric_threshold": ">= 120",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+      "metric_name": "best_max_cvar_95_loss_fraction",
+      "metric_value": 0.00356911,
+      "metric_threshold": "<= 0.01",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+      "metric_name": "best_median_turnover_fraction",
+      "metric_value": 0.02376094,
+      "metric_threshold": "<= 0.08",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+      "metric_name": "scenario_count",
+      "metric_value": 21,
+      "metric_threshold": ">= 15",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+      "metric_name": "hard_falsifier_count",
+      "metric_value": 20,
+      "metric_threshold": "0 for robust survivor",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+      "metric_name": "candidate_below_sr_needed",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+      "metric_name": "official_promotion_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+      "metric_name": "paper_readiness_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "official_cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable",
+    "cvar_constrained_meta_sizing_alpha_or_stability_blocker"
+  ],
+  "risks_residual": [
+    "Research CVaR evidence remains sandbox-only and cannot support official promotion.",
+    "The gate does not change DSR=0.0 or the official zero-exposure CVaR blocker.",
+    "Positive median Sharpe without positive min Sharpe or stable sensitivity is not promotability."
+  ],
+  "next_recommended_step": "phase5_research_regime_specific_meta_disagreement_gate"
+}

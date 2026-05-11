@@ -1,0 +1,82 @@
+{
+  "gate_slug": "phase5_research_rank_score_threshold_sizing_falsification_gate",
+  "phase_family": "phase5_research_rank_score_threshold_sizing_falsification",
+  "status": "PARTIAL",
+  "decision": "correct",
+  "baseline_commit": "1ba7f9499dfda35bab2de8d0929872516d67aca5",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_threshold_sizing_falsification_gate\\rank_score_threshold_family_summary.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_threshold_sizing_falsification_gate\\rank_score_threshold_family_combo_metrics.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_threshold_sizing_falsification_gate\\rank_score_threshold_family_policy_metrics.parquet"
+  ],
+  "summary": [
+    "classification=WEAK_POSITIVE_MEDIAN_ALPHA_UNSTABLE_NOT_PROMOTABLE",
+    "best_policy=top1_score_ge_0_50",
+    "best_median_combo_sharpe=0.331124",
+    "best_min_combo_sharpe=-3.357339",
+    "best_median_active_days=177.0",
+    "best_max_cvar_95_loss_fraction=0.01070472",
+    "family is research-only and predeclared",
+    "no stage_a_eligible policy input used",
+    "no official promotion attempted"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_research_rank_score_threshold_sizing_falsification_gate",
+      "metric_name": "best_policy",
+      "metric_value": "top1_score_ge_0_50",
+      "metric_threshold": "predeclared policy family only",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_rank_score_threshold_sizing_falsification_gate",
+      "metric_name": "best_median_combo_sharpe",
+      "metric_value": 0.331124,
+      "metric_threshold": ">= 4.47 for strong research candidate",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_rank_score_threshold_sizing_falsification_gate",
+      "metric_name": "best_min_combo_sharpe",
+      "metric_value": -3.357339,
+      "metric_threshold": "> 0.0 for robust cross-combo candidate",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_rank_score_threshold_sizing_falsification_gate",
+      "metric_name": "best_median_active_days",
+      "metric_value": 177.0,
+      "metric_threshold": ">= 120",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_rank_score_threshold_sizing_falsification_gate",
+      "metric_name": "best_max_cvar_95_loss_fraction",
+      "metric_value": 0.01070472,
+      "metric_threshold": "<= 0.15",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_rank_score_threshold_sizing_falsification_gate",
+      "metric_name": "policies_evaluated",
+      "metric_value": 5,
+      "metric_threshold": "5",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "best_policy_below_dsr_required_sharpe",
+    "negative_min_combo_sharpe_blocks_promotability",
+    "dsr_honest_zero_blocks_promotion",
+    "official_cvar_zero_exposure_not_economic_robustness"
+  ],
+  "risks_residual": [
+    "The best threshold policy is a weak research-only candidate, not official evidence.",
+    "Cross-combo instability remains because at least one combo has negative Sharpe.",
+    "DSR remains 0.0 and no threshold was relaxed."
+  ],
+  "next_recommended_step": "Use the one allowed PARTIAL correction to test a stability-preserving variant of the best policy, or freeze if no materially defensible correction remains."
+}

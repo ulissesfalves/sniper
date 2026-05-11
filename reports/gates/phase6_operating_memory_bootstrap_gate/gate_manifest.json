@@ -1,0 +1,78 @@
+{
+  "gate_slug": "phase6_operating_memory_bootstrap_gate",
+  "created_at_utc": "2026-05-02T10:42:42Z",
+  "branch": "codex/autonomous-sniper-implementation",
+  "commit_before_gate": "68087363d6d5a4d2343c62a8b27d9636b0f74b36",
+  "status": "PASS",
+  "decision": "advance",
+  "artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\AGENTS.md",
+      "exists": true,
+      "size_bytes": 3734,
+      "sha256": "FBE932E9648C04F5C313D679B64BF5CC06E72313FEBB5660B68888D8C7B7066A"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\docs\\SNIPER_AUTONOMOUS_OPERATING_CONTRACT.md",
+      "exists": true,
+      "size_bytes": 2098,
+      "sha256": "1632FCA3D2C3BE166BA0DEF805A8B1BB07EF0F802620FA6F102CCB5727626100"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_current_state.json",
+      "exists": true,
+      "size_bytes": 2614,
+      "sha256": "68C7BF66A08F5D633A5757433103974CC037246BD55399731E6ABB735A9CA081"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_spec_gap_backlog.yaml",
+      "exists": true,
+      "size_bytes": 3943,
+      "sha256": "4F752254DC75614E0705979FB54B63FA3AB7CBF6C387AFB22CFCEF8EF68432C0"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_decision_ledger.md",
+      "exists": true,
+      "size_bytes": 1802,
+      "sha256": "13CFC51C7DB97CDE3AD84C6562B389A7CE44DD9DBE8A8D6D4CEB7DEF8E52C226"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_artifact_registry.json",
+      "exists": true,
+      "size_bytes": 3725,
+      "sha256": "021B49FB7339143923153FA55D4C65B4A2488F852C35AEBD4B36EA75BA5999B7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_autonomous_runbook.md",
+      "exists": true,
+      "size_bytes": 1655,
+      "sha256": "F45113510B26C996DCABBB20026E314258F5216206905F94F1B52F90854EDC5E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_operating_memory_bootstrap_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3473,
+      "sha256": "C4B13E40F3BF0034686C4EF300B5B470479B5EFCCFACA43EB133770383897331"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_operating_memory_bootstrap_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 2125,
+      "sha256": "6663125EECFEFE95E3D61CB7429C1005549A47576460970F71F6A8B07825EB21"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_operating_memory_bootstrap_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 3908,
+      "sha256": "C1739F9484A350D85B5484D00E68EE1FABFBF7F8F0E3136578E0032CDD974A1D"
+    }
+  ],
+  "commands_to_reproduce": [
+    "git status --short",
+    "git branch --show-current",
+    "git rev-parse HEAD",
+    "Get-Content reports/state/sniper_current_state.json | ConvertFrom-Json",
+    "Get-Content reports/state/sniper_artifact_registry.json | ConvertFrom-Json",
+    "python -c \"import pandas as pd; print(pd.read_parquet('reports/gates/phase6_operating_memory_bootstrap_gate/gate_metrics.parquet').shape)\""
+  ]
+}

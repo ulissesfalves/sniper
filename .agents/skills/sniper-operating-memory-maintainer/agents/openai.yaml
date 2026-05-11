@@ -1,0 +1,7 @@
+policy:
+  allow_implicit_invocation: false
+
+interface:
+  display_name: "SNIPER Operating Memory Maintainer"
+  short_description: "Mantém memória operacional versionada do SNIPER para autonomia segura do Codex."
+  default_prompt: "$sniper-operating-memory-maintainer\n\nAtualize a memória operacional do SNIPER com base no estado atual, gates, PRs, blockers e decisões fechadas."

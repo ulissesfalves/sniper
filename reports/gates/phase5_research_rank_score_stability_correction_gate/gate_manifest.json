@@ -1,0 +1,89 @@
+{
+  "gate_slug": "phase5_research_rank_score_stability_correction_gate",
+  "timestamp_utc": "2026-05-02T12:58:04+00:00",
+  "baseline_commit": "03707ff4d32456125698dcf577384e174afbe15a",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_predictions.parquet",
+      "exists": true,
+      "size_bytes": 4365296,
+      "mtime_utc": "2026-03-29T06:55:53+00:00",
+      "sha256": "FC947D4C3C71175BCF5F773665DD1D5BB5F033D0E67E881F0B07B338FDA1B67E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_threshold_sizing_falsification_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3774,
+      "mtime_utc": "2026-05-02T12:53:23+00:00",
+      "sha256": "600EDFEDE08E939D24097A31E70ABC45FC1845755B35CD3050663E30B0A16561"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_threshold_sizing_falsification_gate\\rank_score_threshold_family_summary.json",
+      "exists": true,
+      "size_bytes": 43233,
+      "mtime_utc": "2026-05-02T12:53:23+00:00",
+      "sha256": "251C3809CE4E38B68700696190B43AF37C2577D49F386DD3197A5E0737B1B703"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_stability_correction_gate\\rank_score_stability_correction_summary.json",
+      "exists": true,
+      "size_bytes": 49355,
+      "mtime_utc": "2026-05-02T12:58:04+00:00",
+      "sha256": "146A78D081EB81B92C0E74270F019C306C0BB11C84ADE4D16630FD0F5765E12F"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_stability_correction_gate\\rank_score_stability_correction_combo_metrics.parquet",
+      "exists": true,
+      "size_bytes": 10838,
+      "mtime_utc": "2026-05-02T12:58:04+00:00",
+      "sha256": "0A4F8A2A4F0A6CD867DBD97E3EB7CDDDDB59C7552C292ED688C6019D432170D2"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_stability_correction_gate\\rank_score_stability_correction_policy_metrics.parquet",
+      "exists": true,
+      "size_bytes": 9187,
+      "mtime_utc": "2026-05-02T12:58:04+00:00",
+      "sha256": "928ED429CC5CEE189BCCC535C4C44F3AC66B69CEFBED3000962F14B1C2E15898"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_stability_correction_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3835,
+      "mtime_utc": "2026-05-02T12:58:04+00:00",
+      "sha256": "BFEB0AAD793CFDC4BB792DB5E53727F48C995C3E83104AFCC3ED109D1A6DFF05"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_stability_correction_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 1717,
+      "mtime_utc": "2026-05-02T12:58:04+00:00",
+      "sha256": "55BFC88640D6F424B4DCD4629FB65C9BA7B3587524CC660BA57A6973F90D4C70"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_stability_correction_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 4129,
+      "mtime_utc": "2026-05-02T12:58:04+00:00",
+      "sha256": "1B12B7A2118193A8C4C5DFCBA551ED7EFD917FF8225A113F1D0F4B47FE8A7904"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_stability_correction_gate\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    ".\\.venv\\Scripts\\python.exe services\\ml_engine\\phase5_research_rank_score_stability_correction.py"
+  ],
+  "notes": [
+    "Research-only stability correction for prior PARTIAL threshold-family gate.",
+    "This consumes the one allowed PARTIAL correction for the threshold-family line.",
+    "No official artifacts were promoted.",
+    "No realized eligibility fields are used as policy inputs."
+  ]
+}

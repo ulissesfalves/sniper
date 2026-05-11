@@ -1,0 +1,111 @@
+{
+  "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+  "timestamp_utc": "2026-05-05T20:15:49+00:00",
+  "baseline_commit": "4a1bb099cf2c34cafbfe646b21b6475432d9ea64",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+      "exists": true,
+      "size_bytes": 2872831,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "5B3144578BB99D48E2A67B3AB60B2B0AD25787A92B8488AFD1D1D5C08AE8F6C7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_research_agenda.yaml",
+      "exists": true,
+      "size_bytes": 11767,
+      "mtime_utc": "2026-05-04T02:55:08+00:00",
+      "sha256": "1E69CB678AFEE749DC5027906C2C19916C0E751D098AB991A88A58D642146CEC"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cvar_constrained_meta_sizing_gate\\cvar_constrained_meta_positions.parquet",
+      "exists": true,
+      "size_bytes": 7539414,
+      "mtime_utc": "2026-05-05T20:15:48+00:00",
+      "sha256": "7759B1CDEA15DEBE321DA50ABE0CF4FE245DCC2B46DF67FF7D311FC453A7CA3F"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cvar_constrained_meta_sizing_gate\\cvar_constrained_meta_daily_returns.parquet",
+      "exists": true,
+      "size_bytes": 502698,
+      "mtime_utc": "2026-05-05T20:15:48+00:00",
+      "sha256": "910C8A540B271D4BE0AD702A95768265347C2F29BCB9D77A58BEA7D60FB8BA60"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cvar_constrained_meta_sizing_gate\\cvar_constrained_meta_trade_log.parquet",
+      "exists": true,
+      "size_bytes": 472189,
+      "mtime_utc": "2026-05-05T20:15:48+00:00",
+      "sha256": "EB93FDCC0EAAF7C17C544E64CCC6CFC731521EFDDF4CC48B2CD4085A3439DEE1"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cvar_constrained_meta_sizing_gate\\cvar_constrained_meta_metrics.parquet",
+      "exists": true,
+      "size_bytes": 21385,
+      "mtime_utc": "2026-05-05T20:15:48+00:00",
+      "sha256": "AFD7215F30527F8F785192E67CA53F63AC5293AB96654C1D78C07C123F0CBCF5"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cvar_constrained_meta_sizing_gate\\cvar_constrained_meta_scenarios.parquet",
+      "exists": true,
+      "size_bytes": 14002,
+      "mtime_utc": "2026-05-05T20:15:48+00:00",
+      "sha256": "0270E6F67441F1DD3B01E2073E7DE034C7934F5E5836196F6AA4D21643E8394B"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cvar_constrained_meta_sizing_gate\\portfolio_cvar_research_report.json",
+      "exists": true,
+      "size_bytes": 22090,
+      "mtime_utc": "2026-05-05T20:15:48+00:00",
+      "sha256": "1D6B326A5C1447D72436F273DF5AADFC4DEF468BC185D0DF748051055254354F"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cvar_constrained_meta_sizing_gate\\cvar_constrained_meta_snapshot_proxy.parquet",
+      "exists": true,
+      "size_bytes": 12092,
+      "mtime_utc": "2026-05-05T20:15:48+00:00",
+      "sha256": "7D5446659EB7C812F28D1ECE7499F9D217323BFBFC4963897D3659C397F4B74A"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cvar_constrained_meta_sizing_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 6786,
+      "mtime_utc": "2026-05-05T20:15:49+00:00",
+      "sha256": "E23319343839F92903AD3C23F5DFB9B69637D926C5C0CE8009650D93C9428661"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cvar_constrained_meta_sizing_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 3650,
+      "mtime_utc": "2026-05-05T20:15:49+00:00",
+      "sha256": "F64AB51F2CC3BAEEA21B1EB5222DD7988BF22EFA2652DC93978CCE0E19CC4191"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cvar_constrained_meta_sizing_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 4350,
+      "mtime_utc": "2026-05-05T20:15:49+00:00",
+      "sha256": "11E4F7996C9DB1E892D9E75A9E006B8F8B24F66BCEF19F060C781B7CF9C9801A"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cvar_constrained_meta_sizing_gate\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    "python services/ml_engine/phase5_research_cvar_constrained_meta_sizing.py",
+    "python -m pytest tests/unit/test_phase5_research_cvar_constrained_meta_sizing.py -q"
+  ],
+  "notes": [
+    "Research/sandbox-only AGENDA-H03 gate.",
+    "Uses ex-ante p_bma_pkf, p_meta_calibrated and sigma_ewma as selection/sizing inputs.",
+    "pnl_real is realized outcome only.",
+    "No official promotion, no paper readiness, no A3/A4 reopening."
+  ]
+}

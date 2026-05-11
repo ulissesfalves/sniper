@@ -1,0 +1,7 @@
+policy:
+  allow_implicit_invocation: false
+
+interface:
+  display_name: "SNIPER Autonomous Implementation Manager"
+  short_description: "Executa missão autônoma controlada de implementação do SNIPER por ciclos de gate."
+  default_prompt: "$sniper-autonomous-implementation-manager\n\nExecute uma missão autônoma controlada para avançar a implementação do SNIPER até o limite seguro, respeitando especificação, gates, artifacts e stop conditions."

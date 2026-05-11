@@ -1,0 +1,115 @@
+{
+  "gate_slug": "phase5_post_candidate_falsification_governed_freeze_gate",
+  "timestamp_utc": "2026-05-03T17:58:42+00:00",
+  "baseline_commit": "b13896a405f0bbc798ce98568abdc0013d80b58f",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_post_candidate_falsification_global_reaudit_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3750,
+      "mtime_utc": "2026-05-03T17:48:58+00:00",
+      "sha256": "D4575DE971E014374D184E9662BC1BCFF385B1391C00FBE8F92961E13D470A36"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_dsr_zero_diagnostic_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3642,
+      "mtime_utc": "2026-05-02T12:48:45+00:00",
+      "sha256": "9997A27E8E3F33205414C244885BA8A04427648919C79B9AA780A4D3750498A4"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4192,
+      "mtime_utc": "2026-05-02T12:44:13+00:00",
+      "sha256": "58DBC8A3814E01E5A4E949324E28B7B7D290BF3F00555B5D0AA8A27EA5CFAB46"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_full_phase_family_comparison_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3984,
+      "mtime_utc": "2026-05-02T14:42:04+00:00",
+      "sha256": "030DC2CE388F59F5E1A137C27606A7E4ABAB44EC6A3E467A2C60B0A21C3ADF90"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_decision_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3223,
+      "mtime_utc": "2026-05-03T13:34:20+00:00",
+      "sha256": "FC9AA24DBAD227A7790EB3D24715D824FFDE76F7814A9383B779B7951B602A51"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4894,
+      "mtime_utc": "2026-05-03T17:53:07+00:00",
+      "sha256": "FD570C76625FEC19EA45D75F194CF89C160E05D89D093348C92B50FBD5B43186"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_decision_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3764,
+      "mtime_utc": "2026-05-03T17:56:55+00:00",
+      "sha256": "A47B13FF184837AC4DB67FFDBDA78522B3DD4B8565323367EE8EF4F178E195ED"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_spec_gap_backlog.yaml",
+      "exists": true,
+      "size_bytes": 23776,
+      "mtime_utc": "2026-05-03T14:14:09+00:00",
+      "sha256": "298367268FDB329D8975DABF99A361B5D77252E297914481928B21BBCAE27785"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_post_candidate_falsification_governed_freeze_gate\\post_candidate_falsification_governed_freeze_report.json",
+      "exists": true,
+      "size_bytes": 1967,
+      "mtime_utc": "2026-05-03T17:58:42+00:00",
+      "sha256": "E5BA3477DB0F675C369E0652E65DE501F3211EC6F69CB364B97D94BDE2AFE042"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_post_candidate_falsification_governed_freeze_gate\\post_candidate_falsification_governed_freeze_metrics.parquet",
+      "exists": true,
+      "size_bytes": 3466,
+      "mtime_utc": "2026-05-03T17:58:42+00:00",
+      "sha256": "873FFE716E99E19696E6126BEB6CD22F85CF39DB41DB36A003C1D2EC8389064D"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_post_candidate_falsification_governed_freeze_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 5294,
+      "mtime_utc": "2026-05-03T17:58:42+00:00",
+      "sha256": "EB322E3FC46D6809562687EC20E9FC7F539747CE4A8F43D001E4E6048416AB40"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_post_candidate_falsification_governed_freeze_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 1360,
+      "mtime_utc": "2026-05-03T17:58:42+00:00",
+      "sha256": "A624B99C872293D932DBFF907C496E6B9DD3ECA79AA50B85C37A71C5EC8BC7A5"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_post_candidate_falsification_governed_freeze_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 4127,
+      "mtime_utc": "2026-05-03T17:58:42+00:00",
+      "sha256": "A72DC3331E825106AB30420BF7BF919DED70088541D52E51D6EE0B5F7FB70CDA"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_post_candidate_falsification_governed_freeze_gate\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    ".\\.venv\\Scripts\\python.exe services\\ml_engine\\phase5_post_candidate_falsification_governed_freeze.py"
+  ],
+  "notes": [
+    "Governed freeze after post-falsification global reaudit.",
+    "No official promotion, readiness, merge, A3/A4 reopen or threshold relaxation."
+  ]
+}

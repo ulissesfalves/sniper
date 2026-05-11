@@ -1,0 +1,98 @@
+{
+  "gate_slug": "phase5_research_alternative_exante_family_gate",
+  "phase_family": "phase5_research_alternative_exante_family",
+  "status": "FAIL",
+  "decision": "abandon",
+  "baseline_commit": "25bae6e303ae6dda297fff7830915c8a1355b405",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_alternative_exante_family_gate\\alternative_exante_family_positions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_alternative_exante_family_gate\\alternative_exante_family_daily_returns.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_alternative_exante_family_gate\\alternative_exante_family_trade_log.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_alternative_exante_family_gate\\alternative_exante_family_metrics.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_alternative_exante_family_gate\\alternative_exante_family_snapshot_proxy.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_alternative_exante_family_gate\\portfolio_cvar_research_report.json"
+  ],
+  "summary": [
+    "classification=ALTERNATIVE_EXANTE_FAMILIES_NO_POSITIVE_SAFE_MEDIAN_ALPHA",
+    "families_tested=regime_filtered_defensive_ensemble,risk_budgeted_topk,uncertainty_abstention,volatility_targeted_topk",
+    "best_policy=ensemble_top3",
+    "best_family=regime_filtered_defensive_ensemble",
+    "best_median_combo_sharpe=-0.632456",
+    "best_min_combo_sharpe=-2.11257",
+    "best_median_active_days=14.0",
+    "best_max_cvar_95_loss_fraction=0.01727292",
+    "pnl_real used only as realized backtest outcome, never ex-ante selection",
+    "no official promotion attempted"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_research_alternative_exante_family_gate",
+      "metric_name": "families_tested",
+      "metric_value": [
+        "regime_filtered_defensive_ensemble",
+        "risk_budgeted_topk",
+        "uncertainty_abstention",
+        "volatility_targeted_topk"
+      ],
+      "metric_threshold": ">= 3 material alternatives in this gate",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_alternative_exante_family_gate",
+      "metric_name": "best_policy",
+      "metric_value": "ensemble_top3",
+      "metric_threshold": "predeclared policy only",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_alternative_exante_family_gate",
+      "metric_name": "best_median_combo_sharpe",
+      "metric_value": -0.632456,
+      "metric_threshold": ">= 4.47 for promotion; > 0 for candidate",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_alternative_exante_family_gate",
+      "metric_name": "best_min_combo_sharpe",
+      "metric_value": -2.11257,
+      "metric_threshold": "> 0.0 for stable candidate",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_alternative_exante_family_gate",
+      "metric_name": "best_median_active_days",
+      "metric_value": 14.0,
+      "metric_threshold": ">= 120",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_alternative_exante_family_gate",
+      "metric_name": "best_max_cvar_95_loss_fraction",
+      "metric_value": 0.01727292,
+      "metric_threshold": "<= 0.15",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_alternative_exante_family_gate",
+      "metric_name": "positive_policy_count",
+      "metric_value": 0,
+      "metric_threshold": "> 0",
+      "metric_status": "FAIL"
+    }
+  ],
+  "blockers": [
+    "alternative_family_not_promotable",
+    "dsr_honest_zero_blocks_promotion",
+    "official_cvar_zero_exposure_not_economic_robustness",
+    "cross_combo_or_active_history_instability"
+  ],
+  "risks_residual": [
+    "The best alternative may be positive but insufficiently active or unstable.",
+    "Research CVaR with exposure does not become official economic CVaR.",
+    "No official policy was changed; further correction must remain research-only."
+  ],
+  "next_recommended_step": "If PARTIAL, attempt one active-history/stability correction inside the alternative family; otherwise compare/freeze the tested families."
+}

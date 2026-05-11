@@ -1,0 +1,87 @@
+{
+  "gate_slug": "phase5_research_meta_disagreement_candidate_decision_gate",
+  "timestamp_utc": "2026-05-04T02:35:11+00:00",
+  "baseline_commit": "09ebf2e2e737c5766d8c06ad860fb4f8e509f6c5",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_abstention_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 5474,
+      "mtime_utc": "2026-05-03T22:11:59+00:00",
+      "sha256": "681B986C9F310E2A185D62509012DB030CD62240FCC7EF274769EFF75BFDF2AD"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_stability_falsification_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 7417,
+      "mtime_utc": "2026-05-04T02:35:01+00:00",
+      "sha256": "1F13F185B8B4B0E1D39B2E1E84BF429997B9B7AA286FDC56B4C54112322FDD26"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_stability_falsification_gate\\meta_disagreement_stability_falsification_report.json",
+      "exists": true,
+      "size_bytes": 33367,
+      "mtime_utc": "2026-05-04T02:35:01+00:00",
+      "sha256": "A45B96C1D969AF2CB491FD8B8292E4BC4C0CCD7C63F3819B372F49897FC6082A"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_research_agenda.yaml",
+      "exists": true,
+      "size_bytes": 11107,
+      "mtime_utc": "2026-05-03T22:15:04+00:00",
+      "sha256": "68EDAD7B430BB708E0EE9168D061867DFB772267CEBA6A1E470548FF26028E3F"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_candidate_decision_gate\\meta_disagreement_candidate_decision_metrics.parquet",
+      "exists": true,
+      "size_bytes": 10700,
+      "mtime_utc": "2026-05-04T02:35:11+00:00",
+      "sha256": "601DF2A66EC1C8EBCD8472D48EA39561167605F7C04CD55B5DF3903C103C528F"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_candidate_decision_gate\\meta_disagreement_candidate_decision_report.json",
+      "exists": true,
+      "size_bytes": 4451,
+      "mtime_utc": "2026-05-04T02:35:11+00:00",
+      "sha256": "E2A694D476F75CD2F1A9DDBE3B9D3D2120838751DCDCC53C291EF3661D4C25DF"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_candidate_decision_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4361,
+      "mtime_utc": "2026-05-04T02:35:11+00:00",
+      "sha256": "B3038306156304C8DB2C4EF0D8B8CA45E6DAB4C945831E9FC776FB94F45F9A29"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_candidate_decision_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 2043,
+      "mtime_utc": "2026-05-04T02:35:11+00:00",
+      "sha256": "084A9CE4677E057580A70B24D0021577A2CBE32A744039430B4011E6615C7E06"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_candidate_decision_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 4046,
+      "mtime_utc": "2026-05-04T02:35:11+00:00",
+      "sha256": "0A31620BFC9C6777D96049F55C0391AE312B7ABF29EF99CD7AF077500D0384ED"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_candidate_decision_gate\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    ".\\.venv\\Scripts\\python.exe services\\ml_engine\\phase5_research_meta_disagreement_candidate_decision.py"
+  ],
+  "notes": [
+    "Research-only meta-disagreement candidate decision gate.",
+    "Classifies the candidate without official promotion, paper readiness, merge, A3/A4 reopen or threshold relaxation."
+  ]
+}

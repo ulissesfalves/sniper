@@ -1,0 +1,40 @@
+{
+  "mode": "preflight_only_not_clean_clone",
+  "clean_clone_or_equivalent": false,
+  "command": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\.venv\\Scripts\\python.exe services/ml_engine/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate.py",
+  "command_executed": false,
+  "returncode": null,
+  "stdout_tail": "",
+  "stderr_tail": "",
+  "preflight": {
+    "model_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models",
+    "model_path_exists": true,
+    "phase4_dir": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4",
+    "phase4_dir_exists": true,
+    "required_phase4_artifacts": [
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_report_v4.json",
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_gate_diagnostic.json"
+    ],
+    "missing_required_artifacts": [],
+    "research_baseline_dir": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline",
+    "research_baseline_dir_exists": false,
+    "required_regeneration_baseline_artifacts": [
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_predictions.parquet",
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_report.json",
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_manifest.json",
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_snapshot_proxy.parquet"
+    ],
+    "missing_regeneration_baseline_artifacts": [
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_predictions.parquet",
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_report.json",
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_manifest.json",
+      "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_snapshot_proxy.parquet"
+    ],
+    "classification": "MISSING_RESEARCH_BASELINE_ARTIFACTS"
+  },
+  "classification": "INCONCLUSIVE",
+  "blocker": "MISSING_RESEARCH_BASELINE_ARTIFACTS"
+}

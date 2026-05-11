@@ -1,0 +1,91 @@
+{
+  "gate_slug": "phase5_research_rank_score_threshold_sizing_falsification_gate",
+  "timestamp_utc": "2026-05-02T12:53:23+00:00",
+  "baseline_commit": "1ba7f9499dfda35bab2de8d0929872516d67aca5",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\research\\phase4_cross_sectional_ranking_baseline\\stage_a_predictions.parquet",
+      "exists": true,
+      "size_bytes": 4365296,
+      "mtime_utc": "2026-03-29T06:55:53+00:00",
+      "sha256": "FC947D4C3C71175BCF5F773665DD1D5BB5F033D0E67E881F0B07B338FDA1B67E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_dsr_zero_diagnostic_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3642,
+      "mtime_utc": "2026-05-02T12:48:45+00:00",
+      "sha256": "9997A27E8E3F33205414C244885BA8A04427648919C79B9AA780A4D3750498A4"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4192,
+      "mtime_utc": "2026-05-02T12:44:13+00:00",
+      "sha256": "58DBC8A3814E01E5A4E949324E28B7B7D290BF3F00555B5D0AA8A27EA5CFAB46"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_threshold_sizing_falsification_gate\\rank_score_threshold_family_summary.json",
+      "exists": true,
+      "size_bytes": 43233,
+      "mtime_utc": "2026-05-02T12:53:23+00:00",
+      "sha256": "251C3809CE4E38B68700696190B43AF37C2577D49F386DD3197A5E0737B1B703"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_threshold_sizing_falsification_gate\\rank_score_threshold_family_combo_metrics.parquet",
+      "exists": true,
+      "size_bytes": 11062,
+      "mtime_utc": "2026-05-02T12:53:23+00:00",
+      "sha256": "16D0C378F128823E7539FF464CA469234E66D1C7A22D13D060B17E64BEF4CDEB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_threshold_sizing_falsification_gate\\rank_score_threshold_family_policy_metrics.parquet",
+      "exists": true,
+      "size_bytes": 8550,
+      "mtime_utc": "2026-05-02T12:53:23+00:00",
+      "sha256": "DFB313D893C381BBED908E92CAB0246492D78C921B13F645B1D44AF157E2F4C4"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_threshold_sizing_falsification_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3774,
+      "mtime_utc": "2026-05-02T12:53:23+00:00",
+      "sha256": "600EDFEDE08E939D24097A31E70ABC45FC1845755B35CD3050663E30B0A16561"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_threshold_sizing_falsification_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 1891,
+      "mtime_utc": "2026-05-02T12:53:23+00:00",
+      "sha256": "43A45EF9C9345C69047F5796AF6A621BCD36E92409BC0B7FDF67362AD11554BB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_threshold_sizing_falsification_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 4107,
+      "mtime_utc": "2026-05-02T12:53:23+00:00",
+      "sha256": "E503B1369D448C9433DB07875E58BC3AB5D732C3F1285E6CBD26F1861DFF2FA3"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_threshold_sizing_falsification_gate\\gate_manifest.json",
+      "exists": true,
+      "size_bytes": 4633,
+      "mtime_utc": "2026-05-02T12:52:56+00:00",
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    ".\\.venv\\Scripts\\python.exe services\\ml_engine\\phase5_research_rank_score_threshold_sizing_falsification.py"
+  ],
+  "notes": [
+    "Research-only predeclared rank-score threshold family.",
+    "Selection uses only ex-ante rank_score_stage_a and optional hmm_prob_bull.",
+    "stage_a_eligible is never used as a policy input.",
+    "No official artifacts were promoted."
+  ]
+}

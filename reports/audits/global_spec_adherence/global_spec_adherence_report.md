@@ -1,225 +1,348 @@
+# Post-H06 Global Reaudit Update
+
+Updated: 2026-05-11T00:56:06Z
+
+Gate: `phase6_post_h06_global_spec_reaudit_gate`
+
+Current head: `22d77a0638582fe69b1cbde1450b0ac7ed5f43c9`
+
+Decision: `REVIEW_DRAFT_PR`
+
+This update refreshes the global audit context after H06, the post-mission
+next-step decision and the final PR draft review. It preserves the previous
+Phase6 audit details below and adds the current conclusion: PR #1 is reviewable
+as a draft governance/reproducibility/research package only. It is not merge,
+official promotion, paper readiness, A3/A4 reopen or threshold-relaxation
+evidence.
+
+Active blockers remain:
+
+- `dsr_honest=0.0`
+- official CVaR zero exposure / `PASS_ZERO_EXPOSURE`
+- cross-sectional `ALIVE_BUT_NOT_PROMOTABLE`
+- H06 diagnostic-only, shadow/proxy-heavy, no research candidate
+- no safe internal autonomous next gate registered
+
+Future autonomous work requires material new evidence, a new safe in-repo
+research agenda, or a concrete artifact package that opens a research-only gate
+without changing specification or relaxing thresholds.
+
+---
+
 # SNIPER Global Spec Adherence Audit
 
-Data da auditoria: 2026-04-26
+Audit date: 2026-04-27
 
-Branch auditada: `codex/openclaw-sniper-handoff`
+Repo: `C:/Users/uliss/Documentos/Meus_projetos/sniper_codex_autonomous`
 
-HEAD auditado: `0dbab35425548b37f5806a724c1858a0d5731bcd`
+Branch audited: `codex/autonomous-sniper-implementation`
 
-Veredito executivo: `GLOBAL_PARTIAL`
+Head audited: `a85b543c5b68777b342446a3a5d9d3ff6e292979`
 
-## Escopo
+PR audited: `https://github.com/ulissesfalves/sniper/pull/1`
 
-Esta auditoria compara o estado atual do repositório SNIPER contra a documentação e especificação disponíveis no próprio repositório. A rodada não implementou correções funcionais, não promoveu artifacts para `official` e não reabriu A3/A4.
+PR state: open draft, not merged, base `codex/openclaw-sniper-handoff`, head `codex/autonomous-sniper-implementation`.
 
-Fontes priorizadas:
+## Executive Verdict
 
-1. Estado atual do repositório.
-2. Documentação em `docs/`, especialmente `SNIPER_v10_10_Especificacao_Definitiva.pdf`, `SNIPER_unlock_pressure_rank_especificacao_final_rev5.pdf`, `SNIPER_openclaw_handoff.md`, `SNIPER_regeneration_guide.md`, `SNIPER_memoria_especificacao_controle_fase4R_v3.md` e `unlock_pressure_rank_technical.md`.
-3. Relatórios em `reports/gates/**`.
-4. Manifests e artifacts em `data/models/**`, `data/models/research/**` e `data/parquet/**`.
+Verdict: `GLOBAL_PARTIAL`
 
-Observação de evidência: `docs/SNIPER_v10.10_Technical_Architecture_presentation.pdf` teve extração textual praticamente vazia pela biblioteca disponível. A auditoria usou as demais fontes canônicas para requisitos técnicos; a apresentação permanece evidência documental inconclusiva até renderização/OCR dedicada.
+The PR branch is reviewable as Phase 6 governance and reproducibility evidence. It is not reviewable as operational readiness, paper readiness, or official promotion.
 
-## Veredito Global
+The main Phase 6 blockers that previously prevented a fair review were resolved:
 
-`GLOBAL_PARTIAL`
+- official `data/models/phase4/**` artifacts were present and hashed;
+- research baseline `data/models/research/phase4_cross_sectional_ranking_baseline/**` artifacts were present and hashed;
+- source-doc-artifact alignment for Phase 4-R4 was restored to `ALIGNED`;
+- preflight no longer reports missing Phase 4 or research baseline artifacts;
+- clean regeneration was proven in an isolated clean clone/equivalent;
+- the clean clone Phase 5 restore returned `PASS/advance`;
+- the focused Phase 5/Phase 6 test subset passed.
 
-O SNIPER tem uma base técnica substancial e coerente com a especificação em várias camadas: universo point-in-time/anti-survivorship, feature engineering com fracdiff, regime walk-forward, triple-barrier, market impact, meta-labeling, calibração, CPCV e bridge paper/Nautilus. Porém o projeto ainda não está aderente o suficiente para avançar para promoção operacional/paper como sistema official.
+The project still cannot advance to promotion/readiness because the remaining blockers are merit and governance blockers:
 
-Bloqueios principais:
+- `dsr_honest=0.0`;
+- `dsr_passed=false`;
+- CVaR official snapshot has zero positions and `total_exposure_pct=0.0`;
+- CVaR status is only `PASS_ZERO_EXPOSURE`, not economic robustness;
+- cross-sectional remains `ALIVE_BUT_NOT_PROMOTABLE`;
+- A3/A4 remain closed and should not be reopened without strong new evidence.
 
-- Os artifacts oficiais atuais materializam `dsr_honest=0.0` com `n_trials_honest=5000`, abaixo do gate especificado.
-- O diagnóstico oficial aponta Sharpe OOS de `0.3494` para a política fallback citada e subperíodos positivos abaixo do mínimo em um caminho oficial.
-- A família cross-sectional está documentada e reportada como `ALIVE_BUT_NOT_PROMOTABLE`.
-- A3 está encerrado como structural choke, e A3/A4 não devem ser reabertos sem evidência nova forte.
-- Há divergência entre a memória Fase 4-R4, que documenta módulos como `phase4_config.py`, `phase4_data.py`, `phase4_dsr.py`, `phase4_backtest.py` e `phase4_calibration.py`, e o source rastreado, que contém `phase4_cpcv.py`, `phase4_gate_diagnostic.py` e `phase4_stage_a_experiment.py`.
-- Existe controle CVaR estrutural em código, mas o artifact oficial atual não persiste auditoria empírica direta de CVaR de portfolio.
+## Sources Reviewed
 
-O próximo avanço deve ser um gate de reprodutibilidade e alinhamento source-doc-artifact, não uma promoção de modelo.
+- `docs/SNIPER_openclaw_handoff.md`
+- `docs/SNIPER_regeneration_guide.md`
+- `docs/SNIPER_memoria_especificacao_controle_fase4R_v3.md`
+- `docs/unlock_pressure_rank_technical.md`
+- `reports/gates/phase6_global_reproducibility_source_alignment_gate/**`
+- `reports/gates/phase6_source_doc_and_regeneration_preflight_gate/**`
+- `reports/gates/phase6_phase4_artifact_rehydration_and_dsr_stop_gate/**`
+- `reports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/**`
+- `reports/audits/autonomous_stop_review/draft_pr_summary.md`
+- `reports/audits/autonomous_stop_review/human_review_checklist.md`
+- `services/ml_engine/phase6_global_reproducibility_source_alignment_gate.py`
+- `tests/unit/test_phase6_global_reproducibility_source_alignment_gate.py`
+- Git branch, status, log, PR metadata, and changed files.
 
-## Matriz Sintética Por Tema
+`rg` was attempted for code search but failed on this machine with `Access denied`; PowerShell `Select-String` was used as fallback.
 
-### 1. Universo point-in-time e anti-survivorship
+## PR Branch State
 
-Status: `PARCIAL`
+The PR contains 9 commits above `codex/openclaw-sniper-handoff`:
 
-Evidência:
+- `a85b543` - Add autonomous mission draft PR closure docs
+- `be0606a` - Add SNIPER strategic decision governor skill
+- `d7829b7` - Add phase6 clean regeneration gate
+- `e86f0db` - Prepare phase6 clean regeneration gate support
+- `c4bf284` - Add phase6 artifact rehydration DSR stop gate
+- `f622842` - Add SNIPER autonomous stop reviewer skill
+- `b1004fb` - Add phase6_source_doc_and_regeneration_preflight_gate
+- `add6ce1` - Add phase6_global_reproducibility_source_alignment_gate
+- `649e9a9` - Add SNIPER autonomous implementation manager skill
 
-- `services/data_inserter/validators/anti_survivorship.py` implementa `AntiSurvivorshipValidator` e inclui ativos colapsados no universo point-in-time.
-- `services/data_inserter/bootstrap_historical.py` marca colapsados como obrigatórios para evitar survivorship bias.
-- `services/data_inserter/collectors/coingecko.py` usa ordenação por market cap histórico.
+Working-tree stabilization classified three untracked stop-review scratch files as superseded by later Phase6 gates and the draft PR closure:
 
-Risco: a estrutura está implementada, mas parte da reprodutibilidade depende de APIs externas e artifacts locais; a auditoria não reexecutou a coleta completa.
+- `reports/audits/autonomous_stop_review/autonomous_stop_review.json`
+- `reports/audits/autonomous_stop_review/autonomous_stop_review.md`
+- `reports/audits/autonomous_stop_review/next_action_prompt.md`
 
-Recomendação: persistir manifest de universo por `as_of_date`, fonte, hash e cobertura; manter ativos mortos/collapsed como critério bloqueante de gate.
+These files should not be committed. The valid stop-review closure artifacts remain `draft_pr_summary.md` and `human_review_checklist.md`.
 
-### 2. Feature engineering geral
+## Gate Results Considered
 
-Status: `PARCIAL`
+| Gate | Status | Decision | Audit reading |
+| --- | --- | --- | --- |
+| `phase6_global_reproducibility_source_alignment_gate` | `PARTIAL` | `correct` | Introduced Phase 6 governance gate, CVaR persistence, source-doc review, environment probe, and regeneration proof hooks. Initial blockers remained. |
+| `phase6_source_doc_and_regeneration_preflight_gate` | `PARTIAL` | `correct` | Source-doc alignment became `ALIGNED`; artifact preflight still needed base artifacts. |
+| `phase6_phase4_artifact_rehydration_and_dsr_stop_gate` | `PARTIAL` | `correct` | Official Phase 4 artifacts were found and hashed; DSR blocker was made explicit. |
+| `phase6_research_baseline_rehydration_clean_regeneration_gate` | `PARTIAL` | `correct` | Research baseline artifacts were found and hashed; clean regeneration passed; remaining blockers are DSR and CVaR zero exposure. |
 
-Evidência:
+## Evidence From Latest Gate
 
-- `services/ml_engine/fracdiff/weights.py` define `DEFAULT_TAU = 1e-5`.
-- `services/ml_engine/fracdiff/transform.py` implementa fracdiff em log-space.
-- `services/ml_engine/fracdiff/optimal_d.py` usa janela expanding e seleção de `d`.
-- `services/ml_engine/main.py` materializa retornos, volatilidade, BTC regime, `sigma_intraday`, features de volume/derivativos/funding e exclusão de audit columns.
+Latest gate: `phase6_research_baseline_rehydration_clean_regeneration_gate`
 
-Risco: o arcabouço principal existe, mas a completude de todos os campos macro/derivativos esperados depende de disponibilidade efetiva nos parquet/artifacts atuais.
+Key values:
 
-Recomendação: criar inventário de features official vs research com coluna, fonte, janela, defasagem, artifact, hash e status de cobertura.
+- `source_doc_alignment=ALIGNED`
+- `phase4_artifact_integrity=PASS`
+- `missing_required_artifacts=[]`
+- `missing_regeneration_baseline_artifacts=[]`
+- `regeneration_mode=isolated_clean_clone_with_copied_base_artifacts`
+- `clean_clone_or_equivalent=true`
+- `regeneration_returncode=0`
+- `phase5_clean_gate_status=PASS`
+- `phase4_promotion_status=BLOCKED_DSR_HONEST_ZERO`
+- `dsr_honest=0.0`
+- `dsr_passed=false`
+- `cvar_technical_status=PASS_ZERO_EXPOSURE`
+- `cvar_economic_status=NOT_PROVEN_ZERO_EXPOSURE`
 
-### 3. `unlock_pressure_rank`
+The clean regeneration proof used copied base artifacts in an isolated clean clone/equivalent and did not fabricate missing artifacts. The clean clone restored the sovereign Phase 5 bundle with `equivalence_classification=EXACT_RESTORE` and `classification_final=SOVEREIGN_BASELINE_RESTORED_AND_VALID`.
 
-Status: `SATISFATÓRIO` para arquitetura; `PARCIAL` para cobertura observada operacional.
+## Specification Adherence Summary
 
-Evidência:
+### Governance
 
-- `docs/SNIPER_unlock_pressure_rank_especificacao_final_rev5.pdf` e `docs/unlock_pressure_rank_technical.md` especificam observado, reconstruído e proxy, sem scraping frágil de long tail.
-- `services/data_inserter/collectors/token_unlocks.py` implementa `unlock_pressure_rank_observed`, `unlock_pressure_rank_reconstructed`, `unlock_overhang_proxy_rank_full`, `unlock_fragility_proxy_rank_fallback`, `unlock_feature_state` e `selected_for_reporting`.
-- `services/data_inserter/collectors/unlock_support/historical.py` impede lookahead ao escolher captura `<= as_of_date`.
-- `services/data_inserter/collectors/unlock_support/utils.py` calcula UPS 30 dias e percent rank cross-sectional.
-- `services/ml_engine/main.py` exclui campos de auditoria do conjunto de treinamento.
+Status: `SATISFATORIO` for preservation of governance boundaries.
 
-Risco: a especificação prevê shadow mode enquanto a cobertura observada não atingir maturidade; isso impede tratar a feature observada como plenamente official.
+Evidence:
 
-Recomendação: manter governança de quatro colunas, publicar relatório diário de cobertura/qualidade e bloquear promoção se unknown bucket ou confidence violarem a rev5.
+- PR is draft and not merged.
+- No official promotion was performed.
+- A3/A4 were not reopened.
+- RiskLabAI remains oracle/shadow.
+- Fast path remains official.
+- Cross-sectional remains research/non-promotable.
+- The Phase 6 gates record blockers instead of masking them.
 
-### 4. Filtro de regime
+Residual risk: the PR body and draft summary are clear, but any future reviewer must preserve the distinction between reproducibility evidence and operational readiness.
 
-Status: `SATISFATÓRIO`
+### Reproducibility
 
-Evidência:
+Status: `SATISFATORIO` for current Phase 6 objective.
 
-- `services/ml_engine/regime/winsorizer.py` aplica winsorização fitada em treino.
-- `services/ml_engine/regime/pca_robust.py` compõe winsorização, `RobustScaler` e PCA.
-- `services/ml_engine/regime/hmm_filter.py` executa HMM em modo walk-forward, com retreino e sem hindsight.
+Evidence:
 
-Risco: a implementação está coerente; o risco remanescente é provar cobertura e estabilidade dos artifacts atuais após regeneração limpa.
+- `reports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/clean_regeneration_report.json`
+- `clean_clone_or_equivalent=true`
+- source and clone head match.
+- clone was clean before regeneration.
+- Phase 5 restore returned `PASS/advance`.
 
-Recomendação: manter diagnóstico HMM por fold/regime e hash de modelo por janela.
+Residual risk: artifacts in `data/models/**` remain external/ignored base artifacts. They are acceptable as audited inputs for this gate, not as newly versioned official outputs.
 
-### 5. Triple-barrier e market impact
+### Phase 4 Artifacts
 
-Status: `SATISFATÓRIO`
+Status: `SATISFATORIO` for presence and hashing, `PARCIAL` for promotion.
 
-Evidência:
+Evidence:
 
-- `services/ml_engine/triple_barrier/labeler.py` usa HLC, toca SL por low e TP por high, e aplica slippage no stop.
-- `services/ml_engine/triple_barrier/market_impact.py` implementa slippage pela lei da raiz quadrada com `sigma_intraday * sqrt(order_size / volume)`.
-- `services/ml_engine/features/volatility.py` calcula `sigma_intraday`.
-- `services/execution_engine/binance/executor.py` contém lógica compatível de slippage e `sigma_intraday` no executor.
+- `phase4_report_v4.json`
+- `phase4_execution_snapshot.parquet`
+- `phase4_aggregated_predictions.parquet`
+- `phase4_oos_predictions.parquet`
+- `phase4_gate_diagnostic.json`
 
-Risco: o labeler está coerente; o risco operacional é garantir que `sigma_intraday` e volume usados no backtest sejam point-in-time e persistidos.
+The artifacts are present and hashed in `phase4_artifact_integrity_report.json`. However, the same report shows `dsr_honest=0.0`, `dsr_passed=false`, and `promotion_status=BLOCKED_DSR_HONEST_ZERO`.
 
-Recomendação: incluir amostras de labels com HLC, barreiras, slippage e volume no próximo manifest de gate.
+### CVaR
 
-### 6. Meta-labeling, CPCV e calibração
+Status: `PARCIAL`.
 
-Status: `SATISFATÓRIO` em implementação; `PARCIAL` no resultado official atual.
+Evidence:
 
-Evidência:
+- `reports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/portfolio_cvar_report.json`
+- snapshot status `LOADED_OFFICIAL_SNAPSHOT`
+- `positions={}`
+- `n_positions=0`
+- `total_exposure_pct=0.0`
+- `technical_persistence_status=PASS_ZERO_EXPOSURE`
+- `economic_robustness_status=NOT_PROVEN_ZERO_EXPOSURE`
 
-- `services/ml_engine/meta_labeling/pbma_purged.py` implementa `PurgedKFold`, purge/embargo e geração de `p_bma`.
-- `services/ml_engine/meta_labeling/uniqueness.py` implementa uniqueness, `N_eff` e sample weights.
-- `services/ml_engine/meta_labeling/cpcv.py` implementa CPCV, PBO e sample weights.
-- `services/ml_engine/meta_labeling/isotonic_calibration.py` implementa isotonic, walk-forward, pooling/time-decay e ECE.
-- `data/models/phase4/phase4_gate_diagnostic.json` mostra CPCV/PBO/ECE/N_eff presentes, mas também bloqueios official por DSR/Sharpe/subperíodos.
+This is a valid persistence artifact with explicit caveat. It is not evidence of economic robustness.
 
-Risco: a camada estatística existe, mas os gates de decisão atual não passam no mérito.
+### Quantitative Merit
 
-Recomendação: separar claramente "implementado" de "aprovado"; nenhum artifact com `dsr_honest=0.0` pode virar official.
+Status: `PARCIAL`.
 
-### 7. Métricas e gates
+Evidence:
 
-Status: `PARCIAL`
+- Phase 4 checks include CPCV/PBO, ECE, N_eff, fallback Sharpe, drawdown, and subperiod checks.
+- `DSR honesto > 0.95 [10]` is false.
+- `dsr_honest=0.0` remains the decisive promotion blocker.
 
-Evidência:
+No threshold should be relaxed and no promotion should occur.
 
-- `services/ml_engine/phase4_cpcv.py` contém thresholds para PBO, Sharpe OOS, subperíodos e DSR honesto.
-- `services/ml_engine/phase4_gate_diagnostic.py` classifica `DSR honesto`, `DSR invalidação global`, `Sharpe OOS` e `Subperiodos` como hard blockers.
-- `data/models/phase4/phase4_gate_diagnostic.json` registra `dsr_honest=0.0`, `n_trials_honest=5000`, Sharpe OOS `0.3494` e subperíodos positivos insuficientes em caminho official.
-- `reports/gates/phase5_cross_sectional_recent_regime_policy_falsification/gate_report.json` classifica a família como `ALIVE_BUT_NOT_PROMOTABLE`.
+### Feature Engineering And Research Components
 
-Risco: promover o sistema ignorando DSR/Sharpe/subperíodos violaria diretamente a especificação.
+Status: `PARCIAL` to `SATISFATORIO` depending on component.
 
-Recomendação: próximo gate deve provar reprodutibilidade e alinhamento antes de qualquer tentativa quantitativa nova.
+Evidence found in code/docs:
 
-### 8. Portfolio/risk
+- unlock rev5 architecture documented in `docs/unlock_pressure_rank_technical.md`;
+- unlock observed/reconstructed/proxy columns persisted in `services/data_inserter/collectors/unlock_support/store.py`;
+- rank construction and selection logic in `services/data_inserter/collectors/token_unlocks.py`;
+- fracdiff log-space functions in `services/ml_engine/fracdiff/transform.py`;
+- expanding fracdiff selection in `services/ml_engine/fracdiff/optimal_d.py`;
+- regime/HMM hooks in `services/ml_engine/drift/alarm_manager.py`, execution pre-trade checks, and tests;
+- CPCV in `services/ml_engine/meta_labeling/cpcv.py`;
+- Kelly/CVaR in `services/ml_engine/sizing/kelly_cvar.py`.
 
-Status: `PARCIAL`
+The codebase has substantial implementation, but the Phase 6 readiness decision is still blocked by final measured merit, not by missing source paths.
 
-Evidência:
+### Paper/Nautilus Bridge
 
-- `services/ml_engine/sizing/kelly_cvar.py` implementa Kelly fracionado, CVaR stress `rho=1.0`, drawdown scalar e sizing.
-- `services/execution_engine/risk/pre_trade_check.py` aplica hard stops, CVaR, drawdown e checks de regime/drift.
-- `services/ml_engine/phase4_gate_diagnostic.py` registra que o controle CVaR estrutural existe, mas que não há artifact oficial persistido para auditoria empírica direta do CVaR atual.
+Status: `PARCIAL`.
 
-Risco: sem artifact empírico persistido, CVaR não pode ser marcado como PASS operacional.
+Evidence:
 
-Recomendação: próximo gate deve persistir `portfolio_cvar`, stress `rho=1`, drawdown, gross/net exposure e decisões de corte por data/símbolo.
+- `services/nautilus_bridge/**` exists;
+- `services/nautilus_bridge/contract.py` enforces `FULL_SNAPSHOT`;
+- `services/nautilus_bridge/acceptance.py` contains stale, duplicate, incomplete snapshot, out-of-order, and revision conflict status handling;
+- `services/nautilus_bridge/run_phase4_paper_daemon.py` exists;
+- integration tests import `nautilus_trader` with `pytest.importorskip`.
 
-### 9. Bridge paper/Nautilus
+The bridge implementation exists, but the branch should not be interpreted as paper-readiness because official CVaR has zero exposure and DSR is zero.
 
-Status: `SATISFATÓRIO` em implementação; bloqueado operacionalmente pelos gates upstream.
+## Phase Checklist Summary
 
-Evidência:
+| Phase | Status | Evidence | Blocker |
+| --- | --- | --- | --- |
+| Phase 0 - repo, environment, reproducibility | `SATISFATORIO` | Clean regeneration proof and focused tests passed | stale stop-review scratch files were triaged and discarded |
+| Phase 1 - data, PIT, anti-survivorship | `PARCIAL` | unlock/PIT logic and handoff docs exist | external ignored artifacts still required for some gates |
+| Phase 2 - feature store and features | `PARCIAL` | fracdiff, unlock rev5, volatility and diagnostics exist | live coverage/quality remains a continuing audit concern |
+| Phase 3 - regime, labels, calibration | `PARCIAL` | HMM/regime hooks, triple-barrier, uniqueness, isotonic and CPCV code exist | final promotion evidence still blocked downstream |
+| Phase 4 - CPCV and statistical gates | `PARCIAL` | PBO/ECE/N_eff present; Phase 4 artifacts hashed | honest DSR is 0.0 |
+| Phase 5 - quantitative hardening | `PARCIAL` | clean restore of sovereign bundle passed | cross-sectional remains `ALIVE_BUT_NOT_PROMOTABLE` |
+| Phase 6 - bridge/paper governance | `PARCIAL` | Nautilus bridge code and Phase 6 gates exist | PR is governance/reproducibility only |
+| Phase 7 - prolonged paper/testnet | `NAO_IMPLEMENTADO` | no safe readiness gate passed | DSR/CVaR block |
+| Phase 8 - real capital readiness | `NAO_APLICAVEL_OBSOLETO` for this branch | governance forbids real capital here | no real orders/capital allowed |
 
-- `services/nautilus_bridge/config.py` define Redis Streams, lock, heartbeat, daemon e freshness de snapshot.
-- `services/nautilus_bridge/contract.py` valida contrato de target, `FULL_SNAPSHOT` e pesos.
-- `services/nautilus_bridge/acceptance.py` cobre stale snapshot, duplicate, incomplete, revision conflict e superseded.
-- `services/nautilus_bridge/phase4_publisher.py` publica snapshot com envelope e Redis `XADD`.
-- `services/nautilus_bridge/consumer.py`, `reconciler.py` e `run_phase4_paper_daemon.py` implementam consumo, reconciliação, idempotência, lock, crash/restart e status terminal.
-- `tests/unit/test_nautilus_bridge_*.py` cobre os principais contratos.
+## Top Satisfactory Areas
 
-Risco: a bridge está pronta como mecanismo, mas não deve ser alimentada por snapshot não-promotable.
+1. Phase 6 clean regeneration is now proven in an isolated clean clone/equivalent.
+2. Phase 4 official artifacts and research baseline artifacts are present and hashed in gate packs.
+3. Source-doc-artifact alignment for the Phase 4-R4 module mismatch is now `ALIGNED`.
+4. Phase 5 sovereign closure restore passes cleanly and preserves the correct research-only baseline.
+5. Governance boundaries are preserved: no merge, no official promotion, no A3/A4 reopen, RiskLabAI remains oracle/shadow.
 
-Recomendação: manter paper bridge em modo testável/shadow até haver artifact official que passe DSR, Sharpe, subperíodos, CVaR e drift.
+## Top Gaps
 
-### 10. Governança, reports e regeneração
+1. `dsr_honest=0.0` blocks any promotion or readiness claim.
+2. CVaR official snapshot has zero exposure; it proves persistence only, not economic robustness.
+3. Cross-sectional remains `ALIVE_BUT_NOT_PROMOTABLE`.
+4. Phase 7 paper/testnet readiness has no valid gate because quantitative blockers remain.
+5. PR #1 remains draft governance/reproducibility evidence and still requires human review before any branch-level decision.
 
-Status: `PARCIAL`
+## Main Risks
 
-Evidência:
+- Treating `PASS_ZERO_EXPOSURE` as a real CVaR pass would overstate robustness.
+- Treating clean regeneration as promotion evidence would confuse reproducibility with economic merit.
+- Reopening A3/A4 without new evidence would violate historical governance.
+- Promoting research artifacts to official would violate the documented official/research split.
+- Merging this PR as readiness would misrepresent a draft governance PR.
 
-- `docs/SNIPER_openclaw_handoff.md` consolida: A3 encerrado, A3/A4 não reabrir, RiskLabAI oracle/shadow, fast path official, cross-sectional `ALIVE_BUT_NOT_PROMOTABLE`, baseline research-only `phase5_cross_sectional_sovereign_closure_restored`.
-- `docs/SNIPER_regeneration_guide.md` documenta comandos de restauração e validação do baseline soberano.
-- `reports/gates/**/gate_report.json` contém reports com `PASS`, `PARTIAL` e `FAIL` por família.
-- `reports/gates/phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate/gate_report.json` registra `SOVEREIGN_BASELINE_RESTORED_AND_VALID` e `EXACT_RESTORE`.
+## What Must Not Be Reopened
 
-Risco: muitos artifacts em `data/models/research/**` são outputs locais e precisam de prova de regeneração limpa; a documentação Fase 4-R4 também diverge do source rastreado.
+- A3 as a promotable line.
+- A4 without strong new evidence.
+- RiskLabAI as official.
+- Cross-sectional as promotable while `ALIVE_BUT_NOT_PROMOTABLE`.
+- Any promotion path while honest DSR remains `0.0`.
 
-Recomendação: executar gate de alinhamento source-doc-artifact antes de qualquer implementação quantitativa nova.
+## Next Step
 
-## Divergências e Lacunas Principais
+Recommended next gate/action: `phase6_pr_review_global_adherence_gate`
 
-1. `phase4_config.py`, `phase4_data.py`, `phase4_dsr.py`, `phase4_backtest.py` e `phase4_calibration.py` são descritos em `docs/SNIPER_memoria_especificacao_controle_fase4R_v3.md`, mas não existem como source rastreado em `services/ml_engine/`.
-2. `docs/SNIPER_v10.10_Technical_Architecture_presentation.pdf` não forneceu texto auditável com a ferramenta disponível.
-3. O official atual não passa gates de robustez: `dsr_honest=0.0`, Sharpe/subperíodos insuficientes em diagnóstico official e família cross-sectional não promotable.
-4. CVaR está implementado em código, mas falta artifact empírico official persistido para auditoria direta.
-5. A cobertura observada de unlock ainda exige shadow/qualidade; a feature não deve ser tratada como fully official sem relatório de maturidade.
+Objective: review PR #1 as a draft governance/reproducibility PR and decide whether to keep it open for human review, request documentation-only changes, or freeze the line. Do not use the PR as operational readiness.
 
-## O Que Não Deve Ser Reaberto
+Branch: `codex/autonomous-sniper-implementation`
 
-- A3 como linha promotable: está encerrado como structural choke.
-- A4 sem evidência causal nova forte.
-- RiskLabAI como official: permanece oracle/shadow.
-- Família cross-sectional como promotable: status consolidado é `ALIVE_BUT_NOT_PROMOTABLE`.
-- Baselines antigos divergentes: a baseline research-only correta é `phase5_cross_sectional_sovereign_closure_restored`.
+Expected outcome: `PARTIAL/review` unless human review accepts the PR as governance evidence without promotion.
 
-## Próximo Passo Recomendado
+Files likely touched if the next action is documentation-only:
 
-Gate sugerido: `phase6_global_reproducibility_source_alignment_gate`
+- `reports/audits/autonomous_stop_review/draft_pr_summary.md`
+- `reports/audits/autonomous_stop_review/human_review_checklist.md`
+- `reports/audits/global_spec_adherence/**`
 
-Objetivo: provar, em uma rodada reproduzível, que documentação, source rastreado e artifacts de gate estão alinhados; fechar lacunas inconclusivas; persistir evidência mínima de CVaR; e manter bloqueios de promoção enquanto DSR/Sharpe/subperíodos não passarem.
+Artifacts expected:
 
-Classificação esperada se nada quantitativo mudar: `PARTIAL`, com avanço apenas se o gate produzir alinhamento e evidência reprodutível, não se tentar promover modelo.
+- updated PR review notes or audit reports;
+- no new official model artifacts;
+- no new heavy `data/models/**` commits.
 
-Não fazer na próxima rodada:
+PASS criteria:
 
-- Não promover artifacts para official.
-- Não reabrir A3/A4.
-- Não transformar `ALIVE_BUT_NOT_PROMOTABLE` em promotable.
-- Não usar RiskLabAI como caminho official.
-- Não compensar falta de artifact com narrativa.
+- PR remains draft;
+- no promotion language is introduced;
+- DSR/CVaR blockers remain explicit;
+- human reviewer accepts the branch as governance/reproducibility evidence.
 
+PARTIAL criteria:
+
+- documentation needs clarification;
+- documentation refresh is needed after any governance drift;
+- no governance violation is found.
+
+FAIL criteria:
+
+- any text or code implies official promotion;
+- A3/A4 are reopened without evidence;
+- `PASS_ZERO_EXPOSURE` is represented as economic robustness;
+- research is treated as official.
+
+## Suggested Commands
+
+```powershell
+git checkout codex/autonomous-sniper-implementation
+git status --short
+git log --oneline codex/openclaw-sniper-handoff..HEAD
+Get-Content reports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/gate_report.json
+Get-Content reports/gates/phase6_research_baseline_rehydration_clean_regeneration_gate/gate_result_review.md
+.\.venv\Scripts\python.exe -m pytest tests/unit/test_phase6_global_reproducibility_source_alignment_gate.py tests/unit/test_phase5_cross_sectional_latest_headroom_reconciliation_audit.py tests/unit/test_phase5_cross_sectional_sovereign_closure_bundle_restore_and_revalidate.py tests/unit/test_phase5_cross_sectional_sovereign_hardening_recheck.py tests/unit/test_gate_reports.py tests/unit/test_hmm_regime_alignment.py -q
+```
+
+## Final Audit Position
+
+The branch should stay in PR draft review. It is a useful reproducibility/governance delivery and resolves important Phase 6 evidence gaps. It is not a promotion, readiness, or paper-live approval path. The next strategic decision should be human review/freeze or a separate research-only thesis with falsification criteria, not continuation toward official promotion.

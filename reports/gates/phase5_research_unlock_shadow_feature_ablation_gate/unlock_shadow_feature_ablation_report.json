@@ -1,0 +1,229 @@
+{
+  "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
+  "hypothesis": "AGENDA-H06 unlock_shadow_feature_ablation",
+  "status": "PASS",
+  "decision": "advance",
+  "classification": "H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE",
+  "artifact_status": {
+    "unlock_dir": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlocks",
+    "unlock_dir_exists": true,
+    "unlock_file_count": 69,
+    "quality_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\parquet\\unlock_diagnostics\\unlock_quality_daily.parquet",
+    "quality_exists": true,
+    "required_artifacts_present": true
+  },
+  "unlock_inventory": {
+    "unlock_artifact_count": 69,
+    "aggregate_inventory_sha256": "CD17A1E0276F67A45D597CD85138286A973C1CB9D55421E415D6E289D2DB0E3E"
+  },
+  "read_errors": [],
+  "quality_error": null,
+  "quality_diagnostics": {
+    "quality_summary_present": true,
+    "quality_rows": 371,
+    "operational_quality_rows": 369,
+    "date_min": "1970-01-01",
+    "date_max": "2026-03-22",
+    "latest_operational_quality": {
+      "date": "2026-03-22T00:00:00",
+      "n_assets": 53,
+      "observed_count": 6,
+      "reconstructed_count": 0,
+      "proxy_full_count": 52,
+      "proxy_fallback_count": 52,
+      "missing_count": 1,
+      "observed_coverage": 0.11320754716981132,
+      "reconstructed_coverage": 0.0,
+      "proxy_full_coverage": 0.9811320754716981,
+      "proxy_fallback_coverage": 0.9811320754716981,
+      "missing_rate": 0.018867924528301886,
+      "unknown_bucket_block_count": 4,
+      "unknown_bucket_block_rate": 0.07547169811320754,
+      "raw_zero_count": 17,
+      "raw_zero_fraction": 0.3269230769230769,
+      "massive_ties_fraction": 1.0,
+      "review_required_count": 3,
+      "promotion_blocked_count": 9,
+      "shadow_mode_flag": 1,
+      "snapshot_lag_days_avg": 0.0,
+      "snapshot_lag_days_max": 0.0,
+      "provider_failures_mobula": 1.0,
+      "provider_failures_coingecko": 0.0,
+      "provider_failures_defillama": null,
+      "provider_failures_wayback": 2,
+      "rank_distribution_json": "{\"selected_for_reporting\":{\"max\":1.0,\"min\":0.12745098039215685,\"n\":52,\"n_unique\":37,\"p25\":0.3088235294117647,\"p50\":0.5,\"p75\":0.7303921568627451},\"state_counts\":{\"MISSING\":1,\"OBSERVED\":6,\"PROXY_FULL\":46},\"unlock_fragility_proxy_rank_fallback\":{\"max\":1.0,\"min\":0.0,\"n\":52,\"n_unique\":52,\"p25\":0.25,\"p50\":0.5,\"p75\":0.75},\"unlock_overhang_proxy_rank_full\":{\"max\":1.0,\"min\":0.12745098039215685,\"n\":52,\"n_unique\":39,\"p25\":0.12745098039215685,\"p50\":0.5,\"p75\":0.75},\"unlock_pressure_rank_observed\":{\"max\":0.5,\"min\":0.5,\"n\":6,\"n_unique\":1,\"p25\":0.5,\"p50\":0.5,\"p75\":0.5},\"unlock_pressure_rank_reconstructed\":{\"max\":null,\"min\":null,\"n\":0,\"n_unique\":0,\"p25\":null,\"p50\":null,\"p75\":null}}"
+    },
+    "raw_latest_quality": {
+      "date": "2026-03-22T00:00:00",
+      "n_assets": 53,
+      "observed_count": 6,
+      "reconstructed_count": 0,
+      "proxy_full_count": 52,
+      "proxy_fallback_count": 52,
+      "missing_count": 1,
+      "observed_coverage": 0.11320754716981132,
+      "reconstructed_coverage": 0.0,
+      "proxy_full_coverage": 0.9811320754716981,
+      "proxy_fallback_coverage": 0.9811320754716981,
+      "missing_rate": 0.018867924528301886,
+      "unknown_bucket_block_count": 4,
+      "unknown_bucket_block_rate": 0.07547169811320754,
+      "raw_zero_count": 17,
+      "raw_zero_fraction": 0.3269230769230769,
+      "massive_ties_fraction": 1.0,
+      "review_required_count": 3,
+      "promotion_blocked_count": 9,
+      "shadow_mode_flag": 1,
+      "snapshot_lag_days_avg": 0.0,
+      "snapshot_lag_days_max": 0.0,
+      "provider_failures_mobula": 1.0,
+      "provider_failures_coingecko": 0.0,
+      "provider_failures_defillama": null,
+      "provider_failures_wayback": 2,
+      "rank_distribution_json": "{\"selected_for_reporting\":{\"max\":1.0,\"min\":0.12745098039215685,\"n\":52,\"n_unique\":37,\"p25\":0.3088235294117647,\"p50\":0.5,\"p75\":0.7303921568627451},\"state_counts\":{\"MISSING\":1,\"OBSERVED\":6,\"PROXY_FULL\":46},\"unlock_fragility_proxy_rank_fallback\":{\"max\":1.0,\"min\":0.0,\"n\":52,\"n_unique\":52,\"p25\":0.25,\"p50\":0.5,\"p75\":0.75},\"unlock_overhang_proxy_rank_full\":{\"max\":1.0,\"min\":0.12745098039215685,\"n\":52,\"n_unique\":39,\"p25\":0.12745098039215685,\"p50\":0.5,\"p75\":0.75},\"unlock_pressure_rank_observed\":{\"max\":0.5,\"min\":0.5,\"n\":6,\"n_unique\":1,\"p25\":0.5,\"p50\":0.5,\"p75\":0.5},\"unlock_pressure_rank_reconstructed\":{\"max\":null,\"min\":null,\"n\":0,\"n_unique\":0,\"p25\":null,\"p50\":null,\"p75\":null}}"
+    },
+    "quality_medians": {
+      "observed_coverage_median": 0.0,
+      "reconstructed_coverage_median": 0.0,
+      "proxy_full_coverage_median": 0.0,
+      "proxy_fallback_coverage_median": 0.979592,
+      "missing_rate_median": 0.020408,
+      "shadow_mode_flag_median": 1.0,
+      "promotion_blocked_count_median": 0.0
+    },
+    "shadow_mode_detected": true
+  },
+  "unlock_coverage_diagnostics": {
+    "unlock_rows": 20087,
+    "operational_unlock_rows": 20086,
+    "unlock_symbols": 69,
+    "date_min": "2025-03-09",
+    "date_max": "2026-03-22",
+    "feature_coverage": {
+      "unlock_pressure_rank_observed": {
+        "coverage": 0.002041,
+        "unique_values": 11
+      },
+      "unlock_pressure_rank_reconstructed": {
+        "coverage": 0.0,
+        "unique_values": 0
+      },
+      "unlock_overhang_proxy_rank_full": {
+        "coverage": 0.012297,
+        "unique_values": 192
+      },
+      "unlock_fragility_proxy_rank_fallback": {
+        "coverage": 0.942896,
+        "unique_values": 635
+      },
+      "unlock_pressure_rank_selected_for_reporting": {
+        "coverage": 0.943095,
+        "unique_values": 696
+      }
+    },
+    "feature_state_counts": {
+      "PROXY_FALLBACK": 18692,
+      "MISSING": 1143,
+      "PROXY_FULL": 210,
+      "OBSERVED": 41
+    }
+  },
+  "phase4_overlap_diagnostics": {
+    "phase4_exists": true,
+    "phase4_rows": 94930,
+    "phase4_symbols": 36,
+    "phase4_date_min": "2020-05-20",
+    "phase4_date_max": "2026-03-20",
+    "joined_rows_with_selected_unlock": 15665,
+    "joined_coverage_selected_unlock": 0.165016,
+    "joined_symbols_with_selected_unlock": 33,
+    "joined_date_min": "2025-03-09",
+    "joined_date_max": "2026-03-08",
+    "phase4_outcome_column_used_for_diagnostic_only": "pnl_real"
+  },
+  "feature_ablation_metrics": [
+    {
+      "feature": "unlock_pressure_rank_observed",
+      "exists": true,
+      "joined_valid_rows": 15,
+      "joined_coverage": 0.000158,
+      "unique_values": 3,
+      "spearman_to_pnl_real_diagnostic": null,
+      "pearson_to_pnl_real_diagnostic": null,
+      "bottom_quintile_mean_pnl_diagnostic": null,
+      "top_quintile_mean_pnl_diagnostic": null,
+      "top_minus_bottom_mean_pnl_diagnostic": null,
+      "forbidden_as_operational_input": false
+    },
+    {
+      "feature": "unlock_pressure_rank_reconstructed",
+      "exists": true,
+      "joined_valid_rows": 0,
+      "joined_coverage": 0.0,
+      "unique_values": 0,
+      "spearman_to_pnl_real_diagnostic": null,
+      "pearson_to_pnl_real_diagnostic": null,
+      "bottom_quintile_mean_pnl_diagnostic": null,
+      "top_quintile_mean_pnl_diagnostic": null,
+      "top_minus_bottom_mean_pnl_diagnostic": null,
+      "forbidden_as_operational_input": false
+    },
+    {
+      "feature": "unlock_overhang_proxy_rank_full",
+      "exists": true,
+      "joined_valid_rows": 55,
+      "joined_coverage": 0.000579,
+      "unique_values": 11,
+      "spearman_to_pnl_real_diagnostic": -0.123007,
+      "pearson_to_pnl_real_diagnostic": -0.349401,
+      "bottom_quintile_mean_pnl_diagnostic": 0.084977,
+      "top_quintile_mean_pnl_diagnostic": -0.03669525,
+      "top_minus_bottom_mean_pnl_diagnostic": -0.12167225,
+      "forbidden_as_operational_input": false
+    },
+    {
+      "feature": "unlock_fragility_proxy_rank_fallback",
+      "exists": true,
+      "joined_valid_rows": 15665,
+      "joined_coverage": 0.165016,
+      "unique_values": 352,
+      "spearman_to_pnl_real_diagnostic": -0.021794,
+      "pearson_to_pnl_real_diagnostic": -0.023553,
+      "bottom_quintile_mean_pnl_diagnostic": -0.05905159,
+      "top_quintile_mean_pnl_diagnostic": -0.0718106,
+      "top_minus_bottom_mean_pnl_diagnostic": -0.01275901,
+      "forbidden_as_operational_input": false
+    },
+    {
+      "feature": "unlock_pressure_rank_selected_for_reporting",
+      "exists": true,
+      "joined_valid_rows": 15665,
+      "joined_coverage": 0.165016,
+      "unique_values": 358,
+      "spearman_to_pnl_real_diagnostic": -0.021533,
+      "pearson_to_pnl_real_diagnostic": -0.023365,
+      "bottom_quintile_mean_pnl_diagnostic": -0.05904104,
+      "top_quintile_mean_pnl_diagnostic": -0.07189775,
+      "top_minus_bottom_mean_pnl_diagnostic": -0.01285671,
+      "forbidden_as_operational_input": false
+    }
+  ],
+  "governance": {
+    "research_only": true,
+    "diagnostic_only": true,
+    "creates_operational_signal": false,
+    "promotes_official": false,
+    "declares_paper_readiness": false,
+    "reopens_a3_a4": false,
+    "relaxes_thresholds": false,
+    "uses_realized_variable_as_ex_ante_rule": false,
+    "uses_pnl_real_as_diagnostic_outcome_only": true,
+    "treats_shadow_artifact_as_official": false
+  },
+  "candidate": {
+    "research_candidate_found": false,
+    "official_promotion_allowed": false,
+    "paper_readiness_allowed": false,
+    "reason": "H06 was executed as diagnostic/preflight only. It produced coverage and ablation evidence but no operational policy candidate."
+  }
+}

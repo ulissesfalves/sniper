@@ -1,0 +1,79 @@
+{
+  "gate_slug": "phase5_research_signal_polarity_long_short_gate",
+  "phase_family": "phase5_research_signal_polarity_long_short",
+  "status": "PARTIAL",
+  "decision": "correct",
+  "baseline_commit": "637f50a7e23b320082d8e08e720bc1ee63e8731c",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_long_short_gate\\signal_polarity_positions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_long_short_gate\\signal_polarity_daily_returns.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_long_short_gate\\signal_polarity_trade_log.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_long_short_gate\\signal_polarity_metrics.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_long_short_gate\\signal_polarity_snapshot_proxy.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_signal_polarity_long_short_gate\\portfolio_cvar_research_report.json"
+  ],
+  "summary": [
+    "classification=POSITIVE_SIGNAL_POLARITY_CANDIDATE_NEEDS_STABILITY_CORRECTION",
+    "best_policy=short_high_p_bma_k3",
+    "best_family=signal_polarity_short_high",
+    "best_median_combo_sharpe=1.768215",
+    "best_min_combo_sharpe=-0.501947",
+    "best_median_active_days=712.0",
+    "best_max_cvar_95_loss_fraction=0.00511048",
+    "short exposure is research/sandbox only",
+    "pnl_real used only as realized outcome, never ex-ante selection",
+    "no official promotion attempted"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_research_signal_polarity_long_short_gate",
+      "metric_name": "best_policy",
+      "metric_value": "short_high_p_bma_k3",
+      "metric_threshold": "predeclared policy only",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_signal_polarity_long_short_gate",
+      "metric_name": "best_median_combo_sharpe",
+      "metric_value": 1.768215,
+      "metric_threshold": ">= 4.47 for promotion; > 0 for research candidate",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_signal_polarity_long_short_gate",
+      "metric_name": "best_min_combo_sharpe",
+      "metric_value": -0.501947,
+      "metric_threshold": "> 0.0 for stable research candidate",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_signal_polarity_long_short_gate",
+      "metric_name": "best_median_active_days",
+      "metric_value": 712.0,
+      "metric_threshold": ">= 120",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_signal_polarity_long_short_gate",
+      "metric_name": "best_max_cvar_95_loss_fraction",
+      "metric_value": 0.00511048,
+      "metric_threshold": "<= 0.15",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "signal_polarity_candidate_not_promotable",
+    "negative_min_combo_sharpe_needs_correction",
+    "dsr_honest_zero_blocks_promotion",
+    "official_cvar_zero_exposure_not_economic_robustness"
+  ],
+  "risks_residual": [
+    "Short exposure is research-only and may not match official execution constraints.",
+    "Best candidate needs stability correction before it can survive research selection.",
+    "Even stable research Sharpe below sr_needed cannot clear DSR promotion."
+  ],
+  "next_recommended_step": "Use one PARTIAL correction to test p_bma/hmm stability filters for the signal polarity family."
+}

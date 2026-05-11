@@ -1,0 +1,104 @@
+{
+  "gate_slug": "phase5_research_meta_uncertainty_abstention_gate",
+  "timestamp_utc": "2026-05-04T02:52:52+00:00",
+  "baseline_commit": "b3263393bf95e001e6878f1a43a2fa44b3b819eb",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+      "exists": true,
+      "size_bytes": 2872831,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "5B3144578BB99D48E2A67B3AB60B2B0AD25787A92B8488AFD1D1D5C08AE8F6C7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_research_agenda.yaml",
+      "exists": true,
+      "size_bytes": 11338,
+      "mtime_utc": "2026-05-04T02:42:38+00:00",
+      "sha256": "B185B64056356242CDBDD1A3EBD686238F70C4D5EF6CDB9F172D09418977E8C0"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_uncertainty_abstention_gate\\meta_uncertainty_positions.parquet",
+      "exists": true,
+      "size_bytes": 307125,
+      "mtime_utc": "2026-05-04T02:52:52+00:00",
+      "sha256": "38D95E7B2F63720A4EEB70670F91D651DC741D1B3738E5E3E76CE839001FD239"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_uncertainty_abstention_gate\\meta_uncertainty_daily_returns.parquet",
+      "exists": true,
+      "size_bytes": 108848,
+      "mtime_utc": "2026-05-04T02:52:52+00:00",
+      "sha256": "C11562D47EC7EA75952DCDD2D7E4164984F93D6C9BB5BFE3A499C23089309B6C"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_uncertainty_abstention_gate\\meta_uncertainty_trade_log.parquet",
+      "exists": true,
+      "size_bytes": 22610,
+      "mtime_utc": "2026-05-04T02:52:52+00:00",
+      "sha256": "F95E5788D4A3B185D464FC19BCC5BAA9B2A8B42076E217AF414B19101E4B8376"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_uncertainty_abstention_gate\\meta_uncertainty_metrics.parquet",
+      "exists": true,
+      "size_bytes": 20817,
+      "mtime_utc": "2026-05-04T02:52:52+00:00",
+      "sha256": "D2DCECCB8F58CCE419F8328B33301C73976164B323436E3C851BFE4009C241E3"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_uncertainty_abstention_gate\\meta_uncertainty_scenarios.parquet",
+      "exists": true,
+      "size_bytes": 12602,
+      "mtime_utc": "2026-05-04T02:52:52+00:00",
+      "sha256": "EDCD5571C9D4B5E90B39A8D9701B3B177186710BDF177E82AEFE34F5E18B0659"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_uncertainty_abstention_gate\\meta_uncertainty_research_report.json",
+      "exists": true,
+      "size_bytes": 19637,
+      "mtime_utc": "2026-05-04T02:52:52+00:00",
+      "sha256": "3228807D47F7C833E915849F5F7CD782C877164F3785B4A36155B066588A588F"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_uncertainty_abstention_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 6024,
+      "mtime_utc": "2026-05-04T02:52:52+00:00",
+      "sha256": "937DDA6AE5F170876D0ECBD2061BB9253007ADE8799E2A105B507BD73A3C5B25"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_uncertainty_abstention_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 3548,
+      "mtime_utc": "2026-05-04T02:52:52+00:00",
+      "sha256": "FC98FD14CF611F8BECD102BD5892B53F87C760DF773FBE58ADA64D75BC744491"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_uncertainty_abstention_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 4204,
+      "mtime_utc": "2026-05-04T02:52:52+00:00",
+      "sha256": "2D3B8FE6E7E078B8E54DB6C1E6201E046DCF26D19F3F883C4929A5783849A96E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_uncertainty_abstention_gate\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    "python services/ml_engine/phase5_research_meta_uncertainty_abstention.py",
+    "python -m pytest tests/unit/test_phase5_research_meta_uncertainty_abstention.py -q"
+  ],
+  "notes": [
+    "Research/sandbox-only AGENDA-H02 gate.",
+    "Uses p_bma_pkf, p_meta_calibrated and sigma_ewma as ex-ante selection inputs.",
+    "pnl_real is realized outcome only.",
+    "No official promotion, no paper readiness, no A3/A4 reopening."
+  ]
+}

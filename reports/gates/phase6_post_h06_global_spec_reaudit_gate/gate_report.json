@@ -1,0 +1,118 @@
+{
+  "gate_slug": "phase6_post_h06_global_spec_reaudit_gate",
+  "phase_family": "phase6_global_spec_reaudit",
+  "status": "PARTIAL",
+  "decision": "correct",
+  "baseline_commit": "22d77a0638582fe69b1cbde1450b0ac7ed5f43c9",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "pr_url": "https://github.com/ulissesfalves/sniper/pull/1",
+  "base_branch": "codex/openclaw-sniper-handoff",
+  "official_artifacts_used": [
+    "data/models/phase4/** as ignored/base audit inputs only"
+  ],
+  "research_artifacts_generated": [
+    "reports/audits/global_spec_adherence/global_spec_adherence_summary.json",
+    "reports/audits/global_spec_adherence/global_spec_adherence_report.md",
+    "reports/audits/global_spec_adherence/global_spec_adherence_matrix.csv",
+    "reports/audits/global_spec_adherence/global_implementation_checklist.md",
+    "reports/audits/global_spec_adherence/next_step_recommendation.md",
+    "reports/audits/global_spec_adherence/next_step_codex_prompt.md",
+    "reports/audits/global_spec_adherence/orchestrator_recommendation.md",
+    "reports/audits/global_spec_adherence/orchestrator_next_prompt.md",
+    "reports/state/sniper_next_step_decision.md",
+    "reports/state/sniper_next_step_decision.json",
+    "reports/state/sniper_current_state.json",
+    "reports/state/sniper_decision_ledger.md",
+    "reports/state/sniper_artifact_registry.json",
+    "reports/state/sniper_autonomous_runbook.md"
+  ],
+  "summary": [
+    "Global audit refreshed to current PR head after H06 and final PR review.",
+    "PR remains reviewable as draft governance/research evidence only.",
+    "No safe internal autonomous next gate is registered."
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase6_research_baseline_rehydration_clean_regeneration_gate",
+      "status": "PARTIAL",
+      "decision": "correct",
+      "clean_clone_or_equivalent": true
+    },
+    {
+      "gate_slug": "phase6_pr_review_global_adherence_gate",
+      "status": "PARTIAL",
+      "decision": "correct"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_decision_gate",
+      "status": "PASS",
+      "decision": "abandon",
+      "classification": "RESEARCH_CANDIDATE_FALSIFIED"
+    },
+    {
+      "gate_slug": "phase5_research_cluster_conditioned_polarity_decision_gate",
+      "status": "PASS",
+      "decision": "abandon",
+      "classification": "CLUSTER_CONDITIONED_RESEARCH_CANDIDATE_FALSIFIED"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_candidate_decision_gate",
+      "status": "PASS",
+      "decision": "abandon",
+      "classification": "META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED"
+    },
+    {
+      "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+      "status": "PARTIAL",
+      "decision": "correct",
+      "classification": "CVAR_CONSTRAINED_META_SIZING_CVAR_PASS_ALPHA_UNSTABLE"
+    },
+    {
+      "gate_slug": "phase5_research_regime_specific_meta_disagreement_gate",
+      "status": "PARTIAL",
+      "decision": "correct",
+      "classification": "REGIME_SPECIFIC_META_DISAGREEMENT_POSITIVE_BUT_UNSTABLE"
+    },
+    {
+      "gate_slug": "phase5_final_freeze_resource_and_opportunity_audit_gate",
+      "status": "PASS",
+      "decision": "freeze",
+      "classification": "FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED"
+    },
+    {
+      "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
+      "status": "PASS",
+      "decision": "advance",
+      "classification": "H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE"
+    },
+    {
+      "gate_slug": "phase6_post_h06_global_spec_reaudit_gate",
+      "status": "PARTIAL",
+      "decision": "correct",
+      "classification": "POST_H06_GLOBAL_PARTIAL_REVIEW_DRAFT_PR"
+    }
+  ],
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable",
+    "paper_readiness_blocked_by_quant_merit",
+    "no_surviving_research_candidate",
+    "no_safe_internal_next_gate",
+    "h06_diagnostic_only_no_research_candidate",
+    "unlock_artifacts_shadow_or_proxy_heavy_not_official"
+  ],
+  "risks_residual": [
+    "Confusing reproducibility/governance proof with quantitative merit.",
+    "Treating PASS_ZERO_EXPOSURE as real CVaR robustness.",
+    "Using the PR draft as merge/readiness approval.",
+    "Promoting research/sandbox artifacts by convenience.",
+    "Reopening A3/A4 without strong new evidence."
+  ],
+  "next_recommended_step": "REVIEW_DRAFT_PR; future autonomous work requires REQUEST_MATERIAL_EVIDENCE or a new safe research agenda.",
+  "global_verdict": "GLOBAL_PARTIAL",
+  "official_promotion_allowed": false,
+  "paper_readiness_allowed": false,
+  "merge_allowed": false
+}

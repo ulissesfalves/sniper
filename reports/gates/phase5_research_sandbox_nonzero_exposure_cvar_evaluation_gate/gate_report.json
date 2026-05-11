@@ -1,0 +1,85 @@
+{
+  "gate_slug": "phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate",
+  "phase_family": "phase5_research_sandbox_nonzero_exposure_cvar_evaluation",
+  "status": "PARTIAL",
+  "decision": "correct",
+  "baseline_commit": "bfb170d8512f3610227c75f518c4117e44445f66",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_report_v4.json"
+  ],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate\\research_sandbox_nonzero_exposure_cvar_summary.json",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate\\research_sandbox_nonzero_exposure_daily_returns.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate\\research_sandbox_nonzero_exposure_cvar_combo_metrics.parquet"
+  ],
+  "summary": [
+    "classification=NONZERO_EXPOSURE_RESEARCH_CVAR_PASS_BUT_ALPHA_DSR_BLOCKERS_REMAIN",
+    "research_active_combo_days=10576",
+    "research_max_cvar_95_loss_fraction=0.01072844",
+    "research_median_cvar_95_loss_fraction=0.00313685",
+    "research_median_combo_sharpe=-0.727203",
+    "research sandbox CVaR module produced nonzero-exposure measurements",
+    "official CVaR remains NOT_PROVEN_ZERO_EXPOSURE",
+    "no official promotion attempted"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate",
+      "metric_name": "research_active_combo_days",
+      "metric_value": 10576,
+      "metric_threshold": ">= 120",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate",
+      "metric_name": "research_median_active_days",
+      "metric_value": 712.0,
+      "metric_threshold": ">= 120",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate",
+      "metric_name": "research_max_cvar_95_loss_fraction",
+      "metric_value": 0.01072844,
+      "metric_threshold": "<= 0.15",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate",
+      "metric_name": "research_median_cvar_95_loss_fraction",
+      "metric_value": 0.00313685,
+      "metric_threshold": "<= 0.15",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate",
+      "metric_name": "research_median_combo_sharpe",
+      "metric_value": -0.727203,
+      "metric_threshold": "> 0.0 for positive-alpha candidate",
+      "metric_status": "FAIL"
+    },
+    {
+      "gate_slug": "phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate",
+      "metric_name": "official_snapshot_exposure_fraction",
+      "metric_value": 0.0,
+      "metric_threshold": "> 0 for official economic CVaR",
+      "metric_status": "FAIL"
+    }
+  ],
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "official_cvar_zero_exposure_not_economic_robustness",
+    "safe_policy_alpha_merit_not_proven",
+    "cross_sectional_alive_but_not_promotable"
+  ],
+  "risks_residual": [
+    "The nonzero-exposure CVaR result is sandbox/research-only.",
+    "The evaluated safe top1 policy still has negative median combo Sharpe.",
+    "Official Phase4 snapshot exposure remains zero, so official economic CVaR remains unproven.",
+    "DSR honest remains 0.0 and blocks any promotion."
+  ],
+  "next_recommended_step": "Continue autonomously with a materially different research-only gate focused on DSR-zero diagnostics or an alternate ex-ante ranking/sizing hypothesis. Do not promote official."
+}

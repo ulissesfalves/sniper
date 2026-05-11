@@ -1,0 +1,109 @@
+{
+  "gate_slug": "phase5_research_hypothesis_space_freeze_gate",
+  "timestamp_utc": "2026-05-02T13:01:04+00:00",
+  "baseline_commit": "d21ed0a8b4d3a699a8607c74f730d8144b475941",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_only_stage_a_nonzero_exposure_falsification_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3994,
+      "mtime_utc": "2026-05-02T10:51:22+00:00",
+      "sha256": "A2F445166D75BA898A8ECC90A3EE310C615B9DD2DDDE5F947FD3BF1BBB5C8116"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4192,
+      "mtime_utc": "2026-05-02T12:44:13+00:00",
+      "sha256": "58DBC8A3814E01E5A4E949324E28B7B7D290BF3F00555B5D0AA8A27EA5CFAB46"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_dsr_zero_diagnostic_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3642,
+      "mtime_utc": "2026-05-02T12:48:45+00:00",
+      "sha256": "9997A27E8E3F33205414C244885BA8A04427648919C79B9AA780A4D3750498A4"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_threshold_sizing_falsification_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3774,
+      "mtime_utc": "2026-05-02T12:53:23+00:00",
+      "sha256": "600EDFEDE08E939D24097A31E70ABC45FC1845755B35CD3050663E30B0A16561"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_stability_correction_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3835,
+      "mtime_utc": "2026-05-02T12:58:04+00:00",
+      "sha256": "BFEB0AAD793CFDC4BB792DB5E53727F48C995C3E83104AFCC3ED109D1A6DFF05"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_current_state.json",
+      "exists": true,
+      "size_bytes": 5431,
+      "mtime_utc": "2026-05-02T12:59:06+00:00",
+      "sha256": "18792D94E98C893F1C006CC576AEA6AB10A193DC0476DDC73F029FE0BEE6E1E0"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_spec_gap_backlog.yaml",
+      "exists": true,
+      "size_bytes": 11078,
+      "mtime_utc": "2026-05-02T12:59:06+00:00",
+      "sha256": "BDF04A9967641E194A577EF1A6CBA5DAA8A5B667E8985AEC2253994627C828AA"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_hypothesis_space_freeze_gate\\research_hypothesis_space_freeze_report.json",
+      "exists": true,
+      "size_bytes": 8756,
+      "mtime_utc": "2026-05-02T13:01:04+00:00",
+      "sha256": "C270E9264FC9D04574C8486F499AD890B88F51909C14BDB7670465AFD506576A"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_hypothesis_space_freeze_gate\\research_hypothesis_space_freeze_gate_table.parquet",
+      "exists": true,
+      "size_bytes": 9622,
+      "mtime_utc": "2026-05-02T13:01:04+00:00",
+      "sha256": "BDD8B517B64738622B65462979F56518F07CBA7331D59F7AF0659472805AC164"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_hypothesis_space_freeze_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3122,
+      "mtime_utc": "2026-05-02T13:01:04+00:00",
+      "sha256": "B95F3A56CF188C2830D69FD7FEFE0D4E317158D4348CF6B4D2175E23B57F6467"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_hypothesis_space_freeze_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 1597,
+      "mtime_utc": "2026-05-02T13:01:04+00:00",
+      "sha256": "C1ED268C268D8DE9B3377E3942B18D1A5DB3893226E5954E6DB3686D60A047E0"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_hypothesis_space_freeze_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 3793,
+      "mtime_utc": "2026-05-02T13:01:04+00:00",
+      "sha256": "D351561639B3F2E8B0B04B2C9EA8B049605EAD769B7E716622BA59CC46625125"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_hypothesis_space_freeze_gate\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    ".\\.venv\\Scripts\\python.exe services\\ml_engine\\phase5_research_hypothesis_space_freeze_gate.py"
+  ],
+  "notes": [
+    "Freeze/closure gate for the current autonomous research hypothesis space.",
+    "No official artifacts were promoted.",
+    "Freeze is based on governance and exhausted defensible hypotheses, not user indecision."
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "snapshot_path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+  "snapshot_status": "LOADED_OFFICIAL_SNAPSHOT",
+  "capital_assumption_usdt": 100000.0,
+  "positions": {},
+  "sigmas": {},
+  "stress_report": {
+    "cvar_historical": 0.0,
+    "cvar_stress_rho1": 0.0,
+    "cvar_limit": 0.15,
+    "margin_of_safety": 0.15,
+    "cvar_ok": true,
+    "hidden_risk_factor": 0.0,
+    "sigma_portfolio_stress": 0,
+    "n_positions": 0,
+    "total_exposure_pct": 0.0
+  },
+  "zero_exposure": true,
+  "technical_persistence_status": "PASS_ZERO_EXPOSURE",
+  "economic_robustness_status": "NOT_PROVEN_ZERO_EXPOSURE",
+  "cvar_limit": 0.15
+}

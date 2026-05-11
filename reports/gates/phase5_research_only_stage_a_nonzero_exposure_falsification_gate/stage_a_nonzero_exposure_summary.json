@@ -1,0 +1,314 @@
+{
+  "hypothesis": "Stage A research baseline can produce nonzero sandbox exposure and enough ex-ante-safe merit to justify further research.",
+  "status": "FAIL",
+  "decision": "abandon",
+  "classification": "ONLY_REALIZED_ELIGIBILITY_LOOKS_GOOD_SAFE_POLICY_FAILS",
+  "safe_policy": {
+    "policy": "safe_top1_by_rank_score_no_realized_eligibility",
+    "selected_events": 10576,
+    "selected_dates": 2112,
+    "combo_count": 15,
+    "median_combo_sharpe": -0.727203,
+    "min_combo_sharpe": -4.321026,
+    "median_combo_cum_return": -3.737393,
+    "median_active_days": 712.0,
+    "median_win_rate_active": 0.469599,
+    "max_combo_drawdown": 50.323054,
+    "combo_metrics": [
+      {
+        "combo": "(0, 1)",
+        "total_days": 934,
+        "active_days": 933,
+        "cum_return_proxy": 3.686274,
+        "annualized_sharpe_proxy": 0.598413,
+        "max_drawdown_proxy": 2.502819,
+        "win_rate_active": 0.491961
+      },
+      {
+        "combo": "(0, 2)",
+        "total_days": 846,
+        "active_days": 844,
+        "cum_return_proxy": 2.377535,
+        "annualized_sharpe_proxy": 0.45429,
+        "max_drawdown_proxy": 3.133918,
+        "win_rate_active": 0.464455
+      },
+      {
+        "combo": "(0, 3)",
+        "total_days": 728,
+        "active_days": 728,
+        "cum_return_proxy": 3.357747,
+        "annualized_sharpe_proxy": 0.685445,
+        "max_drawdown_proxy": 2.46423,
+        "win_rate_active": 0.486264
+      },
+      {
+        "combo": "(0, 4)",
+        "total_days": 712,
+        "active_days": 712,
+        "cum_return_proxy": -1.271388,
+        "annualized_sharpe_proxy": -0.205383,
+        "max_drawdown_proxy": 6.778753,
+        "win_rate_active": 0.492978
+      },
+      {
+        "combo": "(0, 5)",
+        "total_days": 783,
+        "active_days": 782,
+        "cum_return_proxy": -36.423315,
+        "annualized_sharpe_proxy": -2.799661,
+        "max_drawdown_proxy": 41.239896,
+        "win_rate_active": 0.496164
+      },
+      {
+        "combo": "(1, 2)",
+        "total_days": 836,
+        "active_days": 833,
+        "cum_return_proxy": -3.140753,
+        "annualized_sharpe_proxy": -0.727203,
+        "max_drawdown_proxy": 4.84682,
+        "win_rate_active": 0.444178
+      },
+      {
+        "combo": "(1, 3)",
+        "total_days": 719,
+        "active_days": 717,
+        "cum_return_proxy": -2.054983,
+        "annualized_sharpe_proxy": -0.492236,
+        "max_drawdown_proxy": 2.966965,
+        "win_rate_active": 0.457462
+      },
+      {
+        "combo": "(1, 4)",
+        "total_days": 703,
+        "active_days": 700,
+        "cum_return_proxy": -3.737393,
+        "annualized_sharpe_proxy": -0.70305,
+        "max_drawdown_proxy": 5.314645,
+        "win_rate_active": 0.49
+      },
+      {
+        "combo": "(1, 5)",
+        "total_days": 774,
+        "active_days": 773,
+        "cum_return_proxy": -37.761908,
+        "annualized_sharpe_proxy": -3.061413,
+        "max_drawdown_proxy": 38.520467,
+        "win_rate_active": 0.469599
+      },
+      {
+        "combo": "(2, 3)",
+        "total_days": 630,
+        "active_days": 626,
+        "cum_return_proxy": -0.088303,
+        "annualized_sharpe_proxy": -0.030094,
+        "max_drawdown_proxy": 2.410111,
+        "win_rate_active": 0.461661
+      },
+      {
+        "combo": "(2, 4)",
+        "total_days": 614,
+        "active_days": 612,
+        "cum_return_proxy": -8.454517,
+        "annualized_sharpe_proxy": -1.632133,
+        "max_drawdown_proxy": 9.395529,
+        "win_rate_active": 0.462418
+      },
+      {
+        "combo": "(2, 5)",
+        "total_days": 685,
+        "active_days": 682,
+        "cum_return_proxy": -38.228663,
+        "annualized_sharpe_proxy": -3.412495,
+        "max_drawdown_proxy": 39.034798,
+        "win_rate_active": 0.458944
+      },
+      {
+        "combo": "(3, 4)",
+        "total_days": 495,
+        "active_days": 495,
+        "cum_return_proxy": -4.252689,
+        "annualized_sharpe_proxy": -0.999277,
+        "max_drawdown_proxy": 6.381574,
+        "win_rate_active": 0.480808
+      },
+      {
+        "combo": "(3, 5)",
+        "total_days": 567,
+        "active_days": 566,
+        "cum_return_proxy": -48.479167,
+        "annualized_sharpe_proxy": -4.321026,
+        "max_drawdown_proxy": 50.323054,
+        "win_rate_active": 0.457597
+      },
+      {
+        "combo": "(4, 5)",
+        "total_days": 550,
+        "active_days": 549,
+        "cum_return_proxy": -47.037425,
+        "annualized_sharpe_proxy": -4.225839,
+        "max_drawdown_proxy": 49.4772,
+        "win_rate_active": 0.489982
+      }
+    ]
+  },
+  "unsafe_diagnostic_policy": {
+    "policy": "unsafe_realized_stage_a_eligible_top1_diagnostic_only",
+    "selected_events": 5881,
+    "selected_dates": 1429,
+    "combo_count": 15,
+    "median_combo_sharpe": 14.525046,
+    "min_combo_sharpe": 9.126278,
+    "median_combo_cum_return": 41.010437,
+    "median_active_days": 391.0,
+    "median_win_rate_active": 1.0,
+    "max_combo_drawdown": 0.0,
+    "combo_metrics": [
+      {
+        "combo": "(0, 1)",
+        "total_days": 934,
+        "active_days": 619,
+        "cum_return_proxy": 61.645793,
+        "annualized_sharpe_proxy": 14.707511,
+        "max_drawdown_proxy": 0.0,
+        "win_rate_active": 1.0
+      },
+      {
+        "combo": "(0, 2)",
+        "total_days": 846,
+        "active_days": 371,
+        "cum_return_proxy": 41.206691,
+        "annualized_sharpe_proxy": 10.311567,
+        "max_drawdown_proxy": 0.0,
+        "win_rate_active": 1.0
+      },
+      {
+        "combo": "(0, 3)",
+        "total_days": 728,
+        "active_days": 453,
+        "cum_return_proxy": 48.11837,
+        "annualized_sharpe_proxy": 13.576241,
+        "max_drawdown_proxy": 0.0,
+        "win_rate_active": 1.0
+      },
+      {
+        "combo": "(0, 4)",
+        "total_days": 712,
+        "active_days": 466,
+        "cum_return_proxy": 48.676357,
+        "annualized_sharpe_proxy": 14.37743,
+        "max_drawdown_proxy": 0.0,
+        "win_rate_active": 1.0
+      },
+      {
+        "combo": "(0, 5)",
+        "total_days": 783,
+        "active_days": 558,
+        "cum_return_proxy": 54.927475,
+        "annualized_sharpe_proxy": 16.30647,
+        "max_drawdown_proxy": 0.0,
+        "win_rate_active": 1.0
+      },
+      {
+        "combo": "(1, 2)",
+        "total_days": 836,
+        "active_days": 319,
+        "cum_return_proxy": 33.817646,
+        "annualized_sharpe_proxy": 11.440446,
+        "max_drawdown_proxy": 0.0,
+        "win_rate_active": 1.0
+      },
+      {
+        "combo": "(1, 3)",
+        "total_days": 719,
+        "active_days": 391,
+        "cum_return_proxy": 41.010437,
+        "annualized_sharpe_proxy": 15.11469,
+        "max_drawdown_proxy": 0.0,
+        "win_rate_active": 1.0
+      },
+      {
+        "combo": "(1, 4)",
+        "total_days": 703,
+        "active_days": 407,
+        "cum_return_proxy": 41.351313,
+        "annualized_sharpe_proxy": 16.486421,
+        "max_drawdown_proxy": 0.0,
+        "win_rate_active": 1.0
+      },
+      {
+        "combo": "(1, 5)",
+        "total_days": 774,
+        "active_days": 520,
+        "cum_return_proxy": 50.762612,
+        "annualized_sharpe_proxy": 19.386163,
+        "max_drawdown_proxy": 0.0,
+        "win_rate_active": 1.0
+      },
+      {
+        "combo": "(2, 3)",
+        "total_days": 630,
+        "active_days": 175,
+        "cum_return_proxy": 20.263583,
+        "annualized_sharpe_proxy": 9.126278,
+        "max_drawdown_proxy": 0.0,
+        "win_rate_active": 1.0
+      },
+      {
+        "combo": "(2, 4)",
+        "total_days": 614,
+        "active_days": 209,
+        "cum_return_proxy": 22.578027,
+        "annualized_sharpe_proxy": 10.406173,
+        "max_drawdown_proxy": 0.0,
+        "win_rate_active": 1.0
+      },
+      {
+        "combo": "(2, 5)",
+        "total_days": 685,
+        "active_days": 351,
+        "cum_return_proxy": 33.856905,
+        "annualized_sharpe_proxy": 14.525046,
+        "max_drawdown_proxy": 0.0,
+        "win_rate_active": 1.0
+      },
+      {
+        "combo": "(3, 4)",
+        "total_days": 495,
+        "active_days": 243,
+        "cum_return_proxy": 25.295266,
+        "annualized_sharpe_proxy": 13.853677,
+        "max_drawdown_proxy": 0.0,
+        "win_rate_active": 1.0
+      },
+      {
+        "combo": "(3, 5)",
+        "total_days": 567,
+        "active_days": 379,
+        "cum_return_proxy": 38.168285,
+        "annualized_sharpe_proxy": 18.9969,
+        "max_drawdown_proxy": 0.0,
+        "win_rate_active": 1.0
+      },
+      {
+        "combo": "(4, 5)",
+        "total_days": 550,
+        "active_days": 420,
+        "cum_return_proxy": 39.478709,
+        "annualized_sharpe_proxy": 22.221403,
+        "max_drawdown_proxy": 0.0,
+        "win_rate_active": 1.0
+      }
+    ]
+  },
+  "official_snapshot_exposure_usdt": 0.0,
+  "research_snapshot_proxy_exposure_usdt": 0.0,
+  "governance": {
+    "research_only": true,
+    "promotes_official": false,
+    "reopens_a3_a4": false,
+    "relaxes_thresholds": false,
+    "masks_dsr": false,
+    "treats_zero_exposure_cvar_as_economic_robustness": false
+  }
+}

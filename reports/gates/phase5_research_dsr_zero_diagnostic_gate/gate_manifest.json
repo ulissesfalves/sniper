@@ -1,0 +1,96 @@
+{
+  "gate_slug": "phase5_research_dsr_zero_diagnostic_gate",
+  "timestamp_utc": "2026-05-02T12:48:45+00:00",
+  "baseline_commit": "6e4971074c6576cb469c2717f652d891f3bc513e",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_report_v4.json",
+      "exists": true,
+      "size_bytes": 97451,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_gate_diagnostic.json",
+      "exists": true,
+      "size_bytes": 40472,
+      "mtime_utc": "2026-04-26T21:48:31+00:00",
+      "sha256": "EBFC08CDDE6F9AB3F2A6BF7F23F3A4701B2FDB2796E61776E7E842BA21E10954"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_research_baseline_rehydration_clean_regeneration_gate\\phase4_artifact_integrity_report.json",
+      "exists": true,
+      "size_bytes": 2781,
+      "mtime_utc": "2026-04-27T00:57:21+00:00",
+      "sha256": "25D81A8096EAD57C1AD6E54D87B0A09B6A911E4ADD62EC042D71552A6ECCE272"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_only_stage_a_nonzero_exposure_falsification_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3994,
+      "mtime_utc": "2026-05-02T10:51:22+00:00",
+      "sha256": "A2F445166D75BA898A8ECC90A3EE310C615B9DD2DDDE5F947FD3BF1BBB5C8116"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4192,
+      "mtime_utc": "2026-05-02T12:44:13+00:00",
+      "sha256": "58DBC8A3814E01E5A4E949324E28B7B7D290BF3F00555B5D0AA8A27EA5CFAB46"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_dsr_zero_diagnostic_gate\\dsr_zero_diagnostic_report.json",
+      "exists": true,
+      "size_bytes": 2637,
+      "mtime_utc": "2026-05-02T12:48:45+00:00",
+      "sha256": "B54C100EB8EA9A003E2A79102FE560091371489E8A9994B305E87FE11F5C9CC0"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_dsr_zero_diagnostic_gate\\dsr_candidate_scan.parquet",
+      "exists": true,
+      "size_bytes": 7067,
+      "mtime_utc": "2026-05-02T12:48:45+00:00",
+      "sha256": "D7EBA6EEC62A136DADA56C266F28FA0A3FAFDAA89A26823EF8E9EDA6C2B85495"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_dsr_zero_diagnostic_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3642,
+      "mtime_utc": "2026-05-02T12:48:45+00:00",
+      "sha256": "9997A27E8E3F33205414C244885BA8A04427648919C79B9AA780A4D3750498A4"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_dsr_zero_diagnostic_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 1620,
+      "mtime_utc": "2026-05-02T12:48:45+00:00",
+      "sha256": "856B4B269BB40F050027EB11689167083531C86BE1FC251E478C60BD97336B62"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_dsr_zero_diagnostic_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 3815,
+      "mtime_utc": "2026-05-02T12:48:45+00:00",
+      "sha256": "1A21480BAA650CA783B248ED9669A432ED389FA90F09D7CBEBADC409A1ED5E95"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_dsr_zero_diagnostic_gate\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    ".\\.venv\\Scripts\\python.exe services\\ml_engine\\phase5_research_dsr_zero_diagnostic.py"
+  ],
+  "notes": [
+    "Research-only DSR blocker diagnostic.",
+    "No thresholds were relaxed.",
+    "No official artifacts were promoted.",
+    "Diagnostic rows are not treated as operational signals."
+  ]
+}

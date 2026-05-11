@@ -1,0 +1,116 @@
+{
+  "gate_slug": "phase5_research_deep_quant_diagnostic_gate",
+  "timestamp_utc": "2026-05-02T14:29:34+00:00",
+  "baseline_commit": "e8965429d64335ac41dae14243ff35322944be26",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_report_v4.json",
+      "exists": true,
+      "size_bytes": 97451,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_gate_diagnostic.json",
+      "exists": true,
+      "size_bytes": 40472,
+      "mtime_utc": "2026-04-26T21:48:31+00:00",
+      "sha256": "EBFC08CDDE6F9AB3F2A6BF7F23F3A4701B2FDB2796E61776E7E842BA21E10954"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_research_baseline_rehydration_clean_regeneration_gate\\phase4_artifact_integrity_report.json",
+      "exists": true,
+      "size_bytes": 2781,
+      "mtime_utc": "2026-04-27T00:57:21+00:00",
+      "sha256": "25D81A8096EAD57C1AD6E54D87B0A09B6A911E4ADD62EC042D71552A6ECCE272"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_sandbox_nonzero_exposure_cvar_evaluation_gate\\research_sandbox_nonzero_exposure_daily_returns.parquet",
+      "exists": true,
+      "size_bytes": 79330,
+      "mtime_utc": "2026-05-02T12:44:13+00:00",
+      "sha256": "6D8809D77796D7F9A03B4F2FBEC11E903BE8936212A6F1720957FF0D798930DE"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_threshold_sizing_falsification_gate\\rank_score_threshold_family_policy_metrics.parquet",
+      "exists": true,
+      "size_bytes": 8550,
+      "mtime_utc": "2026-05-02T12:53:23+00:00",
+      "sha256": "DFB313D893C381BBED908E92CAB0246492D78C921B13F645B1D44AF157E2F4C4"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_rank_score_stability_correction_gate\\rank_score_stability_correction_policy_metrics.parquet",
+      "exists": true,
+      "size_bytes": 9187,
+      "mtime_utc": "2026-05-02T12:58:04+00:00",
+      "sha256": "928ED429CC5CEE189BCCC535C4C44F3AC66B69CEFBED3000962F14B1C2E15898"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_deep_quant_diagnostic_gate\\deep_quant_diagnostic_report.json",
+      "exists": true,
+      "size_bytes": 2164,
+      "mtime_utc": "2026-05-02T14:29:34+00:00",
+      "sha256": "236BFE92366F53DB600F05D241D39F65985BC6E7C01760ED7B1324A8EED59AA9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_deep_quant_diagnostic_gate\\deep_quant_combo_metrics.parquet",
+      "exists": true,
+      "size_bytes": 8313,
+      "mtime_utc": "2026-05-02T14:29:34+00:00",
+      "sha256": "CEA7B6D2B2E631515160D7EB09D8601B62C71536C6FF923CF1E6F78C56C95009"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_deep_quant_diagnostic_gate\\deep_quant_subperiod_metrics.parquet",
+      "exists": true,
+      "size_bytes": 12060,
+      "mtime_utc": "2026-05-02T14:29:34+00:00",
+      "sha256": "FA6FE5CFA23EB9F19BF34F4811282FAD8F4625DA22F1E5EDC0D9AC25766D6208"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_deep_quant_diagnostic_gate\\deep_quant_policy_sensitivity.parquet",
+      "exists": true,
+      "size_bytes": 4238,
+      "mtime_utc": "2026-05-02T14:29:34+00:00",
+      "sha256": "3E2510EC920BE9FA2B39D5D314D61C0D0A969B9E7E1B89D2C259DC59D2E53AC1"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_deep_quant_diagnostic_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4006,
+      "mtime_utc": "2026-05-02T14:29:34+00:00",
+      "sha256": "EE5D6A2587A718B5F269FCE4B7217A615541C9CB3A0ED821EBA451361EF350C3"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_deep_quant_diagnostic_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 1355,
+      "mtime_utc": "2026-05-02T14:29:34+00:00",
+      "sha256": "7B9B1A1780E8C9B10671BD24E23E1F527445B9A0F1CC3EFDD56E07FC879068DF"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_deep_quant_diagnostic_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 3895,
+      "mtime_utc": "2026-05-02T14:29:34+00:00",
+      "sha256": "B8FCA1DCB43F28FEEFE646EF4D44F579DBDFDF6066D9AC3AAEAE4D9B7C8EA161"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_deep_quant_diagnostic_gate\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    ".\\.venv\\Scripts\\python.exe services\\ml_engine\\phase5_research_deep_quant_diagnostic.py"
+  ],
+  "notes": [
+    "Research-only deep quantitative diagnostic.",
+    "No threshold relaxation and no official promotion.",
+    "pnl_real is only present in upstream realized-return research metrics; this gate is diagnostic."
+  ]
+}

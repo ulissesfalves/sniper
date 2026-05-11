@@ -1,0 +1,124 @@
+{
+  "gate_slug": "phase5_research_meta_disagreement_abstention_gate",
+  "phase_family": "phase5_research_meta_disagreement_abstention",
+  "status": "PASS",
+  "decision": "advance",
+  "baseline_commit": "7b6c1ec95fd8b3243768fe4f1f3a697669142809",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_oos_predictions.parquet"
+  ],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_abstention_gate\\meta_disagreement_positions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_abstention_gate\\meta_disagreement_daily_returns.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_abstention_gate\\meta_disagreement_trade_log.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_abstention_gate\\meta_disagreement_metrics.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_abstention_gate\\meta_disagreement_snapshot_proxy.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_meta_disagreement_abstention_gate\\meta_disagreement_research_report.json"
+  ],
+  "summary": [
+    "classification=META_DISAGREEMENT_RESEARCH_CANDIDATE_NOT_PROMOTABLE",
+    "selected_agenda_id=AGENDA-H01",
+    "best_policy=short_bma_high_meta_low_p60_m40_k3",
+    "best_median_combo_sharpe=0.855486",
+    "best_min_combo_sharpe=0.220622",
+    "best_median_active_days=322.0",
+    "best_max_cvar_95_loss_fraction=0.00455141",
+    "research/sandbox only",
+    "official_promotion_allowed=false",
+    "paper_readiness_allowed=false",
+    "no realized variable used as selection input"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_research_meta_disagreement_abstention_gate",
+      "metric_name": "agenda_generated",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_abstention_gate",
+      "metric_name": "policies_tested",
+      "metric_value": 6,
+      "metric_threshold": ">= 5",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_abstention_gate",
+      "metric_name": "forbidden_selection_input_count",
+      "metric_value": 0,
+      "metric_threshold": "0",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_abstention_gate",
+      "metric_name": "best_policy",
+      "metric_value": "short_bma_high_meta_low_p60_m40_k3",
+      "metric_threshold": "predeclared policy only",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_abstention_gate",
+      "metric_name": "best_median_combo_sharpe",
+      "metric_value": 0.855486,
+      "metric_threshold": "> 0 research candidate",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_abstention_gate",
+      "metric_name": "best_min_combo_sharpe",
+      "metric_value": 0.220622,
+      "metric_threshold": "> 0 stability candidate",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_abstention_gate",
+      "metric_name": "best_median_active_days",
+      "metric_value": 322.0,
+      "metric_threshold": ">= 120",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_abstention_gate",
+      "metric_name": "best_max_cvar_95_loss_fraction",
+      "metric_value": 0.00455141,
+      "metric_threshold": "<= 0.15",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_abstention_gate",
+      "metric_name": "candidate_below_sr_needed",
+      "metric_value": true,
+      "metric_threshold": "true",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_abstention_gate",
+      "metric_name": "official_promotion_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_abstention_gate",
+      "metric_name": "paper_readiness_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "dsr_honest_zero_blocks_promotion",
+    "official_cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable",
+    "candidate_requires_stability_and_falsification_before_any_deepening"
+  ],
+  "risks_residual": [
+    "Short exposure is research/sandbox only and cannot support official promotion.",
+    "The candidate remains below sr_needed and does not change DSR=0.0.",
+    "A dedicated stability/falsification gate is still required before preserving the candidate as robust."
+  ],
+  "next_recommended_step": "phase5_research_meta_disagreement_stability_falsification_gate"
+}

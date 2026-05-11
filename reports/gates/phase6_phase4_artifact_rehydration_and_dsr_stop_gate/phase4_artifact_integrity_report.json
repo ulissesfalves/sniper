@@ -1,0 +1,74 @@
+{
+  "phase4_dir": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4",
+  "required_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_report_v4.json",
+      "exists": true,
+      "size_bytes": 97451,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "01902DBF654E4AD53850E34277C9FA324F7CDCDFBF2A484E149B5A9BA7C11CA9"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_execution_snapshot.parquet",
+      "exists": true,
+      "size_bytes": 21118,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "B3B9C6951DE30689D0DB90B2DD6D73DB07E2F829B6AB4B1A41473917CFAFEAAB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_aggregated_predictions.parquet",
+      "exists": true,
+      "size_bytes": 1234311,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "C6F55008BC4978CD791C48E96D5B58667504101640CFE0FEE9700CC8B6F09A23"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_oos_predictions.parquet",
+      "exists": true,
+      "size_bytes": 2872831,
+      "mtime_utc": "2026-03-24T00:38:40+00:00",
+      "sha256": "5B3144578BB99D48E2A67B3AB60B2B0AD25787A92B8488AFD1D1D5C08AE8F6C7"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\data\\models\\phase4\\phase4_gate_diagnostic.json",
+      "exists": true,
+      "size_bytes": 40472,
+      "mtime_utc": "2026-04-26T21:48:31+00:00",
+      "sha256": "EBFC08CDDE6F9AB3F2A6BF7F23F3A4701B2FDB2796E61776E7E842BA21E10954"
+    }
+  ],
+  "missing_required_artifacts": [],
+  "artifact_integrity_status": "PASS",
+  "dsr": {
+    "sharpe_is": 0.8808,
+    "dsr_surface": 0.0,
+    "dsr_honest": 0.0,
+    "passed": false,
+    "sr_needed": 4.47,
+    "n_trials_honest": 5000
+  },
+  "dsr_honest": 0.0,
+  "dsr_passed": false,
+  "dsr_check_passed": false,
+  "promotion_status": "BLOCKED_DSR_HONEST_ZERO",
+  "fallback_summary": {
+    "policy": "fixed_small_080_cooldown3",
+    "threshold": 0.8,
+    "sharpe": 0.8808,
+    "cum_return": 0.0135,
+    "max_dd": 0.0048,
+    "n_active": 139,
+    "win_rate": 0.5827,
+    "avg_alloc": 0.01
+  },
+  "checks": {
+    "CPCV PBO < 10% [9]": true,
+    "Meta-modelo AUC pass [9]": true,
+    "ECE < 0.05 [11]": true,
+    "DSR honesto > 0.95 [10]": false,
+    "N_eff >= 120 [17]": true,
+    "Fallback Sharpe >= 0.7 [15.2]": true,
+    "Fallback Max DD <= 18% [15.2]": true,
+    "Subperiodos >= 4/6 [16]": true
+  }
+}

@@ -1,0 +1,219 @@
+{
+  "hypothesis": "AGENDA-H05: a diagnostic feature-family ablation can explain remaining DSR/CVaR/promotability blockers and determine whether any safe HIGH/MEDIUM in-repo family remains.",
+  "status": "PASS",
+  "decision": "advance",
+  "classification": "FEATURE_FAMILY_ABLATION_COMPLETE_NO_HIGH_MEDIUM_EXECUTABLE_FAMILY",
+  "selected_agenda_id": "AGENDA-H05",
+  "feature_families": [
+    {
+      "family": "phase4_probability_calibration",
+      "features": "p_bma_pkf,p_meta_raw,p_meta_calibrated",
+      "existing_feature_count": 3,
+      "requested_feature_count": 3,
+      "coverage_min": 1.0,
+      "coverage_max": 1.0,
+      "max_abs_spearman_to_pnl_real_diagnostic": 0.024516,
+      "operational_allowed": true,
+      "contains_forbidden_operational_input": false,
+      "feature_diagnostics": [
+        {
+          "feature": "p_bma_pkf",
+          "exists": true,
+          "coverage": 1.0,
+          "unique_values": 18963,
+          "spearman_to_pnl_real_diagnostic": 0.01482,
+          "pearson_to_pnl_real_diagnostic": 0.010764,
+          "forbidden_as_operational_input": false
+        },
+        {
+          "feature": "p_meta_raw",
+          "exists": true,
+          "coverage": 1.0,
+          "unique_values": 92162,
+          "spearman_to_pnl_real_diagnostic": 0.024516,
+          "pearson_to_pnl_real_diagnostic": 0.033274,
+          "forbidden_as_operational_input": false
+        },
+        {
+          "feature": "p_meta_calibrated",
+          "exists": true,
+          "coverage": 1.0,
+          "unique_values": 61,
+          "spearman_to_pnl_real_diagnostic": 0.01774,
+          "pearson_to_pnl_real_diagnostic": 0.010981,
+          "forbidden_as_operational_input": false
+        }
+      ]
+    },
+    {
+      "family": "risk_regime_context",
+      "features": "sigma_ewma,hmm_prob_bull",
+      "existing_feature_count": 2,
+      "requested_feature_count": 2,
+      "coverage_min": 1.0,
+      "coverage_max": 1.0,
+      "max_abs_spearman_to_pnl_real_diagnostic": 0.003818,
+      "operational_allowed": true,
+      "contains_forbidden_operational_input": false,
+      "feature_diagnostics": [
+        {
+          "feature": "sigma_ewma",
+          "exists": true,
+          "coverage": 1.0,
+          "unique_values": 18986,
+          "spearman_to_pnl_real_diagnostic": -0.003818,
+          "pearson_to_pnl_real_diagnostic": 0.025731,
+          "forbidden_as_operational_input": false
+        },
+        {
+          "feature": "hmm_prob_bull",
+          "exists": true,
+          "coverage": 1.0,
+          "unique_values": 16253,
+          "spearman_to_pnl_real_diagnostic": 0.002116,
+          "pearson_to_pnl_real_diagnostic": 0.016373,
+          "forbidden_as_operational_input": false
+        }
+      ]
+    },
+    {
+      "family": "phase4_meta_sizing_shadow",
+      "features": "mu_adj_meta,kelly_frac_meta,position_usdt_meta",
+      "existing_feature_count": 3,
+      "requested_feature_count": 3,
+      "coverage_min": 1.0,
+      "coverage_max": 1.0,
+      "max_abs_spearman_to_pnl_real_diagnostic": 0.006112,
+      "operational_allowed": false,
+      "contains_forbidden_operational_input": false,
+      "feature_diagnostics": [
+        {
+          "feature": "mu_adj_meta",
+          "exists": true,
+          "coverage": 1.0,
+          "unique_values": 802,
+          "spearman_to_pnl_real_diagnostic": -0.002613,
+          "pearson_to_pnl_real_diagnostic": -0.0122,
+          "forbidden_as_operational_input": false
+        },
+        {
+          "feature": "kelly_frac_meta",
+          "exists": true,
+          "coverage": 1.0,
+          "unique_values": 1220,
+          "spearman_to_pnl_real_diagnostic": 0.006112,
+          "pearson_to_pnl_real_diagnostic": 0.009493,
+          "forbidden_as_operational_input": false
+        },
+        {
+          "feature": "position_usdt_meta",
+          "exists": true,
+          "coverage": 1.0,
+          "unique_values": 1220,
+          "spearman_to_pnl_real_diagnostic": 0.006112,
+          "pearson_to_pnl_real_diagnostic": 0.009493,
+          "forbidden_as_operational_input": false
+        }
+      ]
+    },
+    {
+      "family": "stage_a_rank_research",
+      "features": "p_stage_a_raw,rank_score_stage_a,uniqueness",
+      "existing_feature_count": 3,
+      "requested_feature_count": 3,
+      "coverage_min": 1.0,
+      "coverage_max": 1.0,
+      "max_abs_spearman_to_pnl_real_diagnostic": 0.017893,
+      "operational_allowed": false,
+      "contains_forbidden_operational_input": false,
+      "feature_diagnostics": [
+        {
+          "feature": "p_stage_a_raw",
+          "exists": true,
+          "coverage": 1.0,
+          "unique_values": 82414,
+          "spearman_to_pnl_real_diagnostic": 0.017893,
+          "pearson_to_pnl_real_diagnostic": -0.021607,
+          "forbidden_as_operational_input": false
+        },
+        {
+          "feature": "rank_score_stage_a",
+          "exists": true,
+          "coverage": 1.0,
+          "unique_values": 82414,
+          "spearman_to_pnl_real_diagnostic": 0.017893,
+          "pearson_to_pnl_real_diagnostic": -0.021607,
+          "forbidden_as_operational_input": false
+        },
+        {
+          "feature": "uniqueness",
+          "exists": true,
+          "coverage": 1.0,
+          "unique_values": 11,
+          "spearman_to_pnl_real_diagnostic": 0.006953,
+          "pearson_to_pnl_real_diagnostic": -0.058735,
+          "forbidden_as_operational_input": false
+        }
+      ]
+    },
+    {
+      "family": "training_barrier_diagnostic_only",
+      "features": "avg_tp_train,avg_sl_train",
+      "existing_feature_count": 2,
+      "requested_feature_count": 2,
+      "coverage_min": 1.0,
+      "coverage_max": 1.0,
+      "max_abs_spearman_to_pnl_real_diagnostic": 0.005079,
+      "operational_allowed": false,
+      "contains_forbidden_operational_input": true,
+      "feature_diagnostics": [
+        {
+          "feature": "avg_tp_train",
+          "exists": true,
+          "coverage": 1.0,
+          "unique_values": 432,
+          "spearman_to_pnl_real_diagnostic": -0.005079,
+          "pearson_to_pnl_real_diagnostic": -0.005986,
+          "forbidden_as_operational_input": true
+        },
+        {
+          "feature": "avg_sl_train",
+          "exists": true,
+          "coverage": 1.0,
+          "unique_values": 432,
+          "spearman_to_pnl_real_diagnostic": -3e-05,
+          "pearson_to_pnl_real_diagnostic": 0.021236,
+          "forbidden_as_operational_input": true
+        }
+      ]
+    }
+  ],
+  "assessment": {
+    "safe_high_medium_next_family_found": false,
+    "candidate_operational_family_count_by_diagnostic_threshold": 0,
+    "unlock_shadow_artifacts_available": false,
+    "low_priority_external_or_shadow_line": "unlock_shadow_feature_ablation",
+    "governed_reason_no_high_medium_family_remains": "Agenda H01-H04 were executed and failed or remained partial; H05 is diagnostic; H06 is LOW priority and unlock artifacts are absent or shadow-only in this clone.",
+    "diagnostic_output_is_operational_signal": false,
+    "official_promotion_allowed": false,
+    "paper_readiness_allowed": false
+  },
+  "governance": {
+    "research_only": true,
+    "diagnostic_only": true,
+    "promotes_official": false,
+    "declares_paper_readiness": false,
+    "reopens_a3_a4": false,
+    "relaxes_thresholds": false,
+    "uses_realized_variable_as_ex_ante_rule": false,
+    "diagnostic_uses_pnl_real_only_as_outcome_for_decomposition": true,
+    "diagnostic_output_is_operational_signal": false
+  },
+  "promotion": {
+    "official_promotion_allowed": false,
+    "paper_readiness_allowed": false,
+    "dsr_honest": 0.0,
+    "sr_needed": 4.47
+  },
+  "next_recommended_gate": "FULL_FREEZE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED"
+}

@@ -1,0 +1,87 @@
+{
+  "gate_slug": "phase5_research_candidate_decision_gate",
+  "timestamp_utc": "2026-05-03T13:34:20+00:00",
+  "baseline_commit": "eda07a6ab5a192b38ea0498fc8242348b90845d8",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_global_reaudit_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4753,
+      "mtime_utc": "2026-05-03T13:31:33+00:00",
+      "sha256": "C31B1E58C3573ADB7CD4F5EAE979F052280DBE799B4E3B4224698863506EE7F2"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_stability_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4303,
+      "mtime_utc": "2026-05-03T13:32:49+00:00",
+      "sha256": "2CA6E3252DE0EEF4FE0E3FFCF6D290B50919FD1F2662EAFAA72B95F5C20223FE"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_falsification_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3013,
+      "mtime_utc": "2026-05-03T13:33:55+00:00",
+      "sha256": "0F7780D5B15B8589AA2616D5CE555F19EA13A7505C220B65AA6B0E426EC1E869"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_falsification_gate\\candidate_falsification_report.json",
+      "exists": true,
+      "size_bytes": 7746,
+      "mtime_utc": "2026-05-03T13:33:55+00:00",
+      "sha256": "13124BFDBA7B685A28E916157C93B763F1E7E356D67A8F42C7D19164001D5F06"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_decision_gate\\candidate_decision_metrics.parquet",
+      "exists": true,
+      "size_bytes": 5643,
+      "mtime_utc": "2026-05-03T13:34:20+00:00",
+      "sha256": "EE475FF834457AF3630DCA80A43DEEDA0587B82FA728BEB0250AC7B7F1376DA6"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_decision_gate\\candidate_decision_report.json",
+      "exists": true,
+      "size_bytes": 3645,
+      "mtime_utc": "2026-05-03T13:34:20+00:00",
+      "sha256": "D5A301281996A3E6CEC3C1CC9A2707D6F620A7FD5F8396599C3CAC5725C10D7A"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_decision_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 3223,
+      "mtime_utc": "2026-05-03T13:34:20+00:00",
+      "sha256": "FC9AA24DBAD227A7790EB3D24715D824FFDE76F7814A9383B779B7951B602A51"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_decision_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 991,
+      "mtime_utc": "2026-05-03T13:34:20+00:00",
+      "sha256": "2FF950CDCB85182C82059BE1738339B63F5F3432FA7A5DC336F6648F2AAB0B07"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_decision_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 3944,
+      "mtime_utc": "2026-05-03T13:34:20+00:00",
+      "sha256": "97020CB9E081963F504BC5DFE5175CAC3FD5796FE06407F63DA432DB727E373F"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_candidate_decision_gate\\gate_manifest.json",
+      "exists": false,
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    ".\\.venv\\Scripts\\python.exe services\\ml_engine\\phase5_research_candidate_decision.py"
+  ],
+  "notes": [
+    "Autonomous candidate decision gate.",
+    "Classifies the candidate without promoting official, declaring readiness, or reopening A3/A4."
+  ]
+}

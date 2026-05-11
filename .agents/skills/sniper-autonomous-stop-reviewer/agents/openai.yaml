@@ -1,0 +1,7 @@
+policy:
+  allow_implicit_invocation: false
+
+interface:
+  display_name: "SNIPER Autonomous Stop Reviewer"
+  short_description: "Avalia stop condition de missão autônoma do SNIPER e decide próxima ação segura."
+  default_prompt: "$sniper-autonomous-stop-reviewer\n\nAvalie a missão autônoma recém-encerrada do SNIPER e decida se o Codex pode continuar sozinho, precisa de artifact externo, deve abrir PR draft ou deve congelar."

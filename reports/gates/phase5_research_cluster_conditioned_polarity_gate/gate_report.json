@@ -1,0 +1,103 @@
+{
+  "gate_slug": "phase5_research_cluster_conditioned_polarity_gate",
+  "phase_family": "phase5_research_cluster_conditioned_polarity",
+  "status": "PASS",
+  "decision": "advance",
+  "baseline_commit": "b13896a405f0bbc798ce98568abdc0013d80b58f",
+  "working_tree_dirty": true,
+  "branch": "codex/autonomous-sniper-implementation",
+  "official_artifacts_used": [],
+  "research_artifacts_generated": [
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_gate\\cluster_conditioned_polarity_positions.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_gate\\cluster_conditioned_polarity_daily_returns.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_gate\\cluster_conditioned_polarity_trade_log.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_gate\\cluster_conditioned_polarity_metrics.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_gate\\cluster_conditioned_polarity_snapshot_proxy.parquet",
+    "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_cluster_conditioned_polarity_gate\\portfolio_cvar_research_report.json"
+  ],
+  "summary": [
+    "classification=CLUSTER_CONDITIONED_RESEARCH_CANDIDATE_NOT_PROMOTABLE",
+    "policies_tested=24",
+    "best_policy=cluster_2_long_high_short_low_p60_h70_k3",
+    "best_family=cluster_conditioned_polarity",
+    "best_median_combo_sharpe=1.183459",
+    "best_min_combo_sharpe=0.078586",
+    "best_median_active_days=425.0",
+    "best_max_cvar_95_loss_fraction=0.00151815",
+    "cluster_name used only as ex-ante partition",
+    "pnl_real used only as realized outcome, never ex-ante selection",
+    "no official promotion attempted",
+    "next_recommended_gate=phase5_research_cluster_conditioned_polarity_falsification_gate"
+  ],
+  "gates": [
+    {
+      "gate_slug": "phase5_research_cluster_conditioned_polarity_gate",
+      "metric_name": "policies_tested",
+      "metric_value": 24,
+      "metric_threshold": ">= 12",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cluster_conditioned_polarity_gate",
+      "metric_name": "best_policy",
+      "metric_value": "cluster_2_long_high_short_low_p60_h70_k3",
+      "metric_threshold": "predeclared policy only",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cluster_conditioned_polarity_gate",
+      "metric_name": "best_median_combo_sharpe",
+      "metric_value": 1.183459,
+      "metric_threshold": "> 0 research candidate",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cluster_conditioned_polarity_gate",
+      "metric_name": "best_min_combo_sharpe",
+      "metric_value": 0.078586,
+      "metric_threshold": "> 0 stability candidate",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cluster_conditioned_polarity_gate",
+      "metric_name": "best_median_active_days",
+      "metric_value": 425.0,
+      "metric_threshold": ">= 120",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cluster_conditioned_polarity_gate",
+      "metric_name": "best_max_cvar_95_loss_fraction",
+      "metric_value": 0.00151815,
+      "metric_threshold": "<= 0.15",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cluster_conditioned_polarity_gate",
+      "metric_name": "official_promotion_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    },
+    {
+      "gate_slug": "phase5_research_cluster_conditioned_polarity_gate",
+      "metric_name": "paper_readiness_allowed",
+      "metric_value": false,
+      "metric_threshold": "false",
+      "metric_status": "PASS"
+    }
+  ],
+  "blockers": [
+    "candidate_below_required_honest_dsr_sharpe",
+    "needs_stability_and_falsification",
+    "dsr_honest_zero_blocks_promotion",
+    "official_cvar_zero_exposure_not_economic_robustness",
+    "cross_sectional_alive_but_not_promotable"
+  ],
+  "risks_residual": [
+    "Cluster-conditioned candidate is research/sandbox only and not official support.",
+    "Initial positive min Sharpe can still fail temporal, parameter or cost falsification.",
+    "DSR remains 0.0 and official CVaR remains zero exposure."
+  ],
+  "next_recommended_step": "Execute the next safe in-repo gate automatically: phase5_research_cluster_conditioned_polarity_falsification_gate."
+}
