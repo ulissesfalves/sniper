@@ -1,6 +1,7 @@
 {
-  "updated_at_utc": "2026-05-10T12:20:00Z",
+  "updated_at_utc": "2026-05-11T00:54:46Z",
   "branch": "codex/autonomous-sniper-implementation",
+  "head": "22d77a0638582fe69b1cbde1450b0ac7ed5f43c9",
   "latest_pr": {
     "number": 1,
     "url": "https://github.com/ulissesfalves/sniper/pull/1",
@@ -9,26 +10,14 @@
     "merged": false,
     "base": "codex/openclaw-sniper-handoff",
     "head": "codex/autonomous-sniper-implementation",
-    "observed_head_sha": "68f222f69d78763f9cb0696d01579a33b09b3c3d",
-    "observed_before_local_gate_commits": true
+    "observed_head_sha": "22d77a0638582fe69b1cbde1450b0ac7ed5f43c9"
   },
   "latest_gate": {
-    "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
-    "status": "PASS",
-    "decision": "advance"
+    "gate_slug": "phase6_post_h06_global_spec_reaudit_gate",
+    "status": "PARTIAL",
+    "decision": "correct"
   },
-  "latest_decision": "H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE",
-  "current_state_summary": {
-    "h06_status": "H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE",
-    "unlock_artifacts_present": true,
-    "unlock_artifacts_shadow_or_proxy_heavy": true,
-    "surviving_research_candidate": false,
-    "safe_internal_next_gate": false,
-    "pr_draft_contains_reviewable_evidence": true,
-    "dsr_honest": 0,
-    "cvar_official_status": "PASS_ZERO_EXPOSURE_NOT_ECONOMIC_ROBUSTNESS",
-    "cross_sectional_status": "ALIVE_BUT_NOT_PROMOTABLE"
-  },
+  "latest_decision": "POST_H06_GLOBAL_PARTIAL_REAUDIT_REVIEW_DRAFT_PR",
   "decision": "REVIEW_DRAFT_PR",
   "can_continue_autonomously": false,
   "requires_external_artifact": false,
@@ -41,29 +30,28 @@
     "dsr_honest_zero_blocks_promotion",
     "cvar_zero_exposure_not_economic_robustness",
     "cross_sectional_alive_but_not_promotable",
+    "paper_readiness_blocked_by_quant_merit",
+    "no_surviving_research_candidate",
+    "no_safe_internal_next_gate",
     "h06_diagnostic_only_no_research_candidate",
     "unlock_artifacts_shadow_or_proxy_heavy_not_official"
   ],
   "alternatives_rejected": [
     {
       "decision": "CONTINUE_AUTONOMOUS",
-      "reason": "Rejected because no safe internal next gate or HIGH/MEDIUM executable hypothesis is registered after H06."
+      "reason": "Rejected because the post-H06 global reaudit found no safe internal next gate or HIGH/MEDIUM executable hypothesis."
     },
     {
       "decision": "REQUEST_EXTERNAL_ARTIFACTS",
-      "reason": "Rejected because the H06 unlock artifacts were provided and inventoried; no missing artifact is currently identified."
-    },
-    {
-      "decision": "REQUEST_MATERIAL_EVIDENCE",
-      "reason": "Kept as future alternative, not current primary decision, because PR #1 already contains reviewable evidence and no concrete new evidence path is present."
+      "reason": "Rejected because H06 unlock artifacts are present and inventoried; no specific missing artifact is currently identified."
     },
     {
       "decision": "RUN_GLOBAL_REAUDIT",
-      "reason": "Rejected because the latest state has no safe new gate or candidate requiring reaudit; blockers remain quantitative/governance blockers."
+      "reason": "Executed by this mission; the refreshed verdict remains GLOBAL_PARTIAL with REVIEW_DRAFT_PR."
     },
     {
       "decision": "START_NEW_RESEARCH_AGENDA",
-      "reason": "Rejected because agenda expansion plus H01-H06 have been executed; no material new in-repo thesis is registered."
+      "reason": "Rejected because agenda expansion plus H01-H06 have been executed and no material new in-repo thesis is registered."
     },
     {
       "decision": "STOP_FOR_OFFICIAL_PROMOTION_REQUIRED",
@@ -71,11 +59,11 @@
     }
   ],
   "rationale": [
-    "H06 unlock_shadow_feature_ablation executed as PASS/advance diagnostic-only with H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE.",
-    "Unlock artifacts are present but shadow/proxy-heavy and produced no research candidate.",
-    "There is no safe internal next gate registered in reports/state/sniper_next_autonomous_mission.md.",
-    "PR #1 remains draft, open, unmerged and contains governance/research evidence for review.",
-    "DSR=0.0, CVaR official zero exposure and cross-sectional not promotable remain active blockers."
+    "The global audit was refreshed to the current PR head after H06 and final PR review.",
+    "H06 remains diagnostic/shadow-only and produced no surviving research candidate.",
+    "PR #1 remains draft, open and unmerged with reviewable governance/research evidence.",
+    "DSR=0.0, CVaR official zero exposure and cross-sectional not promotable remain active blockers.",
+    "No safe internal autonomous next gate is registered in the current state."
   ],
-  "statement": "Não há próxima ação autônoma interna segura no estado atual."
+  "statement": "Nao ha proxima acao autonoma interna segura no estado atual."
 }

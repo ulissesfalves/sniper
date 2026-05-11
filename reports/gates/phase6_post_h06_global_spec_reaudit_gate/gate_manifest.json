@@ -1,0 +1,169 @@
+{
+  "gate_slug": "phase6_post_h06_global_spec_reaudit_gate",
+  "timestamp_utc": "2026-05-11T00:56:06Z",
+  "baseline_commit": "22d77a0638582fe69b1cbde1450b0ac7ed5f43c9",
+  "branch": "codex/autonomous-sniper-implementation",
+  "working_tree_dirty_before": true,
+  "working_tree_dirty_after": true,
+  "source_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_spec_gap_backlog.yaml",
+      "exists": true,
+      "size_bytes": 50065,
+      "mtime_utc": "2026-05-10T14:21:46+00:00",
+      "sha256": "3F6B8CBA37291ED55CB8EE451A20340C475C396BAEF3DFF595153F5E35321DEB"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\audits\\pr_review\\pr1_final_review_summary.json",
+      "exists": true,
+      "size_bytes": 3157,
+      "mtime_utc": "2026-05-10T17:18:26+00:00",
+      "sha256": "8E0D0257052B0D224D78AFC23C0D441AA0E491F37602A52A92A1EAE725A1E8D8"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase5_research_unlock_shadow_feature_ablation_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 5153,
+      "mtime_utc": "2026-05-10T11:59:38+00:00",
+      "sha256": "A2C61E7761400D64A90141AD47F6D857DFCF0C2965DA13B07A8A700AEA1BD647"
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\audits\\global_spec_adherence\\global_spec_adherence_summary.json",
+      "exists": true,
+      "size_bytes": 6810,
+      "mtime_utc": "2026-05-11T00:54:46+00:00",
+      "sha256": "9AE79FB62D25D60024A03E703883CDE6DF734B886C8E25D8017F14C48A733ECA"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\audits\\global_spec_adherence\\global_spec_adherence_report.md",
+      "exists": true,
+      "size_bytes": 16642,
+      "mtime_utc": "2026-05-11T00:56:06+00:00",
+      "sha256": "E09BF4A8CA327CFA1A8A434ADA5FDAEBFD793496C45F935A6253887872C0A63D"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\audits\\global_spec_adherence\\global_spec_adherence_matrix.csv",
+      "exists": true,
+      "size_bytes": 10193,
+      "mtime_utc": "2026-05-11T00:56:06+00:00",
+      "sha256": "34EC5DF23F5CB908D58DE3A5504C46992BB42F48FE1E7A1965727164C266DC18"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\audits\\global_spec_adherence\\global_implementation_checklist.md",
+      "exists": true,
+      "size_bytes": 11621,
+      "mtime_utc": "2026-05-11T00:56:06+00:00",
+      "sha256": "81AA2743F6A7E57511F078F8A08ECB240E3C6233E3E95D65FC4DF81A23B9BFA8"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\audits\\global_spec_adherence\\next_step_recommendation.md",
+      "exists": true,
+      "size_bytes": 7557,
+      "mtime_utc": "2026-05-11T00:56:06+00:00",
+      "sha256": "6B4BC39C2F8903CCFBFDDF6095F3BD70183C13F9A9ED3F9D388EADA881200E49"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\audits\\global_spec_adherence\\next_step_codex_prompt.md",
+      "exists": true,
+      "size_bytes": 10085,
+      "mtime_utc": "2026-05-11T00:56:06+00:00",
+      "sha256": "129C66D1D9D37974E6248BEC193E02773596021B4C58AAB6358080645F963FDC"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\audits\\global_spec_adherence\\orchestrator_recommendation.md",
+      "exists": true,
+      "size_bytes": 3102,
+      "mtime_utc": "2026-05-11T00:54:46+00:00",
+      "sha256": "ED73CB4008E73BE481219F6785C3D613255D7409C9837AAB25DF37EBBA815D30"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\audits\\global_spec_adherence\\orchestrator_next_prompt.md",
+      "exists": true,
+      "size_bytes": 5437,
+      "mtime_utc": "2026-05-11T00:54:46+00:00",
+      "sha256": "E238B985EA915A437D03485011C4CF3D0A356E83D8956D92308F36A7745BE635"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_next_step_decision.md",
+      "exists": true,
+      "size_bytes": 2473,
+      "mtime_utc": "2026-05-11T00:54:46+00:00",
+      "sha256": "0939C6B2A984407F87D1EF6D0D6C6E3445D190A1EDEFCAFABC0D60C34F77C687"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_next_step_decision.json",
+      "exists": true,
+      "size_bytes": 3207,
+      "mtime_utc": "2026-05-11T00:54:46+00:00",
+      "sha256": "9681C234ECFCEE2082662677CFAD8D4966B81181D51C0535ED7E510283C0524D"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_current_state.json",
+      "exists": true,
+      "size_bytes": 34005,
+      "mtime_utc": "2026-05-11T00:54:46+00:00",
+      "sha256": "275EB875EBC16FFA9BAFF871CAC7480ED17A30AD9B2669C0E61FC32D2D7ECDBD"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_decision_ledger.md",
+      "exists": true,
+      "size_bytes": 15785,
+      "mtime_utc": "2026-05-11T00:54:46+00:00",
+      "sha256": "29D5E7A6F770E0304D65B551F79A917E5593F512B8356ECF91112EDDD400378D"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_artifact_registry.json",
+      "exists": true,
+      "size_bytes": 16137,
+      "mtime_utc": "2026-05-11T00:54:46+00:00",
+      "sha256": "27EEF1AB85BB4F97BAD8555AB0233A29AD4C2756BC2A30BEB71B9B67D28016EE"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\state\\sniper_autonomous_runbook.md",
+      "exists": true,
+      "size_bytes": 23800,
+      "mtime_utc": "2026-05-11T00:54:46+00:00",
+      "sha256": "1A2AB8077F195298B5D2A169F3917B09AA1A1EA4325FA12CF8C31439085BC047"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_post_h06_global_spec_reaudit_gate\\gate_report.json",
+      "exists": true,
+      "size_bytes": 4839,
+      "mtime_utc": "2026-05-11T00:56:06+00:00",
+      "sha256": "DBCBAC9E82AC37BCD9D3BD0932728A4EC45800FA8286227E64CB3E1606109375"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_post_h06_global_spec_reaudit_gate\\gate_report.md",
+      "exists": true,
+      "size_bytes": 1133,
+      "mtime_utc": "2026-05-11T00:56:06+00:00",
+      "sha256": "D60131282B5C804C8714CAEC86935099C0077DCC758FDE11249C3B829167922E"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_post_h06_global_spec_reaudit_gate\\gate_metrics.parquet",
+      "exists": true,
+      "size_bytes": 3855,
+      "mtime_utc": "2026-05-11T00:56:06+00:00",
+      "sha256": "47B89722AB6EDDA51421B354232049073F0147C3AB73178FDD6DC4E0328EB699"
+    },
+    {
+      "path": "C:\\Users\\uliss\\Documentos\\Meus_projetos\\sniper_codex_autonomous\\reports\\gates\\phase6_post_h06_global_spec_reaudit_gate\\gate_manifest.json",
+      "exists": true,
+      "size_bytes": 8125,
+      "mtime_utc": "2026-05-11T00:54:46+00:00",
+      "note": "self hash omitted inside manifest to avoid self-reference"
+    }
+  ],
+  "commands_executed": [
+    "git status --short",
+    "git branch --show-current",
+    "git rev-parse HEAD",
+    "python validation for JSON/CSV/parquet"
+  ],
+  "notes": [
+    "Audit detail preserved by prepending a post-H06 update to existing global reports.",
+    "PARTIAL/correct reflects remaining DSR/CVaR/promotability blockers."
+  ]
+}

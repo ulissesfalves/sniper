@@ -1,24 +1,19 @@
 # SNIPER Next-Step Decision
 
-Updated: 2026-05-10T12:20:00Z
+Updated: 2026-05-11T00:54:46Z
 
 ## Decision
 
 `REVIEW_DRAFT_PR`
 
-Não há próxima ação autônoma interna segura no estado atual.
+Nao ha proxima acao autonoma interna segura no estado atual.
 
 ## Rationale
 
-H06 `unlock_shadow_feature_ablation` was executed by
-`phase5_research_unlock_shadow_feature_ablation_gate` and returned
-`PASS/advance` with
-`H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE`.
-
-The unlock artifacts are present and were inventoried, but they are
-shadow/proxy-heavy. The H06 diagnostic produced no surviving research candidate
-and no evidence that can support official promotion, paper readiness, merge,
-A3/A4 reopening or threshold relaxation.
+The post-H06 global spec reaudit `phase6_post_h06_global_spec_reaudit_gate` refreshed the audit state to the
+current PR head `22d77a0638582fe69b1cbde1450b0ac7ed5f43c9`. H06 remains diagnostic/shadow-only, produced no
+surviving research candidate, and cannot support official promotion, paper
+readiness, merge, A3/A4 reopening or threshold relaxation.
 
 PR #1 already contains reviewable governance/research evidence. It remains
 draft, open and unmerged.
@@ -28,25 +23,23 @@ draft, open and unmerged.
 - `dsr_honest_zero_blocks_promotion`
 - `cvar_zero_exposure_not_economic_robustness`
 - `cross_sectional_alive_but_not_promotable`
+- `paper_readiness_blocked_by_quant_merit`
+- `no_surviving_research_candidate`
+- `no_safe_internal_next_gate`
 - `h06_diagnostic_only_no_research_candidate`
 - `unlock_artifacts_shadow_or_proxy_heavy_not_official`
 
 ## Alternatives Considered
 
 - `CONTINUE_AUTONOMOUS`: rejected because no safe internal next gate or
-  HIGH/MEDIUM executable hypothesis is registered after H06.
-- `REQUEST_EXTERNAL_ARTIFACTS`: rejected because the H06 unlock artifacts were
-  provided and inventoried; no missing artifact is currently identified.
+  HIGH/MEDIUM executable hypothesis remains after H06 and this reaudit.
+- `REQUEST_EXTERNAL_ARTIFACTS`: rejected because H06 artifacts are present and
+  inventoried; no concrete missing artifact is currently identified.
 - `REQUEST_MATERIAL_EVIDENCE`: retained as the future alternative if new
-  evidence, a materially new hypothesis or a new safe in-repo agenda is
-  provided.
-- `RUN_GLOBAL_REAUDIT`: rejected because no surviving candidate or new safe gate
-  currently requires reaudit.
+  evidence, a materially new hypothesis or a safe in-repo agenda is provided.
+- `RUN_GLOBAL_REAUDIT`: executed by this mission; result remains `GLOBAL_PARTIAL`.
 - `START_NEW_RESEARCH_AGENDA`: rejected because agenda expansion plus H01-H06
   have already been executed and no material new in-repo thesis is registered.
-- `STOP_FOR_OFFICIAL_PROMOTION_REQUIRED`: rejected because promotion is
-  forbidden while DSR=0.0, CVaR official exposure is zero and cross-sectional is
-  not promotable.
 
 ## Next Action
 
@@ -63,17 +56,11 @@ Codex can resume only if there is material new evidence, a new safe research
 agenda, or explicit PR review/audit work that does not require promotion,
 readiness, merge or specification change.
 
-## PR Action
-
-`review_existing_draft_pr`
-
-Keep PR #1 as draft.
-
 ## Suggested Commands
 
 ```powershell
 git status --short
 git log --oneline -5
 Get-Content reports/state/sniper_next_step_decision.json
-Get-Content reports/gates/phase5_research_unlock_shadow_feature_ablation_gate/gate_report.json
+Get-Content reports/audits/global_spec_adherence/global_spec_adherence_summary.json
 ```

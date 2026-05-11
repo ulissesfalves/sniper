@@ -29,62 +29,21 @@
 
 ## Current Recommended Mode
 
-`START_RESEARCH_ONLY_THESIS`
+`REVIEW_DRAFT_PR`
 
-Next logical skill: `sniper-autonomous-implementation-manager`.
+Latest global reaudit gate: `phase6_post_h06_global_spec_reaudit_gate`.
 
-Next mode: `CVAR_CONSTRAINED_META_SIZING_GATE`.
+Current next gate: `none_safe_internal`.
 
-Next gate: `phase5_research_cvar_constrained_meta_sizing_gate`.
+Autonomous can continue: `false` for the current agenda.
 
-Current candidate chain:
+Human decision required: `true` only for draft PR review disposition or for
+providing materially new evidence/new agenda.
 
-- family: `meta_uncertainty_abstention_long_only`;
-- candidate: none preserved;
-- gate: `phase5_research_meta_uncertainty_abstention_gate`;
-- status: `FAIL/abandon`;
-- final status: `META_UNCERTAINTY_FALSIFIED_BY_STABILITY_STRESS`;
-- best policy: `long_bma_meta_agree_p65_m50_s10_k3`;
-- hard falsifier count: `19`;
-- promotion allowed: `false`;
-- paper readiness allowed: `false`.
-
-`Pode continuar autonomamente: sim` is not a stop condition.
-`Próximo gate recomendado` is not a stop condition.
-The H01 initial PASS was not final. H01 and H02 have now been falsified and
-abandoned, so the next materially different agenda hypothesis is `AGENDA-H03`.
-
-Allowed mission modes:
-
-- `START_RESEARCH_ONLY_THESIS`
-- `CONTINUE_AUTONOMOUS`
-- `RUN_GLOBAL_REAUDIT`
-- `RUN_GLOBAL_REAUDIT_CANDIDATE`
-- `POST_CANDIDATE_FALSIFICATION_GLOBAL_REAUDIT`
-- `CANDIDATE_STABILITY_GATE`
-- `CANDIDATE_FALSIFICATION_GATE`
-- `CANDIDATE_DECISION_GATE`
-- `UPDATE_STATE`
-- `UPDATE_DRAFT_PR`
-- `OPEN_RESEARCH_GATE`
-- `NEXT_GATE_CHAIN_EXECUTION`
-- `CHECKPOINT_CONTINUE_AUTONOMOUS`
-- `AUTONOMOUS_RESEARCH_AGENDA_EXPANSION`
-- `GENERATE_NEW_RESEARCH_AGENDA_FROM_SPEC`
-- `META_DISAGREEMENT_STABILITY_FALSIFICATION_GATE`
-- `META_UNCERTAINTY_ABSTENTION_GATE`
-- `CVAR_CONSTRAINED_META_SIZING_GATE`
-- `FREEZE_LINE_AFTER_REAUDIT_AND_AGENDA_EXHAUSTED` only after agenda
-  expansion generates no HIGH/MEDIUM executable hypothesis.
-
-Forbidden modes:
-
-- `OFFICIAL_PROMOTION`
-- `PAPER_READINESS`
-- `A3_REOPEN`
-- `A4_REOPEN`
-- `THRESHOLD_RELAXATION`
-- `REAL_TRADING`
+Current PR action: review PR #1 as a draft governance/reproducibility/research
+package. Do not merge, mark ready, promote official, declare paper readiness,
+reopen A3/A4, relax thresholds, or treat H06 shadow/proxy-heavy artifacts as
+official evidence.
 
 ## Phased Autonomous Flow
 

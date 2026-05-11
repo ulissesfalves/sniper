@@ -1,6 +1,6 @@
 # SNIPER Decision Ledger
 
-Updated: 2026-05-10T12:20:00Z
+Updated: 2026-05-11T00:54:46Z
 
 ## Closed Decisions
 
@@ -94,3 +94,4 @@ Any future promotion attempt must first prove:
 - research artifacts have an explicit promotion gate;
 - A3/A4 remain closed unless strong new evidence is documented;
 - human review accepts the relevant PR.
+| Post-H06 global spec reaudit | GLOBAL_PARTIAL / review draft | `phase6_post_h06_global_spec_reaudit_gate` updated global audit to `22d77a0638582fe69b1cbde1450b0ac7ed5f43c9` and preserved REVIEW_DRAFT_PR with no safe internal next gate. |

@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-05-10T12:20:00Z",
+  "updated_at_utc": "2026-05-11T00:54:46Z",
   "official_artifacts": [
     {
       "path": "data/models/phase4/phase4_report_v4.json",
@@ -107,7 +107,8 @@
     "reports/gates/phase5_research_regime_specific_meta_disagreement_gate",
     "reports/gates/phase5_research_feature_family_ablation_blocker_decomposition_gate",
     "reports/gates/phase5_final_freeze_resource_and_opportunity_audit_gate",
-    "reports/gates/phase5_research_unlock_shadow_feature_ablation_gate"
+    "reports/gates/phase5_research_unlock_shadow_feature_ablation_gate",
+    "reports/gates/phase6_post_h06_global_spec_reaudit_gate"
   ],
   "missing_artifacts": [],
   "ignored_or_heavy_artifacts": [
@@ -191,6 +192,7 @@
     "No safe internal HIGH/MEDIUM research agenda hypothesis remains after the final opportunity audit.",
     "phase5_research_unlock_shadow_feature_ablation_gate executed H06 as diagnostic/preflight only with H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE.",
     "H06 unlock artifacts are now present, but remain research/shadow diagnostic inputs and produced no operational or promotable candidate.",
-    "POST_MISSION_NEXT_STEP_DECISION_PROTOCOL requires sniper_next_step_decision.md/json at the end of every autonomous mission; current decision is REVIEW_DRAFT_PR with REQUEST_MATERIAL_EVIDENCE as future alternative."
+    "POST_MISSION_NEXT_STEP_DECISION_PROTOCOL requires sniper_next_step_decision.md/json at the end of every autonomous mission; current decision is REVIEW_DRAFT_PR with REQUEST_MATERIAL_EVIDENCE as future alternative.",
+    "phase6_post_h06_global_spec_reaudit_gate refreshed global audit to current head 22d77a0638582fe69b1cbde1450b0ac7ed5f43c9; decision remains REVIEW_DRAFT_PR with no safe internal next gate."
   ]
 }

@@ -1,43 +1,45 @@
 {
   "audit": {
     "name": "sniper-global-spec-adherence-audit",
-    "date": "2026-04-27",
+    "date": "2026-05-11",
+    "updated_at_utc": "2026-05-11T00:54:46Z",
     "repo": "C:/Users/uliss/Documentos/Meus_projetos/sniper_codex_autonomous",
     "branch": "codex/autonomous-sniper-implementation",
-    "head": "a85b543c5b68777b342446a3a5d9d3ff6e292979",
+    "head": "22d77a0638582fe69b1cbde1450b0ac7ed5f43c9",
     "base_branch": "codex/openclaw-sniper-handoff",
     "pr_url": "https://github.com/ulissesfalves/sniper/pull/1",
-    "pr_state": "open_draft_not_merged"
+    "pr_state": "open_draft_not_merged",
+    "trigger": "phase6_post_h06_global_spec_reaudit_gate"
   },
   "verdict": "GLOBAL_PARTIAL",
-  "state": "The PR branch is suitable for draft human review as Phase 6 governance and reproducibility evidence. It is not suitable for operational readiness, paper readiness, merge-as-ready, or official promotion because honest DSR remains 0.0 and official CVaR has zero exposure.",
+  "state": "The PR branch is suitable for draft human review as governance, reproducibility, research and audited-freeze evidence. It is not suitable for merge, operational readiness, paper readiness, or official promotion because honest DSR remains 0.0, official CVaR has zero exposure, and no research candidate survived falsification.",
   "status_counts": {
-    "SATISFATORIO": 18,
-    "PARCIAL": 10,
+    "SATISFATORIO": 22,
+    "PARCIAL": 12,
     "DIVERGENTE": 0,
     "NAO_IMPLEMENTADO": 1,
     "NAO_APLICAVEL_OBSOLETO": 1
   },
   "top_satisfactory": [
-    "Clean regeneration is proven in an isolated clean clone/equivalent with clean Phase5 restore PASS/advance.",
-    "Official Phase4 artifacts and research baseline artifacts are present and hashed in the latest Phase6 gate pack.",
-    "Source-doc-artifact alignment is ALIGNED for the Phase4-R4 source/documentation mismatch.",
-    "Phase5 sovereign closure restore remains the correct research-only baseline with EXACT_RESTORE evidence.",
-    "Governance boundaries are preserved: PR is draft, no merge, no official promotion, no A3/A4 reopen, RiskLabAI remains oracle/shadow."
+    "Phase6 clean regeneration/source-artifact alignment evidence exists.",
+    "Official Phase4 and research baseline artifacts were found and hashed.",
+    "H01-H06 research-only agenda was executed, falsified, partially corrected, or reduced to diagnostics.",
+    "H06 unlock shadow feature ablation completed as diagnostic-only evidence.",
+    "PR #1 remains draft/open/unmerged and has a final manual governance review comment."
   ],
   "top_gaps": [
     "dsr_honest=0.0 and dsr_passed=false block any promotion or readiness claim.",
-    "Official CVaR is PASS_ZERO_EXPOSURE with positions={} and total_exposure_pct=0.0, so economic robustness is not proven.",
+    "Official CVaR remains PASS_ZERO_EXPOSURE with positions={} and total_exposure_pct=0.0, so economic robustness is not proven.",
     "Cross-sectional remains ALIVE_BUT_NOT_PROMOTABLE and cannot be treated as official.",
-    "Phase7 paper/testnet readiness cannot start from this evidence because DSR and CVaR blockers remain.",
-    "PR #1 remains draft governance/reproducibility evidence and still requires human review before any branch-level decision."
+    "H06 unlock artifacts are shadow/proxy-heavy diagnostic inputs and did not produce a research candidate.",
+    "No safe internal autonomous next gate is registered after H06 and the final review."
   ],
   "top_risks": [
-    "Confusing reproducibility proof with quantitative merit.",
+    "Confusing reproducibility/governance proof with quantitative merit.",
     "Treating PASS_ZERO_EXPOSURE as real CVaR robustness.",
     "Using the PR draft as merge/readiness approval.",
-    "Reopening A3/A4 without strong new evidence.",
-    "Promoting research artifacts to official by convenience."
+    "Promoting research/sandbox artifacts by convenience.",
+    "Reopening A3/A4 without strong new evidence."
   ],
   "must_not_reopen": [
     "A3 as a promotable line",
@@ -48,65 +50,93 @@
   ],
   "gates_considered": [
     {
-      "gate_slug": "phase6_global_reproducibility_source_alignment_gate",
-      "status": "PARTIAL",
-      "decision": "correct"
-    },
-    {
-      "gate_slug": "phase6_source_doc_and_regeneration_preflight_gate",
-      "status": "PARTIAL",
-      "decision": "correct"
-    },
-    {
-      "gate_slug": "phase6_phase4_artifact_rehydration_and_dsr_stop_gate",
-      "status": "PARTIAL",
-      "decision": "correct"
-    },
-    {
       "gate_slug": "phase6_research_baseline_rehydration_clean_regeneration_gate",
       "status": "PARTIAL",
       "decision": "correct",
-      "source_doc_alignment": "ALIGNED",
-      "phase4_artifact_integrity": "PASS",
-      "clean_clone_or_equivalent": true,
-      "phase5_clean_gate_status": "PASS",
-      "dsr_honest": 0.0,
-      "cvar_technical_status": "PASS_ZERO_EXPOSURE",
-      "cvar_economic_status": "NOT_PROVEN_ZERO_EXPOSURE"
+      "clean_clone_or_equivalent": true
+    },
+    {
+      "gate_slug": "phase6_pr_review_global_adherence_gate",
+      "status": "PARTIAL",
+      "decision": "correct"
+    },
+    {
+      "gate_slug": "phase5_research_candidate_decision_gate",
+      "status": "PASS",
+      "decision": "abandon",
+      "classification": "RESEARCH_CANDIDATE_FALSIFIED"
+    },
+    {
+      "gate_slug": "phase5_research_cluster_conditioned_polarity_decision_gate",
+      "status": "PASS",
+      "decision": "abandon",
+      "classification": "CLUSTER_CONDITIONED_RESEARCH_CANDIDATE_FALSIFIED"
+    },
+    {
+      "gate_slug": "phase5_research_meta_disagreement_candidate_decision_gate",
+      "status": "PASS",
+      "decision": "abandon",
+      "classification": "META_DISAGREEMENT_RESEARCH_CANDIDATE_FALSIFIED"
+    },
+    {
+      "gate_slug": "phase5_research_cvar_constrained_meta_sizing_gate",
+      "status": "PARTIAL",
+      "decision": "correct",
+      "classification": "CVAR_CONSTRAINED_META_SIZING_CVAR_PASS_ALPHA_UNSTABLE"
+    },
+    {
+      "gate_slug": "phase5_research_regime_specific_meta_disagreement_gate",
+      "status": "PARTIAL",
+      "decision": "correct",
+      "classification": "REGIME_SPECIFIC_META_DISAGREEMENT_POSITIVE_BUT_UNSTABLE"
+    },
+    {
+      "gate_slug": "phase5_final_freeze_resource_and_opportunity_audit_gate",
+      "status": "PASS",
+      "decision": "freeze",
+      "classification": "FULL_FREEZE_AFTER_REAUDIT_AND_OPPORTUNITY_AUDITED"
+    },
+    {
+      "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
+      "status": "PASS",
+      "decision": "advance",
+      "classification": "H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE"
+    },
+    {
+      "gate_slug": "phase6_post_h06_global_spec_reaudit_gate",
+      "status": "PARTIAL",
+      "decision": "correct",
+      "classification": "POST_H06_GLOBAL_PARTIAL_REVIEW_DRAFT_PR"
     }
   ],
   "blockers": [
     "dsr_honest_zero_blocks_promotion",
     "cvar_zero_exposure_not_economic_robustness",
-    "cross_sectional_alive_but_not_promotable"
+    "cross_sectional_alive_but_not_promotable",
+    "paper_readiness_blocked_by_quant_merit",
+    "no_surviving_research_candidate",
+    "no_safe_internal_next_gate",
+    "h06_diagnostic_only_no_research_candidate",
+    "unlock_artifacts_shadow_or_proxy_heavy_not_official"
   ],
   "resolved_since_previous_global_audit": [
-    "Phase4 official artifact presence and hashes were established.",
-    "Phase4 research baseline artifact presence and hashes were established.",
-    "Source-doc alignment moved from divergent to ALIGNED.",
-    "Clean regeneration moved from inconclusive to proven in clean clone/equivalent.",
-    "CVaR artifact was persisted with explicit zero-exposure caveat."
+    "H03/H04/H05/H06 research agenda gates were executed and recorded.",
+    "H06 external unlock artifact request was resolved by supplied artifacts.",
+    "H06 diagnostic completed and confirmed no promotable/research candidate.",
+    "Post-mission next-step decision was generated as REVIEW_DRAFT_PR.",
+    "PR #1 final draft review report/checklist/summary were created and the PR body was synchronized."
   ],
-  "stabilization_triage": {
-    "discarded_scratch_files": [
-      "reports/audits/autonomous_stop_review/autonomous_stop_review.json",
-      "reports/audits/autonomous_stop_review/autonomous_stop_review.md",
-      "reports/audits/autonomous_stop_review/next_action_prompt.md"
-    ],
-    "reason": "Superseded autonomous stop-review snapshot contradicted later Phase6 evidence; do not commit these scratch files."
-  },
   "next_step": {
-    "gate_name": "phase6_pr_review_global_adherence_gate",
+    "decision": "REVIEW_DRAFT_PR",
     "branch": "codex/autonomous-sniper-implementation",
-    "objective": "Review PR #1 as a draft governance/reproducibility PR, preserve blockers, and decide whether to keep it open, request documentation-only changes, or freeze the line.",
-    "expected_decision": "DRAFT_REVIEW_OR_FREEZE, not promotion",
-    "expected_result": "PARTIAL/review unless human review accepts it strictly as governance evidence",
+    "objective": "Keep PR #1 as draft governance/reproducibility/research evidence and review manually. Resume autonomous implementation only with material new evidence or a new safe in-repo research agenda.",
+    "expected_result": "PR_DRAFT_READY_WITH_NO_SAFE_NEXT_ACTION",
     "do_not_do": [
       "Do not merge as ready.",
       "Do not promote official.",
       "Do not reopen A3/A4.",
       "Do not treat PASS_ZERO_EXPOSURE as economic robustness.",
-      "Do not treat ALIVE_BUT_NOT_PROMOTABLE as promotable."
+      "Do not treat H06 shadow/proxy-heavy artifacts as official."
     ]
   },
   "deliverables": [
@@ -114,6 +144,7 @@
     "reports/audits/global_spec_adherence/global_spec_adherence_matrix.csv",
     "reports/audits/global_spec_adherence/global_spec_adherence_summary.json",
     "reports/audits/global_spec_adherence/global_implementation_checklist.md",
-    "reports/audits/global_spec_adherence/next_step_recommendation.md"
+    "reports/audits/global_spec_adherence/next_step_recommendation.md",
+    "reports/gates/phase6_post_h06_global_spec_reaudit_gate/gate_report.json"
   ]
 }

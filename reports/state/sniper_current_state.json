@@ -1,5 +1,5 @@
 {
-  "program_status": "H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_FINAL_FREEZE_RESTORED",
+  "program_status": "POST_H06_GLOBAL_PARTIAL_REAUDIT_REVIEW_DRAFT_PR",
   "active_branch": "codex/autonomous-sniper-implementation",
   "latest_pr": {
     "number": 1,
@@ -9,15 +9,15 @@
     "merged": false,
     "base": "codex/openclaw-sniper-handoff",
     "head": "codex/autonomous-sniper-implementation",
-    "observed_head_sha": "68f222f69d78763f9cb0696d01579a33b09b3c3d",
-    "observed_before_local_gate_commits": true
+    "observed_head_sha": "22d77a0638582fe69b1cbde1450b0ac7ed5f43c9",
+    "observed_before_local_gate_commits": false
   },
   "latest_gate": {
-    "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
-    "status": "PASS",
-    "decision": "advance"
+    "gate_slug": "phase6_post_h06_global_spec_reaudit_gate",
+    "status": "PARTIAL",
+    "decision": "correct"
   },
-  "latest_decision": "H06_UNLOCK_SHADOW_DIAGNOSTIC_COMPLETE_NOT_PROMOTABLE",
+  "latest_decision": "POST_H06_GLOBAL_PARTIAL_REAUDIT_REVIEW_DRAFT_PR",
   "resolved_blockers": [
     "source_doc_alignment_restored",
     "phase4_official_artifacts_found_and_hashed",
@@ -603,7 +603,7 @@
     "h06_paper_readiness_allowed": false,
     "safe_internal_action_taken": "phase5_research_unlock_shadow_feature_ablation_gate"
   },
-  "updated_at_utc": "2026-05-10T12:20:00Z",
+  "updated_at_utc": "2026-05-11T00:54:46Z",
   "h06_unlock_shadow_feature_ablation_status": {
     "gate_slug": "phase5_research_unlock_shadow_feature_ablation_gate",
     "status": "PASS",
@@ -692,5 +692,14 @@
       "DSR=0.0, CVaR official zero exposure and cross-sectional not promotable remain active blockers."
     ],
     "statement": "Não há próxima ação autônoma interna segura no estado atual."
+  },
+  "current_head": "22d77a0638582fe69b1cbde1450b0ac7ed5f43c9",
+  "latest_global_reaudit": {
+    "gate_slug": "phase6_post_h06_global_spec_reaudit_gate",
+    "updated_at_utc": "2026-05-11T00:54:46Z",
+    "verdict": "GLOBAL_PARTIAL",
+    "decision": "REVIEW_DRAFT_PR",
+    "head": "22d77a0638582fe69b1cbde1450b0ac7ed5f43c9",
+    "safe_internal_next_gate": false
   }
 }

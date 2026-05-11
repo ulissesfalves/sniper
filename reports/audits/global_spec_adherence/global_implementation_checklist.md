@@ -1,3 +1,34 @@
+# Post-H06 Global Reaudit Update
+
+Updated: 2026-05-11T00:56:06Z
+
+Gate: `phase6_post_h06_global_spec_reaudit_gate`
+
+Current head: `22d77a0638582fe69b1cbde1450b0ac7ed5f43c9`
+
+Decision: `REVIEW_DRAFT_PR`
+
+This update refreshes the global audit context after H06, the post-mission
+next-step decision and the final PR draft review. It preserves the previous
+Phase6 audit details below and adds the current conclusion: PR #1 is reviewable
+as a draft governance/reproducibility/research package only. It is not merge,
+official promotion, paper readiness, A3/A4 reopen or threshold-relaxation
+evidence.
+
+Active blockers remain:
+
+- `dsr_honest=0.0`
+- official CVaR zero exposure / `PASS_ZERO_EXPOSURE`
+- cross-sectional `ALIVE_BUT_NOT_PROMOTABLE`
+- H06 diagnostic-only, shadow/proxy-heavy, no research candidate
+- no safe internal autonomous next gate registered
+
+Future autonomous work requires material new evidence, a new safe in-repo
+research agenda, or a concrete artifact package that opens a research-only gate
+without changing specification or relaxing thresholds.
+
+---
+
 # SNIPER Global Implementation Checklist
 
 Audit date: 2026-04-27
